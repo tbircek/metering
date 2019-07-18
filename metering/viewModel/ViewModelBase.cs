@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Windows.Input;
 
 namespace metering.viewModel
 {
@@ -20,6 +16,7 @@ namespace metering.viewModel
                 field = newValue;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
                 Debug.WriteLine($"SetProperty (propertyName: {propertyName}) processed successfull.");
+                //Log += $"SetProperty (propertyName: {propertyName}) processed successfull.";
                 return true;
             }
             Debug.WriteLine($"SetProperty (propertyName: {propertyName}) processed are same values.");

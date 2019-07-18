@@ -1,31 +1,26 @@
-﻿<UserControl x:Class="metering.view.CommunicationView"
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-            xmlns:resources="clr-namespace:metering.Resources"
-            xmlns:viewModel="clr-namespace:metering.viewModel"
-            mc:Ignorable="d" 
-            d:DesignHeight="150" d:DesignWidth="800"
-            d:DataContext="{d:DesignInstance viewModel:CommunicationViewModel, d:IsDesignTimeCreatable=False}">
+﻿<UserControl 
+    x:Class="metering.view.CommunicationView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:resources="clr-namespace:metering.Resources"
+    xmlns:viewModel="clr-namespace:metering.viewModel"
+    mc:Ignorable="d" 
+    d:DesignHeight="150" d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance viewModel:CommunicationViewModel, d:IsDesignTimeCreatable=False}">
 
-    <UserControl.Background>
-        <ImageBrush Opacity="0.1" 
-                ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
-    </UserControl.Background>
-    
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="150"/>
+            <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
+        
         <Grid.Resources>
-            <viewModel:CommunicationViewModel x:Key="ipAddress" IpAddress="192.168.0.122" />
-            <viewModel:CommunicationViewModel x:Key="port" Port="502" />
+            <viewModel:CommunicationViewModel x:Key="ipAddress" />
+            <viewModel:CommunicationViewModel x:Key="port" />
+            <viewModel:CommunicationViewModel x:Key="log" />
         </Grid.Resources>
-        <Grid.DataContext>
-            <Binding Source="communication"/>
-        </Grid.DataContext>
 
         <Grid Grid.Row="0" Margin="5">
             <Grid.ColumnDefinitions>
@@ -101,13 +96,14 @@
 
                     <Grid Grid.Column="1" Margin="5">
                         <ToggleButton 
-                    x:Name="connectDevice"
-                    Margin="5"
-                    Style="{DynamicResource MetroCircleToggleButtonStyle}" 
-                    TabIndex="4"
-                    Width="80" 
-                    Height="80"
-                    Content="Connect">
+                            x:Name="connectDevice"
+                            Margin="5"
+                            Style="{DynamicResource MetroCircleToggleButtonStyle}" 
+                            TabIndex="4"
+                            Width="80" 
+                            Height="80"
+                            Content="Connect"
+                            Command="{Binding Path=ConnectCommand}">
                             <!--<materialDesign:HintAssist.Hint>-->
                             <!--<StackPanel >-->
                             <!--<materialDesign:PackIcon Kind="AccessPoint" />-->
@@ -121,14 +117,18 @@
 
             <Grid Grid.Column="2" Margin="5">
                 <TextBox 
-            x:Name="ResultTextBox"
-            TabIndex="5"
-            Margin="5" 
-            TextWrapping="Wrap" 
-            Text="TextBox" 
-            BorderBrush="#FBFFFFC0" 
-            FontFamily="Courier New" 
-            FontSize="14"/>
+                    x:Name="ResultTextBox"
+                    TabIndex="5"
+                    Margin="5" 
+                    TextWrapping="Wrap" 
+                    BorderBrush="#FBFFFFC0" 
+                    FontFamily="Courier New" 
+                    FontSize="14">
+                    <TextBox.Text>
+                        <Binding Source="{StaticResource log}" 
+                                            Path="Log" />
+                    </TextBox.Text>
+                </TextBox>
 
             </Grid>
         </Grid>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using metering.model;
+﻿using System.Windows.Input;
 
 namespace metering.viewModel
 {
@@ -22,6 +16,32 @@ namespace metering.viewModel
         {
             get => _port;
             set => SetProperty(ref _port, value);
-        } 
+        }
+
+        private string _log;
+        public string Log
+        {
+            get => _log;
+            set => SetProperty(ref _log, value);
+        }
+
+        private readonly DelegateCommand _connectCommand;
+        public ICommand ConnectCommand => _connectCommand;
+
+        public CommunicationViewModel()
+        {
+            _connectCommand = new DelegateCommand(OnConnect, CanConnect);
+        }
+
+        private bool CanConnect(object arg)
+        {
+            return IpAddress != "testing command";
+        }
+
+        private void OnConnect(object obj)
+        {
+            IpAddress = "testing command";
+            _connectCommand.InvokeCanExecuteChanged();
+        }
     }
 }

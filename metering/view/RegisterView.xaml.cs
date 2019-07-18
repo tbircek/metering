@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace metering.pages
+namespace metering.view
 {
     /// <summary>
-    /// Interaction logic for CommunicationPage.xaml
+    /// Interaction logic for RegisterView.xaml
     /// </summary>
-    public partial class CommunicationPage : Page
+    public partial class RegisterView : UserControl
     {
-        public CommunicationPage()
+        public RegisterView()
         {
             InitializeComponent();
         }

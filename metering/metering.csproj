@@ -116,6 +116,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net462\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -138,27 +139,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="commands\DelegateCommand.cs" />
     <Compile Include="communication\ModbusCommunication.cs" />
     <Compile Include="converters\VisualToImageSourceConverter.cs" />
-    <Compile Include="model\AnalogOutputModel.cs" />
     <Compile Include="model\CommunicationModel.cs" />
-    <Compile Include="model\MainModel.cs" />
-    <Compile Include="model\TestModel.cs" />
+    <Compile Include="model\NominalValuesModel.cs" />
+    <Compile Include="model\RegisterModel.cs" />
     <Compile Include="omicron\ExtractParameters.cs" />
     <Compile Include="omicron\CMCControl.cs" />
     <Compile Include="omicron\InitialCMCSetup.cs" />
     <Compile Include="omicron\PowerOptions.cs" />
     <Compile Include="omicron\ScanCMC.cs" />
-    <Compile Include="pages\CommunicationPage.xaml.cs">
-      <DependentUpon>CommunicationPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="pages\MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="pages\VoltageTestPage.xaml.cs">
-      <DependentUpon>VoltageTestPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Resources\OmicronStringCmd.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -166,16 +157,28 @@
     </Compile>
     <Compile Include="omicron\StringCommands.cs" />
     <Compile Include="viewModel\CommunicationViewModel.cs" />
-    <Compile Include="viewModel\MainWindowViewModel.cs" />
-    <Compile Include="viewModel\TestViewModel.cs" />
     <Compile Include="Resources\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="viewModel\NominalValuesViewModel.cs" />
+    <Compile Include="viewModel\RegisterViewModel.cs" />
     <Compile Include="viewModel\ViewModelBase.cs" />
+    <Compile Include="view\CommandsView.xaml.cs">
+      <DependentUpon>CommandsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="view\CommunicationView.xaml.cs">
       <DependentUpon>CommunicationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\NominalValuesView.xaml.cs">
+      <DependentUpon>NominalValuesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\RegisterView.xaml.cs">
+      <DependentUpon>RegisterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\TestDetailsView.xaml.cs">
+      <DependentUpon>TestDetailsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -189,19 +192,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="pages\CommunicationPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
-    <Page Include="pages\MainPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="pages\VoltageTestPage.xaml">
+    <Page Include="view\CommandsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="view\CommunicationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\NominalValuesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\RegisterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\TestDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -269,9 +276,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="communication\model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\metering.ico" />
   </ItemGroup>

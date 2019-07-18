@@ -1,20 +1,21 @@
-﻿<Page x:Class="metering.pages.VoltageTestPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:metering.viewModel"             
-      xmlns:resources= "clr-namespace:metering.Resources"
-      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"      
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="800"
-      Title="VoltageTestPage" WindowTitle="VoltageTestPage" ScrollViewer.VerticalScrollBarVisibility="Auto">
+﻿<UserControl 
+    x:Class="metering.view.TestView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:metering.Resources"
+    xmlns:viewModel="clr-namespace:metering.viewModel"
+    mc:Ignorable="d" 
+    d:DesignHeight="450" d:DesignWidth="800"
+    d:DataContext="{d:DesignInstance viewModel:RegisterViewModel, d:IsDesignTimeCreatable=False}">
 
-    <Page.Background>
+    <UserControl.Background>
         <ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
-    </Page.Background>
+    </UserControl.Background>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -24,9 +25,13 @@
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
 
-        <Grid 
-            Grid.Row="0">
-            
+        <!--<Grid.Resources>
+            <viewModel:RegisterViewModel x:Key="register" />
+            <viewModel:RegisterViewModel x:Key="progress" />
+        </Grid.Resources>-->
+
+        <!--<Grid Grid.Row="0">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -47,19 +52,15 @@
                     Height="60"
                     FontSize="24"                     
                     HorizontalContentAlignment="Center">
+                    <TextBox.Text>
+                        <Binding 
+                            Source="{StaticResource register}" 
+                            Path="Register"
+                            UpdateSourceTrigger="PropertyChanged"/>
+                    </TextBox.Text>
 
                 </TextBox>
             </Grid>
-
-        <!--<Controls:DropDownButton 
-                Grid.Column="1"
-                VerticalContentAlignment="Center"
-                VerticalAlignment="Bottom"
-                Content="Voltage"
-                Height="30"
-                Margin="5">
-
-            </Controls:DropDownButton>-->
 
             <Grid 
                 Grid.Column="3"
@@ -78,19 +79,19 @@
                         Maximum="100" 
                         Margin="5" 
                         Height="20"
-                        Value="57" 
                         VerticalContentAlignment="Center"
                         VerticalAlignment="Bottom"
-                        materialDesign:ButtonProgressAssist.Value="25" 
+                        Value="{Binding Path=progress, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" 
                         TextOptions.TextFormattingMode="Display">
 
+                        --><!--materialDesign:ButtonProgressAssist.Value="{Binding Path=progress, UpdateSourceTrigger=PropertyChanged}"-->
                         <!--<i:Interaction.Behaviors>
                             <local:ProgresBarAnimateBehavior x:Name="AnimateBehavior" />
-                        </i:Interaction.Behaviors>-->
+                        </i:Interaction.Behaviors>--><!--
                     </ProgressBar>
                 </StackPanel>
             </Grid>
-        </Grid>
+        </Grid>-->
 
 
         <Grid Grid.Row="1">
@@ -562,8 +563,8 @@
                      >
 
             </TextBox>
-            
-             <!--I2--> 
+
+            <!--I2-->
             <TextBox Grid.Column="0"
                      Grid.Row="5"
                      materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_current_2}"
@@ -639,7 +640,7 @@
             </TextBox>
 
 
-             <!--I3--> 
+            <!--I3-->
             <TextBox Grid.Column="0"
                      Grid.Row="6"
                      materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_current_3}"
@@ -714,7 +715,7 @@
 
             </TextBox>
 
-             <!--I4--> 
+            <!--I4-->
             <TextBox Grid.Column="0"
                      Grid.Row="7"
                      materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_current_4}"
@@ -789,7 +790,7 @@
 
             </TextBox>
 
-             <!--I5--> 
+            <!--I5-->
             <TextBox Grid.Column="0"
                      Grid.Row="8"
                      materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_current_5}"
@@ -948,19 +949,19 @@
             </Grid.ColumnDefinitions>
             <Controls:Tile x:Name="Cancel" 
                            Title="{x:Static resources:Strings.cancelTest}" 
-                            Click="Cancel_Click"
-                            Width="Auto"
-                            Height="Auto" 
-                            Margin="1,0,0,0" 
-                            VerticalTitleAlignment="Bottom" 
-                            HorizontalTitleAlignment="Center"
-                            Background="Red"                  
-                            Grid.Column="2" 
-                            Grid.Row="2">
+                           Click="Cancel_Click"
+                           Width="Auto"
+                           Height="Auto" 
+                           Margin="1,0,0,0" 
+                           VerticalTitleAlignment="Bottom" 
+                           HorizontalTitleAlignment="Center"
+                           Background="Red"                  
+                           Grid.Column="2" 
+                           Grid.Row="2">
                 <Grid>
                     <iconPacks:PackIconMaterial Kind="Cancel" Height="50" Width="50" Margin="0,-17.017,0,0"/>
                 </Grid>
-            </Controls:Tile>    
+            </Controls:Tile>
             <Controls:Tile 
                 x:Name="StartTest" 
                 Title="{x:Static resources:Strings.startTest}" 
@@ -983,4 +984,4 @@
         </Button>-->
 
     </Grid>
-</Page>
+</UserControl>

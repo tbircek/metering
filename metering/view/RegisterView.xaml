@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="metering.view.RegisterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModel="clr-namespace:metering.viewModel"
+             xmlns:resources="clr-namespace:metering.Resources"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModel:RegisterViewModel, d:IsDesignTimeCreatable=False}">
+
+    <Grid>
+
+        <Grid.Resources>
+            <viewModel:RegisterViewModel x:Key="register" />
+            <viewModel:RegisterViewModel x:Key="progress" />
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0"
+              Margin="5">
+
+            <TextBox 
+                    x:Name="testRegister" 
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_register}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="0"  
+                    Margin="5"
+                    Height="60"
+                    FontSize="24"                     
+                    HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                            Source="{StaticResource register}" 
+                            Path="Register"
+                            UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+
+            </TextBox>
+        </Grid>
+
+        <Grid Grid.Column="3"
+              Margin="5">
+
+            <StackPanel>
+
+                <Label
+                        Content="{Binding Value, ElementName=testProgressBar}">
+
+                </Label>
+
+                <ProgressBar 
+                        x:Name="testProgressBar" 
+                        Minimum="0" 
+                        Maximum="100" 
+                        Margin="5" 
+                        Height="20"
+                        VerticalContentAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Value="{Binding Path=progress, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" 
+                        TextOptions.TextFormattingMode="Display">
+
+                    <!--materialDesign:ButtonProgressAssist.Value="{Binding Path=progress, UpdateSourceTrigger=PropertyChanged}"-->
+                    <!--<i:Interaction.Behaviors>
+                            <local:ProgresBarAnimateBehavior x:Name="AnimateBehavior" />
+                        </i:Interaction.Behaviors>-->
+                </ProgressBar>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
