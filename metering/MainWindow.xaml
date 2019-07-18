@@ -1,0 +1,67 @@
+﻿<Controls:MetroWindow
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:metering"
+        xmlns:view="clr-namespace:metering.view"
+        xmlns:viewModel="clr-namespace:metering.viewModel"
+        xmlns:resources= "clr-namespace:metering.Resources"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        x:Class="metering.MainWindow"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:icon="clr-namespace:Window.Icon"
+        mc:Ignorable="d"
+        Title="{x:Static resources:Strings.Title}"
+        ShowIconOnTitleBar="True"
+        ShowTitleBar="True"
+        Height="800" Width="800"
+        GlowBrush="{DynamicResource AccentColorBrush}"
+        FontSize="16">
+    
+    <Window.Resources>
+        <icon:VisualToImageSourceConverter x:Key="VisualToImageSourceConverter" />
+    </Window.Resources>
+    <Window.Icon>
+        <Binding Converter="{StaticResource VisualToImageSourceConverter}">
+            <Binding.Source>
+                <iconPacks:PackIconModern Kind="ThermometerSigns" Width="30" Height="30" />
+            </Binding.Source>
+        </Binding>
+    </Window.Icon>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0" Margin="5">
+            
+            <Frame 
+                x:Name="CommunicationFrame"
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                ClipToBounds="True" 
+                NavigationUIVisibility="Hidden" 
+                Source="\pages\CommunicationPage.xaml"
+                >
+            
+            </Frame>
+        </Grid>
+        
+        <Grid Grid.Row="1" Margin="5">
+            <!--<Frame--> 
+                <!--x:Name="CardFrame"-->
+                <!--BorderBrush="Black"--> 
+                <!--BorderThickness="1"--> 
+                <!--ClipToBounds="True"--> 
+                <!--NavigationUIVisibility="Hidden"--> 
+                <!--Source="\pages\MainPage.xaml">-->
+
+            <!--</Frame>-->
+        </Grid>
+    </Grid>
+</Controls:MetroWindow>

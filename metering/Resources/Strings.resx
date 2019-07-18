@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="header_from" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="header_to" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="header_delta" xml:space="preserve">
+    <value>Delta</value>
+  </data>
+  <data name="header_dwell_time" xml:space="preserve">
+    <value>Dwell Time (sec)</value>
+  </data>
+  <data name="header_max_value" xml:space="preserve">
+    <value>Max. Value</value>
+  </data>
+  <data name="header_measurement_duration" xml:space="preserve">
+    <value>Measurement Duration</value>
+  </data>
+  <data name="header_measurement_interval" xml:space="preserve">
+    <value>Measurement Interval (msec)</value>
+  </data>
+  <data name="header_min_value" xml:space="preserve">
+    <value>Min. Value</value>
+  </data>
+  <data name="header_progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="header_register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="header_voltage_1" xml:space="preserve">
+    <value>V1</value>
+  </data>
+  <data name="logo_alt_name" xml:space="preserve">
+    <value>Beckwith Logo</value>
+  </data>
+  <data name="modal_max_test_value" xml:space="preserve">
+    <value>max. test value</value>
+  </data>
+  <data name="modal_min_test_value" xml:space="preserve">
+    <value>min. test value</value>
+  </data>
+  <data name="modal_options" xml:space="preserve">
+    <value>Use tab_voltage, tab_current and tab_frequency values.</value>
+  </data>
+  <data name="modal_test_duration" xml:space="preserve">
+    <value>test duration (hr.)</value>
+  </data>
+  <data name="modal_test_interval" xml:space="preserve">
+    <value>test interval (sec.)</value>
+  </data>
+  <data name="modal_title" xml:space="preserve">
+    <value>Modify/add a register</value>
+  </data>
+  <data name="modal_update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="program_message_error_connection" xml:space="preserve">
+    <value>Connection problems</value>
+  </data>
+  <data name="program_message_error_exists" xml:space="preserve">
+    <value>Currently under test. Please wait</value>
+  </data>
+  <data name="program_message_error_omicron" xml:space="preserve">
+    <value>Omicron timed out</value>
+  </data>
+  <data name="program_message_error_range" xml:space="preserve">
+    <value>Under/over range value.</value>
+  </data>
+  <data name="program_message_success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="register_watermark" xml:space="preserve">
+    <value>Register #</value>
+  </data>
+  <data name="tab_current" xml:space="preserve">
+    <value>Current</value>
+  </data>
+  <data name="tab_frequency" xml:space="preserve">
+    <value>Frequency</value>
+  </data>
+  <data name="tab_home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="tab_home_connect" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="tab_home_ethernet" xml:space="preserve">
+    <value>Ethernet</value>
+  </data>
+  <data name="tab_home_ipaddress" xml:space="preserve">
+    <value>Ip Address</value>
+  </data>
+  <data name="tab_home_port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="tab_home_serial" xml:space="preserve">
+    <value>Serial/USB</value>
+  </data>
+  <data name="tab_measurements" xml:space="preserve">
+    <value>Measurements</value>
+  </data>
+  <data name="tab_message_found" xml:space="preserve">
+    <value>Total {0} item(s) found.</value>
+  </data>
+  <data name="tab_voltage" xml:space="preserve">
+    <value>Voltage</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Metering</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="beckwith_letterhead" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>beckwith-letterhead.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="header_start_delay_time" xml:space="preserve">
+    <value>Start Delay Time (min)</value>
+  </data>
+  <data name="header_start_measurement_delay" xml:space="preserve">
+    <value>Start Measurement Delay (sec)</value>
+  </data>
+  <data name="header_test_value" xml:space="preserve">
+    <value>Test Value</value>
+  </data>
+  <data name="header_current_1" xml:space="preserve">
+    <value>IL1</value>
+  </data>
+  <data name="header_current_2" xml:space="preserve">
+    <value>IL2</value>
+  </data>
+  <data name="header_current_3" xml:space="preserve">
+    <value>IL3</value>
+  </data>
+  <data name="header_current_4" xml:space="preserve">
+    <value>IL4</value>
+  </data>
+  <data name="header_current_5" xml:space="preserve">
+    <value>IL5</value>
+  </data>
+  <data name="header_current_6" xml:space="preserve">
+    <value>IL6</value>
+  </data>
+  <data name="header_voltage_2" xml:space="preserve">
+    <value>V2</value>
+  </data>
+  <data name="header_voltage_3" xml:space="preserve">
+    <value>V3</value>
+  </data>
+  <data name="header_voltage_4" xml:space="preserve">
+    <value>V4</value>
+  </data>
+  <data name="header_frequency" xml:space="preserve">
+    <value>Frequency (Hz)</value>
+  </data>
+  <data name="header_from_current" xml:space="preserve">
+    <value>From (I)</value>
+  </data>
+  <data name="header_from_frequency" xml:space="preserve">
+    <value>From (Hz)</value>
+  </data>
+  <data name="header_from_phase" xml:space="preserve">
+    <value>From (°)</value>
+  </data>
+  <data name="header_from_voltage" xml:space="preserve">
+    <value>From (V)</value>
+  </data>
+  <data name="header_phase" xml:space="preserve">
+    <value>Phase (°)</value>
+  </data>
+  <data name="header_to_current" xml:space="preserve">
+    <value>To (I)</value>
+  </data>
+  <data name="header_to_frequency" xml:space="preserve">
+    <value>To (Hz)</value>
+  </data>
+  <data name="header_to_phase" xml:space="preserve">
+    <value>To (°)</value>
+  </data>
+  <data name="header_to_voltage" xml:space="preserve">
+    <value>To (V)</value>
+  </data>
+  <data name="global_nominal_analog_header" xml:space="preserve">
+    <value>Nominal Analog Values:</value>
+  </data>
+  <data name="global_nominal_current" xml:space="preserve">
+    <value>Nominal Current (mA):</value>
+  </data>
+  <data name="global_nominal_delta" xml:space="preserve">
+    <value>Nominal Delta:</value>
+  </data>
+  <data name="global_nominal_frequency" xml:space="preserve">
+    <value>Nominal Frequency (Hz):</value>
+  </data>
+  <data name="global_nominal_phase_balance" xml:space="preserve">
+    <value>Balance</value>
+  </data>
+  <data name="global_nominal_phase_current" xml:space="preserve">
+    <value>Nominal Current Phase:</value>
+  </data>
+  <data name="global_nominal_phase_voltage" xml:space="preserve">
+    <value>Nominal Voltage Phase:</value>
+  </data>
+  <data name="global_nominal_phase_zero" xml:space="preserve">
+    <value>0°</value>
+  </data>
+  <data name="global_nominal_test_values" xml:space="preserve">
+    <value>Nominal Test Values:</value>
+  </data>
+  <data name="global_nominal_voltage" xml:space="preserve">
+    <value>Nominal Voltage (V):</value>
+  </data>
+  <data name="addNewTest" xml:space="preserve">
+    <value>Add New Test</value>
+  </data>
+  <data name="cancelTest" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="startTest" xml:space="preserve">
+    <value>Start Test</value>
+  </data>
+</root>
