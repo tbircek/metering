@@ -1,12 +1,16 @@
-﻿namespace metering.viewModel
-{
-    public class NominalValuesViewModel: ViewModelBase
-    {
-        private string nominalVoltage = "120.0";
-        private string nominalCurrent = "100.00";
-        private string nominalFrequency = "60.000";
-        private string nominalDelta = "1.00";
+﻿using metering.model;
+using System;
+using System.Collections.ObjectModel;
 
+namespace metering.viewModel
+{
+    public class NominalValues: ViewModelBase
+    {
+        private string nominalVoltage;
+        private string nominalCurrent;
+        private string nominalFrequency;
+        private string nominalDelta;
+        
         public string NominalVoltage
         {
             get => nominalVoltage;

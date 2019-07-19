@@ -9,7 +9,7 @@
     xmlns:viewModel="clr-namespace:metering.viewModel"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance viewModel:NominalValuesViewModel, d:IsDesignTimeCreatable=False}">
+    d:DataContext="{d:DesignInstance viewModel:NominalValues, d:IsDesignTimeCreatable=False}">
 
     <UserControl.Background>
         <ImageBrush 
@@ -23,10 +23,10 @@
         </Grid.RowDefinitions>
         
         <Grid.Resources>
-            <viewModel:NominalValuesViewModel x:Key="voltage"/>
-            <viewModel:NominalValuesViewModel x:Key="current"/>
-            <viewModel:NominalValuesViewModel x:Key="frequency"/>
-            <viewModel:NominalValuesViewModel x:Key="delta"/>
+            <viewModel:NominalValues x:Key="voltage"/>
+            <viewModel:NominalValues x:Key="current"/>
+            <viewModel:NominalValues x:Key="frequency"/>
+            <viewModel:NominalValues x:Key="delta"/>
         </Grid.Resources>
         
         <Grid Grid.Row="0">

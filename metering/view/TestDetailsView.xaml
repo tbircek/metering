@@ -11,7 +11,7 @@
     xmlns:viewModel="clr-namespace:metering.viewModel"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance viewModel:RegisterViewModel, d:IsDesignTimeCreatable=False}">
+    d:DataContext="{d:DesignInstance viewModel:TestDetailsViewModel, d:IsDesignTimeCreatable=False}">
 
     <UserControl.Background>
         <ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
@@ -25,12 +25,24 @@
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
 
-        <!--<Grid.Resources>
-            <viewModel:RegisterViewModel x:Key="register" />
-            <viewModel:RegisterViewModel x:Key="progress" />
-        </Grid.Resources>-->
+        <Grid.Resources>
+            <viewModel:TestDetailsViewModel x:Key="register" />
+            <viewModel:TestDetailsViewModel x:Key="progress" Register="0.0"/>
+            <viewModel:TestDetailsViewModel x:Key="dwellTime" />
+            <viewModel:TestDetailsViewModel x:Key="startDelayTime" />
+            <viewModel:TestDetailsViewModel x:Key="measurementInterval" />
+            <viewModel:TestDetailsViewModel x:Key="startMeasurementDelay" />
+            <viewModel:TestDetailsViewModel x:Key="testDetails" />
+            <viewModel:NominalValues x:Key="delta" />
+            <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
+            <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
+            <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
+            <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
+            <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
+            <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
+        </Grid.Resources>
 
-        <!--<Grid Grid.Row="0">
+        <Grid Grid.Row="0">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -44,7 +56,6 @@
                 Margin="5">
 
                 <TextBox 
-                    x:Name="testRegister" 
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_register}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                     TabIndex="0"  
@@ -53,10 +64,9 @@
                     FontSize="24"                     
                     HorizontalContentAlignment="Center">
                     <TextBox.Text>
-                        <Binding 
-                            Source="{StaticResource register}" 
-                            Path="Register"
-                            UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Source="{StaticResource register}" 
+                                         Path="Register"
+                                         UpdateSourceTrigger="PropertyChanged"/>
                     </TextBox.Text>
 
                 </TextBox>
@@ -68,30 +78,34 @@
 
                 <StackPanel>
 
-                    <Label
-                        Content="{Binding Value, ElementName=testProgressBar}">
-
-                    </Label>
-                    
                     <ProgressBar 
                         x:Name="testProgressBar" 
                         Minimum="0" 
                         Maximum="100" 
                         Margin="5" 
                         Height="20"
+                        Style="{DynamicResource MaterialDesignCircularProgressBar}"
                         VerticalContentAlignment="Center"
-                        VerticalAlignment="Bottom"
-                        Value="{Binding Path=progress, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" 
-                        TextOptions.TextFormattingMode="Display">
-
-                        --><!--materialDesign:ButtonProgressAssist.Value="{Binding Path=progress, UpdateSourceTrigger=PropertyChanged}"-->
-                        <!--<i:Interaction.Behaviors>
+                        VerticalAlignment="Bottom"                        
+                        TextOptions.TextFormattingMode="Display"
+                        IsIndeterminate="False"
+                        Value="0.0">
+                        <!--<ProgressBar.Value>
+                            <Binding Source="{StaticResource progress}"
+                                     Path="Progress"
+                                     FallbackValue="0" IsAsync="True"/>
+                        </ProgressBar.Value>-->
+                        <!--materialDesign:ButtonProgressAssist.Value="{Binding Path=progress, UpdateSourceTrigger=PropertyChanged}"
+                        <i:Interaction.Behaviors>
                             <local:ProgresBarAnimateBehavior x:Name="AnimateBehavior" />
-                        </i:Interaction.Behaviors>--><!--
+                        </i:Interaction.Behaviors>-->
                     </ProgressBar>
+                    <Label
+                        HorizontalContentAlignment="Center"
+                        Content="{Binding Value, ElementName=testProgressBar}"/>
                 </StackPanel>
             </Grid>
-        </Grid>-->
+        </Grid>
 
 
         <Grid Grid.Row="1">
@@ -108,21 +122,24 @@
 
             <!-- Dwell Time -->
             <TextBox 
-                x:Name="dwellTime"
                 Grid.Column="0"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_dwell_time}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                 TabIndex="1"  
                 Margin="5"
-                Width="180"   
-                Text="{Binding Path=DwellTime}"
+                Width="180"
                 HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource dwellTime}" 
+                        Path="DwellTime"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
             <!-- Start Delay Time -->
-            <TextBox 
-                x:Name="startDelayTime"
+            <TextBox
                 Grid.Column="1"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_delay_time}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
@@ -130,12 +147,17 @@
                 Margin="5"
                 Width="180"
                 HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource startDelayTime}" 
+                        Path="StartDelayTime"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
             <!-- Measurement Interval -->
             <TextBox 
-                x:Name="measurementInterval"
                 Grid.Column="2"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_measurement_interval}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
@@ -143,6 +165,11 @@
                 Margin="5"
                 Width="180"                     
                 HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Source="{StaticResource measurementInterval}" 
+                                         Path="MeasurementInterval"
+                                         UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
@@ -156,6 +183,11 @@
                 Margin="5"
                 Width="180"                     
                 HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Source="{StaticResource startMeasurementDelay}" 
+                                         Path="StartMeasurementDelay"
+                                         UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
@@ -195,6 +227,11 @@
                 IsEnabled="False"
                 Width="50"                     
                 HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Source="{StaticResource testDetails}" 
+                                         Path="Test.Signal[0]"
+                                         Mode="OneTime"/>
+                </TextBox.Text>
 
             </TextBox>
 
@@ -208,6 +245,10 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Source="{StaticResource testDetails}" 
+                                         Path="Test.From[0]" />
+                </TextBox.Text>
 
             </TextBox>
 
@@ -221,6 +262,10 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding Source="{StaticResource testDetails}" 
+                                         Path="Test.To[0]" />
+                </TextBox.Text>
 
             </TextBox>
 
@@ -234,7 +279,11 @@
                 Margin="5"
                 Width="100"              
                 HorizontalContentAlignment="Center">
-
+                <TextBox.Text>
+                    <Binding Source="{StaticResource delta}" 
+                                         Path="Test.To[0]" />
+                </TextBox.Text>
+                
             </TextBox>
 
             <TextBox

@@ -144,7 +144,8 @@
     <Compile Include="converters\VisualToImageSourceConverter.cs" />
     <Compile Include="model\CommunicationModel.cs" />
     <Compile Include="model\NominalValuesModel.cs" />
-    <Compile Include="model\RegisterModel.cs" />
+    <Compile Include="model\TestDetailsModel.cs" />
+    <Compile Include="model\TestDetail.cs" />
     <Compile Include="omicron\ExtractParameters.cs" />
     <Compile Include="omicron\CMCControl.cs" />
     <Compile Include="omicron\InitialCMCSetup.cs" />
@@ -163,7 +164,7 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="viewModel\NominalValuesViewModel.cs" />
-    <Compile Include="viewModel\RegisterViewModel.cs" />
+    <Compile Include="viewModel\TestDetailsViewModel.cs" />
     <Compile Include="viewModel\ViewModelBase.cs" />
     <Compile Include="view\CommandsView.xaml.cs">
       <DependentUpon>CommandsView.xaml</DependentUpon>
@@ -173,9 +174,6 @@
     </Compile>
     <Compile Include="view\NominalValuesView.xaml.cs">
       <DependentUpon>NominalValuesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="view\RegisterView.xaml.cs">
-      <DependentUpon>RegisterView.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\TestDetailsView.xaml.cs">
       <DependentUpon>TestDetailsView.xaml</DependentUpon>
@@ -201,10 +199,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="view\NominalValuesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="view\RegisterView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
