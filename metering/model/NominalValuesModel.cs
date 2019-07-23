@@ -1,4 +1,6 @@
-﻿namespace metering.model
+﻿using System.Collections.ObjectModel;
+
+namespace metering.model
 {
     public class NominalValuesModel
     {
@@ -6,8 +8,21 @@
         public string Current { get; set; } = "200.0";
         public string Frequency { get; set; } = "60.000";
         public string Delta { get; set; } = "1.000";
-        public string VoltagePhase { get; set; } = "0";
-        public string CurrentPhase { get; set; } = "0";
+        public string SelectedVoltagePhase { get; set; } = "AllZero";
+        public string SelectedCurrentPhase { get; set; } = "AllZero";
+
+        //private readonly ObservableCollection<VPhases>
+        //public string V1Phase { get; set; } = "0";
+        //public string V2Phase { get; set; } = "0";
+        //public string V3Phase { get; set; } = "0";
+        //public string V4Phase { get; set; } = "0";
+
+        //public string I1Phase { get; set; } = "0";
+        //public string I2Phase { get; set; } = "0";
+        //public string I3Phase { get; set; } = "0";
+        //public string I4Phase { get; set; } = "0";
+        //public string I5Phase { get; set; } = "0";
+        //public string I6Phase { get; set; } = "0";
 
         public NominalValuesModel GetNominalValuesModel()
         {
@@ -21,8 +36,8 @@
                 Voltage = voltage,
                 Current = current,
                 Frequency = frequency,
-                VoltagePhase = voltagePhase,
-                CurrentPhase = currentPhase,
+                SelectedVoltagePhase = voltagePhase,
+                SelectedCurrentPhase = currentPhase,
                 Delta = delta
             };
         }

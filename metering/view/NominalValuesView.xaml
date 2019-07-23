@@ -114,23 +114,24 @@
                     <StackPanel>
                         <RadioButton 
                             Content="{x:Static resources:Strings.global_nominal_phase_zero}"
+                            GroupName="voltage"
                             IsChecked="True"
                             Margin="5"
                             TabIndex="3"
                             FontSize="16"
                             VerticalContentAlignment="Bottom" 
-                            Command="{Binding Path=RadioButtonCommand}" 
-                            CommandParameter="Voltage=AllZero"/>
+                            Command="{Binding RadioButtonCommand}" 
+                            CommandParameter="Voltage.AllZero"/>
 
                         <RadioButton 
-                            x:Name="testNominalVoltagePhaseBalance" 
                             Content="{x:Static resources:Strings.global_nominal_phase_balance}"
+                            GroupName="voltage"
                             Margin="5"
                             TabIndex="4"
                             FontSize="16"
                             VerticalContentAlignment="Bottom" 
-                            Command="{Binding Path=RadioButtonCommand}" 
-                            CommandParameter="Voltage=Balanced"/>
+                            Command="{Binding RadioButtonCommand}" 
+                            CommandParameter="Voltage.Balanced"/>
 
                     </StackPanel>
                 </GroupBox>
@@ -139,24 +140,31 @@
                     Header="{x:Static resources:Strings.global_nominal_phase_current}" 
                     Margin="16" 
                     Grid.Row="1">
+                    <GroupBox.DataContext>
+                        <viewModel:NominalValuesViewModel/>
+                    </GroupBox.DataContext>
 
                     <StackPanel>
                         <RadioButton 
-                            x:Name="testNominalCurrentPhaseZero" 
                             Content="{x:Static resources:Strings.global_nominal_phase_zero}"
+                            GroupName="current"
                             IsChecked="True"
                             Margin="5"
                             TabIndex="5"
                             FontSize="16"
-                            VerticalContentAlignment="Bottom" />
+                            VerticalContentAlignment="Bottom" 
+                            Command="{Binding RadioButtonCommand}" 
+                            CommandParameter="Current.AllZero"/>
 
                         <RadioButton 
-                            x:Name="testNominalCurrentPhaseBalance" 
                             Content="{x:Static resources:Strings.global_nominal_phase_balance}"
+                            GroupName="current"
                             Margin="5"
                             TabIndex="6"
                             FontSize="16"
-                            VerticalContentAlignment="Bottom"/>
+                            VerticalContentAlignment="Bottom" 
+                            Command="{Binding RadioButtonCommand}" 
+                            CommandParameter="Current.Balanced"/>
 
                     </StackPanel>
                 </GroupBox>

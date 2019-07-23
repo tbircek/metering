@@ -5,54 +5,106 @@ namespace metering.viewModel
 {
     public class TestDetailsViewModel : ViewModelBase
     {
-        private string register;
-        private string progress;
-        private string dwellTime;
-        private string startDelayTime;
-        private string measurementInterval;
-        private string startMeasurementDelay;
-        private TestDetail test;
+        private static TestDetailsModel model = new TestDetailsModel();
 
         public string Register
         {
-            get => register;
-            set => SetProperty( register, value);
+            get => model.Register;
+            set
+            {
+                if (SetProperty(model.Register, value))
+                {
+                    model.Register = value;
+                }
+            }
         }
 
         public string Progress
         {
-            get => progress;
-            set => SetProperty( progress, value);
+            get => model.Progress;
+            set
+            {
+                if (SetProperty(model.Progress, value))
+                {
+                    model.Progress = value;
+                }
+            }
         }
 
         public string DwellTime
         {
-            get => dwellTime;
-            set => SetProperty( dwellTime, value);
+            get => model.DwellTime;
+            set
+            {
+               if( SetProperty(model.DwellTime, value))
+                {
+                    model.DwellTime = value;
+                }
+            }
         }
 
         public string StartDelayTime
         {
-            get => startDelayTime;
-            set => SetProperty( startDelayTime, value);
+            get => model.StartDelayTime;
+            set
+            {
+                if ( SetProperty(model.StartDelayTime, value)) 
+                    {
+                    model.StartDelayTime = value;
+                    }
+                }
         }
 
         public string MeasurementInterval
         {
-            get => measurementInterval;
-            set => SetProperty( measurementInterval, value);
+            get => model.MeasurementInterval;
+            set
+            {
+                if (SetProperty(model.MeasurementInterval, value))
+                {
+                    model.MeasurementInterval = value;
+                }
+            } 
         }
 
         public string StartMeasurementDelay
         {
-            get => startMeasurementDelay;
-            set => SetProperty( startMeasurementDelay, value);
+            get => model.StartMeasurementDelay;
+            set
+            { if (SetProperty(model.StartMeasurementDelay, value))
+                {
+                    model.StartMeasurementDelay = value;
+                }
+            }
         }
 
-        public TestDetail Test
+        public ObservableCollection<string> Test
         {
-            get { return test; }
-            set { SetProperty( test, value); }
+            get
+            {
+                foreach (var test in model.TestDetails)
+                {
+                    Test.Add(test.SignalName);
+                    Test.Add(test.From);
+                    Test.Add(test.To);
+                    Test.Add(test.Delta);
+                    Test.Add(test.Phase);
+                    Test.Add(test.Frequency);
+                }
+                return Test;
+            }
+            set
+            {
+                //foreach (var test in value)
+                //{
+                //    if (SetProperty(model.TestDetails, value))
+                //    {
+
+                //    }
+                //}
+                
+            }
         }
+
     }
 }

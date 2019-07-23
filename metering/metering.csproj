@@ -140,6 +140,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="commands\DelegateCommand.cs" />
+    <Compile Include="commands\NavigationCommands.cs" />
     <Compile Include="communication\ModbusCommunication.cs" />
     <Compile Include="converters\VisualToImageSourceConverter.cs" />
     <Compile Include="viewModel\CommandsViewModel.cs" />

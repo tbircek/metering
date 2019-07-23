@@ -18,8 +18,10 @@ namespace metering.viewModel
             get => model.IpAddress;
             set
             {
-                SetProperty(model.IpAddress, value);
-                model.IpAddress = value;
+                if (SetProperty(model.IpAddress, value))
+                {
+                    model.IpAddress = value;
+                }
             }
         }
                
@@ -28,8 +30,10 @@ namespace metering.viewModel
             get => model.Port;
             set
             {
-                SetProperty(model.Port, value);
-                model.Port = value;
+                if (SetProperty(model.Port, value))
+                {
+                    model.Port = value;
+                }
             }
         }
                 
@@ -38,8 +42,10 @@ namespace metering.viewModel
             get => model.Log;
             set
             {
-                SetProperty(model.Log, value);
-                model.Log = value;
+                if (SetProperty(model.Log, value))
+                {
+                    model.Log = value;
+                }
             }
         }
 

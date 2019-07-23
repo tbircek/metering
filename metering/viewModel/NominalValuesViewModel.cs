@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
+using System.Threading;
 using System.Windows.Input;
 using metering.model;
 
@@ -6,20 +8,29 @@ namespace metering.viewModel
 {
     public class NominalValuesViewModel: ViewModelBase
     {
-        // TODO: public radioButtonOptions for NominalVoltagePhase
-        // TODO: public radioButtonOptions for NominalCurrentPhase
         private static NominalValuesModel model = new NominalValuesModel();
+        private static TestDetailsViewModel test = new TestDetailsViewModel();
+
         DelegateCommand addNewTestCommand;
-        // DelegateCommand radioButtonCommand;
+        DelegateCommand radioButtonCommand;
         
+        public NominalValuesViewModel()
+        {
+            CultureInfo ci = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = ci;
+
+            //CommandManager.RegisterClassCommandBinding(typeof(MainWindow), new CommandBinding(NavigationCommands.ShowTestCommand, ShowTestCommandExecuted));
+        }
         
         public string NominalVoltage
         {
             get => model.Voltage;
             set
             {
-                SetProperty(model.Voltage, value);
-                model.Voltage = value;
+                if (SetProperty(model.Voltage, value))
+                {
+                    model.Voltage = value;
+                }
             }
         }
 
@@ -28,8 +39,10 @@ namespace metering.viewModel
             get => model.Current;
             set
             {
-                SetProperty(model.Current, value);
-                model.Current = value;
+                if (SetProperty(model.Current, value))
+                {
+                    model.Current = value;
+                }
             }
         }
 
@@ -38,28 +51,34 @@ namespace metering.viewModel
             get => model.Frequency;
             set
             {
-                SetProperty(model.Frequency, value);
-                model.Frequency = value;
+                if (SetProperty(model.Frequency, value))
+                {
+                    model.Frequency = value;
+                }
             }
         }
 
-        public string VoltagePhase
+        public string SelectedVoltagePhase
         {
-            get => model.VoltagePhase;
+            get => model.SelectedVoltagePhase;
             set
             {
-                SetProperty(model.VoltagePhase, value);
-                model.VoltagePhase = value;
+                if (SetProperty(model.SelectedVoltagePhase, value))
+                {
+                    model.SelectedVoltagePhase = value;
+                }
             }
         }
 
-        public string CurrentPhase
+        public string SelectedCurrentPhase
         {
-            get => model.CurrentPhase;
+            get => model.SelectedCurrentPhase;
             set
             {
-                SetProperty(model.CurrentPhase, value);
-                model.CurrentPhase = value;
+                if (SetProperty(model.SelectedCurrentPhase, value))
+                {
+                    model.SelectedCurrentPhase = value;
+                }                 
             }
         }
 
@@ -68,8 +87,10 @@ namespace metering.viewModel
             get => model.Delta;
             set
             {
-                SetProperty(model.Delta, value);
-                model.Delta = value;
+                if (SetProperty(model.Delta, value))
+                {
+                    model.Delta = value;
+                }
             }
         }
 
@@ -80,17 +101,30 @@ namespace metering.viewModel
                 if (radioButtonCommand == null)
                 {
                     radioButtonCommand = new DelegateCommand(
-                        param => GetSelectedRadioButton(),
+                        param => GetSelectedRadioButton((string)param),
                         param => true);
                 }
                 return radioButtonCommand;
             }
         }
 
-        private void GetSelectedRadioButton()
+        private void GetSelectedRadioButton(string param)
         {
-            // throw new NotImplementedException();            
-            Debug.WriteLine($"selected an option...{VoltagePhase}");
+            // throw new NotImplementedException();
+            string type = param.Split('.')[0];
+            string option = param.Split('.')[1];
+
+            switch (type)
+            {
+                case "Voltage":
+                    SelectedVoltagePhase = option;
+                    break;
+                case "Current":
+                    SelectedCurrentPhase = option;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public ICommand AddNewTestCommand
@@ -117,14 +151,38 @@ namespace metering.viewModel
             int omicronVoltageOutputNumber = 4;
             for (int i = 1; i <= omicronVoltageOutputNumber; i++)
             {
-                Debug.WriteLine($"signal: v{i}\tfrom: {model.Voltage}\tto: {model.Voltage}\tdelta: {model.Delta}\tphase: {0}\tfrequency: {model.Frequency}");
+                string [] phase;
+                if (model.SelectedVoltagePhase == "Balanced")
+                {
+                    phase = new string[] { "0", "-120", "120", "0" }; 
+                }
+                else
+                {
+                    phase = new string[] { "0", "0", "0", "0" };
+                }
+                
+                Debug.WriteLine($"signal: v{i}\tfrom: {model.Voltage}\tto: {model.Voltage}\tdelta: {model.Delta}\tphase: {phase[i-1]}\tfrequency: {model.Frequency}");
+
+                //TestDetailModel testDetail = new TestDetailModel("v" + i, model.Voltage, model.Voltage, model.Delta, phase[i - 1], model.Frequency);
+                
+                
             }
 
             // TODO: This variable must be obtain thru Omicron Test Set.
             int omicronCurrentOutputNumber = 6;
             for (int i = 1; i <= omicronCurrentOutputNumber; i++)
             {
-                Debug.WriteLine($"signal: i{i}\tfrom: {model.Current}\tto: {model.Current}\tdelta: {model.Delta}\tphase: {0}\tfrequency: {model.Frequency}");
+                string[] phase;
+                if (model.SelectedCurrentPhase == "Balanced")
+                {
+                    phase = new string[] { "0", "-120", "120", "0", "-120", "120" }; 
+                }
+                else
+                {
+                    phase = new string[] { "0", "0", "0", "0", "0", "0" };
+                }
+                
+                Debug.WriteLine($"signal: i{i}\tfrom: {model.Current}\tto: {model.Current}\tdelta: {model.Delta}\tphase: {phase[i - 1]}\tfrequency: {model.Frequency}");
             }
             Debug.WriteLine("TODO: show new TestDetailsView");
         }

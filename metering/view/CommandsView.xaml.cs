@@ -62,7 +62,7 @@ namespace metering.view
         //        int omicronVoltageOutputNumber = 4;
         //        for (int i = 1; i <= omicronVoltageOutputNumber; i++)
         //        {
-        //            test = new model.TestDetail(signalName: "v" + i,
+        //            test = new model.TestDetailModel(signalName: "v" + i,
         //                                        from: nominalValues.Voltage,
         //                                        to: nominalValues.Voltage,
         //                                        delta: nominalValues.Delta,
