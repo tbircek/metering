@@ -1,12 +1,14 @@
 ﻿<UserControl 
-    x:Class="metering.view.CommunicationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:metering.Resources"
     xmlns:viewModel="clr-namespace:metering.viewModel"
+    xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    x:Class="metering.view.CommunicationView"    
     mc:Ignorable="d" 
     d:DesignHeight="150" d:DesignWidth="800"
     d:DataContext="{d:DesignInstance viewModel:CommunicationViewModel, d:IsDesignTimeCreatable=False}">
@@ -15,7 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
-        
+
         <Grid.Resources>
             <viewModel:CommunicationViewModel x:Key="ipAddress" />
             <viewModel:CommunicationViewModel x:Key="port" />
@@ -65,7 +67,6 @@
                     <Grid Grid.Column="0" Margin="5">
                         <StackPanel>
                             <TextBox 
-                            x:Name="testIpAddress"
                             materialDesign:HintAssist.Hint="{x:Static resources:Strings.tab_home_ipaddress}"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                             TabIndex="2" 
@@ -95,22 +96,19 @@
                     </Grid>
 
                     <Grid Grid.Column="1" Margin="5">
-                        <ToggleButton 
-                            x:Name="connectDevice"
-                            Margin="5"
-                            Style="{DynamicResource MetroCircleToggleButtonStyle}" 
-                            TabIndex="4"
-                            Width="80" 
-                            Height="80"
-                            Content="Connect"
-                            Command="{Binding Path=ConnectCommand}">
-                            <!--<materialDesign:HintAssist.Hint>-->
-                            <!--<StackPanel >-->
-                            <!--<materialDesign:PackIcon Kind="AccessPoint" />-->
-                            <!--<TextBlock>Connect</TextBlock>-->
-                            <!--</StackPanel>-->
-                            <!--</materialDesign:HintAssist.Hint>-->
+                        <ToggleButton
+                        Margin="5"
+                        Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                        TabIndex="4"
+                        Width="80"
+                        Height="80"
+                        Content="Connect"
+                        Command="{Binding Path=ConnectCommand}">
+                        <ToggleButton.DataContext>
+                        <viewModel:CommunicationViewModel/>
+                        </ToggleButton.DataContext>
                         </ToggleButton>
+                        
                     </Grid>
                 </Grid>
             </Grid>

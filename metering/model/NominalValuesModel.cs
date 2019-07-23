@@ -2,11 +2,31 @@
 {
     public class NominalValuesModel
     {
-        public string NominalVoltage { get; set; }
-        public string NominalCurrent { get; set; }
-        public string NominalFrequency { get; set; }
-        public string NominalDelta { get; set; }
-        // TODO: public radioButtonOptions for NominalVoltagePhase
-        // TODO: public radioButtonOptions for NominalCurrentPhase
+        public string Voltage { get; set; } = "120.0";
+        public string Current { get; set; } = "200.0";
+        public string Frequency { get; set; } = "60.000";
+        public string Delta { get; set; } = "1.000";
+        public string VoltagePhase { get; set; } = "0";
+        public string CurrentPhase { get; set; } = "0";
+
+        public NominalValuesModel GetNominalValuesModel()
+        {
+            return new NominalValuesModel();
+        }
+
+        public NominalValuesModel GetNominalValuesModel( string voltage, string current, string frequency, string voltagePhase, string currentPhase, string delta)
+        {
+            return new NominalValuesModel
+            {
+                Voltage = voltage,
+                Current = current,
+                Frequency = frequency,
+                VoltagePhase = voltagePhase,
+                CurrentPhase = currentPhase,
+                Delta = delta
+            };
+        }
+
+        // TODO: Implement IDataErrorInfo
     }
 }

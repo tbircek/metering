@@ -27,13 +27,13 @@
 
         <Grid.Resources>
             <viewModel:TestDetailsViewModel x:Key="register" />
-            <viewModel:TestDetailsViewModel x:Key="progress" Register="0.0"/>
+            <viewModel:TestDetailsViewModel x:Key="progress" Progress="0.0"/>
             <viewModel:TestDetailsViewModel x:Key="dwellTime" />
             <viewModel:TestDetailsViewModel x:Key="startDelayTime" />
             <viewModel:TestDetailsViewModel x:Key="measurementInterval" />
             <viewModel:TestDetailsViewModel x:Key="startMeasurementDelay" />
             <viewModel:TestDetailsViewModel x:Key="testDetails" />
-            <viewModel:NominalValues x:Key="delta" />
+            <viewModel:NominalValuesViewModel x:Key="delta" />
             <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
             <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
             <!--<viewModel:TestDetailsViewModel x:Key="register" />-->

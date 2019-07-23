@@ -16,43 +16,43 @@ namespace metering.viewModel
         public string Register
         {
             get => register;
-            set => SetProperty(ref register, value);
+            set => SetProperty( register, value);
         }
 
         public string Progress
         {
             get => progress;
-            set => SetProperty(ref progress, value);
+            set => SetProperty( progress, value);
         }
 
         public string DwellTime
         {
             get => dwellTime;
-            set => SetProperty(ref dwellTime, value);
+            set => SetProperty( dwellTime, value);
         }
 
         public string StartDelayTime
         {
             get => startDelayTime;
-            set => SetProperty(ref startDelayTime, value);
+            set => SetProperty( startDelayTime, value);
         }
 
         public string MeasurementInterval
         {
             get => measurementInterval;
-            set => SetProperty(ref measurementInterval, value);
+            set => SetProperty( measurementInterval, value);
         }
 
         public string StartMeasurementDelay
         {
             get => startMeasurementDelay;
-            set => SetProperty(ref startMeasurementDelay, value);
+            set => SetProperty( startMeasurementDelay, value);
         }
 
         public TestDetail Test
         {
             get { return test; }
-            set { SetProperty(ref test, value); }
+            set { SetProperty( test, value); }
         }
     }
 }

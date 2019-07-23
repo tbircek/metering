@@ -9,7 +9,7 @@
     xmlns:viewModel="clr-namespace:metering.viewModel"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance viewModel:NominalValues, d:IsDesignTimeCreatable=False}">
+    d:DataContext="{d:DesignInstance viewModel:NominalValuesViewModel, d:IsDesignTimeCreatable=False}">
 
     <UserControl.Background>
         <ImageBrush 
@@ -23,10 +23,10 @@
         </Grid.RowDefinitions>
         
         <Grid.Resources>
-            <viewModel:NominalValues x:Key="voltage"/>
-            <viewModel:NominalValues x:Key="current"/>
-            <viewModel:NominalValues x:Key="frequency"/>
-            <viewModel:NominalValues x:Key="delta"/>
+            <viewModel:NominalValuesViewModel x:Key="voltage"/>
+            <viewModel:NominalValuesViewModel x:Key="current"/>
+            <viewModel:NominalValuesViewModel x:Key="frequency"/>
+            <viewModel:NominalValuesViewModel x:Key="delta"/>
         </Grid.Resources>
         
         <Grid Grid.Row="0">
@@ -108,16 +108,19 @@
                     Header="{x:Static resources:Strings.global_nominal_phase_voltage}" 
                     Margin="16" 
                     Grid.Row="0">
-
+                    <GroupBox.DataContext>
+                        <viewModel:NominalValuesViewModel/>
+                    </GroupBox.DataContext>
                     <StackPanel>
                         <RadioButton 
-                            x:Name="testNominalVoltagePhaseZero" 
                             Content="{x:Static resources:Strings.global_nominal_phase_zero}"
                             IsChecked="True"
                             Margin="5"
                             TabIndex="3"
                             FontSize="16"
-                            VerticalContentAlignment="Bottom"/>
+                            VerticalContentAlignment="Bottom" 
+                            Command="{Binding Path=RadioButtonCommand}" 
+                            CommandParameter="Voltage=AllZero"/>
 
                         <RadioButton 
                             x:Name="testNominalVoltagePhaseBalance" 
@@ -125,7 +128,9 @@
                             Margin="5"
                             TabIndex="4"
                             FontSize="16"
-                            VerticalContentAlignment="Bottom"/>
+                            VerticalContentAlignment="Bottom" 
+                            Command="{Binding Path=RadioButtonCommand}" 
+                            CommandParameter="Voltage=Balanced"/>
 
                     </StackPanel>
                 </GroupBox>

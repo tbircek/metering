@@ -142,6 +142,7 @@
     <Compile Include="commands\DelegateCommand.cs" />
     <Compile Include="communication\ModbusCommunication.cs" />
     <Compile Include="converters\VisualToImageSourceConverter.cs" />
+    <Compile Include="viewModel\CommandsViewModel.cs" />
     <Compile Include="model\CommunicationModel.cs" />
     <Compile Include="model\NominalValuesModel.cs" />
     <Compile Include="model\TestDetailsModel.cs" />

@@ -1,47 +1,68 @@
-﻿using System.Windows.Input;
+﻿using System.Diagnostics;
+using System.Windows.Input;
+using metering.model;
 
 namespace metering.viewModel
 {
     public class CommunicationViewModel : ViewModelBase
     {
-        private string _ipAddress = "192.168.0.122";
+        // TODO: Add a model for "Connect" button 
+        // TODO: squirrel.windows update tool
+
+        private static CommunicationModel model = new CommunicationModel();
+        DelegateCommand connectCommand;
+
+
         public string IpAddress
         {
-            get => _ipAddress;
-            set => SetProperty(ref _ipAddress, value);
+            get => model.IpAddress;
+            set
+            {
+                SetProperty(model.IpAddress, value);
+                model.IpAddress = value;
+            }
         }
-
-        private string _port = "502";
+               
         public string Port
         {
-            get => _port;
-            set => SetProperty(ref _port, value);
+            get => model.Port;
+            set
+            {
+                SetProperty(model.Port, value);
+                model.Port = value;
+            }
         }
-
-        private string _log;
+                
         public string Log
         {
-            get => _log;
-            set => SetProperty(ref _log, value);
+            get => model.Log;
+            set
+            {
+                SetProperty(model.Log, value);
+                model.Log = value;
+            }
         }
 
-        private readonly DelegateCommand _connectCommand;
-        public ICommand ConnectCommand => _connectCommand;
-
-        public CommunicationViewModel()
+        public ICommand ConnectCommand
         {
-            _connectCommand = new DelegateCommand(OnConnect, CanConnect);
+            get
+            {
+                if (connectCommand == null)
+                {
+                    connectCommand = new DelegateCommand(
+                        param => ConnectOmicronAndUnit(),
+                        param => true
+                        );
+                }
+                return connectCommand;
+            }
         }
 
-        private bool CanConnect(object arg)
+        private void ConnectOmicronAndUnit()
         {
-            return IpAddress != "testing command";
-        }
-
-        private void OnConnect(object obj)
-        {
-            IpAddress = "testing command";
-            _connectCommand.InvokeCanExecuteChanged();
+            //throw new NotImplementedException();
+            Debug.WriteLine("TODO: Connect Omicron Test Set ...");
+            Debug.WriteLine($"TODO: Connect thru modbus protocol to {model.IpAddress}:{model.Port}");
         }
     }
 }
