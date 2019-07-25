@@ -10,7 +10,7 @@ namespace metering.model
         public string StartDelayTime { get; set; }
         public string MeasurementInterval { get; set; }
         public string StartMeasurementDelay { get; set; }
-        public ObservableCollection<TestDetailModel> TestDetail { get; set; }
+        //public ObservableCollection<TestDetailModel> TestDetail { get; set; }
 
         public TestDetailsModel()
         {

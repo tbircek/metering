@@ -9,17 +9,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:metering.Resources"
     xmlns:viewModel="clr-namespace:metering.viewModel"
+    xmlns:c="clr-namespace:metering.model"
     mc:Ignorable="d" 
     d:DesignHeight="50" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance viewModel:TestDetailViewModel, d:IsDesignTimeCreatable=False}">
+    d:DataContext="{d:DesignInstance d:IsDesignTimeCreatable=False}">
 
     <!--<UserControl.Background>-->
         <!--<ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>-->
     <!--</UserControl.Background>-->
     <UserControl.Resources>
+        <!--<c:TestDetailList x:Key="TestList"/>-->
         <CollectionViewSource 
-            x:Key="TestDetail"
-            Source="{Binding Path=}"
+            x:Key="TestList"
+            Source="{Binding TestDetailList}"/>
     </UserControl.Resources>
     <Grid >
         <Grid.ColumnDefinitions>
@@ -41,7 +43,7 @@
             <viewModel:TestDetailViewModel x:Key="phase" />
             <viewModel:TestDetailViewModel x:Key="frequency" />
         </Grid.Resources>-->
-        
+       
         <TextBox 
                 Grid.Column="0"
                 Grid.Row="0"
@@ -53,7 +55,7 @@
                 HorizontalContentAlignment="Center">
             <TextBox.Text>
                 <Binding
-                        Source="{StaticResource signalName}" 
+                        Source="{StaticResource TestList}" 
                         Mode="OneTime"
                         Path="SignalName"/>
             </TextBox.Text>
@@ -68,10 +70,10 @@
             Margin="5"
             Width="100"                     
             HorizontalContentAlignment="Center" >
-            
+
             <TextBox.Text>
                 <Binding 
-                    Source="{StaticResource from}" 
+                    Source="{StaticResource TestList}" 
                     Mode="TwoWay"
                     Path="From"
                     StringFormat="0:F2"
@@ -90,7 +92,7 @@
             HorizontalContentAlignment="Center" >
             <TextBox.Text>
                 <Binding 
-                    Source="{StaticResource to}" 
+                    Source="{StaticResource TestList}" 
                     Mode="TwoWay"
                     Path="To"
                     StringFormat="0:F2"
@@ -109,7 +111,7 @@
             HorizontalContentAlignment="Center">
             <TextBox.Text>
                 <Binding 
-                    Source="{StaticResource delta}" 
+                    Source="{StaticResource TestList}" 
                     Mode="TwoWay"
                     Path="Delta" 
                     StringFormat="0:F3"
@@ -129,7 +131,7 @@
             HorizontalContentAlignment="Center">
             <TextBox.Text>
                 <Binding 
-                    Source="{StaticResource phase}" 
+                    Source="{StaticResource TestList}" 
                     Mode="TwoWay"
                     Path="Phase" 
                     StringFormat="0:F3"
@@ -149,7 +151,7 @@
             HorizontalContentAlignment="Center">
             <TextBox.Text>
                 <Binding 
-                    Source="{StaticResource frequency}" 
+                    Source="{StaticResource TestList}" 
                     Mode="TwoWay"
                     Path="Frequency" 
                     StringFormat="0:F3"

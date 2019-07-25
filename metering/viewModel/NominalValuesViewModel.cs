@@ -169,21 +169,19 @@ namespace metering.viewModel
         {
             // throw new NotImplementedException();
             Debug.WriteLine("CancelNominalValues is running:");
-            testDetailsModel.TestDetail.Clear();
-            // TestDetailsModel testDetailsModel = new TestDetailsModel();
-            // model.Voltage = "";
+            // testDetailsModel.TestDetail.Clear();
         }
 
         private void CopyNominalValues()
         {
-            if (testDetailsModel.TestDetail != null)
-            {
-                testDetailsModel.TestDetail.Clear();
-            }
-            else
-            {
-                testDetailsModel.TestDetail = new ObservableCollection<TestDetailModel>();
-            }
+            //if (testDetailsModel.TestDetail != null)
+            //{
+            //    testDetailsModel.TestDetail.Clear();
+            //}
+            //else
+            //{
+            //    testDetailsModel.TestDetail = new ObservableCollection<TestDetailModel>();
+            //}
 
             // throw new NotImplementedException();
             Debug.WriteLine("Following values reported:");
@@ -212,13 +210,9 @@ namespace metering.viewModel
                     Phase = phase[i - 1],
                     Frequency = model.Frequency
                 };
-                testDetailsModel.TestDetail.Add(test);
+                //testDetailsModel.TestDetail.Add(test);
 
 
-
-                //TestDetailsModel test = new TestDetailsModel("","","","","","",)
-                //test = new TestDetail("v" + i, model.Voltage, model.Voltage, model.Delta, phase[i - 1], model.Frequency);
-                //testDetails.Add(test);
             }
 
             // TODO: This variable must be obtain thru Omicron Test Set.
@@ -245,11 +239,11 @@ namespace metering.viewModel
                     Phase = phase[i - 1],
                     Frequency = model.Frequency
                 };
-                testDetailsModel.TestDetail.Add(test);
+                //testDetailsModel.TestDetail.Add(test);
             }
             Debug.WriteLine("TODO: show new TestDetailsView");
 
-            TestDetailsViewModel testDetailsViewModel = new TestDetailsViewModel("", "", "", "", "", "", testDetailsModel.TestDetail);
+            //TestDetailsViewModel testDetailsViewModel = new TestDetailsViewModel("", "", "", "", "", "", testDetailsModel.TestDetail);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace metering.viewModel
             StartDelayTime = startDelayTime;
             MeasurementInterval = measurementInterval;
             StartMeasurementDelay = startMeasurementDelay;
-            model.TestDetail = testDetails;
+            // model.TestDetail = testDetails;
             //model.TestDetail.CollectionChanged += TestDetails_CollectionChanged;
         }
 
@@ -127,10 +127,11 @@ namespace metering.viewModel
             }
         }
 
-        public ObservableCollection<TestDetailModel> TestDetails
-        {
-            get => model.TestDetail;
-            set => model.TestDetail = value;
-        }
+        public ObservableCollection<TestDetailModel> TestDetails { get; set; }
+        //{
+
+            //get => model.TestDetail;
+            //set => model.TestDetail = value;
+        //}
     }
 }

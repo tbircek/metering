@@ -9,9 +9,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:metering.Resources"
     xmlns:viewModel="clr-namespace:metering.viewModel"
+    xmlns:local="clr-namespace:metering.model"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance viewModel:TestDetailsViewModel, d:IsDesignTimeCreatable=False}">
+    d:DataContext="{d:DesignInstance d:IsDesignTimeCreatable=False}">
 
     <UserControl.Background>
         <ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
@@ -37,13 +38,14 @@
             <viewModel:TestDetailsViewModel x:Key="startDelayTime" />
             <viewModel:TestDetailsViewModel x:Key="measurementInterval" />
             <viewModel:TestDetailsViewModel x:Key="startMeasurementDelay" />
-            <viewModel:TestDetailsViewModel x:Key="testDetails" />
-            <viewModel:TestDetailsViewModel x:Key="signalName" />
-            <viewModel:TestDetailsViewModel x:Key="from" />
-            <viewModel:TestDetailsViewModel x:Key="to" />
-            <viewModel:TestDetailsViewModel x:Key="delta" />
-            <viewModel:TestDetailsViewModel x:Key="phase" />
-            <viewModel:TestDetailsViewModel x:Key="frequency" />
+            <!--<viewModel:TestDetailsViewModel x:Key="testDetails" />-->
+            <!--<viewModel:TestDetailViewModel x:Key="signalName" />-->
+            <!--<viewModel:TestDetailViewModel x:Key="from" />-->
+            <!--<viewModel:TestDetailViewModel x:Key="to" />-->
+            <!--<viewModel:TestDetailViewModel x:Key="delta" />-->
+            <!--<viewModel:TestDetailViewModel x:Key="phase" />-->
+            <!--<viewModel:TestDetailViewModel x:Key="frequency" />-->
+            <local:TestDetailList x:Key="Tests"/>
         </Grid.Resources>
 
         <Grid Grid.Row="0">
@@ -197,32 +199,35 @@
 
         </Grid>
 
-        <Grid Grid.Row="2" DataContext="viewModel:TestDetailViewModel" />
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="2" >
+            <Frame NavigationUIVisibility="Hidden" Source="/metering;component/view/TestDetailView.xaml" DataContext="{StaticResource Tests}" />
+        </Grid>
+            <!--<Grid Grid.Row="2" DataContext="viewModel:TestDetailViewModel" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-        --><!-- V1 --><!--
-        <TextBox 
+            --><!--V1--><!--
+            <TextBox 
                 Grid.Column="0"
                 Grid.Row="0"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
@@ -230,17 +235,16 @@
                 Margin="5"
                 IsEnabled="False"
                 Width="50"                     
-                HorizontalContentAlignment="Center">
-            --><!--Text="{Binding TestDetails/SignalName, Mode=OneTime, Source={StaticResource testDetails}, ValidatesOnNotifyDataErrors=False}">--><!--
-            <TextBox.Text>
-                <Binding
-                        Source="{StaticResource signalName}" 
-                        Mode="OneTime"
-                        Path="TestDetails/SignalName"/>
-            </TextBox.Text>
-        </TextBox>
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding
+                        Mode="OneTime" 
+                        Source="{StaticResource Tests}"
+                        Path="SignalName"/>
+                </TextBox.Text>
+            </TextBox> 
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="1"
                 Grid.Row="0"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
@@ -249,17 +253,17 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center" >
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource from}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/To"
+                        Path="From"
                         StringFormat="0:F2"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="2"
                 Grid.Row="0"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
@@ -268,17 +272,17 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center" >
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource to}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/To"
+                        Path="To"
                         StringFormat="0:F2"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="3"
                 Grid.Row="0"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
@@ -287,18 +291,18 @@
                 Margin="5"
                 Width="100"              
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource delta}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Delta" 
+                        Path="Delta" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
+                </TextBox.Text>
 
-        </TextBox>
+            </TextBox>
 
-        <TextBox
+            <TextBox
                 Grid.Column="4"
                 Grid.Row="0"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
@@ -307,18 +311,18 @@
                 Margin="5"
                 Width="100"                    
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource phase}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Phase" 
+                        Path="Phase" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
+                </TextBox.Text>
 
-        </TextBox>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="5"
                 Grid.Row="0"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
@@ -327,18 +331,18 @@
                 Margin="5"
                 Width="100"                    
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource frequency}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Frequency" 
+                        Path="Frequency" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        --><!-- V2 --><!--
-        <TextBox 
+            --><!--V2--><!--
+            <TextBox 
                 Grid.Column="0"
                 Grid.Row="1"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
@@ -347,16 +351,15 @@
                 IsEnabled="False"
                 Width="50"                     
                 HorizontalContentAlignment="Center">
-            --><!--Text="{Binding TestDetails/SignalName, Mode=OneTime, Source={StaticResource testDetails}, ValidatesOnNotifyDataErrors=False}">--><!--
-            <TextBox.Text>
-                <Binding
-                        Source="{StaticResource signalName}" 
+                <TextBox.Text>
+                    <Binding
+                        Source="{StaticResource Tests}" 
                         Mode="OneTime"
-                        Path="TestDetails/SignalName"/>
-            </TextBox.Text>
-        </TextBox>
+                        Path="SignalName"/>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="1"
                 Grid.Row="1"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
@@ -365,17 +368,17 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center" >
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource from}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/To"
+                        Path="From"
                         StringFormat="0:F2"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="2"
                 Grid.Row="1"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
@@ -384,17 +387,17 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center" >
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource to}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/To"
+                        Path="To"
                         StringFormat="0:F2"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="3"
                 Grid.Row="1"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
@@ -403,18 +406,18 @@
                 Margin="5"
                 Width="100"              
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource delta}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Delta" 
+                        Path="Delta" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
+                </TextBox.Text>
 
-        </TextBox>
+            </TextBox>
 
-        <TextBox
+            <TextBox
                 Grid.Column="4"
                 Grid.Row="1"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
@@ -423,18 +426,18 @@
                 Margin="5"
                 Width="100"                    
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource phase}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Phase" 
+                        Path="Phase" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
+                </TextBox.Text>
 
-        </TextBox>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="5"
                 Grid.Row="1"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
@@ -443,19 +446,19 @@
                 Margin="5"
                 Width="100"                    
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource frequency}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Frequency" 
+                        Path="Frequency" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
 
-        --><!-- V3 --><!--
-        <TextBox 
+            --><!--V3--><!--
+            <TextBox 
                 Grid.Column="0"
                 Grid.Row="2"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
@@ -464,16 +467,15 @@
                 IsEnabled="False"
                 Width="50"                     
                 HorizontalContentAlignment="Center">
-            --><!--Text="{Binding TestDetails/SignalName, Mode=OneTime, Source={StaticResource testDetails}, ValidatesOnNotifyDataErrors=False}">--><!--
-            <TextBox.Text>
-                <Binding
-                        Source="{StaticResource signalName}" 
+                <TextBox.Text>
+                    <Binding
+                        Source="{StaticResource Tests}" 
                         Mode="OneTime"
-                        Path="TestDetails/SignalName"/>
-            </TextBox.Text>
-        </TextBox>
+                        Path="SignalName"/>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="1"
                 Grid.Row="2"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
@@ -482,17 +484,17 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center" >
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource from}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/To"
+                        Path="From"
                         StringFormat="0:F2"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="2"
                 Grid.Row="2"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
@@ -501,17 +503,17 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center" >
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource to}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/To"
+                        Path="To"
                         StringFormat="0:F2"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="3"
                 Grid.Row="2"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
@@ -520,18 +522,18 @@
                 Margin="5"
                 Width="100"              
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource delta}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Delta" 
+                        Path="Delta" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
+                </TextBox.Text>
 
-        </TextBox>
+            </TextBox>
 
-        <TextBox
+            <TextBox
                 Grid.Column="4"
                 Grid.Row="2"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
@@ -540,18 +542,18 @@
                 Margin="5"
                 Width="100"                    
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource phase}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Phase" 
+                        Path="Phase" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
+                </TextBox.Text>
 
-        </TextBox>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="5"
                 Grid.Row="2"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
@@ -560,19 +562,19 @@
                 Margin="5"
                 Width="100"                    
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource frequency}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Frequency" 
+                        Path="Frequency" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
 
-        --><!-- V4 --><!--
-        <TextBox 
+            --><!--V4--><!--
+            <TextBox 
                 Grid.Column="0"
                 Grid.Row="3"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
@@ -581,16 +583,15 @@
                 IsEnabled="False"
                 Width="50"                     
                 HorizontalContentAlignment="Center">
-            --><!--Text="{Binding TestDetails/SignalName, Mode=OneTime, Source={StaticResource testDetails}, ValidatesOnNotifyDataErrors=False}">--><!--
-            <TextBox.Text>
-                <Binding
-                        Source="{StaticResource signalName}" 
+                <TextBox.Text>
+                    <Binding
+                        Source="{StaticResource Tests}" 
                         Mode="OneTime"
-                        Path="TestDetails/SignalName"/>
-            </TextBox.Text>
-        </TextBox>
+                        Path="SignalName"/>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="1"
                 Grid.Row="3"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
@@ -599,17 +600,17 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center" >
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource from}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/To"
+                        Path="From"
                         StringFormat="0:F2"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="2"
                 Grid.Row="3"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
@@ -618,17 +619,17 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center" >
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource to}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/To"
+                        Path="To"
                         StringFormat="0:F2"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="3"
                 Grid.Row="3"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
@@ -637,18 +638,18 @@
                 Margin="5"
                 Width="100"              
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource delta}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Delta" 
+                        Path="Delta" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
+                </TextBox.Text>
 
-        </TextBox>
+            </TextBox>
 
-        <TextBox
+            <TextBox
                 Grid.Column="4"
                 Grid.Row="3"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
@@ -657,18 +658,18 @@
                 Margin="5"
                 Width="100"                    
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource phase}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Phase" 
+                        Path="Phase" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
+                </TextBox.Text>
 
-        </TextBox>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="5"
                 Grid.Row="3"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
@@ -677,19 +678,19 @@
                 Margin="5"
                 Width="100"                    
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource frequency}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Frequency" 
+                        Path="Frequency" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
 
-        --><!-- I1 --><!--
-        <TextBox 
+            --><!--I1--><!--
+            <TextBox 
                 Grid.Column="0"
                 Grid.Row="4"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
@@ -698,16 +699,15 @@
                 IsEnabled="False"
                 Width="50"                     
                 HorizontalContentAlignment="Center">
-            --><!--Text="{Binding TestDetails/SignalName, Mode=OneTime, Source={StaticResource testDetails}, ValidatesOnNotifyDataErrors=False}">--><!--
-            <TextBox.Text>
-                <Binding
-                        Source="{StaticResource signalName}" 
+                <TextBox.Text>
+                    <Binding
+                        Source="{StaticResource Tests}" 
                         Mode="OneTime"
-                        Path="TestDetails/SignalName"/>
-            </TextBox.Text>
-        </TextBox>
+                        Path="SignalName"/>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="1"
                 Grid.Row="4"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
@@ -716,17 +716,17 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center" >
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource from}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/To"
+                        Path="From"
                         StringFormat="0:F2"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="2"
                 Grid.Row="4"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
@@ -735,17 +735,17 @@
                 Margin="5"
                 Width="100"                     
                 HorizontalContentAlignment="Center" >
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource to}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/To"
+                        Path="To"
                         StringFormat="0:F2"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>
+                </TextBox.Text>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="3"
                 Grid.Row="4"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
@@ -754,18 +754,18 @@
                 Margin="5"
                 Width="100"              
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource delta}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Delta" 
+                        Path="Delta" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
+                </TextBox.Text>
 
-        </TextBox>
+            </TextBox>
 
-        <TextBox
+            <TextBox
                 Grid.Column="4"
                 Grid.Row="4"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
@@ -774,18 +774,18 @@
                 Margin="5"
                 Width="100"                    
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource phase}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Phase" 
+                        Path="Phase" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
+                </TextBox.Text>
 
-        </TextBox>
+            </TextBox>
 
-        <TextBox 
+            <TextBox 
                 Grid.Column="5"
                 Grid.Row="4"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
@@ -794,393 +794,594 @@
                 Margin="5"
                 Width="100"                    
                 HorizontalContentAlignment="Center">
-            <TextBox.Text>
-                <Binding 
-                        Source="{StaticResource frequency}" 
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
                         Mode="TwoWay"
-                        Path="TestDetails/Frequency" 
+                        Path="Frequency" 
                         StringFormat="0:F3"
                         UpdateSourceTrigger="PropertyChanged"/>
-            </TextBox.Text>
-        </TextBox>-->
+                </TextBox.Text>
+            </TextBox>
 
 
-        <!--I2-->
-        <!--<TextBox Grid.Column="0"
-                     Grid.Row="5"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_current_2}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     Margin="5"
-                     IsEnabled="False"
-                     Width="50"                     
-                     HorizontalContentAlignment="Center"
-                     >
+            --><!--I2--><!--
+            <TextBox 
+                Grid.Column="0"
+                Grid.Row="5"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                Margin="5"
+                IsEnabled="False"
+                Width="50"                     
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding
+                        Source="{StaticResource Tests}" 
+                        Mode="OneTime"
+                        Path="SignalName"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="5"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="5"  
+                Margin="5"
+                Width="100"                     
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="From"
+                        StringFormat="0:F2"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="2"
+                Grid.Row="5"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="6"  
+                Margin="5"
+                Width="100"                     
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="To"
+                        StringFormat="0:F2"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="3"
+                Grid.Row="5"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="7"  
+                Margin="5"
+                Width="100"              
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Delta" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
-            <TextBox Grid.Column="1"
-                     Grid.Row="5"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="1"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
+            <TextBox
+                Grid.Column="4"
+                Grid.Row="5"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="8"  
+                Margin="5"
+                Width="100"                    
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Phase" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
-            <TextBox Grid.Column="2"
-                     Grid.Row="5"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="2"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
+            <TextBox 
+                Grid.Column="5"
+                Grid.Row="5"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="4"  
+                Margin="5"
+                Width="100"                    
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Frequency" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+
+            --><!--I3--><!--
+            <TextBox 
+                Grid.Column="0"
+                Grid.Row="6"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                Margin="5"
+                IsEnabled="False"
+                Width="50"                     
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding
+                        Source="{StaticResource Tests}" 
+                        Mode="OneTime"
+                        Path="SignalName"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="6"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="5"  
+                Margin="5"
+                Width="100"                     
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="From"
+                        StringFormat="0:F2"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="2"
+                Grid.Row="6"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="6"  
+                Margin="5"
+                Width="100"                     
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="To"
+                        StringFormat="0:F2"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="3"
+                Grid.Row="6"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="7"  
+                Margin="5"
+                Width="100"              
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Delta" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
-            <TextBox Grid.Column="3"
-                     Grid.Row="5"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
+            <TextBox
+                Grid.Column="4"
+                Grid.Row="6"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="8"  
+                Margin="5"
+                Width="100"                    
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Phase" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
-            <TextBox Grid.Column="4"
-                     Grid.Row="5"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"
-                     Text="0.00"                     
-                     HorizontalContentAlignment="Center"
-                     >
+            <TextBox 
+                Grid.Column="5"
+                Grid.Row="6"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="4"  
+                Margin="5"
+                Width="100"                    
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Frequency" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            --><!--I4--><!--
+            <TextBox 
+                Grid.Column="0"
+                Grid.Row="7"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                Margin="5"
+                IsEnabled="False"
+                Width="50"                     
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding
+                        Source="{StaticResource Tests}" 
+                        Mode="OneTime"
+                        Path="SignalName"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="7"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="5"  
+                Margin="5"
+                Width="100"                     
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="From"
+                        StringFormat="0:F2"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="2"
+                Grid.Row="7"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="6"  
+                Margin="5"
+                Width="100"                     
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="To"
+                        StringFormat="0:F2"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="3"
+                Grid.Row="7"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="7"  
+                Margin="5"
+                Width="100"              
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Delta" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
-            <TextBox Grid.Column="5"
-                     Grid.Row="5"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"
-                     Text="60.000"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>-->
-
-
-        <!--I3-->
-        <!--<TextBox Grid.Column="0"
-                     Grid.Row="6"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_current_3}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     Margin="5"
-                     IsEnabled="False"
-                     Width="50"                     
-                     HorizontalContentAlignment="Center"
-                     >
+            <TextBox
+                Grid.Column="4"
+                Grid.Row="7"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="8"  
+                Margin="5"
+                Width="100"                    
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Phase" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
-            <TextBox Grid.Column="1"
-                     Grid.Row="6"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="1"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
+            <TextBox 
+                Grid.Column="5"
+                Grid.Row="7"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="4"  
+                Margin="5"
+                Width="100"                    
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Frequency" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            --><!--I5--><!--
+            <TextBox 
+                Grid.Column="0"
+                Grid.Row="8"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                Margin="5"
+                IsEnabled="False"
+                Width="50"                     
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding
+                        Source="{StaticResource Tests}" 
+                        Mode="OneTime"
+                        Path="SignalName"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="8"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="5"  
+                Margin="5"
+                Width="100"                     
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="From"
+                        StringFormat="0:F2"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="2"
+                Grid.Row="8"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="6"  
+                Margin="5"
+                Width="100"                     
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="To"
+                        StringFormat="0:F2"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="3"
+                Grid.Row="8"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="7"  
+                Margin="5"
+                Width="100"              
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Delta" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
-            <TextBox Grid.Column="2"
-                     Grid.Row="6"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="2"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
+            <TextBox
+                Grid.Column="4"
+                Grid.Row="8"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="8"  
+                Margin="5"
+                Width="100"                    
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Phase" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
-            <TextBox Grid.Column="3"
-                     Grid.Row="6"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
+            <TextBox 
+                Grid.Column="5"
+                Grid.Row="8"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="4"  
+                Margin="5"
+                Width="100"                    
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Frequency" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            --><!--I6--><!--
+            <TextBox 
+                Grid.Column="0"
+                Grid.Row="9"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                Margin="5"
+                IsEnabled="False"
+                Width="50"                     
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding
+                        Source="{StaticResource Tests}" 
+                        Mode="OneTime"
+                        Path="SignalName"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="9"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="5"  
+                Margin="5"
+                Width="100"                     
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="From"
+                        StringFormat="0:F2"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="2"
+                Grid.Row="9"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="6"  
+                Margin="5"
+                Width="100"                     
+                HorizontalContentAlignment="Center" >
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="To"
+                        StringFormat="0:F2"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox 
+                Grid.Column="3"
+                Grid.Row="9"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="7"  
+                Margin="5"
+                Width="100"              
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Delta" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
-            <TextBox Grid.Column="4"
-                     Grid.Row="6"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"
-                     Text="0.00"                     
-                     HorizontalContentAlignment="Center"
-                     >
+            <TextBox
+                Grid.Column="4"
+                Grid.Row="9"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="8"  
+                Margin="5"
+                Width="100"                    
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Phase" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
 
             </TextBox>
 
-            <TextBox Grid.Column="5"
-                     Grid.Row="6"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"
-                     Text="60.000"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>-->
-
-        <!--I4-->
-        <!--<TextBox Grid.Column="0"
-                     Grid.Row="7"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_current_4}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     Margin="5"
-                     IsEnabled="False"
-                     Width="50"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
+            <TextBox 
+                Grid.Column="5"
+                Grid.Row="9"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="4"  
+                Margin="5"
+                Width="100"                    
+                HorizontalContentAlignment="Center">
+                <TextBox.Text>
+                    <Binding 
+                        Source="{StaticResource Tests}" 
+                        Mode="TwoWay"
+                        Path="Frequency" 
+                        StringFormat="0:F3"
+                        UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
             </TextBox>
 
-            <TextBox Grid.Column="1"
-                     Grid.Row="7"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="1"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="2"
-                     Grid.Row="7"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="2"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="3"
-                     Grid.Row="7"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="4"
-                     Grid.Row="7"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"
-                     Text="0.00"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="5"
-                     Grid.Row="7"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"
-                     Text="60.000"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>-->
-
-        <!--I5-->
-        <!--<TextBox Grid.Column="0"
-                     Grid.Row="8"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_current_5}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     Margin="5"
-                     IsEnabled="False"
-                     Width="50"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="1"
-                     Grid.Row="8"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="1"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="2"
-                     Grid.Row="8"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="2"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="3"
-                     Grid.Row="8"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="4"
-                     Grid.Row="8"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"
-                     Text="0.00"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="5"
-                     Grid.Row="8"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"
-                     Text="60.000"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>-->
-
-        <!--I6-->
-        <!--<TextBox Grid.Column="0"
-                     Grid.Row="9"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_current_6}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     Margin="5"
-                     IsEnabled="False"
-                     Width="50"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="1"
-                     Grid.Row="9"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="1"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="2"
-                     Grid.Row="9"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="2"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="3"
-                     Grid.Row="9"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="4"
-                     Grid.Row="9"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"
-                     Text="0.00"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>
-
-            <TextBox Grid.Column="5"
-                     Grid.Row="9"
-                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="3"  
-                     Margin="5"
-                     Width="100"
-                     Text="60.000"                     
-                     HorizontalContentAlignment="Center"
-                     >
-
-            </TextBox>-->
-
+        </Grid>-->
 
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
