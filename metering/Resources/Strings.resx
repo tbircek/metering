@@ -337,4 +337,7 @@
   <data name="startTest" xml:space="preserve">
     <value>Start Test</value>
   </data>
+  <data name="header_signal" xml:space="preserve">
+    <value>Signal</value>
+  </data>
 </root>

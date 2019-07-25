@@ -21,9 +21,9 @@ namespace metering.view
             var navigationService = NavigationService.GetNavigationService(this);
 
             // Force WPF to download this page
-            if (navigationService != null)
+            if (navigationService.CanGoBack) // != null)
             {
-                Debug.WriteLine("Can go back");
+                Debug.WriteLine("Can go forward...");
                 navigationService.GoBack(); // (new Uri("\\MainWindow.xaml", UriKind.Relative));
             }
         }

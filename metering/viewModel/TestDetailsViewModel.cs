@@ -1,11 +1,59 @@
 ﻿using metering.model;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace metering.viewModel
 {
     public class TestDetailsViewModel : ViewModelBase
     {
+
         private static TestDetailsModel model = new TestDetailsModel();
+        private static TestDetailModel testDetail = new TestDetailModel();
+
+        public TestDetailsViewModel()
+        {
+
+        }
+
+        public TestDetailsViewModel(string register, string progress, string dwellTime, string startDelayTime, string measurementInterval, string startMeasurementDelay, ObservableCollection<TestDetailModel> testDetails)
+        {
+            Register = register;
+            Progress = progress;
+            DwellTime = dwellTime;
+            StartDelayTime = startDelayTime;
+            MeasurementInterval = measurementInterval;
+            StartMeasurementDelay = startMeasurementDelay;
+            model.TestDetail = testDetails;
+            //model.TestDetail.CollectionChanged += TestDetails_CollectionChanged;
+        }
+
+        //private void TestDetails_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        //{
+        //    // throw new System.NotImplementedException();
+        //    ObservableCollection<TestDetailModel> senderCollection = sender as ObservableCollection<TestDetailModel>;
+        //    NotifyCollectionChangedAction action = e.Action;
+
+        //    Debug.WriteLine($"Collection action:{e.Action}");
+        //    if (action == NotifyCollectionChangedAction.Add)
+        //    {
+        //        //if (SetProperty(model.TestDetail, senderCollection))
+        //        //{
+        //        //    model.TestDetail = senderCollection;
+        //        //}
+        //        Debug.WriteLine("Collection changed. Clear first than put new values");
+
+        //        //foreach (var item in senderCollection)
+        //        //{
+        //        //    testDetail.From = item.From;
+        //        //}
+        //    }
+        //    else if (action == NotifyCollectionChangedAction.Reset)
+        //    {
+        //        Debug.WriteLine("Collection changed. Clear first than put new values");
+        //    }
+        //    model.TestDetail = senderCollection;
+        //}
 
         public string Register
         {
@@ -36,7 +84,7 @@ namespace metering.viewModel
             get => model.DwellTime;
             set
             {
-               if( SetProperty(model.DwellTime, value))
+                if (SetProperty(model.DwellTime, value))
                 {
                     model.DwellTime = value;
                 }
@@ -48,11 +96,11 @@ namespace metering.viewModel
             get => model.StartDelayTime;
             set
             {
-                if ( SetProperty(model.StartDelayTime, value)) 
-                    {
+                if (SetProperty(model.StartDelayTime, value))
+                {
                     model.StartDelayTime = value;
-                    }
                 }
+            }
         }
 
         public string MeasurementInterval
@@ -64,47 +112,25 @@ namespace metering.viewModel
                 {
                     model.MeasurementInterval = value;
                 }
-            } 
+            }
         }
 
         public string StartMeasurementDelay
         {
             get => model.StartMeasurementDelay;
             set
-            { if (SetProperty(model.StartMeasurementDelay, value))
+            {
+                if (SetProperty(model.StartMeasurementDelay, value))
                 {
                     model.StartMeasurementDelay = value;
                 }
             }
         }
 
-        public ObservableCollection<string> Test
+        public ObservableCollection<TestDetailModel> TestDetails
         {
-            get
-            {
-                foreach (var test in model.TestDetails)
-                {
-                    Test.Add(test.SignalName);
-                    Test.Add(test.From);
-                    Test.Add(test.To);
-                    Test.Add(test.Delta);
-                    Test.Add(test.Phase);
-                    Test.Add(test.Frequency);
-                }
-                return Test;
-            }
-            set
-            {
-                //foreach (var test in value)
-                //{
-                //    if (SetProperty(model.TestDetails, value))
-                //    {
-
-                //    }
-                //}
-                
-            }
+            get => model.TestDetail;
+            set => model.TestDetail = value;
         }
-
     }
 }

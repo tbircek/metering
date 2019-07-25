@@ -39,43 +39,27 @@ namespace metering.view
             var navigationService =  NavigationService.GetNavigationService(this);
 
             // Force WPF to download this page
-            if (navigationService != null)
+            //if (navigationService != null)
+            if (navigationService.CanGoBack)
             {
                 Debug.WriteLine("Can go forward");
                 navigationService.Navigate(new Uri("\\view\\NominalValuesView.xaml", UriKind.Relative));
             }
         }
 
-        //private void AddNewTest_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var navigationService = NavigationService.GetNavigationService(this);
+        // it is not pure mvvm but it works.
+        private void AddNewTest_Click(object sender, RoutedEventArgs e)
+        {
+            var navigationService = NavigationService.GetNavigationService(this);
 
-        //    // Force WPF to download this page
-        //    if (navigationService != null)
-        //    {
-        //        Debug.WriteLine("Can move backward");
-        //        var test = new TestDetailsViewModel().Test;
-
-        //        // NominalValuesViewModel nominalValues = new NominalValuesViewModel();
-
-        //        // TODO: This value would be retrieve from Omicron Connection.
-        //        int omicronVoltageOutputNumber = 4;
-        //        for (int i = 1; i <= omicronVoltageOutputNumber; i++)
-        //        {
-        //            test = new model.TestDetailModel(signalName: "v" + i,
-        //                                        from: nominalValues.Voltage,
-        //                                        to: nominalValues.Voltage,
-        //                                        delta: nominalValues.Delta,
-        //                                        phase: "0.00",
-        //                                        frequency: nominalValues.Frequency);
-                    
-        //            // testView.S("v" + i, nominalValues.Voltage, nominalValues.Voltage, nominalValues.Delta, "0.00", nominalValues.Frequency);
-        //            Debug.WriteLine($"testDetail: signalName: {test.SignalName}\tfrom: {test.From}\tto: {test.To}\tdelta: {test.Delta}\tphase: {test.Phase}\tfrequency: {test.Frequency}");
-        //        }
-
-
-        //        navigationService.Navigate(new Uri("\\view\\TestDetailsView.xaml", UriKind.Relative));
-        //    }
-        //}
+            // Force WPF to download this page
+            if (navigationService != null)
+            {
+                Debug.WriteLine("Can move backward");                
+               
+                navigationService.Navigate(new Uri("\\view\\TestDetailsView.xaml", UriKind.Relative));
+                // navigationService.AddBackEntry(state);
+            }
+        }
     }
 }

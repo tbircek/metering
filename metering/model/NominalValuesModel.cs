@@ -11,19 +11,6 @@ namespace metering.model
         public string SelectedVoltagePhase { get; set; } = "AllZero";
         public string SelectedCurrentPhase { get; set; } = "AllZero";
 
-        //private readonly ObservableCollection<VPhases>
-        //public string V1Phase { get; set; } = "0";
-        //public string V2Phase { get; set; } = "0";
-        //public string V3Phase { get; set; } = "0";
-        //public string V4Phase { get; set; } = "0";
-
-        //public string I1Phase { get; set; } = "0";
-        //public string I2Phase { get; set; } = "0";
-        //public string I3Phase { get; set; } = "0";
-        //public string I4Phase { get; set; } = "0";
-        //public string I5Phase { get; set; } = "0";
-        //public string I6Phase { get; set; } = "0";
-
         public NominalValuesModel GetNominalValuesModel()
         {
             return new NominalValuesModel();

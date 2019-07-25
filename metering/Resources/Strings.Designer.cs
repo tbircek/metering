@@ -368,6 +368,15 @@ namespace metering.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Signal.
+        /// </summary>
+        public static string header_signal {
+            get {
+                return ResourceManager.GetString("header_signal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Delay Time (min).
         /// </summary>
         public static string header_start_delay_time {
