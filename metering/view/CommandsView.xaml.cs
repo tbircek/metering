@@ -1,5 +1,4 @@
-﻿using metering.viewModel;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;

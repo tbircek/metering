@@ -10,12 +10,12 @@ namespace metering.viewModel
 {
     public class TestDetailViewModel : ViewModelBase
     {
-        private static TestDetailModel model = new TestDetailModel();
+        private static Test model = new Test("", "", "", "", "", "");
 
-        public TestDetailViewModel()
-        {
+        //public TestDetailViewModel()
+        //{
 
-        }
+        //}
 
         public TestDetailViewModel(string signalName, string from, string to, string delta, string phase, string frequency)
         {

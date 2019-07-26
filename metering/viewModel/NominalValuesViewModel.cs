@@ -11,17 +11,57 @@ namespace metering.viewModel
 {
     public class NominalValuesViewModel : ViewModelBase
     {
+
+        ObservableCollection<TestDetailsViewModel> testDetailsViewModels;
+
         private static NominalValuesModel model = new NominalValuesModel();
         // private static TestDetail testDetail = new TestDetail();
-        private static ObservableCollection<TestDetailModel> testDetails = new ObservableCollection<TestDetailModel>();
+        private static ObservableCollection<Test> testDetails = new ObservableCollection<Test>();
         // private ObservableCollection<Person> persons = new ObservableCollection<Person>();
-        private static TestDetailsModel testDetailsModel = new TestDetailsModel("", "", "", "", "", "");// , testDetails);
+        // private static TestDetailsModel testDetailsModel = new TestDetailsModel("", "", "", "", "", "");// , testDetails);
 
         // private bool CollectionChanged = false;
 
         DelegateCommand addNewTestCommand;
         DelegateCommand cancelNewTestCommand;
         DelegateCommand radioButtonCommand;
+
+        public ObservableCollection<TestDetailsViewModel> TestDetailsViewModels
+        {
+            get
+            {
+                if (testDetailsViewModels == null)
+                {
+                    testDetailsViewModels = new ObservableCollection<TestDetailsViewModel>();
+                    testDetailsViewModels.CollectionChanged += OnCollectionChanged;
+                }
+                return testDetailsViewModels;
+            }
+        }
+
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // throw new NotImplementedException();
+            Debug.WriteLine("new testDetailsViewModels is loading ...");
+
+            if (e.NewItems !=null && e.NewItems.Count > 0)
+            {
+                foreach (TestDetailsViewModel item in e.NewItems)
+                {
+                    // item.RequestClose += OnTestDetailsViewModelClose;
+                    Debug.WriteLine("testDetailsViewModels has new e.MewItems");
+                }
+            }
+
+            if (e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (TestDetailsViewModel item in e.OldItems)
+                {
+                    // item.RequestClose += OnTestDetailsViewModelClose;
+                    Debug.WriteLine("testDetailsViewModels has new e.OldItems");
+                }
+            }
+        }
 
         public NominalValuesViewModel()
         {
@@ -174,14 +214,7 @@ namespace metering.viewModel
 
         private void CopyNominalValues()
         {
-            //if (testDetailsModel.TestDetail != null)
-            //{
-            //    testDetailsModel.TestDetail.Clear();
-            //}
-            //else
-            //{
-            //    testDetailsModel.TestDetail = new ObservableCollection<TestDetailModel>();
-            //}
+            TestDetailsModel testDetailsModel = new TestDetailsModel();
 
             // throw new NotImplementedException();
             Debug.WriteLine("Following values reported:");
@@ -201,18 +234,28 @@ namespace metering.viewModel
                 }
 
                 Debug.WriteLine($"signal: v{i}\tfrom: {model.Voltage}\tto: {model.Voltage}\tdelta: {model.Delta}\tphase: {phase[i - 1]}\tfrequency: {model.Frequency}");
-                TestDetailModel test = new TestDetailModel
-                {
-                    SignalName = "v" + i,
-                    From = model.Voltage,
-                    To = model.Voltage,
-                    Delta = model.Delta,
-                    Phase = phase[i - 1],
-                    Frequency = model.Frequency
-                };
-                //testDetailsModel.TestDetail.Add(test);
+                //TestDetailModel test = new TestDetailModel
+                //{
+                //    SignalName = "v" + i,
+                //    From = model.Voltage,
+                //    To = model.Voltage,
+                //    Delta = model.Delta,
+                //    Phase = phase[i - 1],
+                //    Frequency = model.Frequency
+                //};
+                ////testDetailsModel.TestDetail.Add(test);
+                ///
+                Test test = new Test(
+                signalName: "v" + i,
+                        from: model.Voltage,
+                        to: model.Voltage,
+                        delta: model.Delta,
+                        phase: phase[i - 1],
+                        frequency: model.Frequency
+                    );
 
-
+                testDetails.Add(test);
+                    
             }
 
             // TODO: This variable must be obtain thru Omicron Test Set.
@@ -230,19 +273,33 @@ namespace metering.viewModel
                 }
 
                 Debug.WriteLine($"signal: i{i}\tfrom: {model.Current}\tto: {model.Current}\tdelta: {model.Delta}\tphase: {phase[i - 1]}\tfrequency: {model.Frequency}");
-                TestDetailModel test = new TestDetailModel
-                {
-                    SignalName = "i" + i,
-                    From = model.Current,
-                    To = model.Current,
-                    Delta = model.Delta,
-                    Phase = phase[i - 1],
-                    Frequency = model.Frequency
-                };
-                //testDetailsModel.TestDetail.Add(test);
+                //TestDetailModel test = new TestDetailModel
+                //{
+                //    SignalName = "i" + i,
+                //    From = model.Current,
+                //    To = model.Current,
+                //    Delta = model.Delta,
+                //    Phase = phase[i - 1],
+                //    Frequency = model.Frequency
+                //};
+                ////testDetailsModel.TestDetail.Add(test);
+
+                Test test = new Test(
+                signalName: "i" + i,
+                           from: model.Current,
+                           to: model.Current,
+                           delta: model.Delta,
+                           phase: phase[i - 1],
+                           frequency: model.Frequency
+                       );
+
+                testDetails.Add(test);                
             }
             Debug.WriteLine("TODO: show new TestDetailsView");
 
+            // testDetailsModel.TestDetail = testDetails;
+            testDetailsModel = new TestDetailsModel("", "", "", "", "", "", testDetails);
+            // detailsModel.TestDetail.Add()
             //TestDetailsViewModel testDetailsViewModel = new TestDetailsViewModel("", "", "", "", "", "", testDetailsModel.TestDetail);
         }
     }

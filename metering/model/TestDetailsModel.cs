@@ -10,13 +10,13 @@ namespace metering.model
         public string StartDelayTime { get; set; }
         public string MeasurementInterval { get; set; }
         public string StartMeasurementDelay { get; set; }
-        //public ObservableCollection<TestDetailModel> TestDetail { get; set; }
+        public ObservableCollection<Test> TestDetail { get; set; }
 
         public TestDetailsModel()
         {
         }
 
-        public TestDetailsModel(string register, string progress, string dwellTime, string startDelayTime, string measurementInterval, string startMeasurementDelay)//, ObservableCollection<TestDetail> testDetails)
+        public TestDetailsModel(string register, string progress, string dwellTime, string startDelayTime, string measurementInterval, string startMeasurementDelay, ObservableCollection<Test> testDetails)
         {
 
             Register = register;
@@ -25,7 +25,8 @@ namespace metering.model
             StartDelayTime = startDelayTime;
             MeasurementInterval = measurementInterval;
             StartMeasurementDelay = startMeasurementDelay;
-            //  TestDetail = testDetails;
+            TestDetail = testDetails;
+            //  Register = testDetails[0].SignalName;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -9,9 +8,9 @@ namespace metering.view
     /// <summary>
     /// Interaction logic for TestView.xaml
     /// </summary>
-    public partial class TestView : UserControl
+    public partial class TestDetailsView : UserControl
     {
-        public TestView()
+        public TestDetailsView()
         {
             InitializeComponent();
         }

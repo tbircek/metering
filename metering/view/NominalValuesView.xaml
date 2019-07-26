@@ -1,5 +1,5 @@
 ﻿<UserControl 
-    x:Class="metering.view.MainView"
+    x:Class="metering.view.NominalValuesView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

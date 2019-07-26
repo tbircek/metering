@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:resources="clr-namespace:metering.Resources"
+    xmlns:viewModels="clr-namespace:metering.viewModel"
     xmlns:icon="clr-namespace:Window.Icon"
     x:Class="metering.MainWindow"
     mc:Ignorable="d"
@@ -18,6 +19,9 @@
     
     <Window.Resources>
         <icon:VisualToImageSourceConverter x:Key="VisualToImageSourceConverter" />
+        <DataTemplate DataType="{x:Type viewModels:CommandsViewModel}"/>
+        <DataTemplate DataType="{x:Type viewModels:CommunicationViewModel}"/>
+        <DataTemplate DataType="{x:Type viewModels:NominalValuesViewModel}"/>
     </Window.Resources>
     <Window.Icon>
         <Binding Converter="{StaticResource VisualToImageSourceConverter}">
@@ -54,6 +58,7 @@
                 ClipToBounds="True" 
                 NavigationUIVisibility="Hidden" 
                 Source="\view\NominalValuesView.xaml">
+            <!--Content="{Binding TestDetailsViewModels}">-->
 
             </Frame>
         </Grid>

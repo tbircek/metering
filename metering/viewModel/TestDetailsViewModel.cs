@@ -7,16 +7,16 @@ namespace metering.viewModel
 {
     public class TestDetailsViewModel : ViewModelBase
     {
-
+        
         private static TestDetailsModel model = new TestDetailsModel();
-        private static TestDetailModel testDetail = new TestDetailModel();
+        private static ObservableCollection<Test> tests = new ObservableCollection<Test>();
 
         public TestDetailsViewModel()
         {
 
         }
 
-        public TestDetailsViewModel(string register, string progress, string dwellTime, string startDelayTime, string measurementInterval, string startMeasurementDelay, ObservableCollection<TestDetailModel> testDetails)
+        public TestDetailsViewModel(string register, string progress, string dwellTime, string startDelayTime, string measurementInterval, string startMeasurementDelay, ObservableCollection<Test> testDetails)
         {
             Register = register;
             Progress = progress;
@@ -24,7 +24,7 @@ namespace metering.viewModel
             StartDelayTime = startDelayTime;
             MeasurementInterval = measurementInterval;
             StartMeasurementDelay = startMeasurementDelay;
-            // model.TestDetail = testDetails;
+            tests = testDetails;
             //model.TestDetail.CollectionChanged += TestDetails_CollectionChanged;
         }
 
@@ -127,11 +127,11 @@ namespace metering.viewModel
             }
         }
 
-        public ObservableCollection<TestDetailModel> TestDetails { get; set; }
-        //{
+        public ObservableCollection<Test> Test 
+        {
 
-            //get => model.TestDetail;
-            //set => model.TestDetail = value;
-        //}
-    }
+            get => tests;
+            set => tests = value;
+        }
+}
 }
