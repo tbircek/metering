@@ -5,11 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:metering.Resources"
-    xmlns:viewModel="clr-namespace:metering.viewModel"
-    x:Class="metering.view.CommunicationView"    
+    x:Class="metering.CommunicationView"    
     mc:Ignorable="d" 
     d:DesignHeight="150" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance viewModel:CommunicationViewModel, d:IsDesignTimeCreatable=False}">
+    d:DataContext="{d:DesignInstance d:IsDesignTimeCreatable=False}">
 
     <!--<UserControl.Resources>
         <CollectionViewSource x:Key="Communication" Source="{Binding Path=ConnectCommand}"/>
@@ -19,11 +18,11 @@
             <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
 
-        <Grid.Resources>
+        <!--<Grid.Resources>
             <viewModel:CommunicationViewModel x:Key="ipAddress" />
             <viewModel:CommunicationViewModel x:Key="port" />
             <viewModel:CommunicationViewModel x:Key="log" />
-        </Grid.Resources>
+        </Grid.Resources>-->
 
         <Grid Grid.Row="0" Margin="5">
             <Grid.ColumnDefinitions>
@@ -74,9 +73,9 @@
                             Width="150" 
                             Margin="5">
                                 <TextBox.Text>
-                                    <Binding Source="{StaticResource ipAddress}" 
-                                            Path="IpAddress"
-                                            UpdateSourceTrigger="PropertyChanged"/>
+                                    <Binding 
+                                        Path="IpAddress"
+                                        UpdateSourceTrigger="PropertyChanged"/>
                                 </TextBox.Text>
                             </TextBox>
 
@@ -88,9 +87,9 @@
                             Width="150" 
                             Margin="5">
                                 <TextBox.Text>
-                                    <Binding Source="{StaticResource port}" 
-                                            Path="Port"                                        
-                                            UpdateSourceTrigger="PropertyChanged"/>
+                                    <Binding 
+                                        Path="Port"                                        
+                                        UpdateSourceTrigger="PropertyChanged"/>
                                 </TextBox.Text>
                             </TextBox>
                         </StackPanel>
@@ -105,11 +104,11 @@
                         Height="80"
                         Content="Connect"
                         Command="{Binding Path=ConnectCommand}">
-                        <ToggleButton.DataContext>
-                        <viewModel:CommunicationViewModel/>
-                        </ToggleButton.DataContext>
+                            <!--<ToggleButton.DataContext>
+                                <viewModel:CommunicationViewModel/>
+                            </ToggleButton.DataContext>-->
                         </ToggleButton>
-                        
+
                     </Grid>
                 </Grid>
             </Grid>
@@ -124,8 +123,7 @@
                     FontFamily="Courier New" 
                     FontSize="14">
                     <TextBox.Text>
-                        <Binding Source="{StaticResource log}" 
-                                            Path="Log" />
+                        <Binding Path="Log" />
                     </TextBox.Text>
                 </TextBox>
 

@@ -10,6 +10,7 @@ namespace metering.view
         public NominalValuesView()
         {
             InitializeComponent();
+            DataContext = new NominalValuesViewModel();
         }
     }
 }

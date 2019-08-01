@@ -5,21 +5,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:metering.Resources"
-    xmlns:c="clr-namespace:metering"
-    xmlns:viewModel="clr-namespace:metering.viewModel"
     x:Class="metering.view.TestDetailView"
     mc:Ignorable="d" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance {x:Type viewModel:TestDetailsViewModel}, IsDesignTimeCreatable=False}" Height="50">
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False}" Height="50">
 
     <!--<UserControl.Background>-->
     <!--<ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>-->
     <!--</UserControl.Background>-->
-    <UserControl.Resources>
+    <!--<UserControl.Resources>-->
         <!--<CollectionViewSource 
             x:Key="TestList"
             Source="{Binding Test}"/>-->   
-        <viewModel:TestDetailsViewModel x:Key="Test" />
-    </UserControl.Resources>
+        <!--<viewModel:TestDetailsViewModel x:Key="Test" />-->
+    <!--</UserControl.Resources>-->
 
     <!--<Grid.Resources>
             <viewModel:TestDetailViewModel x:Key="signalName" />

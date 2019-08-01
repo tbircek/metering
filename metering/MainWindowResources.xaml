@@ -1,21 +1,20 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:view="clr-namespace:metering.view"
-                    xmlns:viewModel="clr-namespace:metering.viewModel">
+                    xmlns:local="clr-namespace:metering">
 
-    <DataTemplate DataType="{x:Type viewModel:CommandsViewModel}">
-        <view:CommandsView/>
+    <!--<DataTemplate DataType="{x:Type local:CommandsViewModel}">
+        <local:CommandsView/>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type viewModel:CommunicationViewModel}">
-        <view:CommunicationView/>
+    <DataTemplate DataType="{x:Type local:CommunicationViewModel}">
+        <local:CommunicationView/>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type viewModel:NominalValuesViewModel}">
-        <view:NominalValuesView/>
+    <DataTemplate DataType="{x:Type local:NominalValuesViewModel}">
+        <local:NominalValuesView/>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type viewModel:TestDetailsViewModel}">
-        <view:TestDetailsView/>
+    <DataTemplate DataType="{x:Type local:TestDetailsViewModel}">
+        <local:TestDetailsView/>
     </DataTemplate>
-    <DataTemplate DataType="{x:Type viewModel:TestDetailViewModel}">
-        <view:TestDetailView/>
-    </DataTemplate>
+    <DataTemplate DataType="{x:Type local:TestDetailViewModel}">
+        <local:TestDetailView/>
+    </DataTemplate>-->
 </ResourceDictionary>

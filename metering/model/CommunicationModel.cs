@@ -1,4 +1,4 @@
-﻿namespace metering.model
+﻿namespace metering
 {
     public class CommunicationModel
     {

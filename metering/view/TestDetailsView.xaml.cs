@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
-namespace metering.view
+namespace metering
 {
     /// <summary>
     /// Interaction logic for TestView.xaml

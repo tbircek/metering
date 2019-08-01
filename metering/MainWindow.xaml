@@ -6,22 +6,22 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:resources="clr-namespace:metering.Resources"
-    xmlns:viewModels="clr-namespace:metering.viewModel"
     xmlns:icon="clr-namespace:Window.Icon"
     x:Class="metering.MainWindow"
+    xmlns:local="clr-namespace:metering"
     mc:Ignorable="d"
-        Title="{x:Static resources:Strings.Title}"
-        ShowIconOnTitleBar="True"
-        ShowTitleBar="True"
-        Height="800" Width="800"
-        GlowBrush="{DynamicResource AccentColorBrush}"
-        FontSize="16">
+    Title="{x:Static resources:Strings.Title}"
+    ShowIconOnTitleBar="True"
+    ShowTitleBar="True"
+    Height="800" Width="800"
+    GlowBrush="{DynamicResource AccentColorBrush}"
+    FontSize="16">
     
     <Window.Resources>
         <icon:VisualToImageSourceConverter x:Key="VisualToImageSourceConverter" />
-        <DataTemplate DataType="{x:Type viewModels:CommandsViewModel}"/>
-        <DataTemplate DataType="{x:Type viewModels:CommunicationViewModel}"/>
-        <DataTemplate DataType="{x:Type viewModels:NominalValuesViewModel}"/>
+        <!--<DataTemplate DataType="{x:Type local:CommandsViewModel}"/>-->
+        <!--<DataTemplate DataType="{x:Type local:CommunicationViewModel}"/>-->
+        <!--<DataTemplate DataType="{x:Type local:}"/>-->
     </Window.Resources>
     <Window.Icon>
         <Binding Converter="{StaticResource VisualToImageSourceConverter}">

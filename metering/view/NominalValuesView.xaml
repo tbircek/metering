@@ -1,15 +1,14 @@
 ﻿<UserControl 
     x:Class="metering.view.NominalValuesView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
-    xmlns:resources="clr-namespace:metering.Resources"            
-    xmlns:viewModel="clr-namespace:metering.viewModel"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resources="clr-namespace:metering.Resources"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance viewModel:NominalValuesViewModel, d:IsDesignTimeCreatable=False}">
+    d:DataContext="{d:DesignInstance d:IsDesignTimeCreatable=False}">
 
     <UserControl.Background>
         <ImageBrush 
@@ -21,14 +20,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <Grid.Resources>
-            <viewModel:NominalValuesViewModel x:Key="voltage"/>
-            <viewModel:NominalValuesViewModel x:Key="current"/>
-            <viewModel:NominalValuesViewModel x:Key="frequency"/>
-            <viewModel:NominalValuesViewModel x:Key="delta"/>
-        </Grid.Resources>
-        
+
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -51,11 +43,10 @@
                             FontSize="16"
                             HorizontalContentAlignment="Center">
                             <TextBox.Text>
-                                <Binding Source="{StaticResource voltage}" 
-                                         Path="NominalVoltage"
-                                         UpdateSourceTrigger="PropertyChanged"
-                                         ConverterCulture='en-US'
-                                         StringFormat="{}{0:F2}"/>
+                                <Binding 
+                                    Path="NominalVoltage"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    StringFormat="{}{0:F2}"/>
                             </TextBox.Text>
                         </TextBox>
 
@@ -68,11 +59,11 @@
                             FontSize="16"
                             HorizontalContentAlignment="Center">
                             <TextBox.Text>
-                                <Binding Source="{StaticResource current}" 
-                                         Path="NominalCurrent"
-                                         UpdateSourceTrigger="PropertyChanged"
-                                         ConverterCulture='en-US'
-                                         StringFormat="{}{0:F2}"/>
+                                <Binding 
+                                    Path="NominalCurrent"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    ConverterCulture='en-US'
+                                    StringFormat="{}{0:F2}"/>
                             </TextBox.Text>
 
                         </TextBox>
@@ -86,11 +77,11 @@
                             FontSize="16"
                             HorizontalContentAlignment="Center">
                             <TextBox.Text>
-                                <Binding Source="{StaticResource frequency}" 
-                                         Path="NominalFrequency"
-                                         UpdateSourceTrigger="PropertyChanged"
-                                         ConverterCulture='en-US'
-                                         StringFormat="{}{0:F3}"/>
+                                <Binding 
+                                    Path="NominalFrequency"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    ConverterCulture='en-US'
+                                    StringFormat="{}{0:F3}"/>
                             </TextBox.Text>
 
                         </TextBox>
@@ -108,9 +99,7 @@
                     Header="{x:Static resources:Strings.global_nominal_phase_voltage}" 
                     Margin="16" 
                     Grid.Row="0">
-                    <GroupBox.DataContext>
-                        <viewModel:NominalValuesViewModel/>
-                    </GroupBox.DataContext>
+                    
                     <StackPanel>
                         <RadioButton 
                             Content="{x:Static resources:Strings.global_nominal_phase_zero}"
@@ -140,10 +129,7 @@
                     Header="{x:Static resources:Strings.global_nominal_phase_current}" 
                     Margin="16" 
                     Grid.Row="1">
-                    <GroupBox.DataContext>
-                        <viewModel:NominalValuesViewModel/>
-                    </GroupBox.DataContext>
-
+                                        
                     <StackPanel>
                         <RadioButton 
                             Content="{x:Static resources:Strings.global_nominal_phase_zero}"
@@ -186,11 +172,11 @@
                             FontSize="16"                     
                             HorizontalContentAlignment="Center">
                             <TextBox.Text>
-                                <Binding Source="{StaticResource delta}" 
-                                         Path="NominalDelta"
-                                         UpdateSourceTrigger="PropertyChanged"
-                                         ConverterCulture='en-US'
-                                         StringFormat="{}{0:F2}"/>
+                                <Binding 
+                                    Path="NominalDelta"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    ConverterCulture='en-US'
+                                    StringFormat="{}{0:F2}"/>
                             </TextBox.Text>
 
                         </TextBox>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace metering.model
+namespace metering
 {
     public class TestDetailsModel
     {

@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="metering.view.TestDetailsView"
+    x:Class="metering.TestDetailsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
@@ -8,12 +8,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resources="clr-namespace:metering.Resources"
-    xmlns:local="clr-namespace:metering.view"
-    xmlns:viewModel="clr-namespace:metering.viewModel"
-    
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance {x:Type viewModel:NominalValuesViewModel}, IsDesignTimeCreatable=False}">
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False}">
 
     <UserControl.Background>
         <ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
@@ -26,13 +23,13 @@
     </UserControl.DataContext>-->
     <Grid>
 
-        <Grid.Resources>
-            <viewModel:TestDetailsViewModel x:Key="register" />
-            <viewModel:TestDetailsViewModel x:Key="progress" Progress="0.0"/>
-            <viewModel:TestDetailsViewModel x:Key="dwellTime" />
-            <viewModel:TestDetailsViewModel x:Key="startDelayTime" />
-            <viewModel:TestDetailsViewModel x:Key="measurementInterval" />
-            <viewModel:TestDetailsViewModel x:Key="startMeasurementDelay" />
+        <!--<Grid.Resources>-->
+            <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
+            <!--<viewModel:TestDetailsViewModel x:Key="progress" Progress="0.0"/>-->
+            <!--<viewModel:TestDetailsViewModel x:Key="dwellTime" />-->
+            <!--<viewModel:TestDetailsViewModel x:Key="startDelayTime" />-->
+            <!--<viewModel:TestDetailsViewModel x:Key="measurementInterval" />-->
+            <!--<viewModel:TestDetailsViewModel x:Key="startMeasurementDelay" />-->
             <!--<viewModel:TestDetailsViewModel x:Key="testDetails" />-->
             <!--<viewModel:TestDetailViewModel x:Key="signalName" />-->
             <!--<viewModel:TestDetailViewModel x:Key="from" />-->
@@ -41,7 +38,7 @@
             <!--<viewModel:TestDetailViewModel x:Key="phase" />-->
             <!--<viewModel:TestDetailViewModel x:Key="frequency" />-->
             <!--<viewModel:TestDetailViewModel x:Key="Tests"/>-->
-        </Grid.Resources>
+        <!--</Grid.Resources>-->
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -70,7 +67,8 @@
                     Margin="5"
                     Height="60"
                     FontSize="24"                     
-                    HorizontalContentAlignment="Center" Text="{Binding Register, Source={StaticResource register}, UpdateSourceTrigger=PropertyChanged}"/>
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding Register, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
 
             <Grid 
@@ -89,7 +87,8 @@
                         VerticalContentAlignment="Center"
                         VerticalAlignment="Bottom"                        
                         TextOptions.TextFormattingMode="Display"
-                        IsIndeterminate="False" Value="{Binding Progress, FallbackValue=0, IsAsync=True, Source={StaticResource progress}}">
+                        IsIndeterminate="False" 
+                        Value="{Binding Progress, FallbackValue=0, IsAsync=True}">
                         <!--materialDesign:ButtonProgressAssist.Value="{Binding Path=progress, UpdateSourceTrigger=PropertyChanged}"
                         <i:Interaction.Behaviors>
                             <local:ProgresBarAnimateBehavior x:Name="AnimateBehavior" />
@@ -123,7 +122,8 @@
                 TabIndex="1"  
                 Margin="5"
                 Width="180"
-                HorizontalContentAlignment="Center" Text="{Binding DwellTime, Source={StaticResource dwellTime}, UpdateSourceTrigger=PropertyChanged}"/>
+                HorizontalContentAlignment="Center" 
+                Text="{Binding DwellTime, UpdateSourceTrigger=PropertyChanged}"/>
 
             <!-- Start Delay Time -->
             <TextBox
@@ -133,7 +133,8 @@
                 TabIndex="2"  
                 Margin="5"
                 Width="180"
-                HorizontalContentAlignment="Center" Text="{Binding StartDelayTime, Source={StaticResource startDelayTime}, UpdateSourceTrigger=PropertyChanged}"/>
+                HorizontalContentAlignment="Center" 
+                Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged}"/>
 
             <!-- Measurement Interval -->
             <TextBox 
@@ -143,7 +144,8 @@
                 TabIndex="3"  
                 Margin="5"
                 Width="180"                     
-                HorizontalContentAlignment="Center" Text="{Binding MeasurementInterval, Source={StaticResource measurementInterval}, UpdateSourceTrigger=PropertyChanged}"/>
+                HorizontalContentAlignment="Center" 
+                Text="{Binding MeasurementInterval, UpdateSourceTrigger=PropertyChanged}"/>
 
             <!-- Start Measurement Delay -->
             <TextBox 
@@ -154,7 +156,8 @@
                 TabIndex="4"  
                 Margin="5"
                 Width="180"                     
-                HorizontalContentAlignment="Center" Text="{Binding StartMeasurementDelay, Source={StaticResource startMeasurementDelay}, UpdateSourceTrigger=PropertyChanged}"/>
+                HorizontalContentAlignment="Center" 
+                Text="{Binding StartMeasurementDelay, UpdateSourceTrigger=PropertyChanged}"/>
 
         </Grid>
 
