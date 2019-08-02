@@ -15,7 +15,11 @@ namespace metering
         private Window thisWindow;
         #endregion
 
+        #region Public Properties
 
+
+        #endregion
+        
         #region Constructor
 
         /// <summary>

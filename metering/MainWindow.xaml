@@ -8,20 +8,23 @@
     xmlns:resources="clr-namespace:metering.Resources"
     xmlns:icon="clr-namespace:WindowConverter.Icon"
     x:Class="metering.MainWindow"
+    x:Name="AppWindow"
     mc:Ignorable="d"
     Title="{x:Static resources:Strings.Title}"
     ShowIconOnTitleBar="True"
     ShowTitleBar="True"
     Height="800" Width="800"
-    GlowBrush="{DynamicResource AccentColorBrush}"
-    FontSize="16">
-    
+    BorderThickness="0" 
+    GlowBrush="Black"
+    ResizeMode="CanResizeWithGrip"
+    FontSize="16"
+    WindowTransitionsEnabled="False"
+    WindowStartupLocation="CenterScreen">
+
     <Window.Resources>
         <icon:VisualToImageSourceConverter x:Key="VisualToImageSourceConverter" />
-        <!--<DataTemplate DataType="{x:Type local:CommandsViewModel}"/>-->
-        <!--<DataTemplate DataType="{x:Type local:CommunicationViewModel}"/>-->
-        <!--<DataTemplate DataType="{x:Type local:}"/>-->
     </Window.Resources>
+    
     <Window.Icon>
         <Binding Converter="{StaticResource VisualToImageSourceConverter}">
             <Binding.Source>
@@ -29,15 +32,16 @@
             </Binding.Source>
         </Binding>
     </Window.Icon>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="0" Margin="5">
-            
+
             <Frame 
                 x:Name="CommunicationFrame"
                 BorderBrush="Black" 
@@ -45,10 +49,10 @@
                 ClipToBounds="True" 
                 NavigationUIVisibility="Hidden" 
                 Source="\view\CommunicationView.xaml">
-            
+
             </Frame>
         </Grid>
-        
+
         <Grid Grid.Row="1" Margin="5">
             <Frame 
                 x:Name="TestValuesFrame"
@@ -58,7 +62,7 @@
                 NavigationUIVisibility="Hidden" 
                 Source="\view\TestDetailView.xaml">
                 <!--Source="\view\NominalValuesView.xaml">-->
-            <!--Content="{Binding TestDetailsViewModels}">-->
+                <!--Content="{Binding TestDetailsViewModels}">-->
 
             </Frame>
         </Grid>

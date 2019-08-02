@@ -17,6 +17,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <Button
+            Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}">
+            
+        </Button>
         <Controls:Tile 
             Title="Cancel" 
             Margin="1,0,0,0"

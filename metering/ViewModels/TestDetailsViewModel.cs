@@ -40,9 +40,12 @@ namespace metering
 
         #endregion
 
-        //private static TestDetailsModel model = new TestDetailsModel();
-        //private static ObservableCollection<Test> tests = new ObservableCollection<Test>();
 
+        #region Constructor
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public TestDetailsViewModel()
         {
             // make aware of culture of the computer
@@ -51,51 +54,7 @@ namespace metering
             Thread.CurrentThread.CurrentCulture = ci;
 
         }
+        #endregion
 
-        //public TestDetailsViewModel(string register, string progress, string dwellTime, string startDelayTime, string measurementInterval, string startMeasurementDelay, ObservableCollection<Test> testDetails)
-        //{
-        //    Register = register;
-        //    Progress = progress;
-        //    DwellTime = dwellTime;
-        //    StartDelayTime = startDelayTime;
-        //    MeasurementInterval = measurementInterval;
-        //    StartMeasurementDelay = startMeasurementDelay;
-        //    tests = testDetails;
-        //    //model.TestDetail.CollectionChanged += TestDetails_CollectionChanged;
-        //}
-
-        //private void TestDetails_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //    // throw new System.NotImplementedException();
-        //    ObservableCollection<TestDetailModel> senderCollection = sender as ObservableCollection<TestDetailModel>;
-        //    NotifyCollectionChangedAction action = e.Action;
-
-        //    Debug.WriteLine($"Collection action:{e.Action}");
-        //    if (action == NotifyCollectionChangedAction.Add)
-        //    {
-        //        //if (SetProperty(model.TestDetail, senderCollection))
-        //        //{
-        //        //    model.TestDetail = senderCollection;
-        //        //}
-        //        Debug.WriteLine("Collection changed. Clear first than put new values");
-
-        //        //foreach (var item in senderCollection)
-        //        //{
-        //        //    testDetail.From = item.From;
-        //        //}
-        //    }
-        //    else if (action == NotifyCollectionChangedAction.Reset)
-        //    {
-        //        Debug.WriteLine("Collection changed. Clear first than put new values");
-        //    }
-        //    model.TestDetail = senderCollection;
-        //}
-
-        //public ObservableCollection<Test> Test 
-        //{
-
-        //    get => tests;
-        //    set => tests = value;
-        //}
     }
 }
