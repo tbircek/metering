@@ -45,7 +45,8 @@ namespace metering
 
         public TestDetailsViewModel()
         {
-
+            // make aware of culture of the computer
+            // in case this software turns to something else.
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
 

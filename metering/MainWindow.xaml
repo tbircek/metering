@@ -6,9 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:resources="clr-namespace:metering.Resources"
-    xmlns:icon="clr-namespace:Window.Icon"
+    xmlns:icon="clr-namespace:WindowConverter.Icon"
     x:Class="metering.MainWindow"
-    xmlns:local="clr-namespace:metering"
     mc:Ignorable="d"
     Title="{x:Static resources:Strings.Title}"
     ShowIconOnTitleBar="True"
@@ -57,7 +56,8 @@
                 BorderThickness="1" 
                 ClipToBounds="True" 
                 NavigationUIVisibility="Hidden" 
-                Source="\view\NominalValuesView.xaml">
+                Source="\view\TestDetailView.xaml">
+                <!--Source="\view\NominalValuesView.xaml">-->
             <!--Content="{Binding TestDetailsViewModels}">-->
 
             </Frame>

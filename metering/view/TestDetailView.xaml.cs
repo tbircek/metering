@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace metering.view
+namespace metering
 {
     /// <summary>
     /// Interaction logic for TestDetailView.xaml
@@ -23,6 +11,25 @@ namespace metering.view
         public TestDetailView()
         {
             InitializeComponent();
+            DataContext = new TestDetailList();
+
+        }
+    }
+
+    public class TestDetailList : ObservableCollection<TestDetailViewModel>
+    {
+        public TestDetailList() : base()
+        {
+            Add(new TestDetailViewModel("v1", "100.0", "120.0", "2.345", "0", "59.999"));
+            Add(new TestDetailViewModel("v2", "100.0", "120.0", "2.345", "-120", "59.999"));
+            Add(new TestDetailViewModel("v3", "100.0", "120.0", "2.345", "120", "59.999"));
+            Add(new TestDetailViewModel("v4", "100.0", "120.0", "2.345", "0", "59.999"));
+            Add(new TestDetailViewModel("i1", "25.0", "35.0", "0.100", "0", "59.999"));
+            Add(new TestDetailViewModel("i2", "25.0", "35.0", "0.100", "-120", "59.999"));
+            Add(new TestDetailViewModel("i3", "25.0", "35.0", "0.100", "120", "59.999"));
+            Add(new TestDetailViewModel("i4", "25.0", "35.0", "0.100", "0", "59.999"));
+            Add(new TestDetailViewModel("i5", "25.0", "35.0", "0.100", "-120", "59.999"));
+            Add(new TestDetailViewModel("i6", "25.0", "35.0", "0.100", "1200", "59.999"));
         }
     }
 }

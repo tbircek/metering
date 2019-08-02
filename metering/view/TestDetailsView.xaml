@@ -24,20 +24,20 @@
     <Grid>
 
         <!--<Grid.Resources>-->
-            <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
-            <!--<viewModel:TestDetailsViewModel x:Key="progress" Progress="0.0"/>-->
-            <!--<viewModel:TestDetailsViewModel x:Key="dwellTime" />-->
-            <!--<viewModel:TestDetailsViewModel x:Key="startDelayTime" />-->
-            <!--<viewModel:TestDetailsViewModel x:Key="measurementInterval" />-->
-            <!--<viewModel:TestDetailsViewModel x:Key="startMeasurementDelay" />-->
-            <!--<viewModel:TestDetailsViewModel x:Key="testDetails" />-->
-            <!--<viewModel:TestDetailViewModel x:Key="signalName" />-->
-            <!--<viewModel:TestDetailViewModel x:Key="from" />-->
-            <!--<viewModel:TestDetailViewModel x:Key="to" />-->
-            <!--<viewModel:TestDetailViewModel x:Key="delta" />-->
-            <!--<viewModel:TestDetailViewModel x:Key="phase" />-->
-            <!--<viewModel:TestDetailViewModel x:Key="frequency" />-->
-            <!--<viewModel:TestDetailViewModel x:Key="Tests"/>-->
+        <!--<viewModel:TestDetailsViewModel x:Key="register" />-->
+        <!--<viewModel:TestDetailsViewModel x:Key="progress" Progress="0.0"/>-->
+        <!--<viewModel:TestDetailsViewModel x:Key="dwellTime" />-->
+        <!--<viewModel:TestDetailsViewModel x:Key="startDelayTime" />-->
+        <!--<viewModel:TestDetailsViewModel x:Key="measurementInterval" />-->
+        <!--<viewModel:TestDetailsViewModel x:Key="startMeasurementDelay" />-->
+        <!--<viewModel:TestDetailsViewModel x:Key="testDetails" />-->
+        <!--<viewModel:TestDetailViewModel x:Key="signalName" />-->
+        <!--<viewModel:TestDetailViewModel x:Key="from" />-->
+        <!--<viewModel:TestDetailViewModel x:Key="to" />-->
+        <!--<viewModel:TestDetailViewModel x:Key="delta" />-->
+        <!--<viewModel:TestDetailViewModel x:Key="phase" />-->
+        <!--<viewModel:TestDetailViewModel x:Key="frequency" />-->
+        <!--<viewModel:TestDetailViewModel x:Key="Tests"/>-->
         <!--</Grid.Resources>-->
 
         <Grid.RowDefinitions>
@@ -163,11 +163,15 @@
 
         <!--<Grid Grid.Row="2">
             <ContentControl Content="{Binding}" />
-            --><!--<Grid.DataContext>
+            -->
+        <!--<Grid.DataContext>
                 <local:TestDetailView />
-                --><!--<CollectionViewSource x:Name="Somethin" Source="{Binding Path=Test}" />--><!--
+                -->
+        <!--<CollectionViewSource x:Name="Somethin" Source="{Binding Path=Test}" />-->
+        <!--
             </Grid.DataContext>-->
-            <!--<ContentControl Content="{Binding Source={StaticResource Tests}}" />--><!--
+        <!--<ContentControl Content="{Binding Source={StaticResource Tests}}" />-->
+        <!--
         </Grid>-->
         <!--<Grid Grid.Row="2" DataContext="viewModel:TestDetailViewModel" >-->
         <!--<Grid.RowDefinitions>
@@ -1378,8 +1382,7 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Controls:Tile x:Name="Cancel" 
-                           Title="{x:Static resources:Strings.cancelTest}" 
-                           Click="Cancel_Click"
+                           Title="{x:Static resources:Strings.cancelTest}"
                            Width="Auto"
                            Height="Auto" 
                            Margin="1,0,0,0" 

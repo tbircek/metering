@@ -5,7 +5,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Window.Icon
+namespace WindowConverter.Icon
 {
     [ValueConversion(typeof(FrameworkElement), typeof(ImageSource))]
     public class VisualToImageSourceConverter : IValueConverter

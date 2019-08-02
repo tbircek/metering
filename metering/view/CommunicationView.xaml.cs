@@ -10,6 +10,7 @@ namespace metering
         public CommunicationView()
         {
             InitializeComponent();
+            DataContext = new CommunicationViewModel();
         }
     }
 }

@@ -1,21 +1,11 @@
-﻿using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Threading;
 using System.Windows.Input;
-using PropertyChanged;
-// using metering.model;
 
 namespace metering
 {
-    [AddINotifyPropertyChangedInterface]
     public class NominalValuesViewModel : BaseViewModel
     {
-
-        // ObservableCollection<TestDetailsViewModel> testDetailsViewModels;        
-        // RelayCommand addNewTestCommand;
-        // RelayCommand cancelNewTestCommand;
-        // RelayCommand radioButtonCommand;
-
         #region Constructor
         /// <summary>
         /// Default constructor.
@@ -28,7 +18,7 @@ namespace metering
             Thread.CurrentThread.CurrentCulture = ci;
 
             RadioButtonCommand = new RelayCommand(param => GetSelectedRadioButton((string)param));
-            //AddNewTestCommand = new RelayCommand(CopyNominalValues);
+            // AddTestCommand = new RelayCommand(CopyNominalValues);
             //CancelNewTestCommand = new RelayCommand(CancelNominalValues);
         }
         #endregion

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace metering.view
+namespace metering
 {
     /// <summary>
     /// Interaction logic for MainView.xaml

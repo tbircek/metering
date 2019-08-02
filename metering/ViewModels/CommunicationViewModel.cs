@@ -1,10 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Windows.Input;
-using PropertyChanged;
 
 namespace metering
 {
-    [AddINotifyPropertyChangedInterface]
     public class CommunicationViewModel : BaseViewModel
     {
         // TODO: Add a model for "Connect" button 
@@ -43,17 +41,10 @@ namespace metering
         /// <summary>
         /// default constructor
         /// </summary>
-        public CommunicationViewModel( ) //string ipAddress, string port, string log, string omicron)
+        public CommunicationViewModel( )
         {
             // create the command.
-            ConnectCommand = new RelayCommand(ConnectOmicronAndUnit);
-
-            // set ipaddress, port and log
-            //IpAddress = ipAddress;
-            //Port = port;
-            //Log = log;
-
-            // TODO: Handle Omicron connection here.
+            ConnectCommand = new RelayCommand(param => ConnectOmicronAndUnit());
         }
 
         #endregion
@@ -66,6 +57,8 @@ namespace metering
         private void ConnectOmicronAndUnit()
         {
             //throw new NotImplementedException();
+            // TODO: Handle Omicron connection here.
+            // TODO: Handle Button checked and unchecked
             Debug.WriteLine("TODO: Connect Omicron Test Set ...");
             Debug.WriteLine($"TODO: Connect thru modbus protocol to {IpAddress}:{Port}");
         }

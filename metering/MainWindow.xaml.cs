@@ -10,6 +10,7 @@ namespace metering
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new WindowViewModel(this);
         }
     }
 }
