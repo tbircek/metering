@@ -6,7 +6,7 @@ namespace metering
     /// <summary>
     /// Interaction logic for TestDetailPage.xaml
     /// </summary>
-    public partial class TestDetailPage : UserControl
+    public partial class TestDetailPage : Page
     {
         public TestDetailPage()
         {

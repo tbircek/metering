@@ -5,7 +5,7 @@ namespace metering
     /// <summary>
     /// Interaction logic for CommunicationPage.xaml
     /// </summary>
-    public partial class CommunicationPage : UserControl
+    public partial class CommunicationPage : Page
     {
         public CommunicationPage()
         {

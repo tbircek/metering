@@ -5,7 +5,7 @@ namespace metering
     /// <summary>
     /// Interaction logic for CommandsView.xaml
     /// </summary>
-    public partial class CommandsView : UserControl
+    public partial class CommandsView : Page
     {
         public CommandsView()
         {

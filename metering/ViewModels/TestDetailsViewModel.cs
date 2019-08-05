@@ -5,6 +5,7 @@ namespace metering
 {
     public class TestDetailsViewModel : BaseViewModel
     {
+
         #region Public Properties
         /// <summary>
         /// The register to monitor while testing.

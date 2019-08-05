@@ -1,16 +1,14 @@
-﻿using System.Windows.Controls;
-
-namespace metering
+﻿namespace metering
 {
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
-    public partial class NominalValuesPage : UserControl
+    public partial class NominalValuesPage: BasePage<NominalValuesViewModel>
     {
         public NominalValuesPage()
         {
             InitializeComponent();
-            DataContext = new NominalValuesViewModel();
+            // DataContext = new NominalValuesViewModel();
         }
     }
 }

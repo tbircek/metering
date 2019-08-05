@@ -152,7 +152,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Animation\PageAnimation.cs" />
     <Compile Include="converters\ApplicationPageValueConverter.cs" />
     <Compile Include="converters\BaseValueConverter.cs" />
     <Compile Include="models\ApplicationPage.cs" />

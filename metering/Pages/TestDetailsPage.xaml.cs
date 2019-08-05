@@ -1,17 +1,13 @@
-﻿using System.Windows.Controls;
-
-namespace metering
+﻿namespace metering
 {
     /// <summary>
     /// Interaction logic for TestDetailsPage.xaml
     /// </summary>
-    public partial class TestDetailsPage : UserControl
+    public partial class TestDetailsPage: BasePage<TestDetailsViewModel>
     {
         public TestDetailsPage()
         {
-            InitializeComponent();
-                      
-            DataContext = new TestDetailsViewModel();
+            InitializeComponent();             
         }
     }
 }

@@ -6,6 +6,7 @@ namespace metering
 {
     public class NominalValuesViewModel : BaseViewModel
     {
+
         #region Public Properties
         /// <summary>
         /// Default Voltage magnitude to use through out the test
