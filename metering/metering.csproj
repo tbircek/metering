@@ -152,9 +152,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Animation\PageAnimation.cs" />
     <Compile Include="converters\ApplicationPageValueConverter.cs" />
     <Compile Include="converters\BaseValueConverter.cs" />
     <Compile Include="models\ApplicationPage.cs" />
+    <Compile Include="Pages\BasePage.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="communication\ModbusCommunication.cs" />
     <Compile Include="converters\VisualToImageSourceConverter.cs" />
@@ -185,20 +187,20 @@
     <Compile Include="ViewModels\TestDetailViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
-    <Compile Include="view\CommandsView.xaml.cs">
-      <DependentUpon>CommandsView.xaml</DependentUpon>
+    <Compile Include="Pages\CommandsPage.xaml.cs">
+      <DependentUpon>CommandsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\CommunicationView.xaml.cs">
-      <DependentUpon>CommunicationView.xaml</DependentUpon>
+    <Compile Include="Pages\CommunicationPage.xaml.cs">
+      <DependentUpon>CommunicationPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\NominalValuesView.xaml.cs">
-      <DependentUpon>NominalValuesView.xaml</DependentUpon>
+    <Compile Include="Pages\NominalValuesPage.xaml.cs">
+      <DependentUpon>NominalValuesPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\TestDetailsView.xaml.cs">
-      <DependentUpon>TestDetailsView.xaml</DependentUpon>
+    <Compile Include="Pages\TestDetailsPage.xaml.cs">
+      <DependentUpon>TestDetailsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="view\TestDetailView.xaml.cs">
-      <DependentUpon>TestDetailView.xaml</DependentUpon>
+    <Compile Include="Pages\TestDetailPage.xaml.cs">
+      <DependentUpon>TestDetailPage.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -212,23 +214,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="view\CommandsView.xaml">
+    <Page Include="Pages\CommandsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\CommunicationView.xaml">
+    <Page Include="Pages\CommunicationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\NominalValuesView.xaml">
+    <Page Include="Pages\NominalValuesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\TestDetailsView.xaml">
+    <Page Include="Pages\TestDetailsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="view\TestDetailView.xaml">
+    <Page Include="Pages\TestDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

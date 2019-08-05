@@ -4,15 +4,14 @@ using System.Windows.Controls;
 namespace metering
 {
     /// <summary>
-    /// Interaction logic for TestDetailView.xaml
+    /// Interaction logic for TestDetailPage.xaml
     /// </summary>
-    public partial class TestDetailView : UserControl
+    public partial class TestDetailPage : UserControl
     {
-        public TestDetailView()
+        public TestDetailPage()
         {
             InitializeComponent();
-           // DataContext = new TestDetailList();
-
+            
         }
     }
 

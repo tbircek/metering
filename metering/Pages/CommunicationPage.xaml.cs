@@ -3,11 +3,11 @@
 namespace metering
 {
     /// <summary>
-    /// Interaction logic for CommunicationView.xaml
+    /// Interaction logic for CommunicationPage.xaml
     /// </summary>
-    public partial class CommunicationView : UserControl
+    public partial class CommunicationPage : UserControl
     {
-        public CommunicationView()
+        public CommunicationPage()
         {
             InitializeComponent();
             DataContext = new CommunicationViewModel();

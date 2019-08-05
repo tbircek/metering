@@ -50,7 +50,7 @@
                     BorderThickness="1" 
                     ClipToBounds="True" 
                     NavigationUIVisibility="Hidden" 
-                    Source="\view\CommunicationView.xaml">
+                    Source="\Pages\CommunicationPage.xaml">
 
                 </Frame>
             </Viewbox>
@@ -79,7 +79,7 @@
                     BorderThickness="1" 
                     ClipToBounds="True" 
                     NavigationUIVisibility="Hidden" 
-                    Source="\view\CommandsView.xaml">
+                    Source="\Pages\CommandsPage.xaml">
 
                 </Frame>
             </Viewbox>

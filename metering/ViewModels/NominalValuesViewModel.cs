@@ -61,6 +61,7 @@ namespace metering
             Thread.CurrentThread.CurrentCulture = ci;
 
             RadioButtonCommand = new RelayCommand(param => GetSelectedRadioButton((string)param));
+
         }
         #endregion
 

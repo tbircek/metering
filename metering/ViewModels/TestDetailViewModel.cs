@@ -140,7 +140,7 @@ namespace metering
 
                 Debug.WriteLine($"signal: i{i}\tfrom: {From}\tto: {To}\tdelta: {Delta}\tphase: {phase[i - 1]}\tfrequency: {Frequency}");
             }
-            Debug.WriteLine("TODO: show new TestDetailsView");
+            Debug.WriteLine("TODO: show new TestDetailsPage");
         }
 
         #endregion

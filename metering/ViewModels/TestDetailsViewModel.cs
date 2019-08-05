@@ -1,10 +1,8 @@
 ﻿using System.Globalization;
 using System.Threading;
-using PropertyChanged;
 
 namespace metering
 {
-    [AddINotifyPropertyChangedInterface]
     public class TestDetailsViewModel : BaseViewModel
     {
         #region Public Properties
@@ -52,7 +50,6 @@ namespace metering
             // in case this software turns to something else.
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
-
         }
         #endregion
 

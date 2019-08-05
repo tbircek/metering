@@ -15,7 +15,7 @@ namespace metering
             switch ((ApplicationPage)value)
             {
                 case ApplicationPage.NominalValues:
-                    return new NominalValuesView();
+                    return new NominalValuesPage();
                 default:
                     Debugger.Break();
                     return null;

@@ -5,9 +5,9 @@ namespace metering
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
-    public partial class NominalValuesView : UserControl
+    public partial class NominalValuesPage : UserControl
     {
-        public NominalValuesView()
+        public NominalValuesPage()
         {
             InitializeComponent();
             DataContext = new NominalValuesViewModel();
