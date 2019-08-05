@@ -6,23 +6,6 @@ namespace metering
 {
     public class NominalValuesViewModel : BaseViewModel
     {
-        #region Constructor
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public NominalValuesViewModel()
-        {
-            // make aware of culture of the computer
-            // in case this software turns to something else.
-            CultureInfo ci = new CultureInfo("en-US");
-            Thread.CurrentThread.CurrentCulture = ci;
-
-            RadioButtonCommand = new RelayCommand(param => GetSelectedRadioButton((string)param));
-            // AddTestCommand = new RelayCommand(CopyNominalValues);
-            //CancelNewTestCommand = new RelayCommand(CancelNominalValues);
-        }
-        #endregion
-
         #region Public Properties
         /// <summary>
         /// Default Voltage magnitude to use through out the test
@@ -64,6 +47,21 @@ namespace metering
         /// </summary>
         public ICommand RadioButtonCommand { get; set; }
 
+        #endregion
+
+        #region Constructor
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public NominalValuesViewModel()
+        {
+            // make aware of culture of the computer
+            // in case this software turns to something else.
+            CultureInfo ci = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = ci;
+
+            RadioButtonCommand = new RelayCommand(param => GetSelectedRadioButton((string)param));
+        }
         #endregion
 
         #region Helpers

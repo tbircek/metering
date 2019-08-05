@@ -17,6 +17,10 @@ namespace metering
 
         #region Public Properties
 
+        /// <summary>
+        /// The current application page
+        /// </summary>
+        public ApplicationPage CurrentPage { get; set; } = ApplicationPage.NominalValues;
 
         #endregion
         

@@ -8,9 +8,8 @@
     x:Class="metering.TestDetailView"
     mc:Ignorable="d" d:DesignWidth="800"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False}" Height="50">
-
-
-    <Grid>
+  
+    <Grid DataContext="TestSteps">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
@@ -30,7 +29,7 @@
             IsEnabled="False"
             Width="50"                     
             HorizontalContentAlignment="Center" 
-            Text="{Binding SignalName, Mode=OneTime}"/>
+            Text="{Binding SignalName, Mode=OneTime, Source=TestDetailList}"/>
 
 
         <TextBox        

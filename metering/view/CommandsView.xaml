@@ -50,9 +50,9 @@
                 HorizontalTitleAlignment="Center" 
                 Background="Lime"
                 Grid.Column="1" 
-            IsDefault="True" 
+            IsDefault="True"
             Command="{Binding Path=AddNewTestCommand}">
-            
+
             <!--<Controls:Tile.DataContext>
                 <viewModel:NominalValuesViewModel />
             </Controls:Tile.DataContext>-->

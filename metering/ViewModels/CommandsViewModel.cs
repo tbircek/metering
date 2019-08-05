@@ -26,6 +26,10 @@ namespace metering
         /// </summary>
         private NominalValuesViewModel NominalValues { get; }
 
+        ///// <summary>
+        ///// TestDetailViewModel to access its values.
+        ///// </summary>
+        //private TestDetailViewModel TestDetail { get; }
         #endregion
 
         #region Constructor

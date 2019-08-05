@@ -79,6 +79,9 @@ namespace metering
             Delta = delta;
             Phase = phase;
             Frequency = frequency;
+
+            // create commands
+            AddTestCommand = new RelayCommand(() => NewTest());
         }
 
         #endregion
@@ -99,7 +102,7 @@ namespace metering
         /// <summary>
         /// Adds all test step to view with nominal values specified previous view
         /// </summary>
-        private void NewTest()
+        public void NewTest()
         {
 
             Debug.WriteLine("Following values reported:");

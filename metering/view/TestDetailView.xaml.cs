@@ -11,7 +11,7 @@ namespace metering
         public TestDetailView()
         {
             InitializeComponent();
-            DataContext = new TestDetailList();
+           // DataContext = new TestDetailList();
 
         }
     }
