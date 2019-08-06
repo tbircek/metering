@@ -1,14 +1,15 @@
-﻿<Page
+﻿<local:BasePage
+    x:TypeArguments="local:CommandsViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    x:Class="metering.CommandsView"
+    xmlns:local="clr-namespace:metering" 
+    x:Class="metering.CommandsPage"
     mc:Ignorable="d" 
-    d:DesignHeight="80" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance d:IsDesignTimeCreatable=False}">
+    d:DesignHeight="80" d:DesignWidth="800">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -33,7 +34,7 @@
         <Viewbox Grid.Column="1" 
                  Margin="10 5">
             <Controls:Tile 
-                Title="Add New Voltage Test"
+                Title="{Binding AddNewTestCommandTitle}"
                 Margin="1,0,0,0" 
                 TabIndex="9"
                 Width="266"
@@ -42,15 +43,14 @@
                 HorizontalTitleAlignment="Center" 
                 Background="Lime"
                 IsDefault="True"
-                Command="{Binding Path=AddNewTestCommand}">
+                Command="{Binding AddNewTestCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
 
-                <!--<Controls:Tile.DataContext>
-                <viewModel:NominalValuesViewModel />
-            </Controls:Tile.DataContext>-->
-
+                <!-- + sign icon on the button -->
                 <Grid>
                     <iconPacks:PackIconFontAwesome Kind="PlusSolid" Height="50" Width="50" Margin="0,-17.017,0,0" BorderBrush="Black"/>
                 </Grid>
+                
             </Controls:Tile>
         </Viewbox>
 
@@ -69,6 +69,7 @@
                 IsCancel="True"
                 Command="{Binding Path=CancelNewTestCommand}">
 
+                <!-- cancel icon on the button -->
                 <Grid>
                     <iconPacks:PackIconMaterial Kind="Cancel" Height="50" Width="50" Margin="0,-17.017,0,0"/>
                 </Grid>
@@ -76,4 +77,4 @@
         </Viewbox>
 
     </Grid>
-</Page>
+</local:BasePage>

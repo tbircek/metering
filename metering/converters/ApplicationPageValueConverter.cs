@@ -16,6 +16,10 @@ namespace metering
             {
                 case ApplicationPage.NominalValues:
                     return new NominalValuesPage();
+
+                case ApplicationPage.TestDetails:
+                    return new TestDetailsPage();
+
                 default:
                     Debugger.Break();
                     return null;

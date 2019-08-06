@@ -1,16 +1,13 @@
-﻿using System.Windows.Controls;
-
-namespace metering
+﻿namespace metering
 {
     /// <summary>
     /// Interaction logic for CommunicationPage.xaml
     /// </summary>
-    public partial class CommunicationPage : Page
+    public partial class CommunicationPage : BasePage<CommunicationViewModel>
     {
         public CommunicationPage()
         {
             InitializeComponent();
-            DataContext = new CommunicationViewModel();
         }
     }
 }

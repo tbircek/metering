@@ -1,0 +1,111 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:metering"
+    xmlns:resources="clr-namespace:metering.Resources"
+    x:Class="metering.AnalogSignalListItemControl"
+    mc:Ignorable="d"
+    d:DesignWidth="800" d:DesignHeight="50"
+    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False}" >
+
+    <Grid d:DataContext="{x:Static local:AnalogSignalItemDesignModel.Instance}">
+        <Grid.ColumnDefinitions>
+            <!-- Signal Name -->
+            <ColumnDefinition Width="Auto" />
+            <!-- From -->
+            <ColumnDefinition Width="Auto" />
+            <!-- To -->
+            <ColumnDefinition Width="Auto" />
+            <!-- Delta-->
+            <ColumnDefinition Width="Auto" />
+            <!-- Phase -->
+            <ColumnDefinition Width="Auto" />
+            <!-- Frequency -->
+            <ColumnDefinition Width="Auto" />
+            <!-- For extra content -->
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Signal Name -->
+        <Viewbox Grid.Column="0">
+            <TextBox                         
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    Padding="5"
+                    IsEnabled="False"
+                    Width="50"                     
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding SignalName, Mode=OneTime}"/>
+        </Viewbox>
+
+        <!-- From -->
+        <Viewbox Grid.Column="1">
+            <TextBox  
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="0"  
+                    Padding="5"
+                    Width="100"                     
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding From, Mode=TwoWay, StringFormat=0:F2, UpdateSourceTrigger=PropertyChanged}" />
+        </Viewbox>
+
+        <!-- To -->
+        <Viewbox Grid.Column="2">
+            <TextBox
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="1"  
+                    Padding="5"
+                    Width="100"                     
+                    HorizontalContentAlignment="Center"
+                    Text="{Binding To, Mode=TwoWay, StringFormat=0:F2, UpdateSourceTrigger=PropertyChanged}" />
+        </Viewbox>
+
+        <!-- Delta-->
+        <Viewbox Grid.Column="3">
+            <TextBox 
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="2"  
+                    Padding="5"
+                    Width="100"              
+                    HorizontalContentAlignment="Center"
+                    Text="{Binding Delta, Mode=TwoWay, StringFormat=0:F3, UpdateSourceTrigger=PropertyChanged}" />
+        </Viewbox>
+
+        <!-- Phase -->
+        <Viewbox  Grid.Column="4">
+            <TextBox
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="3"  
+                    Padding="5"
+                    Width="100"                    
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding Phase, Mode=TwoWay, StringFormat=0:F3, UpdateSourceTrigger=PropertyChanged}" />
+        </Viewbox>
+
+        <!-- Frequency -->
+        <Viewbox Grid.Column="5">
+            <TextBox
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="4"  
+                    Padding="5"
+                    Width="100"                    
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding Frequency, Mode=TwoWay, StringFormat=0:F3, UpdateSourceTrigger=PropertyChanged}" />
+
+        </Viewbox>
+
+        <Viewbox Grid.Column="6">
+            <ContentControl />
+        </Viewbox>
+
+
+    </Grid>
+</UserControl>

@@ -6,14 +6,14 @@ namespace metering
     /// <summary>
     /// A basic command that runs an Action
     /// </summary>
-    public class RelayCommand : ICommand
+    public class RelayParameterizedCommand : ICommand
     {
         #region Private Members
 
         /// <summary>
         /// The action to run
         /// </summary>
-        private Action mAction;
+        private Action<object> mAction;
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace metering
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RelayCommand(Action action)
+        public RelayParameterizedCommand(Action<object> action)
         {
             mAction = action;
         }
@@ -56,7 +56,7 @@ namespace metering
         /// <param name="parameter"></param>
         public void Execute(object parameter)
         {
-            mAction();
+            mAction(parameter);
         }
 
         #endregion

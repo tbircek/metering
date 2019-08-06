@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using OMICRON.CMEngAL;
 using metering.Resources;
+using OMICRON.CMEngAL;
 
 namespace metering
 {

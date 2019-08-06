@@ -20,7 +20,7 @@ namespace metering
         /// <summary>
         /// The current application page
         /// </summary>
-        public ApplicationPage CurrentPage { get; set; } = ApplicationPage.NominalValues;
+        public ApplicationPage CurrentPage { get; set; } = ApplicationPage.TestDetails;
 
         #endregion
         

@@ -1,16 +1,13 @@
-﻿using System.Windows.Controls;
-
-namespace metering
+﻿namespace metering
 {
     /// <summary>
-    /// Interaction logic for CommandsView.xaml
+    /// Interaction logic for CommandsPage.xaml
     /// </summary>
-    public partial class CommandsView : Page
+    public partial class CommandsPage : BasePage<CommandsViewModel>
     {
-        public CommandsView()
+        public CommandsPage()
         {
             InitializeComponent();
-            DataContext = new CommandsViewModel();
         }
     }
 }

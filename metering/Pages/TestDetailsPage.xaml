@@ -21,7 +21,7 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="100"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="80"/>
@@ -30,35 +30,27 @@
         <Grid Grid.Row="0">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Register and Progress Bar-->
-            <Grid 
-                Grid.Column="0"
-                Margin="5">
-
-                <!-- Register -->
+            <!-- Register -->
+            <Viewbox Grid.Column="0">
                 <TextBox 
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_register}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    TabIndex="0"  
-                    Margin="5"
-                    Height="60"
-                    FontSize="24"                     
+                    TabIndex="0"
+                    Padding="0 0 5 0"
+                    FontSize="20"                     
                     HorizontalContentAlignment="Center" 
                     Text="{Binding Register, UpdateSourceTrigger=PropertyChanged}"/>
-            </Grid>
+            </Viewbox>
 
-            <Grid 
-                Grid.Column="3"
-                Margin="5">
+            <!-- Progress bar and text -->
+            <Viewbox Grid.Column="3">
 
                 <StackPanel>
-
                     <!-- Progress Bar -->
                     <ProgressBar 
                         x:Name="testProgressBar" 
@@ -81,7 +73,7 @@
                         HorizontalContentAlignment="Center"
                         Content="{Binding Value, ElementName=testProgressBar}"/>
                 </StackPanel>
-            </Grid>
+            </Viewbox>
         </Grid>
 
 
@@ -91,30 +83,28 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
-                <ColumnDefinition />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <!-- Dwell Time -->
-            <TextBox 
-                Grid.Column="0"
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_dwell_time}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="1"  
-                Margin="5"
-                Width="180"
-                HorizontalContentAlignment="Center" 
-                Text="{Binding DwellTime, UpdateSourceTrigger=PropertyChanged}"/>
-
+            <Viewbox Grid.Column="0">
+                <TextBox 
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_dwell_time}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="1"  
+                    Padding="5"
+                    Width="180"
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding DwellTime, UpdateSourceTrigger=PropertyChanged}"/>
+            </Viewbox>
+            
             <!-- Start Delay Time -->
             <TextBox
                 Grid.Column="1"
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_delay_time}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                 TabIndex="2"  
-                Margin="5"
+                Padding="5"
                 Width="180"
                 HorizontalContentAlignment="Center" 
                 Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged}"/>
@@ -144,22 +134,16 @@
 
         </Grid>
 
+        <!-- Analog signal values -->
         <Grid Grid.Row="2">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <Frame 
-                    x:Name="MainFrame"
-                    BorderBrush="Black" 
-                    BorderThickness="1" 
-                    ClipToBounds="True" 
-                    NavigationUIVisibility="Hidden" 
-                    Source="\Pages\TestDetailPage.xaml">
-                    <!--Content="{Binding TestDetailView, Converter={local:ApplicationPageValueConverter}}">-->
-
-                </Frame>
-            </ScrollViewer>
+            
+            <!--<local:AnalogSignalListControl>-->
+                <local:AnalogSignalListItemControl />
+            <!--</local:AnalogSignalListControl>-->
+            
         </Grid>
         
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="3" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>

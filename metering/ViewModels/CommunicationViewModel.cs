@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace metering
@@ -26,6 +28,16 @@ namespace metering
         /// </summary>
         public string Log { get; set; } = "";
 
+        /// <summary>
+        /// ConnectCommand button content
+        /// </summary>
+        public string ConnectCommandContent { get; set; } = "Connect";
+
+        /// <summary>
+        /// a flag indicating Omicron Test Set connected and running
+        /// </summary>
+        public bool OmicronIsConnected { get; set; } = false;
+
         #endregion
 
         #region Public Commands
@@ -44,7 +56,8 @@ namespace metering
         public CommunicationViewModel( )
         {
             // create the command.
-            ConnectCommand = new RelayCommand(param => ConnectOmicronAndUnit());
+            ConnectCommand = new RelayParameterizedCommand(async(parameter) => await ConnectOmicronAndUnit(parameter));
+
         }
 
         #endregion
@@ -54,13 +67,51 @@ namespace metering
         /// <summary>
         /// connects to omicron and test unit.
         /// </summary>
-        private void ConnectOmicronAndUnit()
+        /// <param name="parameter">Attached self IsChecked property in the view</param>
+        [DebuggerStepThrough]
+        private async Task ConnectOmicronAndUnit(object parameter)
         {
-            //throw new NotImplementedException();
-            // TODO: Handle Omicron connection here.
-            // TODO: Handle Button checked and unchecked
-            Debug.WriteLine("TODO: Connect Omicron Test Set ...");
-            Debug.WriteLine($"TODO: Connect thru modbus protocol to {IpAddress}:{Port}");
+            await RunCommand(() => OmicronIsConnected, async () =>
+            {
+                // waiting for the connections.
+                // TODO: remove me later
+                // await Task.Delay(5000);
+
+                // Change Content of the button per isChecked parameter
+                if ((bool)parameter)
+                {
+                    // get instance of Omicron Test Set
+                    CMCControl cMCControl = new CMCControl();
+
+                    // await omicron connection
+                    bool isOmicronConnected = await Task.Factory.StartNew(()=> cMCControl.FindCMC());
+
+                    // The user click on the button 
+                    // TODO: Handle Omicron open connection here.
+                    Debug.WriteLine($"TODO: Connect Omicron Test Set ... success?: {isOmicronConnected}");
+                    Log += $"{DateTime.Now.ToLocalTime()}:\nConnecting Omicron Test Set was {(isOmicronConnected ? " successful" : " failed")}\n";
+
+                    // TODO: Handle ConnectCommand Button checked
+                    Debug.WriteLine($"TODO: Connect thru modbus protocol to {IpAddress}:{Port}");
+
+                    // Change ConnectCommand Button content to "Disconnect"
+                    ConnectCommandContent = isOmicronConnected?"Disconnect": "Connect";
+                }
+                else
+                {
+                    // The user wants to disconnect.
+                    // TODO: Handle Omicron close connection here.
+                    Debug.WriteLine("TODO: Disconnect Omicron Test Set ...");
+
+                    // TODO: Handle ConnectCommand Button checked
+                    Debug.WriteLine($"TODO: Disconnect modbus communication to {IpAddress}:{Port}");
+
+                    // TODO: Verify disconnect was successful.
+
+                    // Change ConnectCommand Button content to "Disconnect"
+                    ConnectCommandContent = "Connect";
+                }
+            });
         }
 
         #endregion

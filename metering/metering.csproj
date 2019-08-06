@@ -152,18 +152,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="controls\AnalogSignalListControl.xaml.cs">
+      <DependentUpon>AnalogSignalListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="converters\ApplicationPageValueConverter.cs" />
     <Compile Include="converters\BaseValueConverter.cs" />
+    <Compile Include="expressions\ExpressionHelpers.cs" />
     <Compile Include="models\ApplicationPage.cs" />
-    <Compile Include="Pages\BasePage.cs" />
+    <Compile Include="Pages\Base\BasePage.cs" />
+    <Compile Include="ViewModels\Base\IOmicron.cs" />
+    <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="communication\ModbusCommunication.cs" />
     <Compile Include="converters\VisualToImageSourceConverter.cs" />
     <Compile Include="ViewModels\CommandsViewModel.cs" />
-    <Compile Include="models\CommunicationModel.cs" />
-    <Compile Include="models\NominalValuesModel.cs" />
-    <Compile Include="models\TestDetailsModel.cs" />
-    <Compile Include="models\TestDetailModel.cs" />
     <Compile Include="omicron\ExtractParameters.cs" />
     <Compile Include="omicron\CMCControl.cs" />
     <Compile Include="omicron\InitialCMCSetup.cs" />
@@ -183,7 +185,8 @@
     </Compile>
     <Compile Include="ViewModels\NominalValuesViewModel.cs" />
     <Compile Include="ViewModels\TestDetailsViewModel.cs" />
-    <Compile Include="ViewModels\TestDetailViewModel.cs" />
+    <Compile Include="ViewModels\Test\Design\AnalogSignalItemDesignModel.cs" />
+    <Compile Include="ViewModels\Test\AnalogSignalListItemViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="Pages\CommandsPage.xaml.cs">
@@ -198,9 +201,13 @@
     <Compile Include="Pages\TestDetailsPage.xaml.cs">
       <DependentUpon>TestDetailsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\TestDetailPage.xaml.cs">
-      <DependentUpon>TestDetailPage.xaml</DependentUpon>
+    <Compile Include="Pages\AnalogSignalListItemControl.xaml.cs">
+      <DependentUpon>AnalogSignalListItemControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="controls\AnalogSignalListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -229,7 +236,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\TestDetailPage.xaml">
+    <Page Include="Pages\AnalogSignalListItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

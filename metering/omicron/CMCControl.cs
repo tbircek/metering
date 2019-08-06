@@ -1,25 +1,71 @@
-﻿using OMICRON.CMEngAL;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using metering.Resources;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
+using metering.Resources;
+using OMICRON.CMEngAL;
 
 namespace metering
 {
-    public class CMCControl
+    public class CMCControl: IOmicron
+
     {
         /// <summary>
-        /// Refers to Omicron CM Engine.
+        /// Omicron CM Engine
         /// </summary>
-        CMEngine engine = new CMEngine();
+        private CMEngine engine;
+
         /// <summary>
-        /// Implemented Omicron Test Set string commands.
+        /// Omicron CM Engine
         /// </summary>
-        StringCommands omicron = new StringCommands();
+        public CMEngine CMEngine
+        {
+            get
+            {
+               if(engine == null)
+                    return new CMEngine();
+
+                return engine;
+            }
+            set
+            {
+                engine = value;
+            }
+        }
+
+        /// <summary>
+        ///  Omicron Test Set string commands.
+        /// </summary>
+        private StringCommands omicronStringCommands;
+
+        /// <summary>
+        /// Omicron Test Set string commands.
+        /// </summary>
+        public StringCommands OmicronStringCommands
+        {
+            get
+            {
+                if (omicronStringCommands == null)
+                    return new StringCommands();
+
+                return omicronStringCommands;
+            }
+            set
+            {
+                omicronStringCommands = value;
+            }
+        }
+       // /// <summary>
+       // /// Refers to Omicron CM Engine.
+       // /// </summary>
+       ////  CMEngine CMEngine = new CMEngine();
+
+        ///// <summary>
+        ///// Implemented Omicron Test Set string commands.
+        ///// </summary>
+        //StringCommands omicron = new StringCommands();
+
+
         /// <summary>
         /// Omicron Test Set maximum voltage output limit.
         /// </summary>
@@ -30,9 +76,9 @@ namespace metering
         private const double maxCurrentMagnitude = 2.0f;
         //protected CMCControl() { }
 
-        //protected CMCControl(CMEngine engine, StringCommands omicron, int deviceID)
+        //protected CMCControl(CMEngine CMEngine, StringCommands omicron, int deviceID)
         //{
-        //    this.engine = engine ?? throw new ArgumentNullException(nameof(engine));
+        //    this.CMEngine = CMEngine ?? throw new ArgumentNullException(nameof(CMEngine));
         //    this.omicron = omicron ?? throw new ArgumentNullException(nameof(omicron));
         //    DeviceID = deviceID;
         //}
@@ -69,10 +115,10 @@ namespace metering
         /// </summary>
         public bool FindCMC()
         {
-            engine.DevScanForNew();
+            CMEngine.DevScanForNew();
             string deviceList = "";
             ExtractParameters extract = new ExtractParameters();
-            deviceList = engine.DevGetList(ListSelectType.lsUnlockedAssociated);
+            deviceList = CMEngine.DevGetList(ListSelectType.lsUnlockedAssociated);
 
             if (string.IsNullOrWhiteSpace(deviceList))
             {
@@ -81,17 +127,17 @@ namespace metering
             }
 
             // log Omicron Test Set debug information.
-            engine.LogNew(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\cmc.log");
-            engine.LogSetLevel((short)LogLevels.Level2);
-            Debug.WriteLine(string.Format("Found device: {0}", deviceList), "info");
-            Debug.WriteLine(string.Format("Error text: {0}", engine.GetExtError()));
+            CMEngine.LogNew(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\cmc.log");
+            CMEngine.LogSetLevel((short)LogLevels.Level2);
+            Debug.WriteLine($"Found device: {deviceList}", "info");
+            Debug.WriteLine($"Error text: {CMEngine.GetExtError()}");
 
             DeviceID = Convert.ToInt32(extract.Parameters(1, deviceList));
-            engine.DevLock(DeviceID);
+            CMEngine.DevLock(DeviceID);
 
             // Searches for external Omicron amplifiers and returns a list of IDs.
             // Future use.
-            //omicron.SendStringCommand(engine, DeviceID, OmicronStringCmd.amp_scan);
+            //omicron.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_scan);
 
             return true;
         }
@@ -104,32 +150,32 @@ namespace metering
             try
             {
                 // initialize routes.
-                omicron.SendStringCommand(engine, DeviceID, OmicronStringCmd.amp_route_init);
-                omicron.SendStringCommand(engine, DeviceID, OmicronStringCmd.amp_def_init);
-                omicron.SendStringCommand(engine, DeviceID, OmicronStringCmd.amp_route_voltage);
-                omicron.SendStringCommand(engine, DeviceID, OmicronStringCmd.amp_route_current);
+                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_init);
+                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_def_init);
+                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_voltage);
+                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_current);
 
                 // update ranges.
-                omicron.SendStringCommand(engine, DeviceID, string.Format(OmicronStringCmd.amp_range_voltage, maxVoltageMagnitude));
-                omicron.SendStringCommand(engine, DeviceID, string.Format(OmicronStringCmd.amp_range_current, maxCurrentMagnitude));
+                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_voltage, maxVoltageMagnitude));
+                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_current, maxCurrentMagnitude));
 
                 // change pmode.
-                omicron.SendStringCommand(engine, DeviceID, OmicronStringCmd.out_analog_pmode);
+                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_pmode);
 
                 //// set voltage amplifiers default values.
-                //omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", nominalVoltage, phase, nominalFrequency);
-                //omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", nominalVoltage, phase, nominalFrequency);
-                //omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", nominalVoltage, phase, nominalFrequency);
+                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", nominalVoltage, phase, nominalFrequency);
+                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", nominalVoltage, phase, nominalFrequency);
+                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", nominalVoltage, phase, nominalFrequency);
 
                 //// set current amplifiers default values.
-                //omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", nominalCurrent, phase, nominalFrequency);
-                //omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", nominalCurrent, phase, nominalFrequency);
-                //omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", nominalCurrent, phase, nominalFrequency);
+                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", nominalCurrent, phase, nominalFrequency);
+                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", nominalCurrent, phase, nominalFrequency);
+                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", nominalCurrent, phase, nominalFrequency);
 
             }
             catch (Exception err)
             {
-                Debug.WriteLine(String.Format("initial setup::Exception InnerException is : {0}", err.Message));
+                Debug.WriteLine($"initial setup::Exception InnerException is : {err.Message}");
             }
         }
 
@@ -140,13 +186,13 @@ namespace metering
         {
             try
             {
-                omicron = null;
-                engine.DevUnlock(DeviceID);
-                engine = null;
+                OmicronStringCommands = null;
+                CMEngine.DevUnlock(DeviceID);
+                CMEngine = null;
             }
             catch (Exception err)
             {
-                Debug.WriteLine(string.Format("release Omicron::Exception InnerException is : {0}", err.Message));
+                Debug.WriteLine($"release Omicron::Exception InnerException is : {err.Message}");
             }
         }
 
@@ -157,7 +203,7 @@ namespace metering
         {
             try
             {
-                omicron.SendStringCommand(engine, DeviceID, OmicronStringCmd.out_analog_outputOff);
+                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_outputOff);
                 var t = Task.Run(async delegate
                 {
                     await Task.Delay(TimeSpan.FromSeconds(2.0));
@@ -167,7 +213,7 @@ namespace metering
             }
             catch (Exception err)
             {
-                Debug.WriteLine(String.Format("turnOffCMC setup::Exception InnerException is : {0}", err.Message));
+                Debug.WriteLine($"turnOffCMC setup::Exception InnerException is : {err.Message}");
             }
         }
 
@@ -178,11 +224,11 @@ namespace metering
         {
             try
             {
-                omicron.SendStringCommand(engine, DeviceID, OmicronStringCmd.out_analog_outputOn);
+                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_outputOn);
             }
             catch (Exception err)
             {
-                Debug.WriteLine(String.Format("turnONCMC setup::Exception InnerException is : {0}", err.Message));
+                Debug.WriteLine($"turnONCMC setup::Exception InnerException is : {err.Message}");
             }
         }
 
@@ -224,15 +270,15 @@ namespace metering
                 Debug.WriteLine($"Time: {DateTime.Now.ToString("hh:mm:ss.fff")}\tRegister: {Register}\tTest value: {testStartValue:F3}");
 
                 // set voltage amplifiers default values.
-                omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", testStartValue, phase, nominalFrequency);
-                omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", 0, 0, nominalFrequency);
-                omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", 0, 0, nominalFrequency);
+                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", testStartValue, phase, nominalFrequency);
+                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", 0, 0, nominalFrequency);
+                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", 0, 0, nominalFrequency);
 
                 // set current amplifiers default values.
-                omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", 0, 0, nominalFrequency);
-                omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", 0, 0, nominalFrequency);
-                omicron.SendOutAna(engine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", 0, 0, nominalFrequency);
-
+                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", 0, 0, nominalFrequency);
+                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", 0, 0, nominalFrequency);
+                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", 0, 0, nominalFrequency);
+                
                 TurnOnCMC();
 
                 var t = Task.Run(async delegate
@@ -295,5 +341,6 @@ namespace metering
         /// Hold progress information per test register.
         /// </summary>
         public double Progress { get; set; }
+        
     }
 }

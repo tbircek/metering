@@ -64,8 +64,7 @@
                     ClipToBounds="True" 
                     NavigationUIVisibility="Hidden" 
                     Content="{Binding CurrentPage, Converter={local:ApplicationPageValueConverter}}">
-
-
+                    
                 </Frame>
             </ScrollViewer>
             

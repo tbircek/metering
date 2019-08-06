@@ -61,7 +61,7 @@ namespace metering
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
 
-            RadioButtonCommand = new RelayCommand(param => GetSelectedRadioButton((string)param));
+            RadioButtonCommand = new RelayParameterizedCommand((parameter) => GetSelectedRadioButton((string)parameter));
 
         }
         #endregion

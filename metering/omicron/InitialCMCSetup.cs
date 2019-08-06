@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using metering;
-using metering.Resources;
-
-namespace metering.omicron
+﻿namespace metering
 {
     class InitialCMCSetup
     {
-        //CMCControl engine;
+        //CMCControl CMEngine;
 
         //public void InitialSetup()
         //{
-        //    engine.DeviceID = 2;
+        //    CMEngine.DeviceID = 2;
         //}
     }
 }

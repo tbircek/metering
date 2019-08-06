@@ -9,5 +9,10 @@
         /// Initial page
         /// </summary>
         NominalValues = 0,
+
+        /// <summary>
+        /// Test Details page
+        /// </summary>
+        TestDetails = 1,
     }
 }
