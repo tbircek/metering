@@ -8,49 +8,46 @@
     xmlns:resources="clr-namespace:metering.Resources"
     x:Class="metering.AnalogSignalListItemControl"
     mc:Ignorable="d"
-    d:DesignWidth="800" d:DesignHeight="50"
-    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False}" >
+    FontSize="12"
+    Height="50"
+    d:DesignWidth="620" d:DesignHeight="50">
 
-    <Grid d:DataContext="{x:Static local:AnalogSignalItemDesignModel.Instance}">
+    <Grid d:DataContext="{x:Static local:AnalogSignalListItemDesignModel.Instance}" Background="Aqua">
         <Grid.ColumnDefinitions>
             <!-- Signal Name -->
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100" />
             <!-- From -->
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100" />
             <!-- To -->
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100" />
             <!-- Delta-->
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100" />
             <!-- Phase -->
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100" />
             <!-- Frequency -->
-            <ColumnDefinition Width="Auto" />
-            <!-- For extra content -->
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="100" />
         </Grid.ColumnDefinitions>
 
         <!-- Signal Name -->
         <Viewbox Grid.Column="0">
             <TextBox                         
-                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    Padding="5"
-                    IsEnabled="False"
-                    Width="50"                     
-                    HorizontalContentAlignment="Center" 
-                    Text="{Binding SignalName, Mode=OneTime}"/>
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                Padding="5"
+                IsEnabled="False"            
+                HorizontalContentAlignment="Center" 
+                Text="{Binding SignalName}"/>
         </Viewbox>
 
         <!-- From -->
         <Viewbox Grid.Column="1">
-            <TextBox  
-                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    TabIndex="0"  
-                    Padding="5"
-                    Width="100"                     
-                    HorizontalContentAlignment="Center" 
-                    Text="{Binding From, Mode=TwoWay, StringFormat=0:F2, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox 
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"        
+                TabIndex="0"  
+                Padding="5"                  
+                HorizontalContentAlignment="Center" 
+                Text="{Binding From, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
 
         <!-- To -->
@@ -59,10 +56,9 @@
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                     TabIndex="1"  
-                    Padding="5"
-                    Width="100"                     
+                    Padding="5"                   
                     HorizontalContentAlignment="Center"
-                    Text="{Binding To, Mode=TwoWay, StringFormat=0:F2, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding To, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
 
         <!-- Delta-->
@@ -71,22 +67,20 @@
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                     TabIndex="2"  
-                    Padding="5"
-                    Width="100"              
+                    Padding="5"           
                     HorizontalContentAlignment="Center"
-                    Text="{Binding Delta, Mode=TwoWay, StringFormat=0:F3, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding Delta, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
 
         <!-- Phase -->
-        <Viewbox  Grid.Column="4">
+        <Viewbox Grid.Column="4">
             <TextBox
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                     TabIndex="3"  
-                    Padding="5"
-                    Width="100"                    
+                    Padding="5"                  
                     HorizontalContentAlignment="Center" 
-                    Text="{Binding Phase, Mode=TwoWay, StringFormat=0:F3, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding Phase, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
 
         <!-- Frequency -->
@@ -95,17 +89,10 @@
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                     TabIndex="4"  
-                    Padding="5"
-                    Width="100"                    
+                    Padding="5"                  
                     HorizontalContentAlignment="Center" 
-                    Text="{Binding Frequency, Mode=TwoWay, StringFormat=0:F3, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding Frequency, UpdateSourceTrigger=PropertyChanged}"/>
 
         </Viewbox>
-
-        <Viewbox Grid.Column="6">
-            <ContentControl />
-        </Viewbox>
-
-
     </Grid>
 </UserControl>

@@ -11,8 +11,7 @@
     xmlns:local="clr-namespace:metering"
     xmlns:resources="clr-namespace:metering.Resources"
     mc:Ignorable="d" 
-    d:DesignHeight="450" d:DesignWidth="800"
-    d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False}">
+    d:DesignHeight="450" d:DesignWidth="800">
 
     <Page.Background>
         <ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
@@ -30,8 +29,8 @@
         <Grid Grid.Row="0">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="600"/>
+                <!--<ColumnDefinition Width="*"/>-->
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
 
@@ -48,7 +47,7 @@
             </Viewbox>
 
             <!-- Progress bar and text -->
-            <Viewbox Grid.Column="3">
+            <Viewbox Grid.Column="1">
 
                 <StackPanel>
                     <!-- Progress Bar -->
@@ -99,48 +98,49 @@
             </Viewbox>
             
             <!-- Start Delay Time -->
-            <TextBox
-                Grid.Column="1"
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_delay_time}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="2"  
-                Padding="5"
-                Width="180"
-                HorizontalContentAlignment="Center" 
-                Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged}"/>
-
+            <Viewbox Grid.Column="1">
+                <TextBox
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_delay_time}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="2"  
+                    Padding="5"
+                    Width="180"
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged}"/>
+            </Viewbox>
+            
             <!-- Measurement Interval -->
-            <TextBox 
-                Grid.Column="2"
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_measurement_interval}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="3"  
-                Margin="5"
-                Width="180"                     
-                HorizontalContentAlignment="Center" 
-                Text="{Binding MeasurementInterval, UpdateSourceTrigger=PropertyChanged}"/>
+            <Viewbox Grid.Column="2">
+                <TextBox                 
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_measurement_interval}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="3"  
+                    Padding="5"
+                    Width="180"                     
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding MeasurementInterval, UpdateSourceTrigger=PropertyChanged}"/>
+            </Viewbox>
+            
 
             <!-- Start Measurement Delay -->
-            <TextBox 
-                x:Name="startMeasurementDelay"
-                Grid.Column="3"
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_measurement_delay}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="4"  
-                Margin="5"
-                Width="180"                     
-                HorizontalContentAlignment="Center" 
-                Text="{Binding StartMeasurementDelay, UpdateSourceTrigger=PropertyChanged}"/>
-
+            <Viewbox Grid.Column="3">
+                <TextBox 
+                    x:Name="startMeasurementDelay"
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_measurement_delay}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="4"  
+                    Padding="5"
+                    Width="180"                     
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding StartMeasurementDelay, UpdateSourceTrigger=PropertyChanged}"/>
+            </Viewbox>            
         </Grid>
 
         <!-- Analog signal values -->
         <Grid Grid.Row="2">
-            
-            <!--<local:AnalogSignalListControl>-->
-                <local:AnalogSignalListItemControl />
-            <!--</local:AnalogSignalListControl>-->
-            
+                <local:AnalogSignalListControl>
+                    <!--<local:AnalogSignalListItemControl/>-->
+                </local:AnalogSignalListControl>            
         </Grid>
         
         <Grid Grid.Row="3" Visibility="Collapsed">

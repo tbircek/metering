@@ -1,22 +1,25 @@
 ﻿namespace metering
 {
     /// <summary>
-    /// Design time data for a <see cref="AnalogSignalListItemViewModel"/>
+    /// Design time data for a <see cref="AnalogSignalListViewModel"/>
     /// </summary>
-    public class AnalogSignalItemDesignModel : AnalogSignalListItemViewModel
+    public class AnalogSignalListItemDesignModel : AnalogSignalListItemViewModel
     {
         #region Singleton       
 
         /// <summary>
         /// Single instance of the design time model
         /// </summary>
-        public static AnalogSignalItemDesignModel Instance => new AnalogSignalItemDesignModel();
+        public static AnalogSignalListItemDesignModel Instance => new AnalogSignalListItemDesignModel();
 
         #endregion
 
         #region Constructor
 
-        public AnalogSignalItemDesignModel()
+        /// <summary>
+        /// default constructor
+        /// </summary>
+        public AnalogSignalListItemDesignModel()
         {
             SignalName = "v1";
             From = "100.4";

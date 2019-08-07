@@ -185,9 +185,11 @@
     </Compile>
     <Compile Include="ViewModels\NominalValuesViewModel.cs" />
     <Compile Include="ViewModels\TestDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Test\Design\AnalogSignalItemDesignModel.cs" />
+    <Compile Include="ViewModels\Test\AnalogSignalViewModel.cs" />
+    <Compile Include="ViewModels\Test\Design\AnalogSignalDesignModel.cs" />
     <Compile Include="ViewModels\Test\AnalogSignalListItemViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Test\Design\AnalogSignalListItemDesignModel.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Compile Include="Pages\CommandsPage.xaml.cs">
       <DependentUpon>CommandsPage.xaml</DependentUpon>
@@ -201,7 +203,7 @@
     <Compile Include="Pages\TestDetailsPage.xaml.cs">
       <DependentUpon>TestDetailsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\AnalogSignalListItemControl.xaml.cs">
+    <Compile Include="controls\AnalogSignalListItemControl.xaml.cs">
       <DependentUpon>AnalogSignalListItemControl.xaml</DependentUpon>
     </Compile>
     <Page Include="controls\AnalogSignalListControl.xaml">
@@ -236,7 +238,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\AnalogSignalListItemControl.xaml">
+    <Page Include="controls\AnalogSignalListItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

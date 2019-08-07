@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 
 namespace metering
@@ -7,6 +8,7 @@ namespace metering
     {
 
         #region Public Properties
+
         /// <summary>
         /// The register to monitor while testing.
         /// </summary>
@@ -35,7 +37,7 @@ namespace metering
         /// <summary>
         /// The time to wait after analog signals applied before <see cref="DwellTime"/> starts.
         /// </summary>
-        public string StartMeasurementDelay { get; set; } = "10";
+        public string StartMeasurementDelay { get; set; } = "10";                
 
         #endregion
 
