@@ -1,4 +1,6 @@
-﻿namespace metering
+﻿using metering.core;
+
+namespace metering
 {
     /// <summary>
     /// Interaction logic for MainView.xaml

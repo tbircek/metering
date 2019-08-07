@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using metering.core;
 
 namespace metering
 {
@@ -20,7 +21,7 @@ namespace metering
         /// <summary>
         /// The current application page
         /// </summary>
-        public ApplicationPage CurrentPage { get; set; } = ApplicationPage.TestDetails;
+        public ApplicationPage CurrentPage { get; set; } = ApplicationPage.NominalValues;
 
         #endregion
         
@@ -32,6 +33,7 @@ namespace metering
         public WindowViewModel(Window window)
         {
             thisWindow = window;
+
         }
 
         #endregion

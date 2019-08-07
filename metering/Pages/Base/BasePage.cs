@@ -1,7 +1,5 @@
 ﻿using System.Windows.Controls;
-using System.Windows;
-using System;
-using System.Threading.Tasks;
+using metering.core;
 
 namespace metering
 {
@@ -20,6 +18,7 @@ namespace metering
         private VM mViewModel;
 
         #endregion
+
         #region Public Properties
 
         ///// <summary>
@@ -42,10 +41,7 @@ namespace metering
         /// </summary>
         public VM ViewModel
         {
-            get
-            {
-                return mViewModel;
-            }
+            get => mViewModel;
             set
             {
                 // nothing changed return

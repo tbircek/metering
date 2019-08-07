@@ -1,13 +1,13 @@
 ﻿<local:BasePage
-    x:TypeArguments="local:CommunicationViewModel"
+    x:TypeArguments="core:CommunicationViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:metering" 
+    xmlns:core="clr-namespace:metering.core;assembly=metering.core" 
     xmlns:resources="clr-namespace:metering.Resources"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     x:Class="metering.CommunicationPage"    
     mc:Ignorable="d" 
     d:DesignHeight="150" d:DesignWidth="800">
@@ -19,7 +19,7 @@
 
         <Grid Grid.Row="0" Margin="5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
@@ -94,44 +94,39 @@
                         </StackPanel>
                     </Grid>
 
-                    <Grid Grid.Column="1" Margin="5">
-                        <!-- Connect/Disconnect Button -->
-                        <ToggleButton
-                            Margin="5"
-                            Style="{DynamicResource MetroCircleToggleButtonStyle}"
-                            TabIndex="4"
-                            Width="80"
-                            Height="80"
-                            Content="{Binding ConnectCommandContent}"
-                            Command="{Binding ConnectCommand}"
-                            CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}">
+                    <Grid Grid.Column="1">
+                        <Viewbox>
+                            <!-- Connect/Disconnect Button -->
+                            <ToggleButton
+                                Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                                TabIndex="4"
+                                Width="50"
+                                Height="50"
+                                Content="{Binding ConnectCommandContent}"
+                                Command="{Binding ConnectCommand}"
+                                CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}">
                                 <!--<ToggleButton.DataContext>
                                     <viewModel:CommunicationViewModel/>
                                 </ToggleButton.DataContext>-->
-                           
-                        </ToggleButton>
-                        
 
+                            </ToggleButton>
+                        </Viewbox>
                     </Grid>
                 </Grid>
             </Grid>
 
-            <Grid Grid.Column="2" Margin="5">
-                
+            <Grid Grid.Column="2">              
                 <!-- Log textbox -->
                 <TextBox 
                     x:Name="ResultTextBox"
                     TabIndex="5"
-                    Margin="5" 
+                    Padding="5" 
                     TextWrapping="Wrap" 
                     BorderBrush="#FBFFFFC0" 
                     FontFamily="Courier New" 
-                    FontSize="14">
-                    <TextBox.Text>
-                        <Binding Path="Log" />
-                    </TextBox.Text>
+                    FontSize="12"
+                    Text="{Binding Log}">
                 </TextBox>
-
             </Grid>
         </Grid>
     </Grid>

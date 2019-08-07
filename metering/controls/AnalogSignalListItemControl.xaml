@@ -5,14 +5,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:metering"
+    xmlns:core="clr-namespace:metering.core;assembly=metering.core"
     xmlns:resources="clr-namespace:metering.Resources"
     x:Class="metering.AnalogSignalListItemControl"
     mc:Ignorable="d"
-    FontSize="12"
+    FontSize="14"
     Height="50"
     d:DesignWidth="620" d:DesignHeight="50">
 
-    <Grid d:DataContext="{x:Static local:AnalogSignalListItemDesignModel.Instance}" Background="Aqua">
+    <Grid d:DataContext="{x:Static core:AnalogSignalListItemDesignModel.Instance}" Background="Transparent">
         <Grid.ColumnDefinitions>
             <!-- Signal Name -->
             <ColumnDefinition Width="100" />
@@ -26,6 +27,9 @@
             <ColumnDefinition Width="100" />
             <!-- Frequency -->
             <ColumnDefinition Width="100" />
+            <!-- Extra space -->
+            <ColumnDefinition Width="*" />
+
         </Grid.ColumnDefinitions>
 
         <!-- Signal Name -->

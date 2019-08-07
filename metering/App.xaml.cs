@@ -67,9 +67,9 @@ namespace metering
             //Tuple<AppTheme, Accent> appStyle = ThemeManager.DetectAppStyle(Application.Current);
 
             //// now set the Green accent and dark theme
-            ThemeManager.ChangeAppStyle(Current,
-                                        ThemeManager.GetAccent("Red"),
-                                        ThemeManager.GetAppTheme("BaseLight")); // or appStyle.Item1
+            //ThemeManager.ChangeAppStyle(Current,
+            //                            ThemeManager.GetAccent("Red"),
+            //                            ThemeManager.GetAppTheme("BaseDark")); // or appStyle.Item1
 
             base.OnStartup(e);
 

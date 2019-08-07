@@ -4,14 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:metering"
-             mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="650">
-    
+             xmlns:core="clr-namespace:metering.core;assembly=metering.core"
+             mc:Ignorable="d" d:DesignWidth="650" Height="500">
+
     <UserControl.Template>
         <ControlTemplate TargetType="UserControl">
-            <Grid DataContext="{x:Static local:AnalogSignalDesignModel.Instance}" Background="DarkKhaki">
+            <Grid DataContext="{x:Static core:AnalogSignalDesignModel.Instance}" Background="Transparent">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding AnalogSignals}">
+                    <ItemsControl ItemsSource="{Binding AnalogSignals}" Margin="2">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <local:AnalogSignalListItemControl/>

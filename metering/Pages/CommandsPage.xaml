@@ -1,12 +1,13 @@
 ﻿<local:BasePage
-    x:TypeArguments="local:CommandsViewModel"
+    x:TypeArguments="core:CommandsViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:metering" 
+    xmlns:local="clr-namespace:metering"
+    xmlns:core="clr-namespace:metering.core;assembly=metering.core"
     x:Class="metering.CommandsPage"
     mc:Ignorable="d" 
     d:DesignHeight="80" d:DesignWidth="800">
