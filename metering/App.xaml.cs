@@ -112,7 +112,8 @@ namespace metering
             // Persist application state
             try
             {
-                PersistApplicationState();
+                // PersistApplicationState();
+                WriteApplicationLogEntry("Failure", e.ApplicationExitCode);
             }
             catch
             {
@@ -134,18 +135,18 @@ namespace metering
             }
         }
 
-        void PersistApplicationState()
-        {
-            // Persist application state to file in isolated storage for the user
-            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
-            using (Stream stream = new IsolatedStorageFileStream("state.txt", FileMode.Create, store))
-            using (StreamWriter writer = new StreamWriter(stream))
-            {
-                foreach (DictionaryEntry entry in Properties)
-                {
-                    writer.WriteLine(entry.Value);
-                }
-            }
-        }
+        //void PersistApplicationState()
+        //{
+        //    // Persist application state to file in isolated storage for the user
+        //    IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
+        //    using (Stream stream = new IsolatedStorageFileStream("state.txt", FileMode.Create, store))
+        //    using (StreamWriter writer = new StreamWriter(stream))
+        //    {
+        //        foreach (DictionaryEntry entry in Properties)
+        //        {
+        //            writer.WriteLine(entry.Value);
+        //        }
+        //    }
+        //}
     }
 }

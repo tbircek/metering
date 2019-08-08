@@ -156,6 +156,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
+    <Compile Include="AttachedProperties\NoFrame.cs" />
     <Compile Include="Controls\AnalogSignalListControl.xaml.cs">
       <DependentUpon>AnalogSignalListControl.xaml</DependentUpon>
     </Compile>
@@ -293,6 +295,7 @@
   <ItemGroup>
     <Resource Include="Resources\metering.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:metering"
              xmlns:core="clr-namespace:metering.core;assembly=metering.core"
-             mc:Ignorable="d" d:DesignWidth="650" Height="500">
+             mc:Ignorable="d">
 
     <UserControl.Template>
         <ControlTemplate TargetType="UserControl">

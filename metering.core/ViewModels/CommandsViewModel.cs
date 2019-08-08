@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace metering.core
@@ -48,15 +49,15 @@ namespace metering.core
         /// </summary>
         /// <param name="parameter">Button content attached property in the view</param>
         /// <returns>void</returns>
-        private void CopyNominalValues(object parameter)
+        private async void CopyNominalValues(object parameter)
         {
             // Simulate the page creation.
             // await Task.Delay(100);
 
             // TODO: Pass NominalValues page values to the TestDetails page;
-
+           
             // Show TestDetails page
-            IoC.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.TestDetails;
+            await Task.Factory.StartNew(()=> IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.TestDetails));
             Debug.WriteLine("CopyNominalValues(object parameter) is running:");
         }
 
@@ -65,10 +66,10 @@ namespace metering.core
         /// Navigate backwards to main view / shows default nominal values
         /// resets values specified in test step view to nominal values
         /// </summary>
-        private void CancelTestDetailsPageShowing()
+        private async void CancelTestDetailsPageShowing()
         {
             // Show NominalValues page
-            IoC.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.NominalValues;
+            await Task.Factory.StartNew(() => IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.NominalValues));
 
             Debug.WriteLine("CancelTestDetailsPageShowing is running:");
         }

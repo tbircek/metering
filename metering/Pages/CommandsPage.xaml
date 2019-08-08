@@ -10,7 +10,8 @@
     xmlns:core="clr-namespace:metering.core;assembly=metering.core"
     x:Class="metering.CommandsPage"
     mc:Ignorable="d" 
-    d:DesignHeight="80" d:DesignWidth="800">
+    Height="100"
+    d:DesignHeight="100" d:DesignWidth="800">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -63,28 +64,28 @@
         <!-- Cancel Button -->
         <Viewbox Grid.Column="2"
                  Margin="10 5">
-            <Controls:Tile 
-                Title="Cancel" 
-                Margin="1,0,0,0"
-                TabIndex="8"
-                Width="266"
-                Height="80"
-                VerticalTitleAlignment="Bottom" 
-                HorizontalTitleAlignment="Center"
-                Background="Green"
-                IsCancel="True"
-                Command="{Binding Path=CancelNewTestCommand}">
+                <Controls:Tile 
+                    Title="Cancel" 
+                    Margin="1,0,0,0"
+                    TabIndex="8"
+                    Width="266"
+                    Height="80"
+                    VerticalTitleAlignment="Bottom" 
+                    HorizontalTitleAlignment="Center"
+                    Background="Green"
+                    IsCancel="True"
+                    Command="{Binding Path=CancelNewTestCommand}">
 
-                <!-- cancel icon on the button -->
-                <Grid>
-                    <iconPacks:PackIconMaterial 
+                    <!-- cancel icon on the button -->
+                    <Grid>
+                        <iconPacks:PackIconMaterial 
                         Kind="Cancel" 
                         Height="40" 
                         Width="40" 
                         Margin="0"
                         Foreground="Black"/>
-                </Grid>
-            </Controls:Tile>
+                    </Grid>
+                </Controls:Tile>            
         </Viewbox>
 
     </Grid>
