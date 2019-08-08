@@ -16,15 +16,6 @@ namespace metering
         private Window thisWindow;
         #endregion
 
-        #region Public Properties
-
-        /// <summary>
-        /// The current application page
-        /// </summary>
-        public ApplicationPage CurrentPage { get; set; } = ApplicationPage.NominalValues;
-
-        #endregion
-        
         #region Constructor
 
         /// <summary>

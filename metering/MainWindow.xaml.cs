@@ -1,4 +1,6 @@
 ﻿
+using metering.core;
+
 namespace metering
 {
     /// <summary>
@@ -6,6 +8,10 @@ namespace metering
     /// </summary>
     public partial class MainWindow
     {
+        /// <summary>
+        /// temp fix
+        /// </summary>
+        public ApplicationViewModel ApplicationViewModel => new ApplicationViewModel();
 
         public MainWindow()
         {
