@@ -56,7 +56,7 @@ namespace metering.core
             // TODO: Pass NominalValues page values to the TestDetails page;
 
             // Show TestDetails page
-            // ((WindowViewModel)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = ApplicationPage.TestDetails;
+            IoC.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.TestDetails;
             Debug.WriteLine("CopyNominalValues(object parameter) is running:");
         }
 
@@ -68,7 +68,7 @@ namespace metering.core
         private void CancelTestDetailsPageShowing()
         {
             // Show NominalValues page
-            // ((WindowViewModel)((MainWindow)Application.Current.MainWindow).DataContext).CurrentPage = ApplicationPage.NominalValues;
+            IoC.Get<ApplicationViewModel>().CurrentPage = ApplicationPage.NominalValues;
 
             Debug.WriteLine("CancelTestDetailsPageShowing is running:");
         }

@@ -64,7 +64,9 @@
                     BorderThickness="1" 
                     ClipToBounds="True" 
                     NavigationUIVisibility="Hidden" 
-                    Content="{Binding ApplicationViewModel.CurrentPage, ElementName=AppWindow , Converter={local:ApplicationPageValueConverter}}">
+                    Content="{Binding ApplicationViewModel.CurrentPage, 
+                                      Source={x:Static local:ViewModelLocator.Instance},
+                                      Converter={local:ApplicationPageValueConverter}}">
                     
                 </Frame>
             </ScrollViewer>

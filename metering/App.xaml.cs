@@ -7,6 +7,7 @@ using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Threading;
+using metering.core;
 
 namespace metering
 {
@@ -60,24 +61,16 @@ namespace metering
         /// </summary>
         /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
-        {
-            //// get the current app style (theme and accent) from the application
-            //// you can then use the current theme and custom accent instead set a new theme
-            //Tuple<AppTheme, Accent> appStyle = ThemeManager.DetectAppStyle(Application.Current);
-
-            //// now set the Green accent and dark theme
-            //ThemeManager.ChangeAppStyle(Current,
-            //                            ThemeManager.GetAccent("Red"),
-            //                            ThemeManager.GetAppTheme("BaseDark")); // or appStyle.Item1
-
+        {           
+            // Allow the base start
             base.OnStartup(e);
 
-            //// Create default view.
-            //MainWindow window = new MainWindow();
+            // Setup IoC
+            IoC.Setup();
 
-            //window.Show();
-
-            //Task.Factory.StartNew(CheckForUpdates);
+            // Show the main window
+            Current.MainWindow = new MainWindow();
+            Current.MainWindow.Show();
         }
 
         void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

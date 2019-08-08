@@ -164,6 +164,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="ValueConverters\IoCConverter.cs" />
     <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="Pages\Base\BasePage.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="Controls\AnalogSignalListItemControl.xaml.cs">
       <DependentUpon>AnalogSignalListItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Page Include="Controls\AnalogSignalListControl.xaml">
       <SubType>Designer</SubType>

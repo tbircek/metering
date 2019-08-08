@@ -44,15 +44,14 @@
                 HorizontalTitleAlignment="Center" 
                 Background="Red"
                 IsDefault="True"
-                Command="{Binding AddNewTestCommand}"
-                CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                Command="{Binding AddNewTestCommand}">
 
                 <!-- + sign icon on the button -->
                 <Grid>
                     <iconPacks:PackIconFontAwesome 
                         Kind="PlusSolid" 
-                        Height="50" 
-                        Width="50" 
+                        Height="40" 
+                        Width="40" 
                         Margin="0" 
                         BorderBrush="Black" 
                         Foreground="Black"/>
@@ -80,8 +79,8 @@
                 <Grid>
                     <iconPacks:PackIconMaterial 
                         Kind="Cancel" 
-                        Height="50" 
-                        Width="50" 
+                        Height="40" 
+                        Width="40" 
                         Margin="0"
                         Foreground="Black"/>
                 </Grid>
