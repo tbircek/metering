@@ -161,6 +161,9 @@
     <Compile Include="Controls\AnalogSignalListControl.xaml.cs">
       <DependentUpon>AnalogSignalListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TestHost.xaml.cs">
+      <DependentUpon>TestHost.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Strings.Designer.cs">
       <DependentUpon>Strings.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -191,6 +194,10 @@
     <Page Include="Controls\AnalogSignalListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TestHost.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

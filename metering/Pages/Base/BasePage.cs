@@ -6,17 +6,17 @@ namespace metering
     /// <summary>
     /// A base page for all pages
     /// </summary>
-    //public class BasePage: Page
-    //{
+    public class BasePage : UserControl
+    {
 
-    //    // Animation and other stuff here
-    //}
+        // Animation and other stuff here
+    }
 
 
     /// <summary>
     /// A base page with added ViewModel support
     /// </summary>
-    public class BasePage<VM> : Page
+    public class BasePage<VM> : BasePage
         where VM: BaseViewModel, new()
     {
 
@@ -30,7 +30,6 @@ namespace metering
         #endregion
 
         #region Public Properties
-
 
         /// <summary>
         /// View Model associated with this page

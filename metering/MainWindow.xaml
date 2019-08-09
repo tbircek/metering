@@ -27,7 +27,11 @@
     <Window.Resources>
         <icon:VisualToImageSourceConverter x:Key="VisualToImageSourceConverter" />
     </Window.Resources>
-    
+
+    <!--<Window.Background>
+        <ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
+    </Window.Background>-->
+
     <Window.Icon>
         <Binding Converter="{StaticResource VisualToImageSourceConverter}">
             <Binding.Source>
@@ -56,25 +60,16 @@
         </Grid>
 
         <Grid Grid.Row="1" Margin="5">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <Frame 
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">                
+                <local:TestHost Grid.Row="1"
                     BorderBrush="Black" 
                     BorderThickness="1" 
                     ClipToBounds="True"
-                    local:NoFrameHistory.Value="True"
-                    Content="{Binding ApplicationViewModel.CurrentPage, 
-                                      Source={x:Static local:ViewModelLocator.Instance},
-                                      Converter={local:ApplicationPageValueConverter}}">
-                    
-                </Frame>
-                <!--<local:TestHost Grid.Row="1"
-                    BorderBrush="Black" 
-                    BorderThickness="1" 
-                    ClipToBounds="True"
+                    d:DataContext=""
                     DataContext="{Binding ApplicationViewModel.CurrentPage, 
                                       Source={x:Static local:ViewModelLocator.Instance},
                                       Converter={local:ApplicationPageValueConverter}}"
-                    Content="{Binding}"/>-->
+                    CurrentPage="{Binding}"/>
 
             </ScrollViewer>            
         </Grid>

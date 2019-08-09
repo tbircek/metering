@@ -10,13 +10,14 @@
     xmlns:core="clr-namespace:metering.core;assembly=metering.core" 
     xmlns:resources="clr-namespace:metering.Resources"
     mc:Ignorable="d" 
-    d:DesignHeight="450" d:DesignWidth="800">
+    d:DesignHeight="450" d:DesignWidth="800"
+    Background="Transparent">
 
-    <Page.Background>
-        <ImageBrush 
-            Opacity="0.1" 
-            ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
-    </Page.Background>
+    <!--<Page.Background>-->
+        <!--<ImageBrush--> 
+            <!--Opacity="0.1"--> 
+            <!--ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>-->
+    <!--</Page.Background>-->
 
     <Grid>
         <Grid.RowDefinitions>

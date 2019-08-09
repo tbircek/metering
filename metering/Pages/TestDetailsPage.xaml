@@ -9,12 +9,13 @@
     xmlns:local="clr-namespace:metering"
     xmlns:resources="clr-namespace:metering.Resources"
     xmlns:core="clr-namespace:metering.core;assembly=metering.core"
-    mc:Ignorable="d" >
+    mc:Ignorable="d" 
+    Background="Transparent">
 
-    <Page.Background>
-        <ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
-    </Page.Background>
-    
+    <!--<Page.Background>-->
+    <!--<ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>-->
+    <!--</Page.Background>-->
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

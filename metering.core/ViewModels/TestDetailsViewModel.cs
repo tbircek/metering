@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Threading;
 
 namespace metering.core
@@ -7,6 +8,41 @@ namespace metering.core
     {
 
         #region Public Properties
+
+        /// <summary>
+        /// Omicron Analog Output Signals.
+        /// </summary>
+        public ObservableCollection<AnalogSignalListItemViewModel> AnalogSignals { get; set; }
+
+        /// <summary>
+        /// Omicron Analog Output name.
+        /// </summary>
+        public string SignalName { get; set; }
+
+        /// <summary>
+        /// Omicron Analog Output start magnitude 
+        /// </summary>
+        public string From { get; set; }
+
+        /// <summary>
+        /// Omicron Analog Output end magnitude 
+        /// </summary>
+        public string To { get; set; }
+
+        /// <summary>
+        /// Omicron Analog Output magnitude increment/decrement
+        /// </summary>
+        public string Delta { get; set; }
+
+        /// <summary>
+        /// Omicron Analog Output phase
+        /// </summary>
+        public string Phase { get; set; }
+
+        /// <summary>
+        /// Omicron Analog Output frequency
+        /// </summary>
+        public string Frequency { get; set; }
 
         /// <summary>
         /// The register to monitor while testing.

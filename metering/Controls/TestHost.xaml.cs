@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using metering.core;
 
 namespace metering
 {
@@ -31,14 +33,32 @@ namespace metering
         #region Property Changed Events
 
         /// <summary>
-        /// 
+        /// Called when the <see cref="CurrentPage"/> value has changed
         /// </summary>
         /// <param name="d"></param>
         /// <param name="e"></param>
         private static void CurrentPagePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var newPage = (d as TestHost).CurrentPage;
+            // get the Content Controls
+            var newPageHost = (d as TestHost).NewTestHost;
+            var oldPageHost = (d as TestHost).OldTestHost;
+
+            // store the current page content as the old page
+            var oldPageContent = newPageHost.Content;
+
+            // Remove current page from new page host
+            newPageHost.Content = null;
+
+            // move the previous host into the old page host
+            oldPageHost.Content = oldPageContent;
+
+            // remove old page
+            // Application.Current.Dispatcher.Invoke(() => oldPageHost.Content = null);
+
+            // set the new page content
+            newPageHost.Content = e.NewValue;
             
+
         }
 
 
@@ -52,6 +72,11 @@ namespace metering
         public TestHost()
         {
             InitializeComponent();
+
+            // Show the current page in design mode
+            // otherwise design view would not show the current page in design mode.
+            if (DesignerProperties.GetIsInDesignMode(this))
+                NewTestHost.Content = (BasePage)new ApplicationPageValueConverter().Convert(IoC.Get<ApplicationViewModel>().CurrentPage);
         } 
 
         #endregion
