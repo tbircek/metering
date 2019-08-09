@@ -110,7 +110,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\metering\metering.csproj">
+    <ProjectReference Include="..\metering\metering.wpf.csproj">
       <Project>{512ab3d9-59eb-4831-93da-7aa4067d3b14}</Project>
       <Name>metering</Name>
     </ProjectReference>

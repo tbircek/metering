@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using metering.core;
@@ -53,12 +52,10 @@ namespace metering
             oldPageHost.Content = oldPageContent;
 
             // remove old page
-            // Application.Current.Dispatcher.Invoke(() => oldPageHost.Content = null);
+            Application.Current.Dispatcher.Invoke(() => oldPageHost.Content = null);
 
             // set the new page content
             newPageHost.Content = e.NewValue;
-            
-
         }
 
 

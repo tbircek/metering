@@ -5,23 +5,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:local="clr-namespace:metering"
     xmlns:resources="clr-namespace:metering.Resources"
     xmlns:icon="clr-namespace:WindowConverter.Icon"
-    xmlns:local="clr-namespace:metering"
-    xmlns:core="clr-namespace:metering.core;assembly=metering.core"
     x:Class="metering.MainWindow"
     x:Name="AppWindow"
     mc:Ignorable="d"
     Title="{x:Static resources:Strings.Title}"
     ShowIconOnTitleBar="True"
     ShowTitleBar="True"
-    Height="800" Width="800"
-    MinHeight="800" MinWidth="850"
+    Height="600" Width="800"
     BorderThickness="0" 
-    GlowBrush="Black"
+    GlowBrush="Red"
     ResizeMode="CanResizeWithGrip"
-    FontSize="16"
-    WindowTransitionsEnabled="False"
     WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -47,19 +43,12 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Margin="5">
-            <Frame 
-                BorderBrush="Black" 
-                BorderThickness="1" 
-                ClipToBounds="True" 
-                local:NoFrameHistory.Value="True"
-                Source="\Pages\CommunicationPage.xaml">
-
-            </Frame>
+        <Grid Grid.Row="0">           
+            <local:CommunicationPage />
 
         </Grid>
 
-        <Grid Grid.Row="1" Margin="5">
+        <Grid Grid.Row="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">                
                 <local:TestHost Grid.Row="1"
                     BorderBrush="Black" 
@@ -74,16 +63,8 @@
             </ScrollViewer>            
         </Grid>
         
-        <Grid Grid.Row="2" 
-              Margin="5">
-            <Frame 
-                BorderBrush="Black" 
-                BorderThickness="1" 
-                ClipToBounds="True" 
-                local:NoFrameHistory.Value="True"
-                Source="\Pages\CommandsPage.xaml">
-
-            </Frame>
+        <Grid Grid.Row="2" >
+            <local:CommandsPage/>
             
         </Grid>
     </Grid>
