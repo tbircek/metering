@@ -12,10 +12,6 @@
     mc:Ignorable="d" 
     Background="Transparent">
 
-    <!--<Page.Background>-->
-    <!--<ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>-->
-    <!--</Page.Background>-->
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -24,8 +20,9 @@
 
         <!-- Analog signal values -->
         <Grid Grid.Column="1">
-            <local:AnalogSignalListControl ClipToBounds="True">
-                <local:AnalogSignalListItemControl/>
+            <local:AnalogSignalListControl
+                ClipToBounds="True"
+                d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}" >
             </local:AnalogSignalListControl>
         </Grid>
         

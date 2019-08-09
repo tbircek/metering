@@ -18,7 +18,7 @@ namespace metering.core
         /// <summary>
         /// Title of AddNewTestCommand
         /// </summary>
-        public string AddNewTestCommandTitle { get; set; } = "Add New Voltage Test";
+        public string AddNewTestCommandTitle { get; set; } = "New Test";
 
 
         /// <summary>

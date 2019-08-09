@@ -14,7 +14,6 @@
     Title="{x:Static resources:Strings.Title}"
     ShowIconOnTitleBar="True"
     ShowTitleBar="True"
-    Height="600" Width="800"
     BorderThickness="0" 
     GlowBrush="Red"
     ResizeMode="CanResizeWithGrip"
@@ -38,19 +37,22 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">           
-            <local:CommunicationPage />
+            <local:CommunicationPage     
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                ClipToBounds="True"/>
 
         </Grid>
 
         <Grid Grid.Row="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">                
-                <local:TestHost Grid.Row="1"
+                <local:TestHost
                     BorderBrush="Black" 
                     BorderThickness="1" 
                     ClipToBounds="True"
@@ -64,7 +66,10 @@
         </Grid>
         
         <Grid Grid.Row="2" >
-            <local:CommandsPage/>
+            <local:CommandsPage
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                ClipToBounds="True"/>
             
         </Grid>
     </Grid>

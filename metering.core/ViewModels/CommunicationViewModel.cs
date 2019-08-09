@@ -89,7 +89,7 @@ namespace metering.core
                     // The user click on the button 
                     // TODO: Handle Omicron open connection here.
                     Debug.WriteLine($"TODO: Connect Omicron Test Set ... success?: {isOmicronConnected}");
-                    Log += $"{DateTime.Now.ToLocalTime()}:\nConnecting Omicron Test Set was {(isOmicronConnected ? " successful" : " failed")}\n";
+                    Log += $"{DateTime.Now.ToLocalTime()}: Connecting Omicron Test Set was {(isOmicronConnected ? " successful" : " failed")}\n";
 
                     // TODO: Handle ConnectCommand Button checked
                     Debug.WriteLine($"TODO: Connect thru modbus protocol to {IpAddress}:{Port}");

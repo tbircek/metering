@@ -110,6 +110,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\metering.core\metering.core.csproj">
+      <Project>{5C7027D5-4B49-4F50-8AD6-E23234C1855D}</Project>
+      <Name>metering.core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\metering\metering.wpf.csproj">
       <Project>{512ab3d9-59eb-4831-93da-7aa4067d3b14}</Project>
       <Name>metering</Name>

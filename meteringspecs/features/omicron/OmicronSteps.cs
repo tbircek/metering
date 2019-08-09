@@ -1,8 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using TechTalk.SpecFlow;
-using metering;
+﻿using System.Diagnostics;
+using metering.core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using TechTalk.SpecFlow;
 
 namespace meteringspecs.features.omicron
 {

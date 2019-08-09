@@ -9,8 +9,14 @@
 
     <UserControl.Template>
         <ControlTemplate TargetType="UserControl">
-            <Grid d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}" Background="Transparent">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Grid 
+                d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}" 
+                Background="Transparent">
+                
+                <ScrollViewer 
+                    VerticalScrollBarVisibility="Auto" 
+                    HorizontalScrollBarVisibility="Auto">
+                    
                     <ItemsControl ItemsSource="{Binding AnalogSignals}" Margin="2">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

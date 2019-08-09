@@ -1,6 +1,6 @@
 ﻿using System;
 using TechTalk.SpecFlow;
-using metering;
+using metering.core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 
