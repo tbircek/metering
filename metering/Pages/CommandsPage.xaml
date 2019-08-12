@@ -9,67 +9,61 @@
     xmlns:local="clr-namespace:metering"
     xmlns:core="clr-namespace:metering.core;assembly=metering.core"
     x:Class="metering.CommandsPage"
-    mc:Ignorable="d" 
-    Height="100"
-    d:DesignHeight="100" d:DesignWidth="800">
+    mc:Ignorable="d">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <!-- Future use -->
         <Viewbox Grid.Column="0"
                   Margin="10 5">
             <Button
-                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}" 
-                Width="50"
-                Height="50">
+                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}">
 
             </Button>
 
         </Viewbox>
         
-        <!-- Add New Test Button-->
+        <!-- Add New Test Button--><!--
         <Viewbox Grid.Column="1" 
                  Margin="10 5">
             <Controls:Tile 
                 Title="{Binding AddNewTestCommandTitle}"
+                TitleFontSize="20"
                 Margin="1,0,0,0" 
                 TabIndex="9"
-                Width="266"
-                Height="80"
                 VerticalTitleAlignment="Bottom" 
                 HorizontalTitleAlignment="Center" 
                 Background="Red"
                 IsDefault="True"
                 Command="{Binding AddNewTestCommand}">
 
-                <!-- + sign icon on the button -->
+                --><!-- + sign icon on the button --><!--
                 <Grid>
                     <iconPacks:PackIconFontAwesome 
-                        Kind="PlusSolid" 
-                        Height="40" 
-                        Width="40" 
-                        Margin="0" 
+                        Kind="PlusSolid"
+                        Padding="20" 
+                        Width="Auto"
+                        Height="Auto"
                         BorderBrush="Black" 
                         Foreground="Black"/>
                 </Grid>
                 
             </Controls:Tile>
-        </Viewbox>
+        </Viewbox>-->
 
         <!-- Cancel Button -->
         <Viewbox Grid.Column="2"
                  Margin="10 5">
                 <Controls:Tile 
                     Title="Cancel" 
+                    TitleFontSize="20"
                     Margin="1,0,0,0"
                     TabIndex="8"
-                    Width="266"
-                    Height="80"
                     VerticalTitleAlignment="Bottom" 
                     HorizontalTitleAlignment="Center"
                     Background="Green"
@@ -80,9 +74,9 @@
                     <Grid>
                         <iconPacks:PackIconMaterial 
                         Kind="Cancel" 
-                        Height="40" 
-                        Width="40" 
-                        Margin="0"
+                        Padding="20" 
+                        Width="Auto"
+                        Height="Auto"
                         Foreground="Black"/>
                     </Grid>
                 </Controls:Tile>            

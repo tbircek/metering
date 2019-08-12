@@ -7,8 +7,7 @@
     xmlns:core="clr-namespace:metering.core;assembly=metering.core"
     xmlns:resources="clr-namespace:metering.Resources"
     x:Class="metering.AnalogSignalListItemControl"
-    mc:Ignorable="d"
-    FontSize="14">
+    mc:Ignorable="d">
 
     <Grid d:DataContext="{x:Static core:AnalogSignalListItemDesignModel.Instance}" 
           Background="Transparent"
@@ -28,7 +27,7 @@
             <!-- Frequency -->
             <ColumnDefinition />
             <!-- Extra space -->
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="100" />
 
         </Grid.ColumnDefinitions>
 
@@ -37,7 +36,8 @@
             <TextBox                         
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                Padding="5"
+                Padding="10 5 5 0"    
+                Margin="10 5 5 0"
                 IsEnabled="False"            
                 HorizontalContentAlignment="Center" 
                 Text="{Binding SignalName}"/>
@@ -49,7 +49,8 @@
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_from}"        
                 TabIndex="0"  
-                Padding="5"                  
+                Padding="10 5 5 0"      
+                Margin="10 5 5 0"              
                 HorizontalContentAlignment="Center" 
                 Text="{Binding From, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
@@ -60,7 +61,8 @@
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_to}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                 TabIndex="1"  
-                Padding="5"                   
+                Padding="10 5 5 0"      
+                Margin="10 5 5 0"               
                 HorizontalContentAlignment="Center"
                 Text="{Binding To, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
@@ -71,7 +73,8 @@
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_delta}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                 TabIndex="2"  
-                Padding="5"           
+                Padding="10 5 5 0"    
+                Margin="10 5 5 0"
                 HorizontalContentAlignment="Center"
                 Text="{Binding Delta, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
@@ -82,7 +85,8 @@
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_phase}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                 TabIndex="3"  
-                Padding="5"                  
+                Padding="10 5 5 0"     
+                Margin="10 5 5 0"               
                 HorizontalContentAlignment="Center" 
                 Text="{Binding Phase, UpdateSourceTrigger=PropertyChanged}"/>
         </Viewbox>
@@ -93,7 +97,8 @@
                 materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_frequency}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                 TabIndex="4"  
-                Padding="5"                  
+                Padding="10 5 5 0"     
+                Margin="10 5 5 0"                
                 HorizontalContentAlignment="Center" 
                 Text="{Binding Frequency, UpdateSourceTrigger=PropertyChanged}"/>
 

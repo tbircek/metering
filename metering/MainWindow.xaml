@@ -15,6 +15,8 @@
     ShowIconOnTitleBar="True"
     ShowTitleBar="True"
     BorderThickness="0" 
+    MinHeight="400"
+    MinWidth="550"
     GlowBrush="Red"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen">
@@ -24,7 +26,7 @@
     </Window.Resources>
 
     <!--<Window.Background>
-        <ImageBrush Opacity="0.1" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
+        <ImageBrush Opacity="1.0" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
     </Window.Background>-->
 
     <Window.Icon>
@@ -37,9 +39,9 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="150"/>
+            <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">           

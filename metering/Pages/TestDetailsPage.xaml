@@ -19,15 +19,16 @@
         </Grid.ColumnDefinitions>
 
         <!-- Analog signal values -->
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Margin="5">
             <local:AnalogSignalListControl
                 ClipToBounds="True"
-                d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}" >
+                d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}">
+                <!--DataContext="{x:Static core:AnalogSignalDesignModel.Instance}" >-->
             </local:AnalogSignalListControl>
         </Grid>
         
         <!-- Register, Dwell Time, Start Delay Time, Measurement Interval and Start Measurement Delay-->
-        <Grid Grid.Column="0">
+        <Grid Grid.Column="0" Margin="5">
             
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -38,7 +39,7 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <!-- Register -->
-            <Viewbox Grid.Row="0" Margin="5">
+            <Viewbox Grid.Row="0">
                 <TextBox 
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_register}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
@@ -50,7 +51,7 @@
             </Viewbox>
 
             <!-- Dwell Time -->
-            <Viewbox Grid.Row="1" Margin="5">
+            <Viewbox Grid.Row="1">
                 <TextBox 
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_dwell_time}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
@@ -61,7 +62,7 @@
             </Viewbox>
             
             <!-- Start Delay Time -->
-            <Viewbox Grid.Row="2" Margin="5">
+            <Viewbox Grid.Row="2">
                 <TextBox
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_delay_time}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
@@ -72,7 +73,7 @@
             </Viewbox>
             
             <!-- Measurement Interval -->
-            <Viewbox Grid.Row="3" Margin="5">
+            <Viewbox Grid.Row="3">
                 <TextBox                 
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_measurement_interval}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
@@ -84,7 +85,7 @@
             
 
             <!-- Start Measurement Delay -->
-            <Viewbox Grid.Row="4" Margin="5">
+            <Viewbox Grid.Row="4">
                 <TextBox 
                     x:Name="startMeasurementDelay"
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_measurement_delay}"

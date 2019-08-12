@@ -13,7 +13,7 @@ namespace metering
         /// <summary>
         /// The window this view model controls
         /// </summary>
-        private Window thisWindow;
+        private readonly Window thisWindow;
         #endregion
 
         #region Constructor

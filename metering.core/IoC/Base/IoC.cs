@@ -14,6 +14,11 @@ namespace metering.core
         /// </summary>
         public static IKernel Kernel { get; private set; } = new StandardKernel();
 
+        /// <summary>
+        /// Shortcut to access the <see cref="IVMContentManager"/>
+        /// </summary>
+        public static IVMContentManager ContentManager => IoC.Get<IVMContentManager>();
+
         #endregion
 
         #region Setup

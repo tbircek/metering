@@ -164,6 +164,7 @@
     <Compile Include="Controls\TestHost.xaml.cs">
       <DependentUpon>TestHost.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IoC\IContentManager.cs" />
     <Compile Include="Resources\Strings.Designer.cs">
       <DependentUpon>Strings.resx</DependentUpon>
       <AutoGen>True</AutoGen>

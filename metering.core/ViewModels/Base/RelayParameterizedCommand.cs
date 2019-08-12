@@ -13,7 +13,7 @@ namespace metering.core
         /// <summary>
         /// The action to run
         /// </summary>
-        private Action<object> mAction;
+        private readonly Action<object> mAction;
 
         #endregion
 

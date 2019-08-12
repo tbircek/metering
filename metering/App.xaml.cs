@@ -65,12 +65,24 @@ namespace metering
             // Allow the base start
             base.OnStartup(e);
 
-            // Setup IoC
-            IoC.Setup();
+            // Setup the main application
+            ApplicationSetup();
 
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
+        }
+
+        /// <summary>
+        /// Configures the application
+        /// </summary>
+        private void ApplicationSetup()
+        {
+            // Setup IoC
+            IoC.Setup();
+
+            // Bind a IVMContentManager
+            IoC.Kernel.Bind<IVMContentManager>().ToConstant(new IContentManager());
         }
 
         void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
