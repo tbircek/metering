@@ -22,8 +22,8 @@
         <Grid Grid.Column="1" Margin="5">
             <local:AnalogSignalListControl
                 ClipToBounds="True"
-                d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}">
-                <!--DataContext="{x:Static core:AnalogSignalDesignModel.Instance}" >-->
+                d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}"
+                DataContext="{Binding AnalogSignals}" >
             </local:AnalogSignalListControl>
         </Grid>
         

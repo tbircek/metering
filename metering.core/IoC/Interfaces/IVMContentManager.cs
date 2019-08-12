@@ -9,11 +9,18 @@ namespace metering.core
     public interface IVMContentManager
     {
         /// <summary>
-        /// Passes Nominal values specified by the user to TestDetailsViewModel
+        /// Displays TestDetails page with user specified values in NominalValues page
         /// </summary>
-        /// <param name="destination">The viewModel values to transfer to</param>
+        /// <param name="testDetailsViewModel">The view model</param>
         /// <returns></returns>
-        void PassNominalValues(ObservableCollection<AnalogSignalListItemViewModel> destination);
+        Task ShowTestDetails(TestDetailsViewModel testDetailsViewModel);
 
+        /// <summary>
+        /// Displays TestDetails page with user specified values in NominalValues page
+        /// </summary>
+        /// <param name="testDetailsViewModel">The test details viewmodel</param>
+        /// <param name="nominalValuesViewModel">The nominal values viewmodel</param>
+        /// <returns></returns>
+        Task ShowTestDetails(TestDetailsViewModel testDetailsViewModel, NominalValuesViewModel nominalValuesViewModel);
     }
 }

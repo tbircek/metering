@@ -93,13 +93,10 @@ namespace metering.core
             // await Task.Delay(100);
 
             // TODO: Pass NominalValues page values to the TestDetails page;
-            IoC.ContentManager.PassNominalValues(new ObservableCollection<AnalogSignalListItemViewModel>
-            {
-               for (int i = 1; i < 4; i++)
-               {
-                 
-               }
-            });
+           //  await Task.Run(() => IoC.ContentManager.ShowTestDetails(new TestDetailsViewModel()));
+
+            await Task.Run(() => IoC.ContentManager.ShowTestDetails(new TestDetailsViewModel(), parameter as NominalValuesViewModel));
+
 
             // Show TestDetails page
             await Task.Factory.StartNew(() => IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.TestDetails));
