@@ -81,8 +81,8 @@ namespace metering
             // Setup IoC
             IoC.Setup();
 
-            // Bind a IVMContentManager
-            IoC.Kernel.Bind<IVMContentManager>().ToConstant(new IContentManager());
+            // Bind a IUIManager
+            IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
         }
 
         void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -124,8 +124,7 @@ namespace metering
             // Persist application state
             try
             {
-                // PersistApplicationState();
-                WriteApplicationLogEntry("Failure", e.ApplicationExitCode);
+                PersistApplicationState();
             }
             catch
             {
@@ -147,18 +146,18 @@ namespace metering
             }
         }
 
-        //void PersistApplicationState()
-        //{
-        //    // Persist application state to file in isolated storage for the user
-        //    IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
-        //    using (Stream stream = new IsolatedStorageFileStream("state.txt", FileMode.Create, store))
-        //    using (StreamWriter writer = new StreamWriter(stream))
-        //    {
-        //        foreach (DictionaryEntry entry in Properties)
-        //        {
-        //            writer.WriteLine(entry.Value);
-        //        }
-        //    }
-        //}
+        void PersistApplicationState()
+        {
+            // Persist application state to file in isolated storage for the user
+            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
+            using (Stream stream = new IsolatedStorageFileStream("state.txt", FileMode.Create, store))
+            using (StreamWriter writer = new StreamWriter(stream))
+            {
+                foreach (DictionaryEntry entry in Properties)
+                {
+                    writer.WriteLine(entry.Value);
+                }
+            }
+        }
     }
 }

@@ -57,7 +57,7 @@
     <Compile Include="DataModels\ApplicationPage.cs" />
     <Compile Include="Expressions\ExpressionHelpers.cs" />
     <Compile Include="IoC\Base\IoC.cs" />
-    <Compile Include="IoC\Interfaces\IVMContentManager.cs" />
+    <Compile Include="IoC\Interfaces\IUIManager.cs" />
     <Compile Include="Omicron\CMCControl.cs" />
     <Compile Include="Omicron\ExtractParameters.cs" />
     <Compile Include="Omicron\InitialCMCSetup.cs" />
@@ -78,7 +78,7 @@
     <Compile Include="ViewModels\CommandsViewModel.cs" />
     <Compile Include="ViewModels\CommunicationViewModel.cs" />
     <Compile Include="ViewModels\NominalValuesViewModel.cs" />
-    <Compile Include="ViewModels\TestDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Test\TestDetailsViewModel.cs" />
     <Compile Include="ViewModels\Test\AnalogSignalListItemViewModel.cs" />
     <Compile Include="ViewModels\Test\AnalogSignalViewModel.cs" />
     <Compile Include="ViewModels\Test\Design\AnalogSignalDesignModel.cs" />

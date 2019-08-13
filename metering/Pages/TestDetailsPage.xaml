@@ -14,8 +14,11 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
+            <!-- Test Settings -->
+            <ColumnDefinition Width="250"/>
+            
+            <!-- Test Values -->
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="9*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Analog signal values -->
@@ -28,7 +31,8 @@
         </Grid>
         
         <!-- Register, Dwell Time, Start Delay Time, Measurement Interval and Start Measurement Delay-->
-        <Grid Grid.Column="0" Margin="5">
+        <Grid Grid.Column="0" 
+              Margin="5">
             
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -38,36 +42,34 @@
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <!-- Register -->
-            <Viewbox Grid.Row="0">
-                <TextBox 
-                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_register}"
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    TabIndex="0"
-                    Padding="0 0 5 0" 
-                    FontSize="16"                     
-                    HorizontalContentAlignment="Center" 
-                    Text="{Binding Register, UpdateSourceTrigger=PropertyChanged}"/>
-            </Viewbox>
+            
+            <!-- Register Setting -->
+                <TextBox Grid.Row="0"
+                         materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_register}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         TabIndex="0"
+                         Padding="0 0 5 0"                 
+                         HorizontalContentAlignment="Center" 
+                         Text="{Binding Register, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <!-- Dwell Time -->
-            <Viewbox Grid.Row="1">
-                <TextBox 
+            <!-- Dwell Time Setting -->
+                <TextBox Grid.Row="1"
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_dwell_time}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    TabIndex="1"  
-                    Padding="5"
+                    TabIndex="1"
+                    Padding="0 0 5 0" 
                     HorizontalContentAlignment="Center" 
-                    Text="{Binding DwellTime, UpdateSourceTrigger=PropertyChanged}"/>
-            </Viewbox>
+                    Text="{Binding DwellTime, UpdateSourceTrigger=PropertyChanged}"
+                    FontSize="20"/>
+            <!--</Viewbox>-->
             
             <!-- Start Delay Time -->
             <Viewbox Grid.Row="2">
                 <TextBox
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_delay_time}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    TabIndex="2"  
-                    Padding="5"
+                    TabIndex="2" 
+                    Padding="0 0 5 0" 
                     HorizontalContentAlignment="Center" 
                     Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged}"/>
             </Viewbox>
@@ -77,8 +79,8 @@
                 <TextBox                 
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_measurement_interval}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    TabIndex="3"  
-                    Padding="5"                    
+                    TabIndex="3" 
+                    Padding="0 0 5 0"                   
                     HorizontalContentAlignment="Center" 
                     Text="{Binding MeasurementInterval, UpdateSourceTrigger=PropertyChanged}"/>
             </Viewbox>
@@ -90,8 +92,8 @@
                     x:Name="startMeasurementDelay"
                     materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_measurement_delay}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    TabIndex="4"  
-                    Padding="5"                   
+                    TabIndex="4"
+                    Padding="0 0 5 0"                  
                     HorizontalContentAlignment="Center" 
                     Text="{Binding StartMeasurementDelay, UpdateSourceTrigger=PropertyChanged}"/>
             </Viewbox>            

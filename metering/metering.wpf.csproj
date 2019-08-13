@@ -124,6 +124,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Drawing.Primitives.4.3.0\lib\net45\System.Drawing.Primitives.dll</HintPath>
@@ -161,10 +162,14 @@
     <Compile Include="Controls\AnalogSignalListControl.xaml.cs">
       <DependentUpon>AnalogSignalListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\BaseUserControl.cs" />
     <Compile Include="Controls\TestHost.xaml.cs">
       <DependentUpon>TestHost.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IoC\IContentManager.cs" />
+    <Compile Include="IoC\UIManager.cs" />
+    <Compile Include="DialogWindow.xaml.cs">
+      <DependentUpon>DialogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Strings.Designer.cs">
       <DependentUpon>Strings.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -190,6 +195,7 @@
     <Compile Include="Controls\AnalogSignalListItemControl.xaml.cs">
       <DependentUpon>AnalogSignalListItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\DialogWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Page Include="Controls\AnalogSignalListControl.xaml">
@@ -197,6 +203,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\TestHost.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DialogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -92,15 +92,45 @@ namespace metering.core
             // Simulate the page creation.
             // await Task.Delay(100);
 
-            // TODO: Pass NominalValues page values to the TestDetails page;
-           //  await Task.Run(() => IoC.ContentManager.ShowTestDetails(new TestDetailsViewModel()));
+            // TODO: Pass NominalValues page values to the TestDetails page using Dependency Injection
+            await Task.Run(() => IoC.UI.ShowTestDetails(new TestDetailsViewModel()
+            {
+                Register = "Test- register value",
+                DwellTime = "test- dwell time",
+                StartDelayTime = "test-StartDelayTime",
+                MeasurementInterval = "test-MeasurementInterval",
+                StartMeasurementDelay = "test - StartMeasurementDelay",
+                TestText = "Test",
+                AnalogSignals = new ObservableCollection<AnalogSignalListItemViewModel>
+                {
+                    new AnalogSignalListItemViewModel
+                    {
+                        SignalName = "test- v1",
+                        From = "test-100.4",
+                        To = "-test - 134.6",
+                        Delta = "test- 4.333",
+                        Phase = "test- 40.000",
+                        Frequency = "test- 459.999"
+                    },
+                    new AnalogSignalListItemViewModel
+                    {
+                        SignalName = "test- 4v2",
+                        From = "1test- 400.4",
+                        To = "13test- 44.6",
+                        Delta = "4test- 4.333",
+                        Phase = "0.0test- 400",
+                        Frequency = "59test- 4.999"
+                    }
+                }
+            }));
 
-            await Task.Run(() => IoC.ContentManager.ShowTestDetails(new TestDetailsViewModel(), parameter as NominalValuesViewModel));
+            //await Task.Run(() =>
+            //{
 
-
-            // Show TestDetails page
-            await Task.Factory.StartNew(() => IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.TestDetails));
-            Debug.WriteLine("CopyNominalValues() is running:");
+            //});
+            //// Show TestDetails page
+            //await Task.Factory.StartNew(() => IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.TestDetails));
+            //Debug.WriteLine("CopyNominalValues() is running:");
         }
 
         /// <summary>
