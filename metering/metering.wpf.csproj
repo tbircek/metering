@@ -167,9 +167,6 @@
       <DependentUpon>TestHost.xaml</DependentUpon>
     </Compile>
     <Compile Include="IoC\UIManager.cs" />
-    <Compile Include="DialogWindow.xaml.cs">
-      <DependentUpon>DialogWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Resources\Strings.Designer.cs">
       <DependentUpon>Strings.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -195,7 +192,6 @@
     <Compile Include="Controls\AnalogSignalListItemControl.xaml.cs">
       <DependentUpon>AnalogSignalListItemControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\DialogWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Page Include="Controls\AnalogSignalListControl.xaml">
@@ -203,10 +199,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\TestHost.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="DialogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

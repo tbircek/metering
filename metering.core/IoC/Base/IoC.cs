@@ -19,6 +19,16 @@ namespace metering.core
         /// </summary>
         public static IUIManager UI => IoC.Get<IUIManager>();
 
+        /// <summary>
+        /// A shortcut to the <see cref="ApplicationViewModel"/>
+        /// </summary>
+        public static ApplicationViewModel Application => IoC.Get<ApplicationViewModel>();
+
+        /// <summary>
+        /// A shortcut to access the <see cref="NominalValuesViewModel"/>
+        /// </summary>
+        public static NominalValuesViewModel NominalValues => IoC.Get<NominalValuesViewModel>();
+
         #endregion
 
         #region Setup
@@ -34,12 +44,15 @@ namespace metering.core
         }
 
         /// <summary>
-        /// Binds all view models
+        /// Binds to a single instance of view models
         /// </summary>
         private static void BindViewModels()
         {
             // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
+
+            // bind to a single instance of NominalValues view model
+            Kernel.Bind<NominalValuesViewModel>().ToConstant(new NominalValuesViewModel());
         }
 
         #endregion

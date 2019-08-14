@@ -11,6 +11,7 @@ namespace metering.core
     {
 
         #region Public Properties
+        
         /// <summary>
         /// Default Voltage magnitude to use through out the test
         /// </summary>
@@ -77,7 +78,7 @@ namespace metering.core
             Thread.CurrentThread.CurrentCulture = ci;
 
             RadioButtonCommand = new RelayParameterizedCommand((parameter) => GetSelectedRadioButton((string)parameter));
-            AddNewTestCommand = new RelayParameterizedCommand((parameter) => CopyNominalValues((NominalValuesViewModel)parameter));
+            AddNewTestCommand = new RelayCommand(() => CopyNominalValuesAsync());
 
         }
         #endregion
@@ -87,11 +88,10 @@ namespace metering.core
         /// <summary>
         /// Shows test steps with values reset to nominal values
         /// </summary>
-        private async void CopyNominalValues(NominalValuesViewModel parameter)
+        private async void CopyNominalValuesAsync()
         {
-            // Simulate the page creation.
-            // await Task.Delay(100);
 
+            // Show TestDetails page
             // TODO: Pass NominalValues page values to the TestDetails page using Dependency Injection
             await Task.Run(() => IoC.UI.ShowTestDetails(new TestDetailsViewModel()
             {
@@ -124,13 +124,9 @@ namespace metering.core
                 }
             }));
 
-            //await Task.Run(() =>
-            //{
-
-            //});
-            //// Show TestDetails page
-            //await Task.Factory.StartNew(() => IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.TestDetails));
-            //Debug.WriteLine("CopyNominalValues() is running:");
+            // Simulate the page creation.
+            await Task.Delay(1);
+            Debug.WriteLine("CopyNominalValuesAsync() is running:");            
         }
 
         /// <summary>

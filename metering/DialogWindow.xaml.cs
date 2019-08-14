@@ -30,7 +30,7 @@ namespace metering
                 mViewModel = value;
 
                 // Update data context
-                DataContext = mViewModel;
+                //DataContext = mViewModel;
             }
         }
 

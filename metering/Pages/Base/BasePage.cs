@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using metering.core;
 
 namespace metering
@@ -65,5 +67,38 @@ namespace metering
 
         #endregion
 
+        //#region Public Methods
+        
+        ///// <summary>
+        ///// Displays TestDetail page to the user
+        ///// </summary>
+        ///// <typeparam name="T">The view model type</typeparam>
+        ///// <param name="viewModel">The viewmodel</param>
+        ///// <returns></returns>
+        //public Task ShowTest<T>(T viewModel)
+        //    where T: TestDetailsViewModel
+        //{
+        //    // Create a task to wait until user cancels or test is over.
+        //    // TODO: add a task token to cancel the this task
+        //    var tcs = new TaskCompletionSource<bool>();
+
+        //    // Keep view on the UI Thread
+        //    Application.Current.Dispatcher.Invoke(() =>
+        //    {
+        //        try
+        //        {
+        //            DataContext = viewModel;
+        //        }
+        //        finally
+        //        {
+        //            // test completed (with/without error)
+        //            tcs.TrySetResult(true);
+        //        }
+        //    });
+
+        //    // return test completion.
+        //    return tcs.Task;
+        //}
+        //#endregion
     }
 }

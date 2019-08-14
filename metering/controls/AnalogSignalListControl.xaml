@@ -11,7 +11,8 @@
         <ControlTemplate TargetType="UserControl">
             <Grid 
                 d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}" 
-                Background="Transparent">
+                Background="Transparent"
+                DataContext="{Binding AnalogSignals}">
                 
                 <ScrollViewer 
                     VerticalScrollBarVisibility="Auto" 

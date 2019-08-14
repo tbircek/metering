@@ -13,8 +13,16 @@ namespace metering.core
         /// Omicron Analog Output Signals.
         /// </summary>
         public ObservableCollection<AnalogSignalListItemViewModel> AnalogSignals { get; set; }
-        
+
         #endregion
 
+        //#region Constructors
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        //public AnalogSignalViewModel() { }
+
+        //#endregion
     }
 }

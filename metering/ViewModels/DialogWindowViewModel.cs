@@ -28,7 +28,7 @@ namespace metering
         /// <summary>
         /// Default constructor
         /// </summary>
-        public DialogWindowViewModel(Window window): base(window) { }
+       // public DialogWindowViewModel(Window window): base(window) { }
 
         #endregion
     }
