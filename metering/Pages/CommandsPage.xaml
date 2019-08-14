@@ -28,7 +28,7 @@
 
         </Viewbox>
         
-        <!-- Add New Test Button--><!--
+        <!-- Add New Test Button-->
         <Viewbox Grid.Column="1" 
                  Margin="10 5">
             <Controls:Tile 
@@ -42,7 +42,7 @@
                 IsDefault="True"
                 Command="{Binding AddNewTestCommand}">
 
-                --><!-- + sign icon on the button --><!--
+                 <!--+ sign icon on the button--> 
                 <Grid>
                     <iconPacks:PackIconFontAwesome 
                         Kind="PlusSolid"
@@ -54,7 +54,7 @@
                 </Grid>
                 
             </Controls:Tile>
-        </Viewbox>-->
+        </Viewbox>
 
         <!-- Cancel Button -->
         <Viewbox Grid.Column="2"

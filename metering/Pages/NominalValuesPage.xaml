@@ -9,8 +9,6 @@
     xmlns:local="clr-namespace:metering" 
     xmlns:core="clr-namespace:metering.core;assembly=metering.core" 
     xmlns:resources="clr-namespace:metering.Resources"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
     mc:Ignorable="d" 
     Background="Transparent">
 
@@ -171,40 +169,6 @@
                         </TextBox>
                     </StackPanel>
                 </GroupBox>
-            </Grid>
-
-            <Grid Grid.Column="3">
-
-                <!-- Add New Test Button-->
-                <Viewbox Margin="10 5">
-                    <Controls:Tile 
-                        Title="{Binding AddNewTestCommandTitle}"
-                        TitleFontSize="20"
-                        Margin="1,0,0,0" 
-                        TabIndex="9"
-                        VerticalTitleAlignment="Bottom" 
-                        HorizontalTitleAlignment="Center" 
-                        Background="Red"
-                        IsDefault="True"
-                        Command="{Binding AddNewTestCommand}" >
-                        <!--CommandParameter="{Binding DataContext, 
-                                                    RelativeSource={RelativeSource Mode=FindAncestor, 
-                                                                                    AncestorType=local:BasePage}}">-->
-
-                        <!-- + sign icon on the button -->
-                        <Grid>
-                            <iconPacks:PackIconFontAwesome 
-                                Kind="PlusSolid"
-                                Padding="20" 
-                                Width="Auto"
-                                Height="Auto"
-                                BorderBrush="Black" 
-                                Foreground="Black"/>
-                        </Grid>
-
-                    </Controls:Tile>
-                </Viewbox>
-
             </Grid>
         </Grid>
     </Grid>

@@ -16,13 +16,13 @@ namespace metering.core
 
         #endregion
 
-        //#region Constructors
+        #region Constructors
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        //public AnalogSignalViewModel() { }
+        public AnalogSignalViewModel() { }
 
-        //#endregion
+        #endregion
     }
 }

@@ -15,6 +15,9 @@ namespace metering
             // Find the appropriate page
             switch ((ApplicationPage)value)
             {
+                //case ApplicationPage.MainPage:
+                //    return new 
+
                 case ApplicationPage.NominalValues:
                     return new NominalValuesPage();
 

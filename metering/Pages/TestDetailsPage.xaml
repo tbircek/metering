@@ -15,7 +15,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <!-- Test Settings -->
-            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="300"/>
             
             <!-- Test Values -->
             <ColumnDefinition Width="*"/>
@@ -50,8 +50,9 @@
                 TabIndex="0"
                 Padding="0 0 5 0"                 
                 HorizontalContentAlignment="Center" 
-                Text="{Binding Register, UpdateSourceTrigger=PropertyChanged}"/>
-
+                Text="{Binding Register, UpdateSourceTrigger=PropertyChanged}"
+                FontSize="20"/>
+            
             <!-- Dwell Time Setting -->
             <TextBox 
                 Grid.Row="1"
@@ -71,8 +72,9 @@
                 TabIndex="2" 
                 Padding="0 0 5 0" 
                 HorizontalContentAlignment="Center" 
-                Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged}"/>
-            
+                Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged}"
+                FontSize="20"/>
+
             <!-- Measurement Interval -->
             <TextBox 
                 Grid.Row="3"                 
@@ -81,7 +83,8 @@
                 TabIndex="3" 
                 Padding="0 0 5 0"                   
                 HorizontalContentAlignment="Center" 
-                Text="{Binding MeasurementInterval, UpdateSourceTrigger=PropertyChanged}"/>            
+                Text="{Binding MeasurementInterval, UpdateSourceTrigger=PropertyChanged}"
+                FontSize="20"/>
 
             <!-- Start Measurement Delay -->
             <TextBox 
@@ -91,7 +94,9 @@
                 TabIndex="4"
                 Padding="0 0 5 0"                  
                 HorizontalContentAlignment="Center" 
-                Text="{Binding StartMeasurementDelay, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding StartMeasurementDelay, UpdateSourceTrigger=PropertyChanged}"
+                FontSize="20"/>
+
         </Grid>
     </Grid>
 </local:BasePage>

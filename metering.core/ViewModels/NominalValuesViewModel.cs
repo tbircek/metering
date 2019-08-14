@@ -51,11 +51,11 @@ namespace metering.core
 
         #region Public Commands
 
-        /// <summary>
-        /// The command to handle change view to test plan detail view
-        /// and populate items with nominal values
-        /// </summary>
-        public ICommand AddNewTestCommand { get; set; }
+        ///// <summary>
+        ///// The command to handle change view to test plan detail view
+        ///// and populate items with nominal values
+        ///// </summary>
+        //public ICommand AddNewTestCommand { get; set; }
 
         /// <summary>
         /// The command handles radio button selections
@@ -76,7 +76,7 @@ namespace metering.core
             Thread.CurrentThread.CurrentCulture = ci;
 
             RadioButtonCommand = new RelayParameterizedCommand((parameter) => GetSelectedRadioButton((string)parameter));
-            AddNewTestCommand = new RelayCommand(() => CopyNominalValues());
+            // AddNewTestCommand = new RelayCommand(() => CopyNominalValues());
 
         }
         #endregion
@@ -116,12 +116,12 @@ namespace metering.core
             // Show TestDetails page
             IoC.Application.GoToPage(ApplicationPage.TestDetails, new TestDetailsViewModel
             {
-                Register = "New Register",
-                DwellTime = "New Dwell",
-                MeasurementInterval = "New Interval",
-                StartDelayTime = "new delay",
-                StartMeasurementDelay = " new delay 3",
-                Progress = "20.0",
+                Register = "0",
+                DwellTime = "120",
+                MeasurementInterval = "100",
+                StartDelayTime = "10",
+                StartMeasurementDelay = "30",
+                Progress = "0.0",
                 TestText = "Maybe",
                 AnalogSignals = analogSignals
             });

@@ -9,16 +9,16 @@ namespace metering.core
 
         #region Public Commands
 
-        ///// <summary>
-        ///// The command to handle change view to test plan detail view
-        ///// and populate items with nominal values
-        ///// </summary>
-        //public ICommand AddNewTestCommand { get; set; }
+        /// <summary>
+        /// The command to handle change view to test plan detail view
+        /// and populate items with nominal values
+        /// </summary>
+        public ICommand AddNewTestCommand { get; set; }
 
-        ///// <summary>
-        ///// Title of AddNewTestCommand
-        ///// </summary>
-        //public string AddNewTestCommandTitle { get; set; } = "New Test";
+        /// <summary>
+        /// Title of AddNewTestCommand
+        /// </summary>
+        public string AddNewTestCommandTitle { get; set; } = "New Test";
 
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace metering.core
         /// </summary>
         public CommandsViewModel()
         {
-           //  AddNewTestCommand = new RelayCommand(() => CopyNominalValues());
+            AddNewTestCommand = new RelayCommand(() => IoC.NominalValues.CopyNominalValues());
             CancelNewTestCommand = new RelayCommand(() => CancelTestDetailsPageShowing());
         }
 
@@ -68,7 +68,7 @@ namespace metering.core
         private async void CancelTestDetailsPageShowing()
         {
             // Show NominalValues page
-            await Task.Factory.StartNew(() => IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.NominalValues));
+            await Task.Factory.StartNew(() => IoC.Application.GoToPage(ApplicationPage.NominalValues, new NominalValuesViewModel()));
 
             Debug.WriteLine("CancelTestDetailsPageShowing is running:");
         }
