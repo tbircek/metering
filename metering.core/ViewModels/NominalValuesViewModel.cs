@@ -9,7 +9,7 @@ namespace metering.core
     {
 
         #region Public Properties
-        
+
         /// <summary>
         /// Default Voltage magnitude to use through out the test
         /// </summary>
@@ -88,39 +88,43 @@ namespace metering.core
         /// </summary>
         public void CopyNominalValues()
         {
+            // generate AnalogSignals from nominal values.
+            ObservableCollection<AnalogSignalListItemViewModel> analogSignals = new ObservableCollection<AnalogSignalListItemViewModel>();
+
+
+            // TODO: these values should receive from associated Omicron test set
+            int omicronVoltageSignalNumber = 4;
+            int omicronCurrentSignalNumber = 6;
+            int omicronAnalogSignalNumber = omicronVoltageSignalNumber + omicronCurrentSignalNumber + 1; // total of current and voltage Analog Signals of associated Omicron Test set
+            for (int i = 1; i < omicronAnalogSignalNumber; i++)
+            {
+                // Generate AnalogSignals values.
+                analogSignals.Add(new AnalogSignalListItemViewModel
+                {
+                    // is this condition true ? yes : no
+
+                    // current signals names start at 1 => (i - omicronVoltageSignalNumber)
+                    SignalName = i <= omicronVoltageSignalNumber ? "v" + i : "i" + (i - omicronVoltageSignalNumber),
+                    From = i <= omicronVoltageSignalNumber ? NominalVoltage : NominalCurrent,
+                    To = i <= omicronVoltageSignalNumber ? NominalVoltage : NominalCurrent,
+                    Delta = NominalDelta,
+                    Phase = i <= omicronVoltageSignalNumber ? SelectedVoltagePhase : SelectedCurrentPhase,
+                    Frequency = NominalFrequency
+                });
+            }
 
             // Show TestDetails page
             IoC.Application.GoToPage(ApplicationPage.TestDetails, new TestDetailsViewModel
             {
                 Register = "New Register",
-                DwellTime= "New Dwell",
+                DwellTime = "New Dwell",
                 MeasurementInterval = "New Interval",
-                StartDelayTime= "new delay",
+                StartDelayTime = "new delay",
                 StartMeasurementDelay = " new delay 3",
                 Progress = "20.0",
                 TestText = "Maybe",
-                AnalogSignals = new ObservableCollection<AnalogSignalListItemViewModel>
-                {
-                    new AnalogSignalListItemViewModel
-                    {
-                        SignalName = "test- v1",
-                        From = "100.4",
-                        To = "134.6",
-                        Delta = "4.333",
-                        Phase = "40.000",
-                        Frequency = "459.999"
-                    },
-                    new AnalogSignalListItemViewModel
-                    {
-                        SignalName = "test- v2",
-                        From = NominalVoltage,
-                        To = NominalVoltage,
-                        Delta = NominalDelta,
-                        Phase = SelectedVoltagePhase,
-                        Frequency =  NominalFrequency
-                    },
-                }
-            });    
+                AnalogSignals = analogSignals
+            });
         }
 
         /// <summary>
