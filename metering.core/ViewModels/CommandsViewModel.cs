@@ -35,7 +35,7 @@ namespace metering.core
         /// </summary>
         public CommandsViewModel()
         {
-           //  AddNewTestCommand = new RelayCommand(() => CopyNominalValuesAsync());
+           //  AddNewTestCommand = new RelayCommand(() => CopyNominalValues());
             CancelNewTestCommand = new RelayCommand(() => CancelTestDetailsPageShowing());
         }
 
@@ -47,7 +47,7 @@ namespace metering.core
         ///// <summary>
         ///// Shows test steps with values reset to nominal values
         ///// </summary>
-        //private async void CopyNominalValuesAsync()
+        //private async void CopyNominalValues()
         //{
         //    // Simulate the page creation.
         //    // await Task.Delay(100);
@@ -57,7 +57,7 @@ namespace metering.core
 
         //    // Show TestDetails page
         //    await Task.Factory.StartNew(() => IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.TestDetails));
-        //    Debug.WriteLine("CopyNominalValuesAsync() is running:");
+        //    Debug.WriteLine("CopyNominalValues() is running:");
         //}
 
 

@@ -58,11 +58,10 @@
                     BorderBrush="Black" 
                     BorderThickness="1" 
                     ClipToBounds="True"
-                    d:DataContext=""
-                    DataContext="{Binding ApplicationViewModel.CurrentPage, 
-                                      Source={x:Static local:ViewModelLocator.Instance},
-                                      Converter={local:ApplicationPageValueConverter}}"
-                    CurrentPage="{Binding}"/>
+                    CurrentPage="{Binding ApplicationViewModel.CurrentPage,
+                                            Source={x:Static local:ViewModelLocator.Instance}}"
+                    CurrentPageViewModel="{Binding ApplicationViewModel.CurrentPageViewModel,
+                                            Source={x:Static local:ViewModelLocator.Instance}}"/>
 
             </ScrollViewer>            
         </Grid>

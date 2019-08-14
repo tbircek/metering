@@ -14,20 +14,20 @@ namespace metering.core
         /// </summary>
         public static IKernel Kernel { get; private set; } = new StandardKernel();
 
-        /// <summary>
-        /// Shortcut to access the <see cref="IUIManager"/>
-        /// </summary>
-        public static IUIManager UI => IoC.Get<IUIManager>();
+        ///// <summary>
+        ///// Shortcut to access the <see cref="IUIManager"/>
+        ///// </summary>
+        //public static IUIManager UI => IoC.Get<IUIManager>();
 
         /// <summary>
         /// A shortcut to the <see cref="ApplicationViewModel"/>
         /// </summary>
-        public static ApplicationViewModel Application => IoC.Get<ApplicationViewModel>();
+        public static ApplicationViewModel Application => Get<ApplicationViewModel>();
 
         /// <summary>
         /// A shortcut to access the <see cref="NominalValuesViewModel"/>
         /// </summary>
-        public static NominalValuesViewModel NominalValues => IoC.Get<NominalValuesViewModel>();
+        public static NominalValuesViewModel NominalValues => Get<NominalValuesViewModel>();
 
         #endregion
 

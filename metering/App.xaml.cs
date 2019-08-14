@@ -82,7 +82,7 @@ namespace metering
             IoC.Setup();
 
             // Bind a IUIManager
-            IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
+            // IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
         }
 
         void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

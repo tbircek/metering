@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using metering.core;
 
 namespace metering
@@ -60,45 +58,30 @@ namespace metering
         /// <summary>
         /// Default constructor
         /// </summary>
-        public BasePage() // :base()
+        public BasePage() :base()
+        {            
+            // Create a default view model
+            ViewModel = IoC.Get<VM>();
+        }
+
+        /// <summary>
+        /// the constructor with specific view model
+        /// </summary>
+        /// <param name="specificViewModel">The view model to use if exists</param>
+        public BasePage(VM specificViewModel = null) : base()
         {
-            ViewModel = new VM();
+            // set the specific view model
+            if (specificViewModel != null)
+            {
+                ViewModel = specificViewModel;
+            }
+            else
+            {
+                // Create a default view model
+                ViewModel = IoC.Get<VM>();
+            }
         }
 
         #endregion
-
-        //#region Public Methods
-        
-        ///// <summary>
-        ///// Displays TestDetail page to the user
-        ///// </summary>
-        ///// <typeparam name="T">The view model type</typeparam>
-        ///// <param name="viewModel">The viewmodel</param>
-        ///// <returns></returns>
-        //public Task ShowTest<T>(T viewModel)
-        //    where T: TestDetailsViewModel
-        //{
-        //    // Create a task to wait until user cancels or test is over.
-        //    // TODO: add a task token to cancel the this task
-        //    var tcs = new TaskCompletionSource<bool>();
-
-        //    // Keep view on the UI Thread
-        //    Application.Current.Dispatcher.Invoke(() =>
-        //    {
-        //        try
-        //        {
-        //            DataContext = viewModel;
-        //        }
-        //        finally
-        //        {
-        //            // test completed (with/without error)
-        //            tcs.TrySetResult(true);
-        //        }
-        //    });
-
-        //    // return test completion.
-        //    return tcs.Task;
-        //}
-        //#endregion
     }
 }

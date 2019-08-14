@@ -162,11 +162,9 @@
     <Compile Include="Controls\AnalogSignalListControl.xaml.cs">
       <DependentUpon>AnalogSignalListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\BaseUserControl.cs" />
     <Compile Include="Controls\TestHost.xaml.cs">
       <DependentUpon>TestHost.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IoC\UIManager.cs" />
     <Compile Include="Resources\Strings.Designer.cs">
       <DependentUpon>Strings.resx</DependentUpon>
       <AutoGen>True</AutoGen>

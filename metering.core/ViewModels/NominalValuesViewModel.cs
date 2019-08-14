@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace metering.core
@@ -78,7 +76,7 @@ namespace metering.core
             Thread.CurrentThread.CurrentCulture = ci;
 
             RadioButtonCommand = new RelayParameterizedCommand((parameter) => GetSelectedRadioButton((string)parameter));
-            AddNewTestCommand = new RelayCommand(() => CopyNominalValuesAsync());
+            AddNewTestCommand = new RelayCommand(() => CopyNominalValues());
 
         }
         #endregion
@@ -88,45 +86,41 @@ namespace metering.core
         /// <summary>
         /// Shows test steps with values reset to nominal values
         /// </summary>
-        private async void CopyNominalValuesAsync()
+        public void CopyNominalValues()
         {
 
             // Show TestDetails page
-            // TODO: Pass NominalValues page values to the TestDetails page using Dependency Injection
-            await Task.Run(() => IoC.UI.ShowTestDetails(new TestDetailsViewModel()
+            IoC.Application.GoToPage(ApplicationPage.TestDetails, new TestDetailsViewModel
             {
-                Register = "Test- register value",
-                DwellTime = "test- dwell time",
-                StartDelayTime = "test-StartDelayTime",
-                MeasurementInterval = "test-MeasurementInterval",
-                StartMeasurementDelay = "test - StartMeasurementDelay",
-                TestText = "Test",
+                Register = "New Register",
+                DwellTime= "New Dwell",
+                MeasurementInterval = "New Interval",
+                StartDelayTime= "new delay",
+                StartMeasurementDelay = " new delay 3",
+                Progress = "20.0",
+                TestText = "Maybe",
                 AnalogSignals = new ObservableCollection<AnalogSignalListItemViewModel>
                 {
                     new AnalogSignalListItemViewModel
                     {
                         SignalName = "test- v1",
-                        From = "test-100.4",
-                        To = "-test - 134.6",
-                        Delta = "test- 4.333",
-                        Phase = "test- 40.000",
-                        Frequency = "test- 459.999"
+                        From = "100.4",
+                        To = "134.6",
+                        Delta = "4.333",
+                        Phase = "40.000",
+                        Frequency = "459.999"
                     },
                     new AnalogSignalListItemViewModel
                     {
-                        SignalName = "test- 4v2",
-                        From = "1test- 400.4",
-                        To = "13test- 44.6",
-                        Delta = "4test- 4.333",
-                        Phase = "0.0test- 400",
-                        Frequency = "59test- 4.999"
-                    }
+                        SignalName = "test- v2",
+                        From = NominalVoltage,
+                        To = NominalVoltage,
+                        Delta = NominalDelta,
+                        Phase = SelectedVoltagePhase,
+                        Frequency =  NominalFrequency
+                    },
                 }
-            }));
-
-            // Simulate the page creation.
-            await Task.Delay(1);
-            Debug.WriteLine("CopyNominalValuesAsync() is running:");            
+            });    
         }
 
         /// <summary>

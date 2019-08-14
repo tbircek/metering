@@ -57,7 +57,6 @@
     <Compile Include="DataModels\ApplicationPage.cs" />
     <Compile Include="Expressions\ExpressionHelpers.cs" />
     <Compile Include="IoC\Base\IoC.cs" />
-    <Compile Include="IoC\Interfaces\IUIManager.cs" />
     <Compile Include="Omicron\CMCControl.cs" />
     <Compile Include="Omicron\ExtractParameters.cs" />
     <Compile Include="Omicron\InitialCMCSetup.cs" />

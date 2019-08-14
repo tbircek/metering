@@ -176,7 +176,7 @@
             <Grid Grid.Column="3">
 
                 <!-- Add New Test Button-->
-                <Viewbox Margin="10 5">                    
+                <Viewbox Margin="10 5">
                     <Controls:Tile 
                         Title="{Binding AddNewTestCommandTitle}"
                         TitleFontSize="20"
@@ -186,8 +186,10 @@
                         HorizontalTitleAlignment="Center" 
                         Background="Red"
                         IsDefault="True"
-                        Command="{Binding AddNewTestCommand}"
-                        CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:BasePage}}">
+                        Command="{Binding AddNewTestCommand}" >
+                        <!--CommandParameter="{Binding DataContext, 
+                                                    RelativeSource={RelativeSource Mode=FindAncestor, 
+                                                                                    AncestorType=local:BasePage}}">-->
 
                         <!-- + sign icon on the button -->
                         <Grid>
