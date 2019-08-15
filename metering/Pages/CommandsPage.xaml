@@ -20,14 +20,14 @@
                 TabIndex="9"
                 Background="Black"
                 IsDefault="True"
-                Command="{Binding RunTest}"
-                Visibility="{Binding CommandVisibility}">
+                Command="{Binding RunTest}">
+                <!--Visibility="{Binding CommandVisibility}">-->
 
                 <!-- + sign icon on the button-->
                 <!-- Kind="{Binding CommandIcons}" -->
                 <Grid>
                     <iconPacks:PackIconFontAwesome 
-                        Kind="None"
+                        Kind="CaretSquareRightSolid"
                         Padding="2"
                         Width="Auto"
                         Height="Auto"
@@ -37,7 +37,7 @@
 
             </Button>
         </Viewbox>
-
+ 
         <!-- Add New Test Button-->
         <Viewbox Margin="10 5">
             <Button 

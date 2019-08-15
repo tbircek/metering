@@ -13,63 +13,48 @@
     mc:Ignorable="d">
   
     <Grid>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <!-- Ip Address Textbox-->
-                <ColumnDefinition Width="Auto"/>
-                
-                <!-- Port Number textbox-->
-                <ColumnDefinition Width="Auto"/>
-                
-                <!-- Connect button-->
-                <ColumnDefinition Width="Auto"/>
-                
-                <!-- Log textbox-->
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Border 
+            BorderBrush="Black"
+            BorderThickness="2"
+            Margin="10"
+            Padding="10">
 
-            <!-- IPADDRESS textbox -->
-            <TextBox 
-                Grid.Column="0"
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.tab_home_ipaddress}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="0" 
-                Padding="20 5 20 5"
-                Margin="20 5 20 5"
-                Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <!-- Ip Address Textbox-->
+                    <ColumnDefinition Width="Auto"/>
 
-            <!-- PORT textbox -->
-            <TextBox 
-                Grid.Column="1"
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.tab_home_port}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="1"  
-                Padding="5 5 20 5"
-                Margin="5 5 20 5"
-                Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"/>
+                    <!-- Port Number textbox-->
+                    <ColumnDefinition Width="Auto"/>
 
-            <!-- Connect button-->
-            <ToggleButton 
-                Grid.Column="2"
-                Style="{DynamicResource MetroCircleToggleButtonStyle}"
-                TabIndex="2"  
-                Padding="20 5 20 5"
-                Margin="20 5 20 5"
-                Command="{Binding ConnectCommand}"
-                CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}">
+                    <!-- Connect button-->
+                    <ColumnDefinition Width="Auto"/>
 
-                <Grid>
-                    <iconPacks:PackIconFontAwesome 
-                        Kind="OdnoklassnikiSquareBrands"
-                        Width="Auto"
-                        Height="Auto"
-                        BorderBrush="{Binding IconForeground}" 
-                        Foreground="{Binding IconForeground}"/>
-                </Grid>
-                
-            </ToggleButton>
+                    <!-- Log textbox-->
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <!--<Button 
+                <!-- IPADDRESS textbox -->
+                <TextBox 
+                    Grid.Column="0"
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.tab_home_ipaddress}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="0" 
+                    Padding="20 5 20 5"
+                    Margin="20 5 20 5"
+                    Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <!-- PORT textbox -->
+                <TextBox 
+                    Grid.Column="1"
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.tab_home_port}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="1"  
+                    Padding="5 5 20 5"
+                    Margin="5 5 20 5"
+                    Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <!--<Button 
                 Grid.Column="2"
                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
                 Margin="1,0,0,0" 
@@ -78,7 +63,9 @@
                 IsDefault="True"
                 Command="{Binding ConnectCommand}">
 
-                --><!-- + sign icon on the button--><!--
+                -->
+                <!-- + sign icon on the button-->
+                <!--
                 <Grid>
                     <iconPacks:PackIconFontAwesome 
                         Kind="BroadcastTowerSolid"
@@ -90,30 +77,55 @@
                 </Grid>
 
             </Button>-->
-            <!-- Log textbox-->
-            <Border 
-                Grid.Column="3" 
-                Margin="20 10 20 10">
-                
-                <ScrollViewer 
-                    ClipToBounds="True"
-                    VerticalScrollBarVisibility="Auto"
-                    HorizontalScrollBarVisibility="Auto"
-                    local:ScrollToBottomProperty.Value="True">
-                    
-                    <!-- Log textbox -->
-                    <TextBox
-                        Padding="5"
-                        TextWrapping="Wrap" 
-                        BorderBrush="#FBFFFFC0" 
-                        FontSize="14"                            
-                        Text="{Binding Log}"
-                        TextAlignment="Right"
-                        IsReadOnly="True">
-                    </TextBox>
 
-                </ScrollViewer>
-            </Border>
-        </Grid>
+                <Viewbox Margin="10 5" 
+                         Grid.Column="2">
+
+                    <!-- Connect button-->
+                    <ToggleButton 
+                        Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                        TabIndex="10" 
+                        Command="{Binding ConnectCommand}"
+                        CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}">
+
+                            <Grid>
+                                <iconPacks:PackIconFontAwesome 
+                                Kind="CaretSquareRightSolid"
+                                Width="Auto"
+                                Height="Auto"
+                                Padding="5"
+                                BorderBrush="{Binding IconForeground}" 
+                                Foreground="{Binding IconForeground}"/>
+                            </Grid>
+
+                    </ToggleButton>
+                </Viewbox>
+
+                
+                <!-- Log textbox-->
+                <Viewbox 
+                    Grid.Column="3" 
+                    Margin="20 10 20 10">
+
+                    <ScrollViewer 
+                        ClipToBounds="True"
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Auto">
+                        <!--local:AutoScrollToBottomProperty.Value="True"-->
+                        
+                        <!-- Log textbox -->
+                        <TextBox
+                            Padding="5"
+                            TextWrapping="Wrap" 
+                            BorderBrush="#FBFFFFC0"                 
+                            Text="{Binding Log}"
+                            TextAlignment="Right"
+                            IsReadOnly="True">
+                        </TextBox>
+
+                    </ScrollViewer>
+                </Viewbox>
+            </Grid>
+        </Border>        
     </Grid>
 </local:BasePage>

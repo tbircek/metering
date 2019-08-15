@@ -15,34 +15,92 @@
     ShowIconOnTitleBar="True"
     ShowTitleBar="True"
     BorderThickness="0"
-    Width="Auto"
-    Height="Auto"
     GlowBrush="Red"
+    SizeToContent="WidthAndHeight"
     ResizeMode="CanResizeWithGrip"
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="CenterScreen"
+    d:DesignHeight="500" d:DesignWidth="700">
 
-    <Window.Resources>
-        <icon:VisualToImageSourceConverter x:Key="VisualToImageSourceConverter" />
-    </Window.Resources>
-
+    <!-- Background Image -->
     <!--<Window.Background>
         <ImageBrush Opacity="1.0" ImageSource="/metering;component/Resources/beckwith-letterhead.png"/>
     </Window.Background>-->
 
+    <!--Main Window Icon Converter -->
+    <Window.Resources>
+        <icon:VisualToImageSourceConverter x:Key="VisualToImageSourceConverter" />
+    </Window.Resources>
+
+    <!--Main Window Icon -->
     <Window.Icon>
         <Binding Converter="{StaticResource VisualToImageSourceConverter}">
             <Binding.Source>
                 <iconPacks:PackIconModern 
                     Kind="ThermometerSigns" 
                     Width="30" 
-                    Height="30" />
+                    Height="30"
+                    Padding="1"/>
             </Binding.Source>
         </Binding>
     </Window.Icon>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"/>
+            <!-- Communication Page -->
+            <RowDefinition Height="110"/>
+            
+            <!-- Test Details / Nominal Values Page -->
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <!-- Communication Page -->
+            <ColumnDefinition/>
+            
+            <!-- Commands Page-->
+            <ColumnDefinition Width="50"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Communication Page -->
+        <Border
+            Grid.Row="0">
+            <local:CommunicationPage     
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                ClipToBounds="True"/>
+        </Border>
+
+        <!-- Test Details / Nominal Values Page -->
+        <Border 
+            Grid.Row="1">
+            <ScrollViewer
+                VerticalScrollBarVisibility="Auto" 
+                HorizontalScrollBarVisibility="Auto">
+
+                <local:TestHost
+                            BorderBrush="Black" 
+                            BorderThickness="1" 
+                            ClipToBounds="True"
+                            CurrentPage="{Binding ApplicationViewModel.CurrentPage,
+                                                  Source={x:Static local:ViewModelLocator.Instance}}"
+                            CurrentPageViewModel="{Binding ApplicationViewModel.CurrentPageViewModel,
+                                                       Source={x:Static local:ViewModelLocator.Instance}}"/>
+
+            </ScrollViewer>
+        </Border>
+
+        <!-- Commands Page-->
+        <Border 
+            Grid.Column="1"
+            Grid.RowSpan="2" >
+                <local:CommandsPage
+                    BorderBrush="Black" 
+                    BorderThickness="1" 
+                    ClipToBounds="True"/>
+
+        </Border>
+        <!--<Grid.RowDefinitions>
+            <RowDefinition Height="150"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -55,35 +113,38 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="80"/>
-                </Grid.ColumnDefinitions>
+            <Border>
 
-                <ScrollViewer Grid.Column="0"
-                              VerticalScrollBarVisibility="Auto" 
-                              HorizontalScrollBarVisibility="Auto">
-                    
-                    <local:TestHost
-                        BorderBrush="Black" 
-                        BorderThickness="1" 
-                        ClipToBounds="True"
-                        CurrentPage="{Binding ApplicationViewModel.CurrentPage,
-                                              Source={x:Static local:ViewModelLocator.Instance}}"
-                        CurrentPageViewModel="{Binding ApplicationViewModel.CurrentPageViewModel,
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ScrollViewer Grid.Column="0"
+                                  VerticalScrollBarVisibility="Auto" 
+                                  HorizontalScrollBarVisibility="Auto">
+
+                        <local:TestHost
+                            BorderBrush="Black" 
+                            BorderThickness="1" 
+                            ClipToBounds="True"
+                            CurrentPage="{Binding ApplicationViewModel.CurrentPage,
+                                                  Source={x:Static local:ViewModelLocator.Instance}}"
+                            CurrentPageViewModel="{Binding ApplicationViewModel.CurrentPageViewModel,
                                                        Source={x:Static local:ViewModelLocator.Instance}}"/>
 
-                </ScrollViewer>
+                    </ScrollViewer>
 
-                <Grid Grid.Column="1" >
-                    <local:CommandsPage
-                        BorderBrush="Black" 
-                        BorderThickness="1" 
-                        ClipToBounds="True"/>
+                    <Grid Grid.Column="1" >
+                        <local:CommandsPage
+                            BorderBrush="Black" 
+                            BorderThickness="1" 
+                            ClipToBounds="True"/>
 
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Grid>
+            </Border>
+        </Grid>-->
     </Grid>
 </Controls:MetroWindow>
