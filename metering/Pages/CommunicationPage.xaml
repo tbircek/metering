@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:metering" 
     xmlns:core="clr-namespace:metering.core;assembly=metering.core" 
     xmlns:resources="clr-namespace:metering.Resources"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     x:Class="metering.CommunicationPage"    
     mc:Ignorable="d">
   
@@ -15,13 +16,13 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <!-- Ip Address Textbox-->
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
                 
                 <!-- Port Number textbox-->
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
                 
                 <!-- Connect button-->
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
                 
                 <!-- Log textbox-->
                 <ColumnDefinition Width="*"/>
@@ -54,10 +55,41 @@
                 TabIndex="2"  
                 Padding="20 5 20 5"
                 Margin="20 5 20 5"
-                Content="{Binding ConnectCommandContent}"
                 Command="{Binding ConnectCommand}"
-                CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
-            
+                CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}">
+
+                <Grid>
+                    <iconPacks:PackIconFontAwesome 
+                        Kind="OdnoklassnikiSquareBrands"
+                        Width="Auto"
+                        Height="Auto"
+                        BorderBrush="{Binding IconForeground}" 
+                        Foreground="{Binding IconForeground}"/>
+                </Grid>
+                
+            </ToggleButton>
+
+            <!--<Button 
+                Grid.Column="2"
+                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                Margin="1,0,0,0" 
+                TabIndex="9"
+                Background="Transparent"
+                IsDefault="True"
+                Command="{Binding ConnectCommand}">
+
+                --><!-- + sign icon on the button--><!--
+                <Grid>
+                    <iconPacks:PackIconFontAwesome 
+                        Kind="BroadcastTowerSolid"
+                        Padding="2" 
+                        Width="Auto"
+                        Height="Auto"
+                        BorderBrush="Red" 
+                        Foreground="Red"/>
+                </Grid>
+
+            </Button>-->
             <!-- Log textbox-->
             <Border 
                 Grid.Column="3" 
@@ -66,7 +98,8 @@
                 <ScrollViewer 
                     ClipToBounds="True"
                     VerticalScrollBarVisibility="Auto"
-                    HorizontalScrollBarVisibility="Auto">
+                    HorizontalScrollBarVisibility="Auto"
+                    local:ScrollToBottomProperty.Value="True">
                     
                     <!-- Log textbox -->
                     <TextBox

@@ -7,7 +7,7 @@ namespace metering
     /// The NoFrameHistory attached property for creating a <see cref="Frame"/> that hides navigation
     /// and keeps the navigation history empty
     /// </summary>
-    public class NoFrameHistory: BaseAttachedProperty<NoFrameHistory, bool>
+    public class NoFrameHistoryProperty: BaseAttachedProperty<NoFrameHistoryProperty, bool>
     {
         public override void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {

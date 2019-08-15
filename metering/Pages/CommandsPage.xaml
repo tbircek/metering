@@ -24,10 +24,10 @@
                 Visibility="{Binding CommandVisibility}">
 
                 <!-- + sign icon on the button-->
-                <!--"ArrowAltCircleRightSolid"-->
+                <!-- Kind="{Binding CommandIcons}" -->
                 <Grid>
                     <iconPacks:PackIconFontAwesome 
-                        Kind="{Binding CommandIcons}"
+                        Kind="None"
                         Padding="2"
                         Width="Auto"
                         Height="Auto"

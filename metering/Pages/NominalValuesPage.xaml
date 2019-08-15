@@ -21,10 +21,7 @@
                 <!-- Phase Values -->
                 <ColumnDefinition />
                 <!-- Test Values -->
-                <ColumnDefinition />
-                
-                <!-- Commands -->
-                <ColumnDefinition />
+                <ColumnDefinition />                
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
@@ -151,7 +148,6 @@
                     Margin="16">
 
                     <StackPanel>
-
                         <TextBox
                             materialDesign:HintAssist.Hint="{x:Static resources:Strings.global_nominal_delta}"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" 

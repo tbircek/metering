@@ -38,6 +38,11 @@ namespace metering.core
         /// </summary>
         public bool OmicronIsConnected { get; set; } = false;
 
+        /// <summary>
+        /// a property to change Icon colors
+        /// </summary>
+        public string IconForeground { get; set; } = "Black";
+
         #endregion
 
         #region Public Commands
@@ -67,8 +72,7 @@ namespace metering.core
         /// <summary>
         /// connects to omicron and test unit.
         /// </summary>
-        /// <param name="parameter">Attached self IsChecked property in the view</param>
-        [DebuggerStepThrough]
+        /// <param name="parameter">Attached self IsChecked property in the view</param>        
         private async Task ConnectOmicronAndUnit(object parameter)
         {
             await RunCommand(() => OmicronIsConnected, async () =>

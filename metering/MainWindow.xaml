@@ -14,9 +14,9 @@
     Title="{x:Static resources:Strings.Title}"
     ShowIconOnTitleBar="True"
     ShowTitleBar="True"
-    BorderThickness="0" 
-    MinHeight="400"
-    MinWidth="550"
+    BorderThickness="0"
+    Width="Auto"
+    Height="Auto"
     GlowBrush="Red"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen">
@@ -32,7 +32,10 @@
     <Window.Icon>
         <Binding Converter="{StaticResource VisualToImageSourceConverter}">
             <Binding.Source>
-                <iconPacks:PackIconModern Kind="ThermometerSigns" Width="30" Height="30" />
+                <iconPacks:PackIconModern 
+                    Kind="ThermometerSigns" 
+                    Width="30" 
+                    Height="30" />
             </Binding.Source>
         </Binding>
     </Window.Icon>
@@ -54,7 +57,7 @@
         <Grid Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
 

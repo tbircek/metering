@@ -158,7 +158,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
-    <Compile Include="AttachedProperties\NoFrame.cs" />
+    <Compile Include="AttachedProperties\NoFrameHistoryProperty.cs" />
+    <Compile Include="AttachedProperties\ScrollToBottomProperty.cs" />
     <Compile Include="Controls\AnalogSignalListControl.xaml.cs">
       <DependentUpon>AnalogSignalListControl.xaml</DependentUpon>
     </Compile>
