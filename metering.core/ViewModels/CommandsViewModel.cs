@@ -35,7 +35,10 @@ namespace metering.core
         /// </summary>
         public CommandsViewModel()
         {
+            // Show a new Test details page populated with the user specified/accepted values
             AddNewTestCommand = new RelayCommand(() => IoC.NominalValues.CopyNominalValues());
+
+            // navigate back to nominal values page.
             CancelNewTestCommand = new RelayCommand(() => CancelTestDetailsPageShowing());
         }
 
@@ -43,34 +46,18 @@ namespace metering.core
 
         #region Helper Methods
 
-
-        ///// <summary>
-        ///// Shows test steps with values reset to nominal values
-        ///// </summary>
-        //private async void CopyNominalValues()
-        //{
-        //    // Simulate the page creation.
-        //    // await Task.Delay(100);
-
-        //    // TODO: Pass NominalValues page values to the TestDetails page;
-        //    var something = await Task.Run(() => IoC.Get<ApplicationViewModel>().CurrentPage);
-
-        //    // Show TestDetails page
-        //    await Task.Factory.StartNew(() => IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.TestDetails));
-        //    Debug.WriteLine("CopyNominalValues() is running:");
-        //}
-
-
         /// <summary>
         /// Navigate backwards to main view / shows default nominal values
         /// resets values specified in test step view to nominal values
         /// </summary>
-        private async void CancelTestDetailsPageShowing()
+        private void CancelTestDetailsPageShowing()
         {
-            // Show NominalValues page
-            await Task.Factory.StartNew(() => IoC.Application.GoToPage(ApplicationPage.NominalValues, new NominalValuesViewModel()));
+            // clear Test details view model
+            IoC.Application.CurrentPageViewModel = null;
 
-            Debug.WriteLine("CancelTestDetailsPageShowing is running:");
+            // Show NominalValues page
+            IoC.Application.GoToPage(ApplicationPage.NominalValues);
+
         }
 
         #endregion

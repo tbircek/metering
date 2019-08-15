@@ -11,76 +11,79 @@
     x:Class="metering.CommandsPage"
     mc:Ignorable="d">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-
+    <StackPanel Orientation="Vertical">
         <!-- Future use -->
-        <Viewbox Grid.Column="0"
-                  Margin="10 5">
-            <Button
-                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}">
-
-            </Button>
-
-        </Viewbox>
-        
-        <!-- Add New Test Button-->
-        <Viewbox Grid.Column="1" 
-                 Margin="10 5">
-            <Controls:Tile 
-                Title="{Binding AddNewTestCommandTitle}"
-                TitleFontSize="20"
+        <Viewbox Margin="10 5">
+            <Button 
+                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
                 Margin="1,0,0,0" 
                 TabIndex="9"
-                VerticalTitleAlignment="Bottom" 
-                HorizontalTitleAlignment="Center" 
-                Background="Red"
+                Background="Black"
+                IsDefault="True"
+                Command="{Binding RunTest}"
+                Visibility="{Binding CommandVisibility}">
+
+                <!-- + sign icon on the button-->
+                <!--"ArrowAltCircleRightSolid"-->
+                <Grid>
+                    <iconPacks:PackIconFontAwesome 
+                        Kind="{Binding CommandIcons}"
+                        Padding="2"
+                        Width="Auto"
+                        Height="Auto"
+                        BorderBrush="Red" 
+                        Foreground="Red"/>
+                </Grid>
+
+            </Button>
+        </Viewbox>
+
+        <!-- Add New Test Button-->
+        <Viewbox Margin="10 5">
+            <Button 
+                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                Margin="1,0,0,0" 
+                TabIndex="9"
+                Background="Black"
                 IsDefault="True"
                 Command="{Binding AddNewTestCommand}">
 
-                 <!--+ sign icon on the button--> 
+                 <!-- + sign icon on the button--> 
                 <Grid>
                     <iconPacks:PackIconFontAwesome 
-                        Kind="PlusSolid"
-                        Padding="20" 
+                        Kind="PlusCircleSolid"
+                        Padding="2" 
                         Width="Auto"
                         Height="Auto"
-                        BorderBrush="Black" 
-                        Foreground="Black"/>
+                        BorderBrush="Red" 
+                        Foreground="Red"/>
                 </Grid>
                 
-            </Controls:Tile>
+            </Button>
         </Viewbox>
 
         <!-- Cancel Button -->
-        <Viewbox Grid.Column="2"
-                 Margin="10 5">
-                <Controls:Tile 
-                    Title="Cancel" 
-                    TitleFontSize="20"
-                    Margin="1,0,0,0"
-                    TabIndex="8"
-                    VerticalTitleAlignment="Bottom" 
-                    HorizontalTitleAlignment="Center"
-                    Background="Green"
-                    IsCancel="True"
-                    Command="{Binding Path=CancelNewTestCommand}">
+        <Viewbox  Margin="10 5">
+            <Button
+                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"                
+                Margin="1,0,0,0"
+                TabIndex="8"
+                Background="Black"
+                IsCancel="True"
+                Command="{Binding Path=CancelNewTestCommand}">
 
-                    <!-- cancel icon on the button -->
-                    <Grid>
-                        <iconPacks:PackIconMaterial 
-                        Kind="Cancel" 
-                        Padding="20" 
-                        Width="Auto"
-                        Height="Auto"
-                        Foreground="Black"/>
-                    </Grid>
-                </Controls:Tile>            
+                <!-- cancel icon on the button -->
+                <Grid>
+                <iconPacks:PackIconFontAwesome 
+                    Kind="TimesCircleSolid"                    
+                    Padding="2" 
+                    Width="Auto"
+                    Height="Auto"
+                    Foreground="Green"
+                    BorderBrush="Green"/>
+                </Grid>
+            </Button>            
         </Viewbox>
 
-    </Grid>
+    </StackPanel>
 </local:BasePage>

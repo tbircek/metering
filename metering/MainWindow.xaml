@@ -36,15 +36,14 @@
             </Binding.Source>
         </Binding>
     </Window.Icon>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">           
+        <Grid Grid.Row="0">
             <local:CommunicationPage     
                 BorderBrush="Black" 
                 BorderThickness="1" 
@@ -53,25 +52,35 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">                
-                <local:TestHost
-                    BorderBrush="Black" 
-                    BorderThickness="1" 
-                    ClipToBounds="True"
-                    CurrentPage="{Binding ApplicationViewModel.CurrentPage,
-                                            Source={x:Static local:ViewModelLocator.Instance}}"
-                    CurrentPageViewModel="{Binding ApplicationViewModel.CurrentPageViewModel,
-                                            Source={x:Static local:ViewModelLocator.Instance}}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
 
-            </ScrollViewer>            
-        </Grid>
-        
-        <Grid Grid.Row="2" >
-            <local:CommandsPage
-                BorderBrush="Black" 
-                BorderThickness="1" 
-                ClipToBounds="True"/>
-            
+                <ScrollViewer Grid.Column="0"
+                              VerticalScrollBarVisibility="Auto" 
+                              HorizontalScrollBarVisibility="Auto">
+                    
+                    <local:TestHost
+                        BorderBrush="Black" 
+                        BorderThickness="1" 
+                        ClipToBounds="True"
+                        CurrentPage="{Binding ApplicationViewModel.CurrentPage,
+                                              Source={x:Static local:ViewModelLocator.Instance}}"
+                        CurrentPageViewModel="{Binding ApplicationViewModel.CurrentPageViewModel,
+                                                       Source={x:Static local:ViewModelLocator.Instance}}"/>
+
+                </ScrollViewer>
+
+                <Grid Grid.Column="1" >
+                    <local:CommandsPage
+                        BorderBrush="Black" 
+                        BorderThickness="1" 
+                        ClipToBounds="True"/>
+
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </Controls:MetroWindow>

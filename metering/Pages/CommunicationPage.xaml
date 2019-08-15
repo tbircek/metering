@@ -15,88 +15,72 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <!-- Ip Address Textbox-->
-                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
                 
                 <!-- Port Number textbox-->
-                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
                 
                 <!-- Connect button-->
-                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
                 
                 <!-- Log textbox-->
-                <ColumnDefinition />
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Ip Address Textbox-->
-            <Grid Grid.Column="0">
-                <Grid>                    
-                    <Viewbox>
-                        <!-- IPADDRESS textbox -->
-                        <TextBox 
-                            materialDesign:HintAssist.Hint="{x:Static resources:Strings.tab_home_ipaddress}"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                            TabIndex="0" 
-                            Padding="5"
-                            Margin="5"
-                            Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"/>
-                        
-                    </Viewbox>                    
-                </Grid>             
-            </Grid>
+            <!-- IPADDRESS textbox -->
+            <TextBox 
+                Grid.Column="0"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.tab_home_ipaddress}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="0" 
+                Padding="20 5 20 5"
+                Margin="20 5 20 5"
+                Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <!-- Port Number textbox-->
-            <Grid Grid.Column="1">
-                                          
-                <!-- PORT textbox -->
-                <Viewbox>
-                    <TextBox 
-                        materialDesign:HintAssist.Hint="{x:Static resources:Strings.tab_home_port}"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                        TabIndex="1" 
-                        Padding="5"
-                        Margin="5"
-                        Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"/>
-                </Viewbox>
-             </Grid>
+            <!-- PORT textbox -->
+            <TextBox 
+                Grid.Column="1"
+                materialDesign:HintAssist.Hint="{x:Static resources:Strings.tab_home_port}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="1"  
+                Padding="5 5 20 5"
+                Margin="5 5 20 5"
+                Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"/>
 
             <!-- Connect button-->
-            <Grid Grid.Column="2">
-                <Border>
-                    <Viewbox>
-                        <!-- Connect/Disconnect Button -->
-                        <ToggleButton
-                            Style="{DynamicResource MetroCircleToggleButtonStyle}"
-                            TabIndex="2"
-                            Padding="10"
-                            Content="{Binding ConnectCommandContent}"
-                            Command="{Binding ConnectCommand}"
-                            CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}">
-                                
-                        </ToggleButton>
-                    </Viewbox>
-                </Border>
-            </Grid>
-
+            <ToggleButton 
+                Grid.Column="2"
+                Style="{DynamicResource MetroCircleToggleButtonStyle}"
+                TabIndex="2"  
+                Padding="20 5 20 5"
+                Margin="20 5 20 5"
+                Content="{Binding ConnectCommandContent}"
+                Command="{Binding ConnectCommand}"
+                CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
+            
             <!-- Log textbox-->
-            <Grid Grid.Column="3">
-                <Border>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  HorizontalScrollBarVisibility="Auto">
-                        <!-- Log textbox -->
-                        <TextBox 
-                            Padding="5" 
-                            Margin="5"
-                            TextWrapping="Wrap" 
-                            BorderBrush="#FBFFFFC0" 
-                            FontSize="14"                            
-                            Text="{Binding Log}"
-                            TextAlignment="Right"
-                            IsReadOnly="True">
-                        </TextBox>
+            <Border 
+                Grid.Column="3" 
+                Margin="20 10 20 10">
+                
+                <ScrollViewer 
+                    ClipToBounds="True"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Auto">
+                    
+                    <!-- Log textbox -->
+                    <TextBox
+                        Padding="5"
+                        TextWrapping="Wrap" 
+                        BorderBrush="#FBFFFFC0" 
+                        FontSize="14"                            
+                        Text="{Binding Log}"
+                        TextAlignment="Right"
+                        IsReadOnly="True">
+                    </TextBox>
 
-                    </ScrollViewer>
-                </Border>
-            </Grid>
+                </ScrollViewer>
+            </Border>
         </Grid>
     </Grid>
 </local:BasePage>
