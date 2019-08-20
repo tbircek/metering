@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
@@ -7,6 +6,9 @@ using System.Windows.Input;
 
 namespace metering.core
 {
+    /// <summary>
+    /// Handles Nominal Values page.
+    /// </summary>
     public class NominalValuesViewModel : BaseViewModel
     {
 
@@ -72,8 +74,6 @@ namespace metering.core
             Thread.CurrentThread.CurrentCulture = ci;
 
             RadioButtonCommand = new RelayParameterizedCommand((parameter) => GetSelectedRadioButton((string)parameter));
-            // StartTestCommand = new RelayCommand(() => StartTest());
-
         }
 
         #endregion
@@ -90,9 +90,14 @@ namespace metering.core
 
 
             // TODO: these values should receive from associated Omicron test set
+            // Voltage Amplifier number
             int omicronVoltageSignalNumber = 4;
+
+            // Current Amplifier number
             int omicronCurrentSignalNumber = 6;
-            int omicronAnalogSignalNumber = omicronVoltageSignalNumber + omicronCurrentSignalNumber; // total of current and voltage Analog Signals of associated Omicron Test set
+
+            // total of current and voltage Analog Signals of associated Omicron Test set
+            int omicronAnalogSignalNumber = omicronVoltageSignalNumber + omicronCurrentSignalNumber;
             for (int i = 1; i <= omicronAnalogSignalNumber; i++)
             {
                 // Generate AnalogSignals values.
@@ -102,11 +107,11 @@ namespace metering.core
 
                     // current signals names start at 1 => (i - omicronVoltageSignalNumber)
                     SignalName = i <= omicronVoltageSignalNumber ? "v" + i : "i" + (i - omicronVoltageSignalNumber),
-                    From = i <= omicronVoltageSignalNumber ? NominalVoltage : NominalCurrent,
-                    To = i <= omicronVoltageSignalNumber ? NominalVoltage : NominalCurrent,
-                    Delta = NominalDelta,
+                    From = i <= omicronVoltageSignalNumber ? string.Format("{0:F2}", NominalVoltage) : string.Format("{0:F1}", NominalCurrent),
+                    To = i <= omicronVoltageSignalNumber ? string.Format("{0:F2}", NominalVoltage ): string.Format("{0:F1}", NominalCurrent),
+                    Delta = string.Format("{0:F3}", NominalDelta),
                     Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
-                    Frequency = NominalFrequency
+                    Frequency = string.Format("{0:F3}", NominalFrequency)
                 });
             }
 
@@ -128,22 +133,21 @@ namespace metering.core
 
         #region Helpers
 
-        ///// <summary>
-        ///// All possible phase values
-        ///// </summary>
-        // private readonly string[] phaseValues = new string[] { "0.00", "-120.00", "120.00" };
-
         /// <summary>
         /// Converts RadioButton selection into phase information
         /// </summary>
         /// <param name="phase">Selected radio button parameter</param>
+        /// <param name="signalNumber">the signal number to process</param>
         /// <returns>String that represent user selected phase information per analog signal</returns>
         private string SelectedPhaseToString(string phase, int signalNumber)
         {
+            // Return 0.00 if the user selected phase is 0°
             if (phase == "AllZero")
                 return "0.00";
 
             // formula used: 2𝜋−(2𝑥𝜋/3) => 120*(9-x)
+            // 𝜋 = 180°
+            // x = 1 to 10
             double result = 120.0 * (9 - signalNumber) % 360.0; 
             return string.Format("{0:F2}", result);
         }
@@ -168,6 +172,7 @@ namespace metering.core
                     SelectedCurrentPhase = option;
                     break;
                 default:
+                    // Something wrong
                     Debugger.Break();
                     break;
             }
