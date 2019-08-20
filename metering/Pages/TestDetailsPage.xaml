@@ -15,88 +15,104 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <!-- Test Settings -->
-            <ColumnDefinition Width="300"/>
-            
+            <ColumnDefinition Width="Auto"/>
+
             <!-- Test Values -->
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Analog signal values -->
-        <Grid Grid.Column="1" Margin="5">
-            <local:AnalogSignalListControl
-                ClipToBounds="True"
-                d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}">
-            </local:AnalogSignalListControl>
-        </Grid>
+        <Border
+            Grid.Column="1" 
+            BorderBrush="Black" 
+            BorderThickness="1" 
+            ClipToBounds="True">
+            
+            <Grid                 
+                Margin="5">
+
+                <local:AnalogSignalListControl
+                    ClipToBounds="True"
+                    d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}"
+                    Padding="3">
+                </local:AnalogSignalListControl>
+            </Grid>
+        </Border>
         
         <!-- Register, Dwell Time, Start Delay Time, Measurement Interval and Start Measurement Delay-->
-        <Grid Grid.Column="0" 
-              Margin="5">
-            
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            
-            <!-- Register Setting -->
-            <TextBox 
-                Grid.Row="0"
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_register}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="0"
-                Padding="0 0 5 0"                 
-                HorizontalContentAlignment="Center" 
-                Text="{Binding Register, UpdateSourceTrigger=PropertyChanged}"
-                FontSize="20"/>
-            
-            <!-- Dwell Time Setting -->
-            <TextBox 
-                Grid.Row="1"
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_dwell_time}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="1"
-                Padding="0 0 5 0" 
-                HorizontalContentAlignment="Center" 
-                Text="{Binding DwellTime, UpdateSourceTrigger=PropertyChanged}"
-                FontSize="20"/>
-            
-            <!-- Start Delay Time -->
-            <TextBox 
-                Grid.Row="2"
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_delay_time}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="2" 
-                Padding="0 0 5 0" 
-                HorizontalContentAlignment="Center" 
-                Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged}"
-                FontSize="20"/>
+        <Border
+            Grid.Column="0" 
+            BorderBrush="Black" 
+            BorderThickness="1" 
+            ClipToBounds="True">
+        
+            <Grid Margin="5">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
-            <!-- Measurement Interval -->
-            <TextBox 
-                Grid.Row="3"                 
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_measurement_interval}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="3" 
-                Padding="0 0 5 0"                   
-                HorizontalContentAlignment="Center" 
-                Text="{Binding MeasurementInterval, UpdateSourceTrigger=PropertyChanged}"
-                FontSize="20"/>
+                <!-- Register Setting -->
+                <TextBox 
+                    Grid.Row="0"
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_register}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="0"
+                    Padding="0 0 5 0"                 
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding Register, UpdateSourceTrigger=PropertyChanged}"
+                    FontSize="18"/>
 
-            <!-- Start Measurement Delay -->
-            <TextBox 
-                Grid.Row="4"
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_measurement_delay}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                TabIndex="4"
-                Padding="0 0 5 0"                  
-                HorizontalContentAlignment="Center" 
-                Text="{Binding StartMeasurementDelay, UpdateSourceTrigger=PropertyChanged}"
-                FontSize="20"/>
+                <!-- Dwell Time Setting -->
+                <TextBox 
+                    Grid.Row="1"
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_dwell_time}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="1"
+                    Padding="0 0 5 0" 
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding DwellTime, UpdateSourceTrigger=PropertyChanged}"
+                    FontSize="18"/>
 
-        </Grid>
+                <!-- Start Delay Time -->
+                <TextBox 
+                    Grid.Row="2"
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_delay_time}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="2" 
+                    Padding="0 0 5 0" 
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged}"
+                    FontSize="18"/>
+
+                <!-- Measurement Interval -->
+                <TextBox 
+                    Grid.Row="3"                 
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_measurement_interval}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="3" 
+                    Padding="0 0 5 0"                   
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding MeasurementInterval, UpdateSourceTrigger=PropertyChanged}"
+                    FontSize="18"/>
+
+                <!-- Start Measurement Delay -->
+                <TextBox 
+                    Grid.Row="4"
+                    materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_start_measurement_delay}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="4"
+                    Padding="0 0 5 0"                  
+                    HorizontalContentAlignment="Center" 
+                    Text="{Binding StartMeasurementDelay, UpdateSourceTrigger=PropertyChanged}"
+                    FontSize="18"/>
+
+            </Grid>
+        </Border>
     </Grid>
 </local:BasePage>

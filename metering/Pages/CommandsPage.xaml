@@ -12,16 +12,22 @@
     mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical">
-        <!-- Future use -->
+        <!-- Start Test Button -->
+        <!-- Only visible after the user hits "+" button -->
+        <!-- which becomes visible if the user hits back button or -->
+        <!-- app re/starts -->
         <Viewbox Margin="10 5">
             <Button 
+                x:Name="StartTest"
                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
                 Margin="1,0,0,0" 
                 TabIndex="9"
                 Background="Black"
                 IsDefault="True"
                 Command="{Binding RunTest}">
-                <!--Visibility="{Binding CommandVisibility}">-->
+                <!--Visibility="{Binding CommandVisibility, 
+                                     Converter=BooleanToVisibilityConverter,
+                                     ConverterParameter=False}">-->
 
                 <!-- + sign icon on the button-->
                 <!-- Kind="{Binding CommandIcons}" -->
@@ -40,7 +46,8 @@
  
         <!-- Add New Test Button-->
         <Viewbox Margin="10 5">
-            <Button 
+            <Button                 
+                x:Name="AddNewTest"
                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
                 Margin="1,0,0,0" 
                 TabIndex="9"

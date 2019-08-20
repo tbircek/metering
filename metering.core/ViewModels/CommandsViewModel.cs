@@ -34,7 +34,7 @@ namespace metering.core
         /// Default constructor
         /// </summary>
         public CommandsViewModel()
-        {
+        {            
             // Show a new Test details page populated with the user specified/accepted values
             AddNewTestCommand = new RelayCommand(() => IoC.NominalValues.CopyNominalValues());
 
@@ -56,8 +56,9 @@ namespace metering.core
             IoC.Application.CurrentPageViewModel = null;
 
             // Show NominalValues page
+            IoC.NominalValues.GetSelectedRadioButton("Voltage.AllZero");
+            IoC.NominalValues.GetSelectedRadioButton("Current.AllZero");
             IoC.Application.GoToPage(ApplicationPage.NominalValues);
-
         }
 
         #endregion

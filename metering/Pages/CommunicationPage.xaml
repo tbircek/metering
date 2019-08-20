@@ -78,11 +78,11 @@
 
             </Button>-->
 
-                <Viewbox Margin="10 5" 
-                         Grid.Column="2">
+                <!--<Viewbox Margin="10 5" 
+                         Grid.Column="2">-->
 
                     <!-- Connect button-->
-                    <ToggleButton 
+                    <!--<ToggleButton 
                         Style="{DynamicResource MetroCircleToggleButtonStyle}"
                         TabIndex="10" 
                         Command="{Binding ConnectCommand}"
@@ -99,7 +99,7 @@
                             </Grid>
 
                     </ToggleButton>
-                </Viewbox>
+                </Viewbox>-->
 
                 
                 <!-- Log textbox-->

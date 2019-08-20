@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Input;
@@ -23,17 +25,17 @@ namespace metering.core
         /// <summary>
         /// Default Frequency magnitude to use through out the test
         /// </summary>
-        public string NominalFrequency { get; set; } = "60.00";
+        public string NominalFrequency { get; set; } = "60.000";
 
         /// <summary>
         /// Default Voltage phase to use through out the test
         /// </summary>
-        public string SelectedVoltagePhase { get; set; } = "Voltage.AllZero";
+        public string SelectedVoltagePhase { get; set; } = "AllZero";
 
         /// <summary>
         /// Default Current phase to use through out the test
         /// </summary>
-        public string SelectedCurrentPhase { get; set; } = "Current.AllZero";
+        public string SelectedCurrentPhase { get; set; } = "AllZero";
 
         /// <summary>
         /// Default Delta value to use through out the test
@@ -50,12 +52,6 @@ namespace metering.core
         #endregion
 
         #region Public Commands
-
-        ///// <summary>
-        ///// The command to handle change view to test plan detail view
-        ///// and populate items with nominal values
-        ///// </summary>
-        //public ICommand AddNewTestCommand { get; set; }
 
         /// <summary>
         /// The command handles radio button selections
@@ -76,18 +72,19 @@ namespace metering.core
             Thread.CurrentThread.CurrentCulture = ci;
 
             RadioButtonCommand = new RelayParameterizedCommand((parameter) => GetSelectedRadioButton((string)parameter));
-            // AddNewTestCommand = new RelayCommand(() => CopyNominalValues());
+            // StartTestCommand = new RelayCommand(() => StartTest());
 
         }
+
         #endregion
 
-        #region Helpers
+        #region Public Methods
 
         /// <summary>
         /// Shows test steps with values reset to nominal values
         /// </summary>
         public void CopyNominalValues()
-        {
+        {            
             // generate AnalogSignals from nominal values.
             ObservableCollection<AnalogSignalListItemViewModel> analogSignals = new ObservableCollection<AnalogSignalListItemViewModel>();
 
@@ -95,8 +92,8 @@ namespace metering.core
             // TODO: these values should receive from associated Omicron test set
             int omicronVoltageSignalNumber = 4;
             int omicronCurrentSignalNumber = 6;
-            int omicronAnalogSignalNumber = omicronVoltageSignalNumber + omicronCurrentSignalNumber + 1; // total of current and voltage Analog Signals of associated Omicron Test set
-            for (int i = 1; i < omicronAnalogSignalNumber; i++)
+            int omicronAnalogSignalNumber = omicronVoltageSignalNumber + omicronCurrentSignalNumber; // total of current and voltage Analog Signals of associated Omicron Test set
+            for (int i = 1; i <= omicronAnalogSignalNumber; i++)
             {
                 // Generate AnalogSignals values.
                 analogSignals.Add(new AnalogSignalListItemViewModel
@@ -108,7 +105,7 @@ namespace metering.core
                     From = i <= omicronVoltageSignalNumber ? NominalVoltage : NominalCurrent,
                     To = i <= omicronVoltageSignalNumber ? NominalVoltage : NominalCurrent,
                     Delta = NominalDelta,
-                    Phase = i <= omicronVoltageSignalNumber ? SelectedVoltagePhase : SelectedCurrentPhase,
+                    Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
                     Frequency = NominalFrequency
                 });
             }
@@ -127,13 +124,39 @@ namespace metering.core
             });
         }
 
+        #endregion
+
+        #region Helpers
+
+        ///// <summary>
+        ///// All possible phase values
+        ///// </summary>
+        // private readonly string[] phaseValues = new string[] { "0.00", "-120.00", "120.00" };
+
+        /// <summary>
+        /// Converts RadioButton selection into phase information
+        /// </summary>
+        /// <param name="phase">Selected radio button parameter</param>
+        /// <returns>String that represent user selected phase information per analog signal</returns>
+        private string SelectedPhaseToString(string phase, int signalNumber)
+        {
+            if (phase == "AllZero")
+                return "0.00";
+
+            // formula used: 2𝜋−(2𝑥𝜋/3) => 120*(9-x)
+            double result = 120.0 * (9 - signalNumber) % 360.0; 
+            return string.Format("{0:F2}", result);
+        }
+
         /// <summary>
         /// The command handles radio button selection events
         /// </summary>
-        private void GetSelectedRadioButton(string param)
+        public void GetSelectedRadioButton(string param)
         {
-            // throw new NotImplementedException();
+            // Signal type: Voltage or Current
             string type = param.Split('.')[0];
+
+            // Is phase balanced or all zero?
             string option = param.Split('.')[1];
 
             switch (type)
@@ -145,6 +168,7 @@ namespace metering.core
                     SelectedCurrentPhase = option;
                     break;
                 default:
+                    Debugger.Break();
                     break;
             }
         }

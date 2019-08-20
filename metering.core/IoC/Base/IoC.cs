@@ -29,6 +29,11 @@ namespace metering.core
         /// </summary>
         public static NominalValuesViewModel NominalValues => Get<NominalValuesViewModel>();
 
+        /// <summary>
+        /// A shortcut to access the <see cref="CommandsViewModel"/>
+        /// </summary>
+        public static CommandsViewModel Commands => Get<CommandsViewModel>();
+
         #endregion
 
         #region Setup
@@ -53,6 +58,9 @@ namespace metering.core
 
             // bind to a single instance of NominalValues view model
             Kernel.Bind<NominalValuesViewModel>().ToConstant(new NominalValuesViewModel());
+
+            // bind to a single instance of CommandsViewModel view model
+            Kernel.Bind<CommandsViewModel>().ToConstant(new CommandsViewModel());
         }
 
         #endregion

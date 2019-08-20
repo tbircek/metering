@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
+using System.Windows.Input;
 
 namespace metering.core
 {
@@ -58,6 +60,15 @@ namespace metering.core
 
         #endregion
 
+        #region Public Commands
+
+        /// <summary>
+        /// The command to handle connecting associated Omicron Test Set
+        /// and communication to the UUT
+        /// </summary>
+        public ICommand StartTestCommand { get; set; }
+
+        #endregion
 
         #region Constructor
 
@@ -72,7 +83,23 @@ namespace metering.core
             Thread.CurrentThread.CurrentCulture = ci;
 
             // TODO: Add a new command or move "ConnectCommand" here.
+            StartTestCommand = new RelayCommand(() => StartTest());
         }
+        #endregion
+
+        #region Public Methods
+
+
+        /// <summary>
+        /// Starts a test with the values specified in Nominal Values page and
+        /// Communication page.
+        /// </summary>
+        public void StartTest()
+        {
+            // TODO: Check if any  
+            Debug.WriteLine("Start Test is running");
+        }
+
         #endregion
 
     }
