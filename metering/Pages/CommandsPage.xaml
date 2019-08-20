@@ -24,7 +24,7 @@
                 TabIndex="9"
                 Background="Black"
                 IsDefault="True"
-                Command="{Binding RunTest}">
+                Command="{Binding StartTestCommand}">
                 <!--Visibility="{Binding CommandVisibility, 
                                      Converter=BooleanToVisibilityConverter,
                                      ConverterParameter=False}">-->
@@ -38,7 +38,9 @@
                         Width="Auto"
                         Height="Auto"
                         BorderBrush="Red" 
-                        Foreground="Red"/>
+                        Foreground="{Binding CommandForegroundColor,
+                                             Converter=StringToBrushConverter,
+                                             ConverterParameter=Green}"/>
                 </Grid>
 
             </Button>

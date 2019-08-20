@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
@@ -26,7 +27,7 @@ namespace metering.core
         /// <summary>
         /// The register to monitor while testing.
         /// </summary>
-        public string Register { get; set; }
+        public string Register { get; set; } = "0";
 
         /// <summary>
         /// Show test completion percentage.
@@ -58,16 +59,18 @@ namespace metering.core
         /// </summary>
         public string TestText { get; set; }
 
+        /// <summary>
+        /// Foreground color for the controls
+        /// </summary>
+        public string CommandForegroundColor { get; set; }
         #endregion
 
         #region Public Commands
 
-        /// <summary>
-        /// The command to handle connecting associated Omicron Test Set
-        /// and communication to the UUT
-        /// </summary>
-        public ICommand StartTestCommand { get; set; }
-
+        ///// <summary>
+        ///// Selects all text in the textbox
+        ///// </summary>
+        //public ICommand SelectAllTextCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -82,13 +85,16 @@ namespace metering.core
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
 
-            // TODO: Add a new command or move "ConnectCommand" here.
-            StartTestCommand = new RelayCommand(() => StartTest());
+            OnPropertyChanged("Register");
+            //// create command
+            //SelectAllTextCommand = new RelayParameterizedCommand((parameter) => SelectAllText (parameter));
         }
+
         #endregion
 
         #region Public Methods
 
+        ModbusClient modbusClient;
 
         /// <summary>
         /// Starts a test with the values specified in Nominal Values page and
@@ -96,11 +102,55 @@ namespace metering.core
         /// </summary>
         public void StartTest()
         {
-            // TODO: Check if any  
-            Debug.WriteLine("Start Test is running");
+            // open communication channel
+            if (modbusClient == null)
+                modbusClient = new ModbusClient
+                {
+                    IpAddress = IoC.Communication.IpAddress,
+                    Port = Convert.ToInt32(IoC.Communication.Port),
+                    ConnectionTimeout = 20000,
+                };
+
+            if (!modbusClient.GetConnected())
+            {
+                try
+                {                   
+                    modbusClient.Connect();
+                    int[] response = modbusClient.ReadHoldingRegisters(2279, 3);
+
+                    for (int i = 0; i < response.Length; i++)
+                    {
+                        Debug.WriteLine($"Start Test is running: Register: {Convert.ToInt32(Register) + i} reads {response[i]}");
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+            else
+            {
+                // TODO: Check if any 
+                modbusClient.Disconnect();
+                Debug.WriteLine("Communication terminated.");
+            }
+            
         }
 
         #endregion
 
+        #region Helpers
+
+        /// <summary>
+        /// Select all the text in the current textbox
+        /// </summary>
+        private void SelectAllText(object parameter)
+        {
+            if(!string.IsNullOrWhiteSpace(Register))
+                Register = string.Empty;
+            Debug.WriteLine("Clicked");
+        }
+        #endregion
     }
 }

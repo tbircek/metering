@@ -34,6 +34,11 @@ namespace metering.core
         /// </summary>
         public static TestDetailsViewModel TestDetails => Get<TestDetailsViewModel>();
 
+        /// <summary>
+        /// A shortcut to access the <see cref="CommunicationViewModel"/>
+        /// </summary>
+        public static CommunicationViewModel Communication => Get<CommunicationViewModel>();
+
         #endregion
 
         #region Setup
@@ -64,6 +69,9 @@ namespace metering.core
 
             // bind to a single instance of TestDetailsViewModel
             Kernel.Bind<TestDetailsViewModel>().ToConstant(new TestDetailsViewModel());
+
+            // bind to a single instance of CommunicationViewModel
+            Kernel.Bind<CommunicationViewModel>().ToConstant(new CommunicationViewModel());
         }
 
         #endregion

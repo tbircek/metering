@@ -76,7 +76,7 @@ namespace meteringspecs.features.communication
                 int[] serverResponse = mdbus.ReadHoldingRegisters(2279, 3);
                 for (int i = 0; i < serverResponse.Length; i++)
                 {
-                    Debug.WriteLine(String.Format("{0} value {1}", 2279 + i , serverResponse[i]));
+                    Debug.WriteLine(string.Format("{0} value {1}", 2279 + i , serverResponse[i]));
 
                 }
                 WhenIPressDisconnect();

@@ -176,6 +176,7 @@
     <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="Pages\Base\BasePage.cs" />
+    <Compile Include="ValueConverters\StringToBrushConverter.cs" />
     <Compile Include="ValueConverters\VisualToImageSourceConverter.cs" />
     <Compile Include="Pages\CommandsPage.xaml.cs">
       <DependentUpon>CommandsPage.xaml</DependentUpon>

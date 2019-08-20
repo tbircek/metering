@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace metering.core
 {
@@ -25,6 +23,12 @@ namespace metering.core
         /// The command handles cancelling New Test addition view and returns default view
         /// </summary>
         public ICommand CancelNewTestCommand { get; set; }
+        
+        /// <summary>
+        /// The command to handle connecting associated Omicron Test Set
+        /// and communication to the UUT
+        /// </summary>
+        public ICommand StartTestCommand { get; set; }
 
         #endregion
 
@@ -37,6 +41,9 @@ namespace metering.core
         {            
             // Show a new Test details page populated with the user specified/accepted values
             AddNewTestCommand = new RelayCommand(() => IoC.NominalValues.CopyNominalValues());
+
+            // Start a new test
+            StartTestCommand = new RelayCommand(() => IoC.TestDetails.StartTest());
 
             // navigate back to nominal values page.
             CancelNewTestCommand = new RelayCommand(() => CancelTestDetailsPageShowing());
