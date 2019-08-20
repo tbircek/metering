@@ -12,19 +12,26 @@
             <Grid 
                 d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}" 
                 Background="Transparent">
-                
-                <ScrollViewer 
+
+                <Border
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    Margin="10"
+                    Padding="10">
+                    
+                    <ScrollViewer 
                     VerticalScrollBarVisibility="Auto" 
                     HorizontalScrollBarVisibility="Auto">
-                    
-                    <ItemsControl ItemsSource="{Binding AnalogSignals}" Margin="2">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <local:AnalogSignalListItemControl/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
+
+                        <ItemsControl ItemsSource="{Binding AnalogSignals}" Margin="2">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:AnalogSignalListItemControl/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>                
             </Grid>
         </ControlTemplate>
     </UserControl.Template>

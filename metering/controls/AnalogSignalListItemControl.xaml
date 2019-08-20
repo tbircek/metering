@@ -34,14 +34,14 @@
 
         <!-- Signal Name -->
         <!--<Viewbox Grid.Column="0">-->
-            <TextBox Grid.Column="0"                      
-                materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
-                Padding="2 0 2 0"     
-                Margin="5 10 5 10" 
-                IsEnabled="False"
-                HorizontalContentAlignment="Center" 
-                Text="{Binding SignalName}"/>
+        <TextBox Grid.Column="0"                      
+            materialDesign:HintAssist.Hint="{x:Static resources:Strings.header_signal}"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+            Padding="2 0 2 0"     
+            Margin="5 10 5 10" 
+            IsEnabled="False"
+            HorizontalContentAlignment="Center" 
+            Text="{Binding SignalName}"/>
         <!--</Viewbox>-->
 
         <!-- From -->

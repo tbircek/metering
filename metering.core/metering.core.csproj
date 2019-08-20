@@ -78,7 +78,7 @@
     <Compile Include="ViewModels\CommandsViewModel.cs" />
     <Compile Include="ViewModels\CommunicationViewModel.cs" />
     <Compile Include="ViewModels\NominalValuesViewModel.cs" />
-    <Compile Include="ViewModels\Test\TestDetailsViewModel.cs" />
+    <Compile Include="ViewModels\TestDetailsViewModel.cs" />
     <Compile Include="ViewModels\Test\AnalogSignalListItemViewModel.cs" />
     <Compile Include="ViewModels\Test\AnalogSignalViewModel.cs" />
     <Compile Include="ViewModels\Test\Design\AnalogSignalDesignModel.cs" />

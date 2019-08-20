@@ -14,11 +14,6 @@ namespace metering.core
         /// </summary>
         public static IKernel Kernel { get; private set; } = new StandardKernel();
 
-        ///// <summary>
-        ///// Shortcut to access the <see cref="IUIManager"/>
-        ///// </summary>
-        //public static IUIManager UI => IoC.Get<IUIManager>();
-
         /// <summary>
         /// A shortcut to the <see cref="ApplicationViewModel"/>
         /// </summary>
@@ -33,6 +28,11 @@ namespace metering.core
         /// A shortcut to access the <see cref="CommandsViewModel"/>
         /// </summary>
         public static CommandsViewModel Commands => Get<CommandsViewModel>();
+
+        /// <summary>
+        /// A shortcut to access the <see cref="TestDetailsViewModel"/>
+        /// </summary>
+        public static TestDetailsViewModel TestDetails => Get<TestDetailsViewModel>();
 
         #endregion
 
@@ -61,6 +61,9 @@ namespace metering.core
 
             // bind to a single instance of CommandsViewModel view model
             Kernel.Bind<CommandsViewModel>().ToConstant(new CommandsViewModel());
+
+            // bind to a single instance of TestDetailsViewModel
+            Kernel.Bind<TestDetailsViewModel>().ToConstant(new TestDetailsViewModel());
         }
 
         #endregion

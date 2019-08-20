@@ -8,16 +8,12 @@
     xmlns:local="clr-namespace:metering" 
     xmlns:core="clr-namespace:metering.core;assembly=metering.core" 
     xmlns:resources="clr-namespace:metering.Resources"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     x:Class="metering.CommunicationPage"    
     mc:Ignorable="d">
   
     <Grid>
-        <Border 
-            BorderBrush="Black"
-            BorderThickness="2"
-            Margin="10"
-            Padding="10">
+        <Border             
+            Margin="10">
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -53,59 +49,11 @@
                     Padding="5 5 20 5"
                     Margin="5 5 20 5"
                     Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <!--<Button 
-                Grid.Column="2"
-                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
-                Margin="1,0,0,0" 
-                TabIndex="9"
-                Background="Transparent"
-                IsDefault="True"
-                Command="{Binding ConnectCommand}">
-
-                -->
-                <!-- + sign icon on the button-->
-                <!--
-                <Grid>
-                    <iconPacks:PackIconFontAwesome 
-                        Kind="BroadcastTowerSolid"
-                        Padding="2" 
-                        Width="Auto"
-                        Height="Auto"
-                        BorderBrush="Red" 
-                        Foreground="Red"/>
-                </Grid>
-
-            </Button>-->
-
-                <!--<Viewbox Margin="10 5" 
-                         Grid.Column="2">-->
-
-                    <!-- Connect button-->
-                    <!--<ToggleButton 
-                        Style="{DynamicResource MetroCircleToggleButtonStyle}"
-                        TabIndex="10" 
-                        Command="{Binding ConnectCommand}"
-                        CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}">
-
-                            <Grid>
-                                <iconPacks:PackIconFontAwesome 
-                                Kind="CaretSquareRightSolid"
-                                Width="Auto"
-                                Height="Auto"
-                                Padding="5"
-                                BorderBrush="{Binding IconForeground}" 
-                                Foreground="{Binding IconForeground}"/>
-                            </Grid>
-
-                    </ToggleButton>
-                </Viewbox>-->
-
                 
                 <!-- Log textbox-->
                 <Viewbox 
-                    Grid.Column="3" 
-                    Margin="20 10 20 10">
+                    Grid.Column="3"
+                    Margin="20 5 20 5">
 
                     <ScrollViewer 
                         ClipToBounds="True"
@@ -114,8 +62,7 @@
                         <!--local:AutoScrollToBottomProperty.Value="True"-->
                         
                         <!-- Log textbox -->
-                        <TextBox
-                            Padding="5"
+                        <TextBox 
                             TextWrapping="Wrap" 
                             BorderBrush="#FBFFFFC0"                 
                             Text="{Binding Log}"
