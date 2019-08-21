@@ -65,7 +65,7 @@
                         <TextBox 
                             TextWrapping="Wrap" 
                             BorderBrush="#FBFFFFC0"                 
-                            Text="{Binding Log}"
+                            Text="{Binding Log, UpdateSourceTrigger=PropertyChanged}"
                             TextAlignment="Right"
                             IsReadOnly="True">
                         </TextBox>

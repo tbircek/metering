@@ -67,10 +67,13 @@ namespace metering.core
 
         #region Public Commands
 
-        ///// <summary>
-        ///// Selects all text in the textbox
-        ///// </summary>
-        //public ICommand SelectAllTextCommand { get; set; }
+
+        /// <summary>
+        /// command to provide connection to both Attached Omicron and 
+        /// specified Test Unit ipaddress and port.
+        /// </summary>
+        public ICommand ConnectCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -85,9 +88,9 @@ namespace metering.core
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
 
-            OnPropertyChanged("Register");
-            //// create command
-            //SelectAllTextCommand = new RelayParameterizedCommand((parameter) => SelectAllText (parameter));
+            // create the command.
+            ConnectCommand = new RelayParameterizedCommand(async (parameter) => await IoC.Communication.StartCommunicationAsync(this));
+
         }
 
         #endregion

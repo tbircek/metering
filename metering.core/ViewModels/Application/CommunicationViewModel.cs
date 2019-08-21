@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace metering.core
@@ -12,7 +13,15 @@ namespace metering.core
 
         #region Public Properties
 
-
+        /// <summary>
+        /// Modbus Client for all modbus protocol communication
+        /// </summary>
+        public ModbusClient ModbusClient { get; set; }
+        
+        /// <summary>
+        /// Omicron CMC Engine
+        /// </summary>
+        public CMCControl CMCControl { get; set; }
         /// <summary>
         /// ipaddress of the test unit.
         /// </summary>
@@ -52,29 +61,20 @@ namespace metering.core
 
         #region Public Commands
 
-        /// <summary>
-        /// command to provide connection to both Attached Omicron and 
-        /// specified Test Unit ipaddress and port.
-        /// </summary>
-        public ICommand ConnectCommand { get; set; }
         #endregion
 
         #region Constructor
         /// <summary>
         /// default constructor
         /// </summary>
-        public CommunicationViewModel( )
+        public CommunicationViewModel()
         {
-            // create the command.
-            ConnectCommand = new RelayParameterizedCommand(async(parameter) => await StartCommunicationAsync(parameter));
 
         }
 
         #endregion
 
         #region Helper Method
-
-        ModbusClient modbusClient;
 
         /// <summary>
         /// Starts a test with the values specified in Nominal Values page and
@@ -83,31 +83,41 @@ namespace metering.core
         /// <param name="parameter">holding register starting address</param>
         public async Task StartCommunicationAsync(object parameter)
         {
+            if (Convert.ToInt32(IoC.TestDetails.Register) == 0)
+            {
+                await Task.Run(() => MessageBox.Show("Invalid Register"));
+                IsUnitUnderTestConnected = true;
+
+                // Change Start Test Button color
+                IoC.Commands.StartTestForegroundColor = "00ff00";
+            }
+
             await RunCommand(() => IsUnitUnderTestConnected, async () =>
             {
+
                 // open communication channel
-                if (modbusClient == null)
-                    modbusClient = new ModbusClient
+                if (ModbusClient == null)
+                    ModbusClient = new ModbusClient
                     {
                         IpAddress = this.IpAddress,
                         Port = Convert.ToInt32(this.Port),
                         ConnectionTimeout = 20000,
                     };
 
-                if (!modbusClient.GetConnected())
+                if (!ModbusClient.GetConnected())
                 {
                     try
                     {
-                        modbusClient.Connect();
+                        ModbusClient.Connect();
 
                         // await if the server is connected
-                        bool isUUTConnected = await Task.Factory.StartNew(() => modbusClient.GetConnected());
+                        bool isUUTConnected = await Task.Factory.StartNew(() => ModbusClient.GetConnected());
 
-                        int[] response = modbusClient.ReadHoldingRegisters(Convert.ToInt32(parameter), 1);
+                        int[] response = ModbusClient.ReadHoldingRegisters(Convert.ToInt32(IoC.TestDetails.Register), 1);
 
                         for (int i = 0; i < response.Length; i++)
                         {
-                            Debug.WriteLine($"Start Test is running: Register: {Convert.ToInt32(parameter) + i} reads {response[i]}");
+                            Debug.WriteLine($"Start Test is running: Register: {Convert.ToInt32(IoC.TestDetails.Register) + i} reads {response[i]}");
                         }
                     }
                     catch (Exception)
@@ -119,10 +129,11 @@ namespace metering.core
                 else
                 {
                     // TODO: Check if any 
-                    modbusClient.Disconnect();
+                    ModbusClient.Disconnect();
 
                     // Change Start Test Button color
                     IoC.Commands.StartTestForegroundColor = "00ff00";
+
                     Debug.WriteLine("Communication terminated.");
                 }
 

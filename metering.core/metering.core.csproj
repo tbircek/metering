@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,15 +71,15 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="ViewModels\ApplicationViewModel.cs" />
+    <Compile Include="ViewModels\Application\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\IOmicron.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
-    <Compile Include="ViewModels\CommandsViewModel.cs" />
-    <Compile Include="ViewModels\CommunicationViewModel.cs" />
-    <Compile Include="ViewModels\NominalValuesViewModel.cs" />
-    <Compile Include="ViewModels\TestDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Application\CommandsViewModel.cs" />
+    <Compile Include="ViewModels\Application\CommunicationViewModel.cs" />
+    <Compile Include="ViewModels\Application\NominalValuesViewModel.cs" />
+    <Compile Include="ViewModels\Application\TestDetailsViewModel.cs" />
     <Compile Include="ViewModels\Test\AnalogSignalListItemViewModel.cs" />
     <Compile Include="ViewModels\Test\AnalogSignalViewModel.cs" />
     <Compile Include="ViewModels\Test\Design\AnalogSignalDesignModel.cs" />

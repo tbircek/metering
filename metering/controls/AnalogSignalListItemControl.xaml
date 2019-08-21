@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:core="clr-namespace:metering.core;assembly=metering.core"
+    xmlns:local="clr-namespace:metering"
     xmlns:resources="clr-namespace:metering.Resources"
     x:Class="metering.AnalogSignalListItemControl"
     mc:Ignorable="d"
@@ -13,7 +14,7 @@
     <Grid d:DataContext="{x:Static core:AnalogSignalListItemDesignModel.Instance}" 
           Background="Transparent"
           ClipToBounds="True">
-        
+
         <Grid.ColumnDefinitions>
             <!-- Signal Name -->
             <ColumnDefinition Width="60"/>

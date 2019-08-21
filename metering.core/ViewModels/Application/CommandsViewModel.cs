@@ -47,6 +47,11 @@ namespace metering.core
         /// </summary>
         public string StartTestForegroundColor { get; set; }
 
+        /// <summary>
+        /// Holds Foreground color information for the Cancel Command button
+        /// </summary>
+        public string CancelForegroundColor { get; set; }
+
         #endregion
 
         #region Constructor
@@ -71,6 +76,9 @@ namespace metering.core
 
             // default StartTestForegroundColor is Green
             StartTestForegroundColor = "00ff00";
+
+            // default CancelForegroundColor is Green
+            CancelForegroundColor = "00ff00";
         }
 
         #endregion
@@ -83,9 +91,12 @@ namespace metering.core
         /// </summary>
         private void CancelTestDetailsPageShowing()
         {
+            // change CancelForegroundColor to Red
+            CancelForegroundColor = "00ff00";
+
             // set visibility of the Command Buttons
             NewTestAvailable = false;
-
+            
             // clear Test details view model
             IoC.Application.CurrentPageViewModel = null;
 
@@ -101,19 +112,24 @@ namespace metering.core
         /// </summary>
         /// <param name="parameter">Attached self IsChecked property in the view</param>        
         private async Task ConnectOmicronAndUnit(object parameter)
-        {
+        {           
             await RunCommand(() => IoC.Communication.IsOmicronConnected, async () =>
             {
-                // waiting for the connections.
 
+                Debug.WriteLine($"register: {IoC.TestDetails.Register}");
+                Debug.WriteLine($"ipdadress: {IoC.Communication.IpAddress}");
+                
                 // Verify a new test available.
                 if (NewTestAvailable)
-                {
+                {                    
+                    // Pressing again same button will terminate the test
+                    NewTestAvailable = false;
+
                     // get instance of Omicron Test Set
-                    CMCControl cMCControl = new CMCControl();
+                    IoC.Communication.CMCControl = new CMCControl();
 
                     // await omicron connection
-                    bool isOmicronConnected = await Task.Factory.StartNew(() => cMCControl.FindCMC());
+                    bool isOmicronConnected = await Task.Run(() => IoC.Communication.CMCControl.FindCMC());
 
                     // The user click on the button 
                     // TODO: Handle Omicron open connection here.
@@ -122,13 +138,11 @@ namespace metering.core
 
                     // TODO: Handle ConnectCommand Button checked
                     Debug.WriteLine($"TODO: Connect thru modbus protocol to {IoC.Communication.IpAddress}:{IoC.Communication.Port}");
-                    IoC.Communication.ConnectCommand.Execute(IoC.TestDetails.Register);
+                    await Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails));
 
                     //// Change ConnectCommand Button content to "Disconnect"
                     //IoC.Communication.ConnectCommandContent = isOmicronConnected ? "Disconnect" : "Connect";
 
-                    NewTestAvailable = false;
-                 
                 }
                 else
                 {
@@ -141,8 +155,6 @@ namespace metering.core
 
                     // TODO: Verify disconnect was successful.
 
-                    //// Change ConnectCommand Button content to "Disconnect"
-                    //IoC.Communication.ConnectCommandContent = "Connect";
 
                     NewTestAvailable = true;
                 }

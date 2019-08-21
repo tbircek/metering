@@ -21,6 +21,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <Grid.InputBindings>
+            <MouseBinding MouseAction="LeftDoubleClick" local:FocusAndSelectProperty.Value="True" />
+        </Grid.InputBindings>
+
         <!-- Analog signal values -->
         <Border
             Grid.Column="1" 

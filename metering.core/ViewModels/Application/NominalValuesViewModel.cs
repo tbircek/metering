@@ -85,6 +85,8 @@ namespace metering.core
         /// </summary>
         public void CopyNominalValues()
         {
+            // change CancelForegroundColor to Red
+            IoC.Commands.CancelForegroundColor = "ff0000";
 
             // set visibility of Command buttons
             IoC.Commands.NewTestAvailable = true;

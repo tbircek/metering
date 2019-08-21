@@ -16,11 +16,12 @@
         <Viewbox Margin="10 5" 
                  Visibility="{Binding NewTestAvailable,
                                       Converter={local:BooleanToVisibilityConverter},
-                                      ConverterParameter=True}">
+                                      ConverterParameter=False}">
             <Button 
                 x:Name="StartTest"
                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
                 Margin="1,0,0,0" 
+                Cursor="Hand"
                 TabIndex="9"
                 Background="Transparent"
                 IsDefault="True"
@@ -48,7 +49,8 @@
             <Button                 
                 x:Name="AddNewTest"
                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
-                Margin="1,0,0,0" 
+                Margin="1,0,0,0"  
+                Cursor="Hand"
                 TabIndex="9"
                 Background="Transparent"
                 IsDefault="True"
@@ -71,7 +73,8 @@
         <Viewbox  Margin="10 5">
             <Button
                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"                
-                Margin="1,0,0,0"
+                Margin="1,0,0,0" 
+                Cursor="Hand"
                 TabIndex="8"
                 Background="Transparent"
                 IsCancel="True"
@@ -84,7 +87,8 @@
                     Padding="2" 
                     Width="Auto"
                     Height="Auto"
-                    Foreground="Green"/>
+                    Foreground="{Binding CancelForegroundColor, 
+                                         Converter={local:StringToBrushConverter}}"/>
                 </Grid>
             </Button>            
         </Viewbox>
