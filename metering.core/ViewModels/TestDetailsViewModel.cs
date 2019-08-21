@@ -94,50 +94,6 @@ namespace metering.core
 
         #region Public Methods
 
-        ModbusClient modbusClient;
-
-        /// <summary>
-        /// Starts a test with the values specified in Nominal Values page and
-        /// Communication page.
-        /// </summary>
-        public void StartTest()
-        {
-            // open communication channel
-            if (modbusClient == null)
-                modbusClient = new ModbusClient
-                {
-                    IpAddress = IoC.Communication.IpAddress,
-                    Port = Convert.ToInt32(IoC.Communication.Port),
-                    ConnectionTimeout = 20000,
-                };
-
-            if (!modbusClient.GetConnected())
-            {
-                try
-                {                   
-                    modbusClient.Connect();
-                    int[] response = modbusClient.ReadHoldingRegisters(2279, 3);
-
-                    for (int i = 0; i < response.Length; i++)
-                    {
-                        Debug.WriteLine($"Start Test is running: Register: {Convert.ToInt32(Register) + i} reads {response[i]}");
-                    }
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-            }
-            else
-            {
-                // TODO: Check if any 
-                modbusClient.Disconnect();
-                Debug.WriteLine("Communication terminated.");
-            }
-            
-        }
-
         #endregion
 
         #region Helpers

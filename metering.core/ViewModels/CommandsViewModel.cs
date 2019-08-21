@@ -1,9 +1,21 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace metering.core
 {
     public class CommandsViewModel : BaseViewModel
     {
+
+        #region Public Properties
+        
+        /// <summary>
+        /// True if the user hit "+" button
+        /// </summary>
+        public bool NewTestAvailable { get; set; } = false;
+
+        #endregion
 
         #region Public Commands
 
@@ -30,6 +42,11 @@ namespace metering.core
         /// </summary>
         public ICommand StartTestCommand { get; set; }
 
+        /// <summary>
+        /// Holds Foreground color information for the Start Test Command button
+        /// </summary>
+        public string StartTestForegroundColor { get; set; }
+
         #endregion
 
         #region Constructor
@@ -42,11 +59,18 @@ namespace metering.core
             // Show a new Test details page populated with the user specified/accepted values
             AddNewTestCommand = new RelayCommand(() => IoC.NominalValues.CopyNominalValues());
 
-            // Start a new test
-            StartTestCommand = new RelayCommand(() => IoC.TestDetails.StartTest());
+            // Generate Start a new test command
+            // StartTestCommand = new RelayCommand(() => IoC.Communication.ConnectCommand());
+
+            // create the command.
+            StartTestCommand = new RelayParameterizedCommand(async (parameter) => await ConnectOmicronAndUnit(parameter));
+
 
             // navigate back to nominal values page.
             CancelNewTestCommand = new RelayCommand(() => CancelTestDetailsPageShowing());
+
+            // default StartTestForegroundColor is Green
+            StartTestForegroundColor = "00ff00";
         }
 
         #endregion
@@ -59,6 +83,9 @@ namespace metering.core
         /// </summary>
         private void CancelTestDetailsPageShowing()
         {
+            // set visibility of the Command Buttons
+            NewTestAvailable = false;
+
             // clear Test details view model
             IoC.Application.CurrentPageViewModel = null;
 
@@ -68,6 +95,59 @@ namespace metering.core
             IoC.Application.GoToPage(ApplicationPage.NominalValues);
         }
 
+
+        /// <summary>
+        /// connects to omicron and test unit.
+        /// </summary>
+        /// <param name="parameter">Attached self IsChecked property in the view</param>        
+        private async Task ConnectOmicronAndUnit(object parameter)
+        {
+            await RunCommand(() => IoC.Communication.IsOmicronConnected, async () =>
+            {
+                // waiting for the connections.
+
+                // Verify a new test available.
+                if (NewTestAvailable)
+                {
+                    // get instance of Omicron Test Set
+                    CMCControl cMCControl = new CMCControl();
+
+                    // await omicron connection
+                    bool isOmicronConnected = await Task.Factory.StartNew(() => cMCControl.FindCMC());
+
+                    // The user click on the button 
+                    // TODO: Handle Omicron open connection here.
+                    Debug.WriteLine($"TODO: Connect Omicron Test Set ... success?: {isOmicronConnected}");
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime()}: Connecting Omicron Test Set was {(isOmicronConnected ? " successful" : " failed")}\n";
+
+                    // TODO: Handle ConnectCommand Button checked
+                    Debug.WriteLine($"TODO: Connect thru modbus protocol to {IoC.Communication.IpAddress}:{IoC.Communication.Port}");
+                    IoC.Communication.ConnectCommand.Execute(IoC.TestDetails.Register);
+
+                    //// Change ConnectCommand Button content to "Disconnect"
+                    //IoC.Communication.ConnectCommandContent = isOmicronConnected ? "Disconnect" : "Connect";
+
+                    NewTestAvailable = false;
+                 
+                }
+                else
+                {
+                    // The user wants to disconnect.
+                    // TODO: Handle Omicron close connection here.
+                    Debug.WriteLine("TODO: Disconnect Omicron Test Set ...");
+
+                    // TODO: Handle ConnectCommand Button checked
+                    Debug.WriteLine($"TODO: Disconnect modbus communication to {IoC.Communication.IpAddress}:{IoC.Communication.Port}");
+
+                    // TODO: Verify disconnect was successful.
+
+                    //// Change ConnectCommand Button content to "Disconnect"
+                    //IoC.Communication.ConnectCommandContent = "Connect";
+
+                    NewTestAvailable = true;
+                }
+            });
+        }
         #endregion
     }
 }

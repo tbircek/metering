@@ -53,7 +53,7 @@
                 Padding="2 0 2 0"     
                 Margin="5 10 5 10"             
                 HorizontalContentAlignment="Center" 
-                Text="{Binding From, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding From, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged}"/>
         <!--</Viewbox>-->
 
         <!-- To -->
@@ -65,7 +65,7 @@
                 Padding="2 0 2 0"     
                 Margin="5 10 5 10"                
                 HorizontalContentAlignment="Center"
-                Text="{Binding To, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding To, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged}"/>
         <!--</Viewbox>-->
 
         <!-- Delta-->
@@ -77,7 +77,7 @@
                 Padding="2 0 2 0"     
                 Margin="5 10 5 10"    
                 HorizontalContentAlignment="Center"
-                Text="{Binding Delta, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding Delta, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged}"/>
         <!--</Viewbox>-->
 
         <!-- Phase -->
@@ -89,7 +89,7 @@
                 Padding="2 0 2 0"     
                 Margin="5 10 5 10"              
                 HorizontalContentAlignment="Center" 
-                Text="{Binding Phase, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding Phase, StringFormat=\{0:F2\}, UpdateSourceTrigger=PropertyChanged}"/>
         <!--</Viewbox>-->
 
         <!-- Frequency -->
@@ -101,7 +101,7 @@
                 Padding="2 0 2 0"     
                 Margin="5 10 5 10"               
                 HorizontalContentAlignment="Center" 
-                Text="{Binding Frequency, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding Frequency, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged}"/>
 
         <!--</Viewbox>-->
     </Grid>

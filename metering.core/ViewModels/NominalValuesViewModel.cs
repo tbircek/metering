@@ -84,7 +84,11 @@ namespace metering.core
         /// Shows test steps with values reset to nominal values
         /// </summary>
         public void CopyNominalValues()
-        {            
+        {
+
+            // set visibility of Command buttons
+            IoC.Commands.NewTestAvailable = true;
+
             // generate AnalogSignals from nominal values.
             ObservableCollection<AnalogSignalListItemViewModel> analogSignals = new ObservableCollection<AnalogSignalListItemViewModel>();
 
@@ -109,7 +113,7 @@ namespace metering.core
                     SignalName = i <= omicronVoltageSignalNumber ? "v" + i : "i" + (i - omicronVoltageSignalNumber),
                     From = i <= omicronVoltageSignalNumber ? string.Format("{0:F2}", NominalVoltage) : string.Format("{0:F1}", NominalCurrent),
                     To = i <= omicronVoltageSignalNumber ? string.Format("{0:F2}", NominalVoltage ): string.Format("{0:F1}", NominalCurrent),
-                    Delta = string.Format("{0:F3}", NominalDelta),
+                    Delta = $"{NominalDelta:F3}",
                     Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
                     Frequency = string.Format("{0:F3}", NominalFrequency)
                 });
@@ -143,7 +147,7 @@ namespace metering.core
         {
             // Return 0.00 if the user selected phase is 0°
             if (phase == "AllZero")
-                return "0.00";
+                return string.Format("{0:F2}", "0");
 
             // formula used: 2𝜋−(2𝑥𝜋/3) => 120*(9-x)
             // 𝜋 = 180°

@@ -36,7 +36,12 @@ namespace metering.core
         /// <summary>
         /// a flag indicating Omicron Test Set connected and running
         /// </summary>
-        public bool OmicronIsConnected { get; set; } = false;
+        public bool IsOmicronConnected { get; set; } = false;
+
+        /// <summary>
+        /// a flag indication UUT is connected and responding
+        /// </summary>
+        public bool IsUnitUnderTestConnected { get; set; } = false;
 
         /// <summary>
         /// a property to change Icon colors
@@ -61,7 +66,7 @@ namespace metering.core
         public CommunicationViewModel( )
         {
             // create the command.
-            ConnectCommand = new RelayParameterizedCommand(async(parameter) => await ConnectOmicronAndUnit(parameter));
+            ConnectCommand = new RelayParameterizedCommand(async(parameter) => await StartCommunicationAsync(parameter));
 
         }
 
@@ -69,55 +74,60 @@ namespace metering.core
 
         #region Helper Method
 
+        ModbusClient modbusClient;
+
         /// <summary>
-        /// connects to omicron and test unit.
+        /// Starts a test with the values specified in Nominal Values page and
+        /// Communication page.
         /// </summary>
-        /// <param name="parameter">Attached self IsChecked property in the view</param>        
-        private async Task ConnectOmicronAndUnit(object parameter)
+        /// <param name="parameter">holding register starting address</param>
+        public async Task StartCommunicationAsync(object parameter)
         {
-            await RunCommand(() => OmicronIsConnected, async () =>
+            await RunCommand(() => IsUnitUnderTestConnected, async () =>
             {
-                // waiting for the connections.
-                // TODO: remove me later
-                // await Task.Delay(5000);
+                // open communication channel
+                if (modbusClient == null)
+                    modbusClient = new ModbusClient
+                    {
+                        IpAddress = this.IpAddress,
+                        Port = Convert.ToInt32(this.Port),
+                        ConnectionTimeout = 20000,
+                    };
 
-                // Change Content of the button per isChecked parameter
-                if ((bool)parameter)
+                if (!modbusClient.GetConnected())
                 {
-                    // get instance of Omicron Test Set
-                    CMCControl cMCControl = new CMCControl();
+                    try
+                    {
+                        modbusClient.Connect();
 
-                    // await omicron connection
-                    bool isOmicronConnected = await Task.Factory.StartNew(()=> cMCControl.FindCMC());
+                        // await if the server is connected
+                        bool isUUTConnected = await Task.Factory.StartNew(() => modbusClient.GetConnected());
 
-                    // The user click on the button 
-                    // TODO: Handle Omicron open connection here.
-                    Debug.WriteLine($"TODO: Connect Omicron Test Set ... success?: {isOmicronConnected}");
-                    Log += $"{DateTime.Now.ToLocalTime()}: Connecting Omicron Test Set was {(isOmicronConnected ? " successful" : " failed")}\n";
+                        int[] response = modbusClient.ReadHoldingRegisters(Convert.ToInt32(parameter), 1);
 
-                    // TODO: Handle ConnectCommand Button checked
-                    Debug.WriteLine($"TODO: Connect thru modbus protocol to {IpAddress}:{Port}");
+                        for (int i = 0; i < response.Length; i++)
+                        {
+                            Debug.WriteLine($"Start Test is running: Register: {Convert.ToInt32(parameter) + i} reads {response[i]}");
+                        }
+                    }
+                    catch (Exception)
+                    {
 
-                    // Change ConnectCommand Button content to "Disconnect"
-                    ConnectCommandContent = isOmicronConnected?"Disconnect": "Connect";
+                        throw;
+                    }
                 }
                 else
                 {
-                    // The user wants to disconnect.
-                    // TODO: Handle Omicron close connection here.
-                    Debug.WriteLine("TODO: Disconnect Omicron Test Set ...");
+                    // TODO: Check if any 
+                    modbusClient.Disconnect();
 
-                    // TODO: Handle ConnectCommand Button checked
-                    Debug.WriteLine($"TODO: Disconnect modbus communication to {IpAddress}:{Port}");
-
-                    // TODO: Verify disconnect was successful.
-
-                    // Change ConnectCommand Button content to "Disconnect"
-                    ConnectCommandContent = "Connect";
+                    // Change Start Test Button color
+                    IoC.Commands.StartTestForegroundColor = "00ff00";
+                    Debug.WriteLine("Communication terminated.");
                 }
+
             });
         }
-
         #endregion
 
     }
