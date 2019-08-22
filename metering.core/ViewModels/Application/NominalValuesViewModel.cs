@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace metering.core
         /// <summary>
         /// Default Voltage magnitude to use through out the test
         /// </summary>
-        public string NominalVoltage { get; set; } = "120.0";
+        public string NominalVoltage { get; set; } = "4.0";
 
         /// <summary>
         /// Default Current magnitude to use through out the test
@@ -43,13 +44,7 @@ namespace metering.core
         /// Default Delta value to use through out the test
         /// Delta == magnitude difference between test steps
         /// </summary>
-        public string NominalDelta { get; set; } = "1.000";
-
-        /// <summary>
-        /// Title of AddNewTestCommand
-        /// </summary>
-        public string AddNewTestCommandTitle { get; set; } = "New Test";
-
+        public string NominalDelta { get; set; } = "0.0333";
 
         #endregion
 
@@ -104,40 +99,37 @@ namespace metering.core
 
             // total of current and voltage Analog Signals of associated Omicron Test set
             int omicronAnalogSignalNumber = omicronVoltageSignalNumber + omicronCurrentSignalNumber;
+
+            // generate AnalogSignalListItems
             for (int i = 1; i <= omicronAnalogSignalNumber; i++)
             {
+                
                 // Generate AnalogSignals values.
                 analogSignals.Add(new AnalogSignalListItemViewModel
                 {
                     // is this condition true ? yes : no
 
-                    // current signals names start at 1 => (i - omicronVoltageSignalNumber)
+                    // current signals names restart at 1 => (i - omicronVoltageSignalNumber)
                     SignalName = i <= omicronVoltageSignalNumber ? "v" + i : "i" + (i - omicronVoltageSignalNumber),
-                    From = i <= omicronVoltageSignalNumber ? string.Format("{0:F2}", NominalVoltage) : string.Format("{0:F1}", NominalCurrent),
-                    To = i <= omicronVoltageSignalNumber ? string.Format("{0:F2}", NominalVoltage ): string.Format("{0:F1}", NominalCurrent),
-                    Delta = $"{NominalDelta:F3}",
+                    From = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
+                    To = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}": $"{Convert.ToDouble(NominalCurrent):F3}",
+                    Delta = $"{Convert.ToDouble(NominalDelta):F3}",
                     Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
-                    Frequency = string.Format("{0:F3}", NominalFrequency)
+                    Frequency = $"{Convert.ToDouble(NominalFrequency):F3}"
                 });
             }
 
+            // Update only AnalogSignal values of single instance of the TestDetailsViewModel
+            IoC.TestDetails.AnalogSignals = analogSignals;
+
             // Show TestDetails page
-            IoC.Application.GoToPage(ApplicationPage.TestDetails, new TestDetailsViewModel
-            {
-                Register = "0",
-                DwellTime = "120",
-                MeasurementInterval = "100",
-                StartDelayTime = "10",
-                StartMeasurementDelay = "30",
-                Progress = "0.0",
-                TestText = "Maybe",
-                AnalogSignals = analogSignals
-            });
+            IoC.Application.GoToPage(ApplicationPage.TestDetails);
+
         }
 
         #endregion
 
-        #region Helpers
+        #region Private Helpers
 
         /// <summary>
         /// Converts RadioButton selection into phase information
@@ -149,19 +141,22 @@ namespace metering.core
         {
             // Return 0.00 if the user selected phase is 0°
             if (phase == "AllZero")
-                return string.Format("{0:F2}", "0");
+                return $"{Convert.ToDouble(0):F2}";
 
             // formula used: 2𝜋−(2𝑥𝜋/3) => 120*(9-x)
             // 𝜋 = 180°
             // x = 1 to 10
-            double result = 120.0 * (9 - signalNumber) % 360.0; 
-            return string.Format("{0:F2}", result);
+            double result = 120.0 * (9 - signalNumber) % 360.0;
+
+            // if the result phase larger than 180° show it as negative phase
+            // else show the phase as is
+            return $"{(result > 180.0 ? result - 360.0 : result):F2}";
         }
 
         /// <summary>
         /// The command handles radio button selection events
         /// </summary>
-        public void GetSelectedRadioButton(string param)
+        private void GetSelectedRadioButton(string param)
         {
             // Signal type: Voltage or Current
             string type = param.Split('.')[0];

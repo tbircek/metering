@@ -58,7 +58,7 @@
             <ColumnDefinition/>
             
             <!-- Commands Page-->
-            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="80"/>
         </Grid.ColumnDefinitions>
 
         <!-- Communication Page -->

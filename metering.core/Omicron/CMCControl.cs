@@ -7,7 +7,7 @@ using OMICRON.CMEngAL;
 
 namespace metering.core
 {
-    public class CMCControl: IOmicron
+    public class CMCControl // : IOmicron
 
     {
         /// <summary>
@@ -22,7 +22,7 @@ namespace metering.core
         {
             get
             {
-               if(engine == null)
+                if (engine == null)
                     return new CMEngine();
 
                 return engine;
@@ -55,10 +55,10 @@ namespace metering.core
                 omicronStringCommands = value;
             }
         }
-       // /// <summary>
-       // /// Refers to Omicron CM Engine.
-       // /// </summary>
-       ////  CMEngine CMEngine = new CMEngine();
+        // /// <summary>
+        // /// Refers to Omicron CM Engine.
+        // /// </summary>
+        ////  CMEngine CMEngine = new CMEngine();
 
         ///// <summary>
         ///// Implemented Omicron Test Set string commands.
@@ -91,7 +91,7 @@ namespace metering.core
         /// <summary>
         /// Omicron Test Set debuggin log levels.
         /// </summary>
-        public enum LogLevels : short { None, Level1, Level2, };
+        public enum LogLevels : short { None, Level1, Level2, Level3, };
 
         /// <summary>
         /// Default value of Voltage amplifiers while testing non-voltage values.
@@ -128,7 +128,7 @@ namespace metering.core
 
             // log Omicron Test Set debug information.
             CMEngine.LogNew(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\cmc.log");
-            CMEngine.LogSetLevel((short)LogLevels.Level2);
+            CMEngine.LogSetLevel((short)LogLevels.Level3);
             Debug.WriteLine($"Found device: {deviceList}", "info");
             Debug.WriteLine($"Error text: {CMEngine.GetExtError()}");
 
@@ -244,66 +244,80 @@ namespace metering.core
         /// <param name="StartDelayTime">Wait time to stay in chamber room before a test magnitude applied.</param>
         /// <param name="MeasurementInterval">Specifies register reading interval.</param>
         /// <param name="StartMeasurementDelay">Wait time after a test magnitude applied.</param>
-        public void TestSample(int Register, double From, double To, double Delta, double DwellTime, double MeasurementDuration, double StartDelayTime, double MeasurementInterval, double StartMeasurementDelay)
+        public async Task TestSample(int Register, double From, double To, double Delta, double DwellTime, double MeasurementDuration, double StartDelayTime, double MeasurementInterval, double StartMeasurementDelay)
         {
 
-            Debug.WriteLine($"Time: {DateTime.Now.ToString("hh:mm:ss.fff")}\tTest parameters:");
-            Debug.Indent();
-            Debug.WriteLine($"From: {From:F3}\tTo: {To}\t\tDelta: {Delta:F3}\t\t\t\t\tDwell time: {DwellTime}sec\r\tStart delay time: {StartDelayTime}sec\tMeasurement interval: {MeasurementInterval}mSec\tStart measurement delay: {StartMeasurementDelay}sec\n");
-            Debug.Unindent();
-
-            var delay = Task.Run(async delegate
+            try
             {
-                await Task.Delay(TimeSpan.FromSeconds(StartDelayTime));
-                mdbus.ConnectionTimeout = 5000;
-                mdbus.Connect("192.168.0.122", 502);
-            });
-            delay.Wait();
+                Debug.WriteLine($"Time: {DateTime.Now.ToLocalTime():hh:mm:ss.fff}\tTest parameters:");
+                Debug.Indent();
+                Debug.WriteLine($"From: {From:F3}\tTo: {To}\t\tDelta: {Delta:F3}\t\t\t\t\tDwell time: {DwellTime}sec\r\tStart delay time: {StartDelayTime}sec\tMeasurement interval: {MeasurementInterval}mSec\tStart measurement delay: {StartMeasurementDelay}sec\n");
+                Debug.Unindent();
 
-            int progressStep = 1;
-            //TestStartValue = From;
+                var delay = Task.Run(async delegate
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(StartDelayTime));
+                    mdbus.ConnectionTimeout = 5000;
+                    mdbus.Connect("192.168.0.122", 502);
+                });
+                delay.Wait();
 
-            for (double testStartValue = From; testStartValue <= To; testStartValue += Delta)
-            {
-                Timer mdbusTimer = new Timer(TimerTick, Register, TimeSpan.FromSeconds(StartMeasurementDelay), TimeSpan.FromMilliseconds(MeasurementInterval));
+                int progressStep = 1;
+                //TestStartValue = From;
 
-                Debug.WriteLine($"Time: {DateTime.Now.ToString("hh:mm:ss.fff")}\tRegister: {Register}\tTest value: {testStartValue:F3}");
+                for (double testStartValue = From; testStartValue <= To; testStartValue += Delta)
+                {
+                    Timer mdbusTimer = new Timer(TimerTick, Register, TimeSpan.FromSeconds(StartMeasurementDelay), TimeSpan.FromMilliseconds(MeasurementInterval));
+
+                    Debug.WriteLine($"Time: {DateTime.Now.ToLocalTime():hh:mm:ss.fff}\tRegister: {Register}\tTest value: {testStartValue:F3}");
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Register: {Register} --- Test value: {testStartValue:F3}\n";
 
                 // set voltage amplifiers default values.
                 OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", testStartValue, phase, nominalFrequency);
-                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", 0, 0, nominalFrequency);
-                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", 0, 0, nominalFrequency);
+                    OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", 0, 0, nominalFrequency);
+                    OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", 0, 0, nominalFrequency);
 
-                // set current amplifiers default values.
-                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", 0, 0, nominalFrequency);
-                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", 0, 0, nominalFrequency);
-                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", 0, 0, nominalFrequency);
-                
-                TurnOnCMC();
+                    // set current amplifiers default values.
+                    OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", 0, 0, nominalFrequency);
+                    OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", 0, 0, nominalFrequency);
+                    OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", 0, 0, nominalFrequency);
 
-                var t = Task.Run(async delegate
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(DwellTime));
-                    mdbusTimer.Dispose();
+                    TurnOnCMC();
 
-                    // Remember first test case and Add +1.
-                    Progress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
-                    
-                    // Progress cannot be larger than 100%
-                    if (Progress <= 1.00)
+                    var t = Task.Run(async delegate
                     {
-                        Debug.WriteLine($"\t\t\t\t\t\t\t\tMin value: {MinTestValue}\t\tMax value: {MaxTestValue}\tProgress: {Progress * 100:F2}% completed.\n");
-                    }
-                    MinTestValue = 0;
-                    MaxTestValue = 0;
-                    progressStep++;
-                });
-                t.Wait();
+                        await Task.Delay(TimeSpan.FromSeconds(DwellTime));
+                        mdbusTimer.Dispose();
+
+                        // Remember first test case and Add +1.
+                        //Progress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
+                        IoC.Commands.TestProgress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
+
+
+                        // Progress cannot be larger than 100%
+                        if (Progress <= 1.00)
+                        {
+                            Debug.WriteLine($"\t\t\t\t\t\t\t\tMin value: {MinTestValue}\t\tMax value: {MaxTestValue}\tProgress: {Progress * 100:F2}% completed.\n");
+                            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Min value: {MinTestValue} Max value: {MaxTestValue} Progress: {Progress * 100:F2}% completed.\n";
+                        }
+                        MinTestValue = 0;
+                        MaxTestValue = 0;
+                        progressStep++;
+                    });
+                    t.Wait();
+                }
+
+                Debug.WriteLine($"Time: {DateTime.Now.ToLocalTime():hh:mm:ss.fff}\tTest completed for register: {Register}\n");
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Test completed for register: {Register}.\n";
+
+                TurnOffCMC();
+                mdbus.Disconnect();
             }
-            Debug.WriteLine($"Time: {DateTime.Now.ToString("hh:mm:ss.fff")}\tTest completed for register: {Register}\n");
-           
-            TurnOffCMC();
-            mdbus.Disconnect();
+            finally
+            {
+                TurnOffCMC();
+                mdbus.Disconnect();
+            }
         }
         /// <summary>
         /// Instance of Modbus Communication library.
@@ -341,6 +355,6 @@ namespace metering.core
         /// Hold progress information per test register.
         /// </summary>
         public double Progress { get; set; }
-        
+
     }
 }

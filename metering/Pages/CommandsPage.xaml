@@ -14,8 +14,8 @@
     <StackPanel Orientation="Vertical">
         <!-- Start Test Button -->
         <!-- Only visible after the user hits "AddNewTest" button -->
-        <Viewbox Margin="10 5" 
-                 Visibility="{Binding NewTestAvailable,
+        <Viewbox Margin="10 5"
+            Visibility="{Binding NewTestAvailable,
                                       Converter={local:BooleanToVisibilityConverter},
                                       ConverterParameter=False}">
             
@@ -24,15 +24,21 @@
                 Margin="8"
                 Command="{Binding StartTestCommand}"
                 mD:ButtonProgressAssist.IsIndicatorVisible="{Binding IsConnecting}"
-                mD:ButtonProgressAssist.Value="{Binding TestProgress}" >
+                mD:ButtonProgressAssist.IndicatorBackground="Red"
+                mD:ButtonProgressAssist.IndicatorForeground="LimeGreen"
+                mD:ButtonProgressAssist.Value="{Binding TestProgress}" 
+                Background="Transparent">
 
-                <mD:PackIcon Height="24" Width="24">
+                <mD:PackIcon Height="Auto" 
+                             Width="Auto"
+                             Foreground="Black">
                     <mD:PackIcon.Style>
                         <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
                             <Setter Property="Kind" Value="Play"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsConnectionCompleted}" Value="True">
                                     <Setter Property="Kind" Value="ProgressClock"/>
+                                    <Setter Property="Background" Value="Red"/>
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>

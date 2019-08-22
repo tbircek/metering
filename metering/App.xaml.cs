@@ -141,7 +141,7 @@ namespace metering
             using (Stream stream = new IsolatedStorageFileStream("log.txt", FileMode.Append, FileAccess.Write, store))
             using (StreamWriter writer = new StreamWriter(stream))
             {
-                string entry = string.Format("{0}: {1} - {2}", message, exitCode, DateTime.Now);
+                string entry = $"{DateTime.Now.ToLocalTime()}: {exitCode} - {message}";
                 writer.WriteLine(entry);
             }
         }

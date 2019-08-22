@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Input;
@@ -27,7 +25,7 @@ namespace metering.core
         /// <summary>
         /// The register to monitor while testing.
         /// </summary>
-        public string Register { get; set; } = "0";
+        public string Register { get; set; } = "2279";
 
         /// <summary>
         /// Show test completion percentage.
@@ -42,7 +40,7 @@ namespace metering.core
         /// <summary>
         /// The time to wait until test step #1.
         /// </summary>
-        public string StartDelayTime { get; set; } = "30";
+        public string StartDelayTime { get; set; } = "1";
 
         /// <summary>
         /// How often should <see cref="Register"/> be poll.
@@ -52,17 +50,8 @@ namespace metering.core
         /// <summary>
         /// The time to wait after analog signals applied before <see cref="DwellTime"/> starts.
         /// </summary>
-        public string StartMeasurementDelay { get; set; } = "10";
+        public string StartMeasurementDelay { get; set; } = "1";
 
-        /// <summary>
-        /// The text to use Test button
-        /// </summary>
-        public string TestText { get; set; }
-
-        /// <summary>
-        /// Foreground color for the controls
-        /// </summary>
-        public string CommandForegroundColor { get; set; }
         #endregion
 
         #region Public Commands
@@ -89,7 +78,7 @@ namespace metering.core
             Thread.CurrentThread.CurrentCulture = ci;
 
             // create the command.
-            ConnectCommand = new RelayParameterizedCommand(async (parameter) => await IoC.Communication.StartCommunicationAsync(this));
+            ConnectCommand = new RelayCommand(async () => await IoC.Communication.StartCommunicationAsync());
 
         }
 
@@ -101,15 +90,6 @@ namespace metering.core
 
         #region Helpers
 
-        /// <summary>
-        /// Select all the text in the current textbox
-        /// </summary>
-        private void SelectAllText(object parameter)
-        {
-            if(!string.IsNullOrWhiteSpace(Register))
-                Register = string.Empty;
-            Debug.WriteLine("Clicked");
-        }
         #endregion
     }
 }

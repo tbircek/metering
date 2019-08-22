@@ -51,27 +51,27 @@
                     Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"/>
                 
                 <!-- Log textbox-->
-                <Viewbox 
-                    Grid.Column="3"
-                    Margin="20 5 20 5">
+                <Border Grid.Column="2"
+                        Margin="20 5 20 5"
+                        Width="Auto"
+                        Height="Auto">
 
-                    <ScrollViewer 
-                        ClipToBounds="True"
-                        VerticalScrollBarVisibility="Auto"
-                        HorizontalScrollBarVisibility="Auto">
-                        <!--local:AutoScrollToBottomProperty.Value="True"-->
+                        <ScrollViewer 
+                            ClipToBounds="True"
+                            VerticalScrollBarVisibility="Auto"
+                            HorizontalScrollBarVisibility="Auto">
                         
-                        <!-- Log textbox -->
-                        <TextBox 
-                            TextWrapping="Wrap" 
-                            BorderBrush="#FBFFFFC0"                 
-                            Text="{Binding Log, UpdateSourceTrigger=PropertyChanged}"
-                            TextAlignment="Right"
-                            IsReadOnly="True">
-                        </TextBox>
+                            <!-- Log textbox -->
+                            <TextBox 
+                                TextWrapping="Wrap" 
+                                BorderBrush="#FBFFFFC0"                 
+                                Text="{Binding Log, UpdateSourceTrigger=PropertyChanged}"
+                                TextAlignment="Left"
+                                IsReadOnly="True">
+                            </TextBox>
 
-                    </ScrollViewer>
-                </Viewbox>
+                        </ScrollViewer>
+                </Border>
             </Grid>
         </Border>        
     </Grid>

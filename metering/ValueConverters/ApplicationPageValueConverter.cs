@@ -22,7 +22,7 @@ namespace metering
                     return new NominalValuesPage();
 
                 case ApplicationPage.TestDetails:
-                    return new TestDetailsPage(parameter as TestDetailsViewModel);
+                    return new TestDetailsPage(); // parameter as TestDetailsViewModel);
 
                 default:
                     Debugger.Break();
