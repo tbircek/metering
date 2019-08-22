@@ -23,7 +23,7 @@ namespace metering.core
         public void OnPropertyChanged(string name)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(name));
-            Debug.WriteLine($"SetProperty: (name: {name}) processed successfull.");
+            Debug.WriteLine($"{DateTime.Now.ToLocalTime()}: SetProperty: (name: {name}) processed successfull.");
         }
 
         #region Helpers

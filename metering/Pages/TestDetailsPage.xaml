@@ -22,7 +22,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.InputBindings>
-            <MouseBinding MouseAction="LeftDoubleClick" local:FocusAndSelectProperty.Value="True" />
+            <MouseBinding MouseAction="LeftClick" local:FocusAndSelectProperty.Value="True" />
         </Grid.InputBindings>
 
         <!-- Analog signal values -->

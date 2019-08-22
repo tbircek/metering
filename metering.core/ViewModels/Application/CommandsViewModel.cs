@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace metering.core
 {
@@ -9,7 +10,7 @@ namespace metering.core
     {
 
         #region Public Properties
-        
+
         /// <summary>
         /// True if the user hit "+" button
         /// </summary>
@@ -35,7 +36,7 @@ namespace metering.core
         /// The command handles cancelling New Test addition view and returns default view
         /// </summary>
         public ICommand CancelNewTestCommand { get; set; }
-        
+
         /// <summary>
         /// The command to handle connecting associated Omicron Test Set
         /// and communication to the UUT
@@ -52,6 +53,20 @@ namespace metering.core
         /// </summary>
         public string CancelForegroundColor { get; set; }
 
+        /// <summary>
+        /// Set ProgressAssist IsIndicatorVisible on the floating StartTestCommand button
+        /// </summary>
+        public bool IsConnecting { get; set; }
+
+        /// <summary>
+        /// To change icon on the floating StartTestCommand button
+        /// </summary>
+        public bool IsConnectionCompleted { get; set; }
+        /// <summary>
+        /// Progress percentage of the test completion
+        /// </summary>
+        public double TestProgress { get; set; }
+
         #endregion
 
         #region Constructor
@@ -60,7 +75,7 @@ namespace metering.core
         /// Default constructor
         /// </summary>
         public CommandsViewModel()
-        {            
+        {
             // Show a new Test details page populated with the user specified/accepted values
             AddNewTestCommand = new RelayCommand(() => IoC.NominalValues.CopyNominalValues());
 
@@ -96,9 +111,12 @@ namespace metering.core
 
             // set visibility of the Command Buttons
             NewTestAvailable = false;
-            
+
             // clear Test details view model
             IoC.Application.CurrentPageViewModel = null;
+
+            TestProgress = 0d;
+            IsConnectionCompleted = false;
 
             // Show NominalValues page
             IoC.NominalValues.GetSelectedRadioButton("Voltage.AllZero");
@@ -112,18 +130,43 @@ namespace metering.core
         /// </summary>
         /// <param name="parameter">Attached self IsChecked property in the view</param>        
         private async Task ConnectOmicronAndUnit(object parameter)
-        {           
+        {
             await RunCommand(() => IoC.Communication.IsOmicronConnected, async () =>
             {
 
                 Debug.WriteLine($"register: {IoC.TestDetails.Register}");
                 Debug.WriteLine($"ipdadress: {IoC.Communication.IpAddress}");
-                
+
                 // Verify a new test available.
                 if (NewTestAvailable)
-                {                    
-                    // Pressing again same button will terminate the test
-                    NewTestAvailable = false;
+                {
+
+                    // Progress bar is visible
+                    IsConnecting = true;
+                    IsConnectionCompleted = false;
+
+                    var started = DateTime.Now;
+
+                    new DispatcherTimer(
+                        TimeSpan.FromMilliseconds(50),
+                        DispatcherPriority.Normal,
+                        new EventHandler((o, e) =>
+                        {
+                            var totalDuration = started.AddSeconds(7).Ticks - started.Ticks;
+                            var currentProgress = DateTime.Now.Ticks - started.Ticks;
+                            var currentProgressPercent = 100.0 / totalDuration * currentProgress;
+
+                            TestProgress = currentProgressPercent;
+
+                            if (TestProgress >= 100)
+                            {
+                                IsConnecting = true;
+                                TestProgress = 0;
+                                ((DispatcherTimer)o).Stop();
+                            }
+
+                        }), Dispatcher.CurrentDispatcher);
+
 
                     // get instance of Omicron Test Set
                     IoC.Communication.CMCControl = new CMCControl();
@@ -133,29 +176,34 @@ namespace metering.core
 
                     // The user click on the button 
                     // TODO: Handle Omicron open connection here.
-                    Debug.WriteLine($"TODO: Connect Omicron Test Set ... success?: {isOmicronConnected}");
+                    Debug.WriteLine($"TODO: {DateTime.Now.ToLocalTime()}: Connect Omicron Test Set ... success?: {isOmicronConnected}");
                     IoC.Communication.Log += $"{DateTime.Now.ToLocalTime()}: Connecting Omicron Test Set was {(isOmicronConnected ? " successful" : " failed")}\n";
 
                     // TODO: Handle ConnectCommand Button checked
-                    Debug.WriteLine($"TODO: Connect thru modbus protocol to {IoC.Communication.IpAddress}:{IoC.Communication.Port}");
+                    Debug.WriteLine($"TODO: {DateTime.Now.ToLocalTime()}: Connect thru modbus protocol to {IoC.Communication.IpAddress}:{IoC.Communication.Port}");
                     await Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails));
 
-                    //// Change ConnectCommand Button content to "Disconnect"
-                    //IoC.Communication.ConnectCommandContent = isOmicronConnected ? "Disconnect" : "Connect";
+                    IsConnectionCompleted = true;
+
+                    //// Pressing again same button will terminate the test
+                    //NewTestAvailable = false;
 
                 }
                 else
                 {
                     // The user wants to disconnect.
                     // TODO: Handle Omicron close connection here.
-                    Debug.WriteLine("TODO: Disconnect Omicron Test Set ...");
+                    Debug.WriteLine($"TODO: {DateTime.Now.ToLocalTime()}: Disconnect Omicron Test Set ...");
 
                     // TODO: Handle ConnectCommand Button checked
-                    Debug.WriteLine($"TODO: Disconnect modbus communication to {IoC.Communication.IpAddress}:{IoC.Communication.Port}");
+                    Debug.WriteLine($"TODO: {DateTime.Now.ToLocalTime()}: Disconnect modbus communication to {IoC.Communication.IpAddress}:{IoC.Communication.Port}");
 
                     // TODO: Verify disconnect was successful.
 
 
+                    // Progress is visible
+                    IsConnecting = false;
+                    IsConnectionCompleted = false;
                     NewTestAvailable = true;
                 }
             });

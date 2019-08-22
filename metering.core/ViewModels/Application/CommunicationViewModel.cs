@@ -85,7 +85,8 @@ namespace metering.core
         {
             if (Convert.ToInt32(IoC.TestDetails.Register) == 0)
             {
-                await Task.Run(() => MessageBox.Show("Invalid Register"));
+                // await Task.Run(() => MessageBox.Show("Invalid Register"));
+                Log += $"{DateTime.Now} Modbus communication failed. Invalid register {IoC.TestDetails.Register}";
                 IsUnitUnderTestConnected = true;
 
                 // Change Start Test Button color
@@ -120,10 +121,9 @@ namespace metering.core
                             Debug.WriteLine($"Start Test is running: Register: {Convert.ToInt32(IoC.TestDetails.Register) + i} reads {response[i]}");
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
-                        throw;
+                        Log += $"{DateTime.Now} - Modbus error: {ex.Message}";
                     }
                 }
                 else

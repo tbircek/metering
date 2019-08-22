@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:metering"
     xmlns:core="clr-namespace:metering.core;assembly=metering.core"
+    xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
     x:Class="metering.CommandsPage"
     mc:Ignorable="d">
 
@@ -17,7 +18,39 @@
                  Visibility="{Binding NewTestAvailable,
                                       Converter={local:BooleanToVisibilityConverter},
                                       ConverterParameter=False}">
-            <Button 
+            
+            <Button
+                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                Margin="8"
+                Command="{Binding StartTestCommand}"
+                mD:ButtonProgressAssist.IsIndicatorVisible="{Binding IsConnecting}"
+                mD:ButtonProgressAssist.Value="{Binding TestProgress}" >
+
+                <mD:PackIcon Height="24" Width="24">
+                    <mD:PackIcon.Style>
+                        <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                            <Setter Property="Kind" Value="Play"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsConnectionCompleted}" Value="True">
+                                    <Setter Property="Kind" Value="ProgressClock"/>
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    From="0"
+                                                    To="1"
+                                                    Duration="0:0:0.8"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </mD:PackIcon.Style>
+                </mD:PackIcon>
+            </Button>
+            <!--<Button 
                 x:Name="StartTest"
                 Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
                 Margin="1,0,0,0" 
@@ -27,7 +60,7 @@
                 IsDefault="True"
                 Command="{Binding StartTestCommand}">
 
-                <!-- Left arrow sign icon on the button-->
+                --><!-- Left arrow sign icon on the button--><!--
                 <Grid>
                     <iconPacks:PackIconFontAwesome 
                         Kind="ArrowCircleRightSolid"                        
@@ -38,7 +71,7 @@
                                      Converter={local:StringToBrushConverter}}"/>
                 </Grid>
 
-            </Button>
+            </Button>-->
         </Viewbox>
  
         <!-- Add New Test Button-->
@@ -93,5 +126,9 @@
             </Button>            
         </Viewbox>
 
+        <!-- floating action button with progress -->
+        <!--<Viewbox>-->
+           
+        <!--</Viewbox>-->
     </StackPanel>
 </local:BasePage>
