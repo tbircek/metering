@@ -259,11 +259,22 @@ namespace metering.core
                     await Task.Delay(TimeSpan.FromSeconds(StartDelayTime));
                     mdbus.ConnectionTimeout = 5000;
                     mdbus.Connect("192.168.0.122", 502);
+
+                    // Progress bar is visible
+                    IoC.Commands.IsConnecting = mdbus.GetConnected();
+                    IoC.Commands.IsConnectionCompleted = !mdbus.GetConnected();
+
+                    // change color of Cancel Command button to Green
+                    IoC.Commands.CancelForegroundColor = "00ff00";
+
                 });
+
+                // wait for modbus connection
                 delay.Wait();
 
+                // update test progress
                 int progressStep = 1;
-                //TestStartValue = From;
+                IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
 
                 for (double testStartValue = From; testStartValue <= To; testStartValue += Delta)
                 {
@@ -272,8 +283,8 @@ namespace metering.core
                     Debug.WriteLine($"Time: {DateTime.Now.ToLocalTime():hh:mm:ss.fff}\tRegister: {Register}\tTest value: {testStartValue:F3}");
                     IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Register: {Register} --- Test value: {testStartValue:F3}\n";
 
-                // set voltage amplifiers default values.
-                OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", testStartValue, phase, nominalFrequency);
+                    // set voltage amplifiers default values.
+                    OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", testStartValue, phase, nominalFrequency);
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", 0, 0, nominalFrequency);
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", 0, 0, nominalFrequency);
 
@@ -290,8 +301,8 @@ namespace metering.core
                         mdbusTimer.Dispose();
 
                         // Remember first test case and Add +1.
-                        //Progress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
-                        IoC.Commands.TestProgress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
+                        Debug.WriteLine($"{Convert.ToDouble(progressStep) / Math.Ceiling(Math.Abs(To - From) / Delta) + 1}");
+                        Progress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
 
 
                         // Progress cannot be larger than 100%
@@ -299,6 +310,7 @@ namespace metering.core
                         {
                             Debug.WriteLine($"\t\t\t\t\t\t\t\tMin value: {MinTestValue}\t\tMax value: {MaxTestValue}\tProgress: {Progress * 100:F2}% completed.\n");
                             IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Min value: {MinTestValue} Max value: {MaxTestValue} Progress: {Progress * 100:F2}% completed.\n";
+                            IoC.Commands.TestProgress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1) * 100d;
                         }
                         MinTestValue = 0;
                         MaxTestValue = 0;
@@ -312,6 +324,13 @@ namespace metering.core
 
                 TurnOffCMC();
                 mdbus.Disconnect();
+
+                // Progress bar is invisible
+                IoC.Commands.IsConnecting = mdbus.GetConnected();
+                IoC.Commands.IsConnectionCompleted = !mdbus.GetConnected();
+
+                // change color of Cancel Command button to Red
+                IoC.Commands.CancelForegroundColor = "ff0000";
             }
             finally
             {

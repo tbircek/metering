@@ -64,7 +64,7 @@ namespace metering.core
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
 
-            Log += $"{DateTime.Now.ToLocalTime()}: App Starts\n";
+            Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff}: App Starts\n";
         }
 
         #endregion
@@ -78,7 +78,7 @@ namespace metering.core
         public async Task StartCommunicationAsync()
         {
 
-            Log += $"{DateTime.Now.ToLocalTime()}: Communication starts\n";
+            Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff}: Communication starts\n";
 
             await RunCommand(() => IsUnitUnderTestConnected, async () =>
             {

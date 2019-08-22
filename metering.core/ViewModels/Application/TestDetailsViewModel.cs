@@ -50,7 +50,7 @@ namespace metering.core
         /// <summary>
         /// The time to wait after analog signals applied before <see cref="DwellTime"/> starts.
         /// </summary>
-        public string StartMeasurementDelay { get; set; } = "1";
+        public string StartMeasurementDelay { get; set; } = "5";
 
         #endregion
 

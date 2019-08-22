@@ -59,7 +59,8 @@
                         <ScrollViewer 
                             ClipToBounds="True"
                             VerticalScrollBarVisibility="Auto"
-                            HorizontalScrollBarVisibility="Auto">
+                            HorizontalScrollBarVisibility="Auto"
+                            local:AutoScrollToBottomProperty.Value="True">
                         
                             <!-- Log textbox -->
                             <TextBox 
