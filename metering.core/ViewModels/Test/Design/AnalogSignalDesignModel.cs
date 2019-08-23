@@ -28,91 +28,91 @@ namespace metering.core
                 new AnalogSignalListItemViewModel
                 {
                     SignalName = "v1",
-                    From = "100.4",
-                    To = "134.6",
-                    Delta = "4.333",
-                    Phase = "0.000",
+                    From = "100.400",
+                    To = "134.600",
+                    Delta = "104.333",
+                    Phase = "-120.000",
                     Frequency = "59.999"
                 },
                 new AnalogSignalListItemViewModel
                 {
                     SignalName = "v2",
-                    From = "100.4",
-                    To = "134.6",
-                    Delta = "4.333",
-                    Phase = "0.000",
+                    From = "100.400",
+                    To = "134.600",
+                    Delta = "104.333",
+                    Phase = "-120.000",
                     Frequency = "59.999"
                 },
                 new AnalogSignalListItemViewModel
                 {
                     SignalName = "v3",
-                    From = "100.4",
-                    To = "134.6",
-                    Delta = "4.333",
-                    Phase = "0.000",
+                    From = "100.400",
+                    To = "134.600",
+                    Delta = "104.333",
+                    Phase = "-120.000",
                     Frequency = "59.999"
                 },
                 new AnalogSignalListItemViewModel
                 {
                     SignalName = "v4",
-                    From = "100.4",
-                    To = "134.6",
-                    Delta = "4.333",
-                    Phase = "0.000",
+                    From = "100.400",
+                    To = "134.600",
+                    Delta = "104.333",
+                    Phase = "-120.000",
                     Frequency = "59.999"
                 },
                 new AnalogSignalListItemViewModel
                 {
                     SignalName = "i1",
-                    From = "40",
-                    To = "50",
-                    Delta = "0.010",
-                    Phase = "0.000",
+                    From = "100.400",
+                    To = "134.600",
+                    Delta = "104.333",
+                    Phase = "-120.000",
                     Frequency = "59.999"
                 },
                 new AnalogSignalListItemViewModel
                 {
                     SignalName = "i2",
-                    From = "40",
-                    To = "50",
-                    Delta = "0.010",
+                    From = "100.400",
+                    To = "134.600",
+                    Delta = "104.333",
                     Phase = "-120.000",
                     Frequency = "59.999"
                 },
                 new AnalogSignalListItemViewModel
                 {
                     SignalName = "i3",
-                    From = "40",
-                    To = "50",
-                    Delta = "0.010",
-                    Phase = "120.000",
+                    From = "100.400",
+                    To = "134.600",
+                    Delta = "104.333",
+                    Phase = "-120.000",
                     Frequency = "59.999"
                 },
                 new AnalogSignalListItemViewModel
                 {
                     SignalName = "i4",
-                    From = "40",
-                    To = "50",
-                    Delta = "0.010",
-                    Phase = "0.000",
+                    From = "100.400",
+                    To = "134.600",
+                    Delta = "104.333",
+                    Phase = "-120.000",
                     Frequency = "59.999"
                 },
                 new AnalogSignalListItemViewModel
                 {
                     SignalName = "i5",
-                    From = "40",
-                    To = "50",
-                    Delta = "0.010",
+                    From = "100.400",
+                    To = "134.600",
+                    Delta = "104.333",
                     Phase = "-120.000",
                     Frequency = "59.999"
                 },
                 new AnalogSignalListItemViewModel
                 {
                     SignalName = "i6",
-                    From = "40",
-                    To = "50",
-                    Delta = "0.010",
-                    Phase = "120.000",
+                    From = "100.400",
+                    To = "134.600",
+                    Delta = "104.333",
+                    Phase = "-120.000",
                     Frequency = "59.999"
                 },
             };

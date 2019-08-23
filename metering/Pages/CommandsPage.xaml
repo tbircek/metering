@@ -12,73 +12,52 @@
     mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical">
+        
         <!-- Start Test Button -->
         <!-- Only visible after the user hits "AddNewTest" button -->
-        <Viewbox Margin="10 5"
-            Visibility="{Binding NewTestAvailable,
-                                      Converter={local:BooleanToVisibilityConverter},
-                                      ConverterParameter=False}">
-            
-            <Button
-                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                 Margin="8"
                 Command="{Binding StartTestCommand}"
                 mD:ButtonProgressAssist.IsIndicatorVisible="{Binding IsConnecting}"
                 mD:ButtonProgressAssist.IndicatorBackground="Red"
-                mD:ButtonProgressAssist.IndicatorForeground="LimeGreen"
-                mD:ButtonProgressAssist.Value="{Binding TestProgress}" 
-                Background="Transparent">
-
-                <mD:PackIcon Height="Auto" 
-                             Width="Auto"
-                             Foreground="Black">
-                    <mD:PackIcon.Style>
-                        <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
-                            <Setter Property="Kind" Value="Play"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsConnectionCompleted}" Value="True">
-                                    <Setter Property="Kind" Value="ProgressClock"/>
-                                    <Setter Property="Background" Value="Red"/>
-                                    <DataTrigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation 
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    From="0"
-                                                    To="1"
-                                                    Duration="0:0:0.8"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.EnterActions>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </mD:PackIcon.Style>
-                </mD:PackIcon>
-            </Button>
-            <!--<Button 
-                x:Name="StartTest"
-                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
-                Margin="1,0,0,0" 
-                Cursor="Hand"
-                TabIndex="9"
+                mD:ButtonProgressAssist.IndicatorForeground="Black"
+                mD:ButtonProgressAssist.Minimum="0.0"
+                mD:ButtonProgressAssist.Maximum="{Binding MaximumTestCount}"
+                mD:ButtonProgressAssist.Value="{Binding TestProgress}"
                 Background="Transparent"
                 IsDefault="True"
-                Command="{Binding StartTestCommand}">
-
-                --><!-- Left arrow sign icon on the button--><!--
-                <Grid>
-                    <iconPacks:PackIconFontAwesome 
-                        Kind="ArrowCircleRightSolid"                        
-                        Padding="2" 
-                        Width="Auto"
-                        Height="Auto"
-                        Foreground="{Binding StartTestForegroundColor, 
-                                     Converter={local:StringToBrushConverter}}"/>
-                </Grid>
-
-            </Button>-->
-        </Viewbox>
+                Visibility="{Binding NewTestAvailable,
+                                    Converter={local:BooleanToVisibilityConverter},
+                                    ConverterParameter=False}">
+            
+            <!-- icon on the button-->
+            <mD:PackIcon Height="Auto" 
+                         Width="Auto"
+                         Foreground="Black">                        
+                <mD:PackIcon.Style>
+                    <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                        <Setter Property="Kind" Value="Play"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsConnectionCompleted}" Value="True">
+                                <Setter Property="Kind" Value="ProgressClock"/>
+                                <Setter Property="Background" Value="Red"/>
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty="Opacity"
+                                                From="0"
+                                                To="1"
+                                                Duration="0:0:0.8"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </mD:PackIcon.Style>
+            </mD:PackIcon>
+        </Button>
  
         <!-- Add New Test Button-->
         <!-- visible by default, invisible after the user hits "StartTest" button -->
@@ -95,7 +74,7 @@
                 IsDefault="True"
                 Command="{Binding AddNewTestCommand}">
 
-                 <!-- plus sign icon on the button--> 
+                 <!-- icon on the button--> 
                 <Grid>
                     <iconPacks:PackIconFontAwesome 
                         Kind="PlusCircleSolid"
@@ -119,7 +98,7 @@
                 IsCancel="True"
                 Command="{Binding Path=CancelNewTestCommand}">
 
-                <!-- cancel icon on the button -->
+                <!-- icon on the button -->
                 <Grid>
                 <iconPacks:PackIconFontAwesome 
                     Kind="TimesCircleSolid"                    
@@ -131,10 +110,5 @@
                 </Grid>
             </Button>            
         </Viewbox>
-
-        <!-- floating action button with progress -->
-        <!--<Viewbox>-->
-           
-        <!--</Viewbox>-->
     </StackPanel>
 </local:BasePage>

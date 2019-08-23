@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using metering.core.Resources;
@@ -206,7 +207,7 @@ namespace metering.core
                 OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_outputOff);
                 var t = Task.Run(async delegate
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(2.0));
+                    await Task.Delay(TimeSpan.FromSeconds(5.0));
                 });
                 t.Wait();
                 ReleaseOmicron();
@@ -262,7 +263,7 @@ namespace metering.core
 
                     // Progress bar is visible
                     IoC.Commands.IsConnecting = mdbus.GetConnected();
-                    IoC.Commands.IsConnectionCompleted = !mdbus.GetConnected();
+                    IoC.Commands.IsConnectionCompleted = mdbus.GetConnected();
 
                     // change color of Cancel Command button to Green
                     IoC.Commands.CancelForegroundColor = "00ff00";
@@ -274,8 +275,13 @@ namespace metering.core
 
                 // update test progress
                 int progressStep = 1;
-                IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
 
+                // report file header information
+                string message = $"Time,Register,Test Value,Min Value,Max Value\n";
+                // set maximum value for the progress bar
+                IoC.Commands.MaximumTestCount = Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
+
+                // Process test steps
                 for (double testStartValue = From; testStartValue <= To; testStartValue += Delta)
                 {
                     Timer mdbusTimer = new Timer(TimerTick, Register, TimeSpan.FromSeconds(StartMeasurementDelay), TimeSpan.FromMilliseconds(MeasurementInterval));
@@ -310,11 +316,24 @@ namespace metering.core
                         {
                             Debug.WriteLine($"\t\t\t\t\t\t\t\tMin value: {MinTestValue}\t\tMax value: {MaxTestValue}\tProgress: {Progress * 100:F2}% completed.\n");
                             IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Min value: {MinTestValue} Max value: {MaxTestValue} Progress: {Progress * 100:F2}% completed.\n";
-                            IoC.Commands.TestProgress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1) * 100d;
+                            message += $"{DateTime.Now.ToLocalTime()},{Register},{testStartValue},{MinTestValue},{MaxTestValue}";
                         }
+
+                        // log test results to a ".csv" format file
+                        LogTestResults(message, Register);
+
+                        // reset min and max test values for the next test range
                         MinTestValue = 0;
                         MaxTestValue = 0;
+
+                        // clear message for the next test values
+                        message = string.Empty;
+
+                        // increment progress
                         progressStep++;
+
+                        // increment progress bar strip
+                        IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
                     });
                     t.Wait();
                 }
@@ -322,22 +341,38 @@ namespace metering.core
                 Debug.WriteLine($"Time: {DateTime.Now.ToLocalTime():hh:mm:ss.fff}\tTest completed for register: {Register}\n");
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Test completed for register: {Register}.\n";
 
-                TurnOffCMC();
-                mdbus.Disconnect();
-
-                // Progress bar is invisible
-                IoC.Commands.IsConnecting = mdbus.GetConnected();
-                IoC.Commands.IsConnectionCompleted = !mdbus.GetConnected();
-
-                // change color of Cancel Command button to Red
-                IoC.Commands.CancelForegroundColor = "ff0000";
+                
             }
             finally
             {
                 TurnOffCMC();
                 mdbus.Disconnect();
+
+                // Progress bar is invisible
+                IoC.Commands.IsConnecting = mdbus.GetConnected();
+                IoC.Commands.IsConnectionCompleted = mdbus.GetConnected();
+
+                // change color of Cancel Command button to Red
+                IoC.Commands.CancelForegroundColor = "ff0000";
             }
         }
+
+        private void LogTestResults(string message, int Register)
+        {
+            var directory = Path.GetDirectoryName(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"metering"));
+
+            Directory.CreateDirectory(directory);
+
+            using (var fileStream = new StreamWriter(File.OpenWrite(Path.Combine(directory, $"register-{Register}-test.csv"))))
+            {
+                // find the end of the file
+                fileStream.BaseStream.Seek(0, SeekOrigin.End);
+
+                // add the message at the of the file
+                fileStream.WriteLineAsync(message);
+            }
+        }
+
         /// <summary>
         /// Instance of Modbus Communication library.
         /// </summary>

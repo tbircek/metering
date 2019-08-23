@@ -22,10 +22,10 @@
         public AnalogSignalListItemDesignModel()
         {
             SignalName = "v1";
-            From = "100.4";
-            To = "134.6";
-            Delta = "4.333";
-            Phase = "0.000";
+            From = "100.400";
+            To = "134.600";
+            Delta = "104.333";
+            Phase = "-120.000";
             Frequency = "59.999";
         }
 
