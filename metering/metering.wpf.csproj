@@ -58,8 +58,7 @@
     <StartupObject>metering.WpfApp</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\thermometer-lines.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
@@ -308,7 +307,12 @@
   <ItemGroup>
     <Resource Include="Resources\metering.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\metering2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\thermometer-lines.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

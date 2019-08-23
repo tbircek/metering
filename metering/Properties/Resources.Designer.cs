@@ -59,5 +59,15 @@ namespace metering.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon thermometer_lines {
+            get {
+                object obj = ResourceManager.GetObject("thermometer_lines", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

@@ -315,7 +315,7 @@ namespace metering.core
                         if (Progress <= 1.00)
                         {
                             Debug.WriteLine($"\t\t\t\t\t\t\t\tMin value: {MinTestValue}\t\tMax value: {MaxTestValue}\tProgress: {Progress * 100:F2}% completed.\n");
-                            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Min value: {MinTestValue} Max value: {MaxTestValue} Progress: {Progress * 100:F2}% completed.\n";
+                            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Min value: {MinTestValue} Max value: {MaxTestValue}\n";
                             message += $"{DateTime.Now.ToLocalTime()},{Register},{testStartValue},{MinTestValue},{MaxTestValue}";
                         }
 
@@ -359,7 +359,7 @@ namespace metering.core
 
         private void LogTestResults(string message, int Register)
         {
-            var directory = Path.GetDirectoryName(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"metering"));
+            var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"metering");
 
             Directory.CreateDirectory(directory);
 
