@@ -40,12 +40,6 @@
         "Entry"
         {
         "MsmKey" = "8:_1AA45DE851A4AB2F7828C00B89DE5620"
-        "OwnerKey" = "8:_56A5B85A4802495C9675BA8DB0A03A0B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1AA45DE851A4AB2F7828C00B89DE5620"
         "OwnerKey" = "8:_995F7835E43247B4A4B3A373B240BBFF"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -83,12 +77,6 @@
         {
         "MsmKey" = "8:_3E2FC78EB971BF602A8003D1FC2530B1"
         "OwnerKey" = "8:_BDF0392762C144013C9CB777A2AB465A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_56A5B85A4802495C9675BA8DB0A03A0B"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -143,12 +131,6 @@
         {
         "MsmKey" = "8:_7FF9A92EE49C8EE80441A83A37E9C149"
         "OwnerKey" = "8:_35883E44552DC17451B6E3BA9B3D0E58"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_89BE3AB1AF9EE8828F3C5D043724ADDC"
-        "OwnerKey" = "8:_56A5B85A4802495C9675BA8DB0A03A0B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -244,19 +226,7 @@
         "Entry"
         {
         "MsmKey" = "8:_C4C0C331596AA30C9D392029DEDF09CE"
-        "OwnerKey" = "8:_56A5B85A4802495C9675BA8DB0A03A0B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C4C0C331596AA30C9D392029DEDF09CE"
         "OwnerKey" = "8:_995F7835E43247B4A4B3A373B240BBFF"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CFE0BC08FFF4CC57E47F4C93A96AC61A"
-        "OwnerKey" = "8:_56A5B85A4802495C9675BA8DB0A03A0B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -449,12 +419,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_2C3CC75CB793C06D35F3ACB9B118E76C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_56A5B85A4802495C9675BA8DB0A03A0B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1237,7 +1201,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1465,7 +1429,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:metering"
         "ProductCode" = "8:{85375E0C-E16E-41AC-BCB7-106EBB9E22EA}"
-        "PackageCode" = "8:{1069E33E-3F5C-46D2-9F9B-72474EAB1ABB}"
+        "PackageCode" = "8:{5213641F-F6E0-47A6-9F92-95EFF2663736}"
         "UpgradeCode" = "8:{9DD2FC86-2B59-4CC5-BE17-757ED2D159E6}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
@@ -2012,34 +1976,6 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_56A5B85A4802495C9675BA8DB0A03A0B"
-            {
-            "SourcePath" = "8:..\\metering.core\\obj\\Debug\\metering.core.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_5D15F2A0F4B64D9AAE70ABECDF6E6CE1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{5C7027D5-4B49-4F50-8AD6-E23234C1855D}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_995F7835E43247B4A4B3A373B240BBFF"
             {
             "SourcePath" = "8:..\\metering\\obj\\Debug\\metering.exe"
