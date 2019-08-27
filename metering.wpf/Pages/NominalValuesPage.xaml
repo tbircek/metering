@@ -1,0 +1,188 @@
+﻿<local:BasePage 
+    x:TypeArguments="core:NominalValuesViewModel"
+    x:Class="metering.NominalValuesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:metering" 
+    xmlns:core="clr-namespace:metering.core;assembly=metering.core" 
+    mc:Ignorable="d" 
+    Background="Transparent">
+
+    <Grid>        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <!-- Analog Values -->
+                <ColumnDefinition />
+                <!-- Phase Values -->
+                <ColumnDefinition />
+                <!-- Test Values -->
+                <ColumnDefinition /> 
+                
+                <!-- try new group box-->
+                <!--<ColumnDefinition />-->
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0"
+                  Margin="10">
+                <GroupBox 
+                    Header="{Binding AnalogValuesHeaderTitle}" 
+                    Margin="16">
+
+                    <StackPanel Orientation="Vertical">
+                        <TextBox
+                            mD:HintAssist.Hint="{Binding NominalVoltageHint}"                        
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                            TabIndex="0"  
+                            Padding="5"
+                            HorizontalContentAlignment="Center"
+                            ToolTip="This value will apply to all Voltage related from and to values">
+                            
+                            <TextBox.Text>
+                                <Binding 
+                                    Path="NominalVoltage"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    StringFormat="{}{0:F2}"/>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBox
+                            mD:HintAssist.Hint="{Binding NominalCurrentHint}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                            TabIndex="1"  
+                            Padding="5"
+                            HorizontalContentAlignment="Center"
+                            ToolTip="This value will apply to all Current related from and to values">
+                            
+                            <TextBox.Text>
+                                <Binding 
+                                    Path="NominalCurrent"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    ConverterCulture='en-US'
+                                    StringFormat="{}{0:F2}"/>
+                            </TextBox.Text>
+
+                        </TextBox>
+
+                        <TextBox
+                            mD:HintAssist.Hint="{Binding NominalFrequencyHint}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                            TabIndex="2"  
+                            Padding="5"
+                            HorizontalContentAlignment="Center"
+                            ToolTip="This value will apply to all Frequency related from and to values">
+
+                            <TextBox.Text>
+                                <Binding 
+                                    Path="NominalFrequency"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    ConverterCulture='en-US'
+                                    StringFormat="{}{0:F3}"/>
+                            </TextBox.Text>
+
+                        </TextBox>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+
+            <Grid Grid.Column="1"
+                  Margin="10">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox 
+                    Header="{Binding VoltagePhaseHeaderTitle}" 
+                    Margin="16" 
+                    Grid.Row="0">
+                    
+                    <StackPanel Orientation="Vertical">
+                        <RadioButton 
+                            Content="{Binding VoltagePhaseOptionZero}"
+                            GroupName="voltage"
+                            IsChecked="True"
+                            Padding="5"
+                            TabIndex="3"
+                            VerticalContentAlignment="Center" 
+                            Command="{Binding RadioButtonCommand}" 
+                            CommandParameter="Voltage.AllZero"
+                            ToolTip="All voltage phases will be zero"/>
+
+                        <RadioButton 
+                            Content="{Binding VoltagePhaseOptionBalanced}"
+                            GroupName="voltage"
+                            Padding="5"
+                            TabIndex="4"
+                            VerticalContentAlignment="Center" 
+                            Command="{Binding RadioButtonCommand}" 
+                            CommandParameter="Voltage.Balanced"
+                            ToolTip="The voltage phases will be balanced at 0°, -120°, 120°)"/>
+
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox 
+                    Header="{Binding CurrentPhaseHeaderTitle}" 
+                    Margin="16" 
+                    Grid.Row="1">
+                                        
+                    <StackPanel>
+                        <RadioButton 
+                            Content="{Binding CurrentPhaseOptionZero}"
+                            GroupName="current"
+                            IsChecked="True"
+                            Padding="5"
+                            TabIndex="5"
+                            VerticalContentAlignment="Center" 
+                            Command="{Binding RadioButtonCommand}" 
+                            CommandParameter="Current.AllZero"
+                            ToolTip="All current phases will be zero"/>
+
+                        <RadioButton 
+                            Content="{Binding CurrentPhaseOptionBalanced}"
+                            GroupName="current"
+                            Padding="5"
+                            TabIndex="6"
+                            VerticalContentAlignment="Center" 
+                            Command="{Binding RadioButtonCommand}" 
+                            CommandParameter="Current.Balanced"
+                            ToolTip="The current phases will be balanced at 0°, -120°, 120°)"/>
+
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+
+            <Grid Grid.Column="2"
+                  Margin="10">
+                <GroupBox 
+                    Header="{Binding TestValuesHeaderTitle}" 
+                    Margin="16">
+
+                    <StackPanel>
+                        <TextBox
+                            mD:HintAssist.Hint="{Binding NominalDeltaHint}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                            TabIndex="7"  
+                            Padding="5"                   
+                            HorizontalContentAlignment="Center"
+                            ToolTip="This value will increment all test steps per specified amount">
+                            
+                            <TextBox.Text>
+                                <Binding 
+                                    Path="NominalDelta"
+                                    UpdateSourceTrigger="PropertyChanged"
+                                    ConverterCulture='en-US'
+                                    StringFormat="{}{0:F2}"/>
+                            </TextBox.Text>
+
+                        </TextBox>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </Grid>
+    </Grid>
+</local:BasePage>

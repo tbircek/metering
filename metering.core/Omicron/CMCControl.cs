@@ -90,7 +90,7 @@ namespace metering.core
         public int DeviceID { get; set; }
 
         /// <summary>
-        /// Omicron Test Set debuggin log levels.
+        /// Omicron Test Set debugging log levels.
         /// </summary>
         public enum LogLevels : short { None, Level1, Level2, Level3, };
 
@@ -123,7 +123,7 @@ namespace metering.core
 
             if (string.IsNullOrWhiteSpace(deviceList))
             {
-                Debug.WriteLine("Unable to find any device attach to this computer");
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Unable to find any device attach to this computer\n";
                 return false;
             }
 
@@ -135,6 +135,8 @@ namespace metering.core
 
             DeviceID = Convert.ToInt32(extract.Parameters(1, deviceList));
             CMEngine.DevLock(DeviceID);
+
+            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connecting device: {extract.Parameters(2, deviceList)}\n";
 
             // Searches for external Omicron amplifiers and returns a list of IDs.
             // Future use.
@@ -160,7 +162,7 @@ namespace metering.core
                 OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_voltage, maxVoltageMagnitude));
                 OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_current, maxCurrentMagnitude));
 
-                // change pmode.
+                // change power mode.
                 OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_pmode);
 
                 //// set voltage amplifiers default values.
@@ -177,6 +179,7 @@ namespace metering.core
             catch (Exception err)
             {
                 Debug.WriteLine($"initial setup::Exception InnerException is : {err.Message}");
+                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {err.Message}\n";
             }
         }
 
@@ -194,11 +197,12 @@ namespace metering.core
             catch (Exception err)
             {
                 Debug.WriteLine($"release Omicron::Exception InnerException is : {err.Message}");
+                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\trelease Omicron: error detected\n";
             }
         }
 
         /// <summary>
-        /// Turns off outputs of Omicron Test Set.
+        /// Turns off outputs of Omicron Test Set and release it.
         /// </summary>
         public void TurnOffCMC()
         {
@@ -215,6 +219,7 @@ namespace metering.core
             catch (Exception err)
             {
                 Debug.WriteLine($"turnOffCMC setup::Exception InnerException is : {err.Message}");
+                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOffCMC setup: error detected\n";
             }
         }
 
@@ -225,11 +230,14 @@ namespace metering.core
         {
             try
             {
+                // Send command to Turn On Analog Outputs
                 OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_outputOn);
+                Debug.WriteLine( $"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: turnOnCMC setup: started\t");
             }
             catch (Exception err)
             {
                 Debug.WriteLine($"turnONCMC setup::Exception InnerException is : {err.Message}");
+                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOnCMC setup: error detected\n";
             }
         }
 
@@ -239,25 +247,26 @@ namespace metering.core
         /// <param name="Register">Modbus register to monitor.</param>
         /// <param name="From">Test start point.</param>
         /// <param name="To">Test stop point.</param>
-        /// <param name="Delta">Test interval magnatitude point.</param>
+        /// <param name="Delta">Test interval magnitude point.</param>
         /// <param name="DwellTime">Test interval time point.</param>
         /// <param name="MeasurementDuration">Overall test time for this particular register.</param>
         /// <param name="StartDelayTime">Wait time to stay in chamber room before a test magnitude applied.</param>
         /// <param name="MeasurementInterval">Specifies register reading interval.</param>
         /// <param name="StartMeasurementDelay">Wait time after a test magnitude applied.</param>
-        public async Task TestSample(int Register, double From, double To, double Delta, double DwellTime, double MeasurementDuration, double StartDelayTime, double MeasurementInterval, double StartMeasurementDelay)
+        public async Task TestSample(int Register, double From, double To, double Delta, double DwellTime, double MeasurementDuration, double StartDelayTime, double MeasurementInterval, double StartMeasurementDelay, string message)
         {
 
             try
             {
-                Debug.WriteLine($"Time: {DateTime.Now.ToLocalTime():hh:mm:ss.fff}\tTest parameters:");
+                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tTest parameters:");
                 Debug.Indent();
-                Debug.WriteLine($"From: {From:F3}\tTo: {To}\t\tDelta: {Delta:F3}\t\t\t\t\tDwell time: {DwellTime}sec\r\tStart delay time: {StartDelayTime}sec\tMeasurement interval: {MeasurementInterval}mSec\tStart measurement delay: {StartMeasurementDelay}sec\n");
+                Debug.WriteLine($"From: {From:F3}\tTo: {To}\t\tDelta: {Delta:F3}\t\t\t\t\tDwell time: {DwellTime}sec\r\tStart delay time: {StartDelayTime}min\tMeasurement interval: {MeasurementInterval}mSec\tStart measurement delay: {StartMeasurementDelay}sec\n");
                 Debug.Unindent();
-
+                
+                // Wait StartDelayTime to start Modbus communication
                 var delay = Task.Run(async delegate
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(StartDelayTime));
+                    await Task.Delay(TimeSpan.FromMinutes(StartDelayTime));
                     mdbus.ConnectionTimeout = 5000;
                     mdbus.Connect("192.168.0.122", 502);
 
@@ -276,8 +285,9 @@ namespace metering.core
                 // update test progress
                 int progressStep = 1;
 
-                // report file header information
-                string message = $"Time,Register,Test Value,Min Value,Max Value\n";
+                // report file id to distinguish between test results 
+                string fileId = $"{DateTime.Now.ToLocalTime():MM_dd_yy_hh_mm}";
+
                 // set maximum value for the progress bar
                 IoC.Commands.MaximumTestCount = Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
 
@@ -286,8 +296,8 @@ namespace metering.core
                 {
                     Timer mdbusTimer = new Timer(TimerTick, Register, TimeSpan.FromSeconds(StartMeasurementDelay), TimeSpan.FromMilliseconds(MeasurementInterval));
 
-                    Debug.WriteLine($"Time: {DateTime.Now.ToLocalTime():hh:mm:ss.fff}\tRegister: {Register}\tTest value: {testStartValue:F3}");
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Register: {Register} --- Test value: {testStartValue:F3}\n";
+                    Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {Register}\tTest value: {testStartValue:F3}");
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {Register} --- Test value: {testStartValue:F3}\n";
 
                     // set voltage amplifiers default values.
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", testStartValue, phase, nominalFrequency);
@@ -299,8 +309,10 @@ namespace metering.core
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", 0, 0, nominalFrequency);
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", 0, 0, nominalFrequency);
 
+                    // Turn On Omicron Analog Outputs per the user input
                     TurnOnCMC();
 
+                    // Start reading the user specified Register
                     var t = Task.Run(async delegate
                     {
                         await Task.Delay(TimeSpan.FromSeconds(DwellTime));
@@ -315,12 +327,12 @@ namespace metering.core
                         if (Progress <= 1.00)
                         {
                             Debug.WriteLine($"\t\t\t\t\t\t\t\tMin value: {MinTestValue}\t\tMax value: {MaxTestValue}\tProgress: {Progress * 100:F2}% completed.\n");
-                            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Min value: {MinTestValue} Max value: {MaxTestValue}\n";
-                            message += $"{DateTime.Now.ToLocalTime()},{Register},{testStartValue},{MinTestValue},{MaxTestValue}";
+                            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Min value: {MinTestValue} Max value: {MaxTestValue}\n";
+                            message += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{Register},{testStartValue},{MinTestValue},{MaxTestValue}";
                         }
 
                         // log test results to a ".csv" format file
-                        LogTestResults(message, Register);
+                        LogTestResults(message, Register, From, To, fileId);
 
                         // reset min and max test values for the next test range
                         MinTestValue = 0;
@@ -335,35 +347,62 @@ namespace metering.core
                         // increment progress bar strip
                         IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
                     });
+
+                    // wait for the timer to expire
                     t.Wait();
                 }
 
-                Debug.WriteLine($"Time: {DateTime.Now.ToLocalTime():hh:mm:ss.fff}\tTest completed for register: {Register}\n");
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff} - Test completed for register: {Register}.\n";
-
-                
+                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tTest completed for register: {Register}\n");
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed for register: {Register}.\n";                
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tException: {ex.Message}\n");
             }
             finally
             {
-                TurnOffCMC();
-                mdbus.Disconnect();
-
-                // Progress bar is invisible
-                IoC.Commands.IsConnecting = mdbus.GetConnected();
-                IoC.Commands.IsConnectionCompleted = mdbus.GetConnected();
-
-                // change color of Cancel Command button to Red
-                IoC.Commands.CancelForegroundColor = "ff0000";
+                // Trying to stop the app gracefully.
+                await Task.Run(() => ProcessErrors());
             }
         }
 
-        private void LogTestResults(string message, int Register)
+        /// <summary>
+        /// Handles errors and stops the app gracefully.
+        /// </summary>
+        private void ProcessErrors()
         {
+            // Turn off outputs of Omicron Test Set and release it.
+            TurnOffCMC();
+
+            // Disconnect Modbus Communication
+            mdbus.Disconnect();
+
+            // Progress bar is invisible
+            IoC.Commands.IsConnecting = mdbus.GetConnected();
+            IoC.Commands.IsConnectionCompleted = mdbus.GetConnected();
+
+            // change color of Cancel Command button to Red
+            IoC.Commands.CancelForegroundColor = "ff0000";
+        }
+
+        /// <summary>
+        /// Logs test results
+        /// </summary>
+        /// <param name="message">test values to write in to a file</param>
+        /// <param name="Register">the Register number read during the test</param>
+        /// <param name="From">the start value of the test step</param>
+        /// <param name="To">the end value of the test step</param>
+        /// <param name="fileId">the test start time to add the end of the report file name</param>
+        private void LogTestResults(string message, int Register, double From, double To, string fileId)
+        {
+            // specify a "metering" that under the current user's "MyDocuments" folder
             var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"metering");
 
+            // generate the folder
             Directory.CreateDirectory(directory);
 
-            using (var fileStream = new StreamWriter(File.OpenWrite(Path.Combine(directory, $"register-{Register}-test.csv"))))
+            // generate a file and a fileStream to write the test results
+            using (var fileStream = new StreamWriter(File.OpenWrite(Path.Combine(directory, $"{Register}_{From:F3}-{To:F3}_{fileId}.csv"))))
             {
                 // find the end of the file
                 fileStream.BaseStream.Seek(0, SeekOrigin.End);
@@ -377,31 +416,42 @@ namespace metering.core
         /// Instance of Modbus Communication library.
         /// </summary>
         ModbusClient mdbus = new ModbusClient();
+
         /// <summary>
         /// Holds minimum value for test register.
         /// </summary>
         public int MinTestValue { get; set; }
+
         /// <summary>
         /// Holds minimum value for test register.
         /// </summary>
         public int MaxTestValue { get; set; }
+
         /// <summary>
         /// Allows to read test register values specified by "Measurement Interval".
         /// </summary>
         private void TimerTick(object Register)
         {
-            int register = Convert.ToInt32(Register);
-            int[] serverResponse = Task.Factory.StartNew(() => mdbus.ReadHoldingRegisters(register, 1)).Result;
-            for (int i = 0; i < serverResponse.Length; i++)
+            try
             {
-                if (MinTestValue > serverResponse[i] || MinTestValue == 0)
+                int register = Convert.ToInt32(Register);
+                int[] serverResponse = Task.Factory.StartNew(() => mdbus.ReadHoldingRegisters(register, 1)).Result;
+                for (int i = 0; i < serverResponse.Length; i++)
                 {
-                    MinTestValue = serverResponse[i];
+                    if (MinTestValue > serverResponse[i] || MinTestValue == 0)
+                    {
+                        MinTestValue = serverResponse[i];
+                    }
+                    if (MaxTestValue < serverResponse[i] || MaxTestValue == 0)
+                    {
+                        MaxTestValue = serverResponse[i];
+                    }
                 }
-                if (MaxTestValue < serverResponse[i] || MaxTestValue == 0)
-                {
-                    MaxTestValue = serverResponse[i];
-                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: show error once and terminate connection
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.\n";
             }
         }
 

@@ -6,7 +6,6 @@
     /// </summary>
     public class ApplicationViewModel: BaseViewModel
     {
-
         #region Public Properties
 
         /// <summary>

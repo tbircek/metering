@@ -23,6 +23,11 @@ namespace metering.core
         public ObservableCollection<AnalogSignalListItemViewModel> AnalogSignals { get; set; }
 
         /// <summary>
+        /// Provides a hint text for the <see cref="Register"/> textbox
+        /// </summary>
+        public string RegisterHint { get; set; } = Resources.Strings.header_register;
+
+        /// <summary>
         /// The register to monitor while testing.
         /// </summary>
         public string Register { get; set; } = "2279";
@@ -33,9 +38,19 @@ namespace metering.core
         public string Progress { get; set; } = "0.0";
 
         /// <summary>
+        /// Provides a hint text for the <see cref="DwellTime"/> textbox
+        /// </summary>
+        public string DwellTimeHint { get; set; } = Resources.Strings.header_dwell_time;
+
+        /// <summary>
         /// How long should <see cref="Register"/> be poll.
         /// </summary>
         public string DwellTime { get; set; } = "120";
+
+        /// <summary>
+        /// Provides a hint text for the <see cref="StartDelayTime"/> textbox
+        /// </summary>
+        public string StartDelayTimeHint { get; set; } = Resources.Strings.header_start_delay_time;
 
         /// <summary>
         /// The time to wait until test step #1.
@@ -43,9 +58,19 @@ namespace metering.core
         public string StartDelayTime { get; set; } = "1";
 
         /// <summary>
+        /// Provides a hint text for the <see cref="MeasurementInterval"/> textbox
+        /// </summary>
+        public string MeasurementIntervalHint { get; set; } = Resources.Strings.header_measurement_interval;
+
+        /// <summary>
         /// How often should <see cref="Register"/> be poll.
         /// </summary>
         public string MeasurementInterval { get; set; } = "100";
+
+        /// <summary>
+        /// Provides a hint text for the <see cref="StartMeasurementDelay"/> textbox
+        /// </summary>
+        public string StartMeasurementDelayHint { get; set; } = Resources.Strings.header_start_measurement_delay;
 
         /// <summary>
         /// The time to wait after analog signals applied before <see cref="DwellTime"/> starts.

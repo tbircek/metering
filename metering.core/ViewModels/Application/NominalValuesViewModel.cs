@@ -16,9 +16,24 @@ namespace metering.core
         #region Public Properties
 
         /// <summary>
+        /// Group box title for Nominal Analog Values
+        /// </summary>
+        public string AnalogValuesHeaderTitle { get; set; } = Resources.Strings.global_nominal_analog_header;
+
+        /// <summary>
+        /// Hint for the Nominal Voltage text entry
+        /// </summary>
+        public string NominalVoltageHint { get; set; } = Resources.Strings.global_nominal_voltage;
+
+        /// <summary>
         /// Default Voltage magnitude to use through out the test
         /// </summary>
         public string NominalVoltage { get; set; } = "3.333";
+
+        /// <summary>
+        /// Hint for the Nominal Current text entry
+        /// </summary>
+        public string NominalCurrentHint { get; set; } = Resources.Strings.global_nominal_current;
 
         /// <summary>
         /// Default Current magnitude to use through out the test
@@ -26,10 +41,45 @@ namespace metering.core
         public string NominalCurrent { get; set; } = "100.0";
 
         /// <summary>
+        /// Hint for the Nominal Frequency text entry
+        /// </summary>
+        public string NominalFrequencyHint { get; set; } = Resources.Strings.global_nominal_frequency;
+
+        /// <summary>
         /// Default Frequency magnitude to use through out the test
         /// </summary>
         public string NominalFrequency { get; set; } = "60.000";
 
+        /// <summary>
+        /// Group box title for Voltage Phase options
+        /// </summary>
+        public string VoltagePhaseHeaderTitle { get; set; } = Resources.Strings.global_nominal_phase_voltage;
+
+        /// <summary>
+        /// Content of the Nominal Voltage Phase 0°
+        /// </summary>
+        public string VoltagePhaseOptionZero { get; set; } = Resources.Strings.global_nominal_phase_zero;
+        
+        /// <summary>
+        /// Content of the Nominal Voltage Phase Balanced
+        /// </summary>
+        public string VoltagePhaseOptionBalanced { get; set; } = Resources.Strings.global_nominal_phase_balance;
+
+        /// <summary>
+        /// Group box title for Current Phase options
+        /// </summary>
+        public string CurrentPhaseHeaderTitle { get; set; } = Resources.Strings.global_nominal_phase_current;
+
+        /// <summary>
+        /// Content of the Nominal Current Phase 0°
+        /// </summary>
+        public string CurrentPhaseOptionZero { get; set; } = Resources.Strings.global_nominal_phase_zero;
+
+        /// <summary>
+        /// Content of the Nominal Current Phase Balanced
+        /// </summary>
+        public string CurrentPhaseOptionBalanced { get; set; } = Resources.Strings.global_nominal_phase_balance;
+        
         /// <summary>
         /// Default Voltage phase to use through out the test
         /// </summary>
@@ -39,6 +89,16 @@ namespace metering.core
         /// Default Current phase to use through out the test
         /// </summary>
         public string SelectedCurrentPhase { get; set; } = "AllZero";
+
+        /// <summary>
+        /// Group box title for Test Values
+        /// </summary>
+        public string TestValuesHeaderTitle { get; set; } = Resources.Strings.global_nominal_test_values;
+
+        /// <summary>
+        /// Content of the Nominal Delta
+        /// </summary>
+        public string NominalDeltaHint { get; set; } = Resources.Strings.global_nominal_delta;
 
         /// <summary>
         /// Default Delta value to use through out the test

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO.Ports;
-using EasyModbus;
 
 namespace metering.core
 {
@@ -30,10 +26,10 @@ namespace metering.core
             {
                 modbusClient = new EasyModbus.ModbusClient();
             }
-            catch (EasyModbus.Exceptions.ModbusException)
+            catch (EasyModbus.Exceptions.ModbusException ex)
             {
-
-                throw;
+                // TODO: Log this error in to log file.
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: ModbusException error. {ex.Message}.\n";
             }
         }
 
@@ -50,8 +46,8 @@ namespace metering.core
             }
             catch (EasyModbus.Exceptions.ConnectionException)
             {
-
-                throw;
+                // TODO: Log this error in to log file.
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connection error. Please check connection.\n";
             }
         }
 
@@ -176,10 +172,10 @@ namespace metering.core
             {
                 modbusClient.Connect();
             }
-            catch (EasyModbus.Exceptions.ConnectionException)
+            catch (EasyModbus.Exceptions.ConnectionException ex)
             {
-
-                throw;
+                // TODO: Log this error in to log file.
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connection error. {ex.Message}.\n";
             }
             
         }
@@ -195,10 +191,10 @@ namespace metering.core
             {
                 modbusClient.Connect(ipAddress, port);
             }
-            catch (EasyModbus.Exceptions.ConnectionException)
+            catch (EasyModbus.Exceptions.ConnectionException ex)
             {
-
-                throw;
+                // TODO: Log this error in to log file.
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connection error. {ex.Message}.\n";
             }
         }
 
@@ -220,10 +216,11 @@ namespace metering.core
                     return modbusClient.ReadHoldingRegisters(startingAddress - 1, quantity);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                // TODO: Log this error in to log file.
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception occurred. {ex.Message}.\n";
+                return null;
             }
         }
 

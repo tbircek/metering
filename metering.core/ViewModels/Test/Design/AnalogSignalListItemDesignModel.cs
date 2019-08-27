@@ -21,11 +21,17 @@
         /// </summary>
         public AnalogSignalListItemDesignModel()
         {
+            SignalNameHint = Resources.Strings.header_signal;
             SignalName = "v1";
+            FromHint = Resources.Strings.header_from;
             From = "100.400";
+            ToHint = Resources.Strings.header_to;
             To = "134.600";
+            DeltaHint = Resources.Strings.header_delta;
             Delta = "104.333";
+            PhaseHint = Resources.Strings.header_phase;
             Phase = "-120.000";
+            FrequencyHint = Resources.Strings.header_frequency;
             Frequency = "59.999";
         }
 

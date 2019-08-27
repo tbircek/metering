@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.705
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metering.wpf", "metering\metering.wpf.csproj", "{512AB3D9-59EB-4831-93DA-7AA4067D3B14}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metering.tests", "meteringspecs\metering.tests.csproj", "{27DDFD52-DD2D-4D48-902B-580A21712DFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metering.wpf", "metering.wpf\metering.wpf.csproj", "{512AB3D9-59EB-4831-93DA-7AA4067D3B14}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{240C1DC5-3646-47CC-84CA-D08498CF7F0B}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,7 +12,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metering.core", "metering.core\metering.core.csproj", "{5C7027D5-4B49-4F50-8AD6-E23234C1855D}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{DD80BEC8-EF5D-47E1-9CEB-0AAEA4F3F09A}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "metering.setup\Setup.vdproj", "{DD80BEC8-EF5D-47E1-9CEB-0AAEA4F3F09A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5C7027D5-4B49-4F50-8AD6-E23234C1855D} = {5C7027D5-4B49-4F50-8AD6-E23234C1855D}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metering.tests", "metering.test\metering.tests.csproj", "{27DDFD52-DD2D-4D48-902B-580A21712DFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,10 +29,6 @@ Global
 		{512AB3D9-59EB-4831-93DA-7AA4067D3B14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{512AB3D9-59EB-4831-93DA-7AA4067D3B14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{512AB3D9-59EB-4831-93DA-7AA4067D3B14}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27DDFD52-DD2D-4D48-902B-580A21712DFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27DDFD52-DD2D-4D48-902B-580A21712DFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27DDFD52-DD2D-4D48-902B-580A21712DFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27DDFD52-DD2D-4D48-902B-580A21712DFE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C7027D5-4B49-4F50-8AD6-E23234C1855D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5C7027D5-4B49-4F50-8AD6-E23234C1855D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C7027D5-4B49-4F50-8AD6-E23234C1855D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -38,6 +37,10 @@ Global
 		{DD80BEC8-EF5D-47E1-9CEB-0AAEA4F3F09A}.Debug|Any CPU.Build.0 = Debug
 		{DD80BEC8-EF5D-47E1-9CEB-0AAEA4F3F09A}.Release|Any CPU.ActiveCfg = Release
 		{DD80BEC8-EF5D-47E1-9CEB-0AAEA4F3F09A}.Release|Any CPU.Build.0 = Release
+		{27DDFD52-DD2D-4D48-902B-580A21712DFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27DDFD52-DD2D-4D48-902B-580A21712DFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27DDFD52-DD2D-4D48-902B-580A21712DFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27DDFD52-DD2D-4D48-902B-580A21712DFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

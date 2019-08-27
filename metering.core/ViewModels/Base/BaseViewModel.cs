@@ -7,10 +7,19 @@ using System.Threading.Tasks;
 namespace metering.core
 {
     /// <summary>
-    /// Base view model provides comman functionality across viewmodels
+    /// Base view model provides command functionality across view models
     /// </summary>
     public class BaseViewModel : INotifyPropertyChanged
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Application title with version value
+        /// </summary>
+        public string AppTitle { get; private set; } = $"{Resources.Strings.Title} (v{System.Reflection.Assembly.GetEntryAssembly().GetName().Version})";
+
+        #endregion
+
         /// <summary>
         /// the event when any property changed.
         /// </summary>
@@ -23,7 +32,7 @@ namespace metering.core
         public void OnPropertyChanged(string name)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(name));
-            Debug.WriteLine($"{DateTime.Now.ToLocalTime()}: SetProperty: (name: {name}) processed successfull.");
+            Debug.WriteLine($"{DateTime.Now.ToLocalTime()}: SetProperty: (name: {name}) processed successfully.");
         }
 
         #region Helpers
@@ -35,7 +44,7 @@ namespace metering.core
         /// When the action completed the flag set to false
         /// </summary>
         /// <param name="updatingFlag">defines if command is running</param>
-        /// <param name="action">the action to be run while the command is alread not running </param>
+        /// <param name="action">the action to be run while the command is already not running </param>
         /// <returns></returns>
         protected async Task RunCommand (Expression<Func<bool>> updatingFlag, Func<Task> action)
         {

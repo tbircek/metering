@@ -1,0 +1,81 @@
+﻿<local:BasePage
+    x:TypeArguments="core:CommunicationViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:metering" 
+    xmlns:core="clr-namespace:metering.core;assembly=metering.core" 
+    x:Class="metering.CommunicationPage"    
+    mc:Ignorable="d">
+  
+    <Grid>
+        <Border             
+            Margin="10">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <!-- IpAddress Text box-->
+                    <ColumnDefinition Width="Auto"/>
+
+                    <!-- Port Number text box-->
+                    <ColumnDefinition Width="Auto"/>
+
+                    <!-- Log text box-->
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- IPADDRESS text box -->
+                <TextBox
+                    Grid.Column="0"
+                    mD:HintAssist.Hint="{Binding IpAddressHint}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="0" 
+                    Padding="5 5 5 5"
+                    Margin="15 5 5 5"
+                    FontSize="16"
+                    ToolTip="Enter IpAddress of the unit under the test"
+                    Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <!-- PORT text box -->
+                <TextBox
+                    Grid.Column="1"
+                    mD:HintAssist.Hint="{Binding PortHint}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    TabIndex="1"  
+                    Padding="5 5 5 5"
+                    Margin="15 5 15 5"
+                    FontSize="16"
+                    ToolTip="Enter Port number of the unit under the test"
+                    Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"/>
+                
+                <!-- Log text box-->
+                <Border Grid.Column="2"
+                        Margin="5 5 20 5"
+                        Width="Auto"
+                        Height="Auto"
+                        HorizontalAlignment="Right">
+
+                        <ScrollViewer 
+                            ClipToBounds="True"
+                            VerticalScrollBarVisibility="Auto"
+                            HorizontalScrollBarVisibility="Auto"
+                            local:AutoScrollToBottomProperty.Value="True">
+                        
+                            <!-- Log text box -->
+                        <TextBox
+                            Padding="5"
+                            TextWrapping="Wrap"               
+                            Text="{Binding Log, UpdateSourceTrigger=PropertyChanged}"
+                            TextAlignment="Left"
+                            IsReadOnly="True"
+                            ToolTip="The information about test process and more">
+                        </TextBox>
+
+                        </ScrollViewer>
+                </Border>
+            </Grid>
+        </Border>        
+    </Grid>
+</local:BasePage>

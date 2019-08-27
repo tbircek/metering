@@ -1,4 +1,5 @@
 *.dll
+*gitignore
 
 #ignore thumbnails created by windows
 Thumbs.db
@@ -30,4 +31,9 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 .vs*
 /UpgradeLog*
-packages*
+packages/
+/metering.core/Resources/meteringBackground.png
+/metering.core/Resources/metering.ico
+/metering.core/Resources/111.png
+/metering.core/Resources/11.png
+/metering.core/Resources/1.png

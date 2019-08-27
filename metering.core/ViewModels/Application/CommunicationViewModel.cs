@@ -9,7 +9,6 @@ namespace metering.core
 {
     public class CommunicationViewModel : BaseViewModel
     {
-        // TODO: Add a model for "Connect" button 
         // TODO: squirrel.windows update tool
         // TODO: Remove ModbusClient to its own project
         // TODO: Remove CMCControl to its own project
@@ -26,9 +25,20 @@ namespace metering.core
         public CMCControl CMCControl { get; set; }
 
         /// <summary>
+        /// Hint value for Ip Address textbox
+        /// </summary>
+        public string IpAddressHint { get; set; } = Resources.Strings.tab_home_ipaddress;
+
+        /// <summary>
         /// ipaddress of the test unit.
         /// </summary>
         public string IpAddress { get; set; } = "192.168.0.122";
+
+
+        /// <summary>
+        /// Hint value for Port textbox
+        /// </summary>
+        public string PortHint { get; set; } = Resources.Strings.tab_home_port;
 
         /// <summary>
         /// port number of communication port
@@ -64,7 +74,7 @@ namespace metering.core
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
 
-            Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff}: App Starts\n";
+            Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Application Starts\n";
         }
 
         #endregion
@@ -76,17 +86,20 @@ namespace metering.core
         /// Communication page.
         /// </summary>
         public async Task StartCommunicationAsync()
-        {
-
-            Log += $"{DateTime.Now.ToLocalTime():hh:mm:ss.fff}: Communication starts\n";
-
+        {            
+            // start point of all test steps with the first mouse click and it will ignore subsequent mouse clicks
             await RunCommand(() => IsUnitUnderTestConnected, async () =>
             {
                 try
                 {
+                    // update the user
+                    Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Communication starts\n";
+
                     // get new construct of CMCControl
                     CMCControl = new CMCControl
                     {
+                        // TODO: this code needs to move its own project and access through dependency injection
+                        // generate new Omicron Test engine
                         CMEngine = new CMEngine()
                     };
 
@@ -97,28 +110,42 @@ namespace metering.core
                         // perform initial set up on CMCEngine
                         CMCControl.InitialSetup();
 
+                        // Is there Omicron Test Set attached to this app?
                         if (CMCControl.DeviceID > 0)
-                        {                           
+                        {
+                            // Run the test schedule per the user input
                             await CMCControl.TestSample(
+                                         // communication register to retrieve information from
                                          Register: Convert.ToInt32(IoC.TestDetails.Register),
+                                         // start of the test steps value
                                          From: Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].From),
+                                         // end of the test steps value
                                          To: Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].To),
+                                         // increment of the steps
                                          Delta: Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Delta),
+                                         // duration of the test steps
                                          DwellTime: Convert.ToDouble(IoC.TestDetails.DwellTime),
+                                         // currently not used
                                          MeasurementDuration: 0d,
                                          StartDelayTime: Convert.ToDouble(IoC.TestDetails.StartDelayTime),
+                                         // interval to read the register through communication protocol
                                          MeasurementInterval: Convert.ToDouble(IoC.TestDetails.MeasurementInterval),
-                                         StartMeasurementDelay: Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)
+                                         // Delay reading of the register to prevent out of range values due to ramp up
+                                         StartMeasurementDelay: Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay),
+                                         // excel header values for reporting.
+                                         message: $"Time,Register,Test Value,Min Value,Max Value\n"
                             );
 
                         }
                         else
                         {
+                            Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: Omicron Test Set ID is a zero\n";
                         }
                     }
                     else
                     {
                         Debug.WriteLine("Find no Omicron");
+                        Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: There is no attached Omicron Test Set. Please attached a Omicron Test Set before test\n";
                     }
 
 
@@ -128,63 +155,6 @@ namespace metering.core
 
                     Debug.WriteLine(ex.Message);
                 }
-
-                //// open communication channel
-                //// TODO: ModbusClient moves to its own project
-                //if (ModbusClient == null)
-                //    ModbusClient = new ModbusClient
-                //    {
-                //        IpAddress = this.IpAddress,
-                //        Port = Convert.ToInt32(this.Port),
-                //        ConnectionTimeout = 20000,
-                //    };
-
-                //if (!ModbusClient.GetConnected())
-                //{
-                //    try
-                //    {
-                //        ModbusClient.Connect();
-
-                //        // await if the server is connected
-                //        bool isUUTConnected = await Task.Factory.StartNew(() => ModbusClient.GetConnected());
-
-                //        int[] response = ModbusClient.ReadHoldingRegisters(Convert.ToInt32(IoC.TestDetails.Register), 1);
-
-                //        for (int i = 0; i < response.Length; i++)
-                //        {
-                //            Debug.WriteLine($"Start Test is running: Register: {Convert.ToInt32(IoC.TestDetails.Register) + i} reads {response[i]}");
-                //        }
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        // update modbus connection status
-                //        IsUnitUnderTestConnected = false;
-
-                //        // Change Start Test Button color
-                //        IoC.Commands.StartTestForegroundColor = "00ff00";
-
-                //        Log += $"{DateTime.Now} - Modbus error: {ex.Message}";
-                //    }
-                //    finally
-                //    {
-                //        // update modbus connection status
-                //        IsUnitUnderTestConnected = false;
-
-                //        // Disconnect from Modbus server
-                //        ModbusClient.Disconnect();
-                //    }
-                //}
-                //else
-                //{
-                //    // Disconnect from Modbus server
-                //    ModbusClient.Disconnect();
-
-                //    // Change Start Test Button color
-                //    IoC.Commands.StartTestForegroundColor = "00ff00";
-
-                //    Debug.WriteLine("Communication terminated.");
-                //}
-
             });
         }
         #endregion

@@ -1,0 +1,118 @@
+﻿<local:BasePage
+    x:TypeArguments="core:CommandsViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:metering"
+    xmlns:core="clr-namespace:metering.core;assembly=metering.core"   
+    x:Class="metering.CommandsPage"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical">
+        
+        <!-- Start Test Button -->
+        <!-- Only visible after the user hits "AddNewTest" button -->
+        <Button Margin="10 5" 
+                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                Command="{Binding StartTestCommand}"
+                mD:ButtonProgressAssist.IsIndicatorVisible="{Binding IsConnecting}"
+                mD:ButtonProgressAssist.IndicatorBackground="Red"
+                mD:ButtonProgressAssist.IndicatorForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                mD:ButtonProgressAssist.Minimum="0.0"
+                mD:ButtonProgressAssist.Maximum="{Binding MaximumTestCount}"
+                mD:ButtonProgressAssist.Value="{Binding TestProgress}"
+                mD:ButtonProgressAssist.IsIndeterminate="True"
+                Background="Transparent"
+                IsDefault="True"
+                ToolTip="Start all test steps"
+                Visibility="{Binding NewTestAvailable,
+                                    Converter={local:BooleanToVisibilityConverter},
+                                    ConverterParameter=False}">
+
+            <!-- icon on the button-->
+            <mD:PackIcon Padding="5" 
+                         Height="Auto" 
+                         Width="Auto"
+                         Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">                        
+                <mD:PackIcon.Style>
+                    <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                        <Setter Property="Kind" Value="PlayCircleFilled"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsConnectionCompleted}" Value="True">
+                                <Setter Property="Kind" Value="ProgressClock"/>
+                                <Setter Property="Background" Value="Red"/>
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty="Opacity"
+                                                From="0"
+                                                To="1"
+                                                Duration="0:0:0.8"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </mD:PackIcon.Style>
+            </mD:PackIcon>
+        </Button>
+ 
+        <!-- Add New Test Button-->
+        <!-- visible by default, invisible after the user hits "StartTest" button -->
+        <Button Margin="10 5" 
+                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                Cursor="Hand"
+                TabIndex="9"
+                Background="Transparent"
+                IsDefault="True"
+                Command="{Binding AddNewTestCommand}"
+                ToolTip="Add new test steps"
+                Visibility="{Binding NewTestAvailable,
+                                        Converter={local:BooleanToVisibilityConverter}}">
+
+                 <!-- icon on the button-->
+            <mD:PackIcon Padding="5"
+                         Height="Auto" 
+                         Width="Auto"
+                         Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                
+                <mD:PackIcon.Style>
+                    <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                        <Setter Property="Kind" Value="PlusCircle"/>
+                        <Setter Property="Foreground" Value="Red"/>
+                    </Style>                    
+                </mD:PackIcon.Style>
+            </mD:PackIcon>
+        </Button>
+
+        <!-- Cancel Button -->
+        <Button Margin="10 5"
+                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                Cursor="Hand"
+                TabIndex="8"
+                Background="Red" 
+                IsCancel="True"
+                Command="{Binding Path=CancelNewTestCommand}"
+                ToolTip="Cancel all test steps and go back to main page">
+
+                <!-- icon on the button -->
+            <mD:PackIcon Padding="5"
+                         Height="Auto" 
+                         Width="Auto"
+                         Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+
+                <mD:PackIcon.Style>
+                    <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                        <Setter Property="Kind" Value="CloseOctagonOutline"/>
+                        <Setter Property="Foreground" Value="{Binding CancelForegroundColor, 
+                                                                        Converter={local:StringToBrushConverter}}"/>
+                    </Style>
+                </mD:PackIcon.Style>
+            </mD:PackIcon>
+            </Button>  
+    </StackPanel>
+</local:BasePage>
