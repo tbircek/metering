@@ -37,3 +37,4 @@ packages/
 /metering.core/Resources/111.png
 /metering.core/Resources/11.png
 /metering.core/Resources/1.png
+*.nupkg
