@@ -12,15 +12,13 @@ namespace metering.core
         /// Constructor for serial connection. For future implementation.
         /// </summary>
         /// <param name="serialPort">name of the serial port to be used</param>
-        public ModbusClient(string serialPort)
-        {
-            throw new System.NotImplementedException("Modbus Serial protocol is not implemented");
-        }
+        public ModbusClient(string serialPort) { IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Serial Modbus communication is not supported\n"; }
+
 
         /// <summary>
         /// use properties to specify the client
         /// </summary>
-        public ModbusClient()
+            public ModbusClient()
         {
             try
             {
@@ -36,7 +34,7 @@ namespace metering.core
         /// <summary>
         /// Constructor for Modbus TCP and Modbus UDP connection.
         /// </summary>
-        /// <param name="ipAddress">Ip Address of the server</param>
+        /// <param name="ipAddress">IpAddress of the server</param>
         /// <param name="port">port of the server</param>
         public ModbusClient(string ipAddress, int port)
         {
@@ -93,61 +91,25 @@ namespace metering.core
         /// Gets or Sets the Unit identifier in case of serial connection (Default = 0)
         /// For future implementation.
         /// </summary>
-        public byte UnitIdentifier
-        {
-            get
-            {
-                throw new System.NotImplementedException("Modbus Serial protocol is not implemented");
-            }
-            set
-            {
-            }
-        }
+        public byte UnitIdentifier { get; set; }
 
         /// <summary>
-        /// Gets or Sets the Baudrate for serial connection (Default = 9600)
+        /// Gets or Sets the Baud rate for serial connection (Default = 9600)
         /// For future implementation.
         /// </summary>
-        public int Baudrate
-        {
-            get
-            {
-                throw new System.NotImplementedException("Modbus Serial protocol is not implemented");
-            }
-            set
-            {
-            }
-        }
+        public int Baudrate { get; set; }
 
         /// <summary>
         /// Gets or Sets the of Parity in case of serial connection
         /// For future implementation.
         /// </summary>
-        public Parity Parity
-        {
-            get
-            {
-                throw new System.NotImplementedException("Modbus Serial protocol is not implemented");
-            }
-            set
-            {
-            }
-        }
+        public Parity Parity { get; set; }
 
         /// <summary>
-        /// Gets or Sets the number of stopbits in case of serial connection
+        /// Gets or Sets the number of stop bits in case of serial connection
         /// For future implementation.
         /// </summary>
-        public StopBits StopBits
-        {
-            get
-            {
-                throw new System.NotImplementedException("Modbus Serial protocol is not implemented");
-            }
-            set
-            {
-            }
-        }
+        public StopBits StopBits { get; set; }
 
         /// <summary>
         /// Gets or Sets the connection Timeout in case of ModbusTCP connection
@@ -163,6 +125,7 @@ namespace metering.core
                 modbusClient.ConnectionTimeout = value;
             }
         }
+
         /// <summary>
         /// Connects to the Modbus Server
         /// </summary>
@@ -183,7 +146,7 @@ namespace metering.core
         /// <summary>
         /// Connects to the specified Modbus Server
         /// </summary>
-        /// <param name="ipAddress">Ip Address of the server</param>
+        /// <param name="ipAddress">IpAddress of the server</param>
         /// <param name="port">port of the server</param>
         public void Connect(string ipAddress, int port)
         {
@@ -231,7 +194,7 @@ namespace metering.core
         /// <param name="value">value to be written</param>
         public void WriteSingleRegister(int startingAddress, int value)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -241,7 +204,7 @@ namespace metering.core
         /// <param name="values">Register Values [0..quantity-1] to be written</param>
         public void WriteMultipleRegisters(int startingAddress, int[] values)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -256,12 +219,10 @@ namespace metering.core
                     modbusClient.Disconnect();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
-            }
-            
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception occurred. {ex.Message}.\n";
+            }            
         }
 
     }
