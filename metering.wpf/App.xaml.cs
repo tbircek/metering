@@ -1,13 +1,14 @@
-﻿//using Squirrel;
-using System;
+﻿using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
 using System.IO.IsolatedStorage;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Threading;
 using metering.core;
+using Squirrel;
 
 namespace metering
 {
@@ -46,31 +47,35 @@ namespace metering
 
         }
 
-        //private static async void CheckForUpdates()
-        //{
-        //    _updateManager = UpdateManager.GitHubUpdateManager("https://bitbucket.org/tbircek/metering/", "metering");
+        private async Task CheckForUpdates()
+        {
+            using (UpdateManager updateManager = new UpdateManager(@"\\volta\Eng_Lab\Software Updates\metering"))
+            {
 
-        //    if (_updateManager.Result.IsInstalledApp)
-        //    {
-        //        await _updateManager.Result.UpdateApp();
-        //    }
-        //}
+                if (updateManager.IsInstalledApp)
+                    await updateManager.UpdateApp();
+            }
+        }
 
         /// <summary>
-        /// Override Startup event to show default view and viewmodel.
+        /// Override Startup event to show default view and view model.
         /// </summary>
         /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
-        {           
+        {
             // Allow the base start
             base.OnStartup(e);
 
             // Setup the main application
             ApplicationSetup();
-
+            
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
+
+            // check for the updates
+            CheckForUpdates();
+
         }
 
         /// <summary>
@@ -137,7 +142,7 @@ namespace metering
         {
             // Write log entry to file in isolated storage for the user
             IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
-            
+
             using (Stream stream = new IsolatedStorageFileStream("log.txt", FileMode.Append, FileAccess.Write, store))
             using (StreamWriter writer = new StreamWriter(stream))
             {
