@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D7C4CED9-87C8-4A86-890B-AE17B8D8C8B0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>metering.package</RootNamespace>
+    <AssemblyName>metering.package</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\metering.core\metering.core.csproj">
+      <Project>{5c7027d5-4b49-4f50-8ad6-e23234c1855d}</Project>
+      <Name>metering.core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\metering.wpf\metering.wpf.csproj">
+      <Project>{512ab3d9-59eb-4831-93da-7aa4067d3b14}</Project>
+      <Name>metering.wpf</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <IconLocation>$(TargetDir)$(SolutionName)</IconLocation>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SquirrelLocation>$(SolutionDir)packages\squirrel.windows.1.9.1\tools\squirrel.exe</SquirrelLocation>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- For more information https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets -->
+  <!-- <Target Name="CopyPackage" AfterTargets="Pack">     -->
+  <!-- <Copy SourceFiles=" $(OutDir)*.*" DestinationFolder="\\volta\Eng_Lab\Software Updates\metering\" /> -->
+  <!-- </Target> -->
+  <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release'">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo" />
+    </GetAssemblyIdentity>
+    <!-- nuget pack "C:\Users\TBircek\source\repos\metering\metering.package\metering.package.csproj" -OutputDirectory C:\Users\TBircek\source\repos\metering\metering.package\wpf.package\nupkgs -Properties Configuration=Release -->
+    <Exec Command="nuget pack $(ProjectDir)$(ProjectName).csproj -Version %(myAssemblyInfo.Version) -Properties Configuration=Release -OutputDirectory $(ProjectDir)wpf.package\nupkgs" />
+    <Exec Command="$(SolutionDir)packages\squirrel.windows.1.9.1\tools\squirrel.exe --releasify $(ProjectDir)wpf.package\nupkgs\$(ProjectName).$([System.Version]::Parse(%(myAssemblyInfo.Version)).ToString(3)).nupkg --no-msi --no-delta --icon $(SolutionDir)$(SolutionName).core\Resources\$(SolutionName).ico --setupicon $(SolutionDir)$(SolutionName).core\Resources\$(SolutionName).ico --releaseDir $(ProjectDir)wpf.package\Release" />
+    <!-- <Copy SourceFiles=" $(ProjectDir)Releases\*.*" DestinationFolder="\\volta\Eng_Lab\Software Updates\metering\" /> -->
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

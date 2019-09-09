@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace metering.core
@@ -14,9 +15,9 @@ namespace metering.core
         #region Public Properties
 
         /// <summary>
-        /// Application title with version value
+        /// Application title with version value ignoring revision #
         /// </summary>
-        public string AppTitle { get; private set; } = $"{Resources.Strings.Title} (v{System.Reflection.Assembly.GetEntryAssembly().GetName().Version})";
+        public string AppTitle { get; private set; } = $"{Resources.Strings.Title} (v{Assembly.GetEntryAssembly().GetName().Version.ToString(3)})";
 
         #endregion
 

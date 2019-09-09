@@ -1,17 +1,16 @@
-﻿using System.Resources;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("metering.core")]
-[assembly: AssemblyDescription("base library for metering project")]
+[assembly: AssemblyTitle("metering")]
+[assembly: AssemblyDescription("Metering automation for all Beckwith Products.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Beckwith Electric Co Inc")]
-[assembly: AssemblyProduct("metering.core")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCompany("Beckwith Electric Co. Inc.")]
+[assembly: AssemblyProduct("metering")]
+[assembly: AssemblyCopyright("Copyright © Beckwith Electric Co. Inc. 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -21,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5c7027d5-4b49-4f50-8ad6-e23234c1855d")]
+[assembly: Guid("d7c4ced9-87c8-4a86-890b-ae17b8d8c8b0")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -35,5 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: NeutralResourcesLanguage("en-US")]
-

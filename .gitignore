@@ -32,6 +32,11 @@ _ReSharper*/
 .vs*
 /UpgradeLog*
 packages/
-*.png
+/metering.core/Resources/meteringBackground.png
+/metering.core/Resources/metering.ico
+/metering.core/Resources/111.png
+/metering.core/Resources/11.png
+/metering.core/Resources/1.png
 *.nupkg
-*.ico
+*.png
+*.nuspec
