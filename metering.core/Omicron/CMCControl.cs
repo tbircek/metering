@@ -11,10 +11,51 @@ namespace metering.core
     public class CMCControl // : IOmicron
 
     {
+        #region Private variables
+
         /// <summary>
         /// Omicron CM Engine
         /// </summary>
         private CMEngine engine;
+
+        /// <summary>
+        ///  Omicron Test Set string commands.
+        /// </summary>
+        private StringCommands omicronStringCommands;
+
+        /// <summary>
+        /// Omicron Test Set maximum voltage output limit.
+        /// </summary>
+        private const double maxVoltageMagnitude = 8.0f;
+
+        /// <summary>
+        /// Omicron Test Set maximum voltage output limit.
+        /// </summary>
+        private const double maxCurrentMagnitude = 2.0f;
+
+        /// <summary>
+        /// Default value of Voltage amplifiers while testing non-voltage values.
+        /// </summary>
+        const double nominalVoltage = 120.0f;
+
+        /// <summary>
+        /// Default value of Current amplifiers while testing non-current values.
+        /// </summary>
+        const double nominalCurrent = 0.02f;
+
+        /// <summary>
+        /// Default value of amplifiers phase while testing non-phase values.
+        /// </summary>
+        const double phase = 0.0f;
+
+        /// <summary>
+        /// Default value of Frequency amplifiers while testing non-frequency values. Always a non-zero value.
+        /// </summary>
+        const double nominalFrequency = 60.0f;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// Omicron CM Engine
@@ -35,11 +76,6 @@ namespace metering.core
         }
 
         /// <summary>
-        ///  Omicron Test Set string commands.
-        /// </summary>
-        private StringCommands omicronStringCommands;
-
-        /// <summary>
         /// Omicron Test Set string commands.
         /// </summary>
         public StringCommands OmicronStringCommands
@@ -56,33 +92,21 @@ namespace metering.core
                 omicronStringCommands = value;
             }
         }
-        // /// <summary>
-        // /// Refers to Omicron CM Engine.
-        // /// </summary>
-        ////  CMEngine CMEngine = new CMEngine();
-
-        ///// <summary>
-        ///// Implemented Omicron Test Set string commands.
-        ///// </summary>
-        //StringCommands omicron = new StringCommands();
-
 
         /// <summary>
-        /// Omicron Test Set maximum voltage output limit.
+        /// Holds minimum value for test register.
         /// </summary>
-        private const double maxVoltageMagnitude = 8.0f;
-        /// <summary>
-        /// Omicron Test Set maximum voltage output limit.
-        /// </summary>
-        private const double maxCurrentMagnitude = 2.0f;
-        //protected CMCControl() { }
+        public int MinTestValue { get; set; }
 
-        //protected CMCControl(CMEngine CMEngine, StringCommands omicron, int deviceID)
-        //{
-        //    this.CMEngine = CMEngine ?? throw new ArgumentNullException(nameof(CMEngine));
-        //    this.omicron = omicron ?? throw new ArgumentNullException(nameof(omicron));
-        //    DeviceID = deviceID;
-        //}
+        /// <summary>
+        /// Holds minimum value for test register.
+        /// </summary>
+        public int MaxTestValue { get; set; }
+
+        /// <summary>
+        /// Hold progress information per test register.
+        /// </summary>
+        public double Progress { get; set; }
 
         /// <summary>
         /// Associated Omicron Test Set ID. Assigned by CM Engine.
@@ -94,22 +118,7 @@ namespace metering.core
         /// </summary>
         public enum LogLevels : short { None, Level1, Level2, Level3, };
 
-        /// <summary>
-        /// Default value of Voltage amplifiers while testing non-voltage values.
-        /// </summary>
-        const double nominalVoltage = 120.0f;
-        /// <summary>
-        /// Default value of Current amplifiers while testing non-current values.
-        /// </summary>
-        const double nominalCurrent = 0.02f;
-        /// <summary>
-        /// Default value of amplifiers phase while testing non-phase values.
-        /// </summary>
-        const double phase = 0.0f;
-        /// <summary>
-        /// Default value of Frequency amplifiers while testing non-frequency values. Always a non-zero value.
-        /// </summary>
-        const double nominalFrequency = 60.0f;
+        #endregion
 
         /// <summary>
         /// Scans for Omicron CMC's that associated and NOT locked.
@@ -253,6 +262,7 @@ namespace metering.core
         /// <param name="StartDelayTime">Wait time to stay in chamber room before a test magnitude applied.</param>
         /// <param name="MeasurementInterval">Specifies register reading interval.</param>
         /// <param name="StartMeasurementDelay">Wait time after a test magnitude applied.</param>
+        /// <param name="message">Test message to pass to the Log textbox</param>
         public async Task TestSample(int Register, double From, double To, double Delta, double DwellTime, double MeasurementDuration, double StartDelayTime, double MeasurementInterval, double StartMeasurementDelay, string message)
         {
 
@@ -266,13 +276,11 @@ namespace metering.core
                 // Wait StartDelayTime to start Modbus communication
                 var delay = Task.Run(async delegate
                 {
+                    // wait for the user specified "Start Delay Time"
                     await Task.Delay(TimeSpan.FromMinutes(StartDelayTime));
-                    mdbus.ConnectionTimeout = 5000;
-                    mdbus.Connect("192.168.0.122", 502);
 
-                    // Progress bar is visible
-                    IoC.Commands.IsConnecting = mdbus.GetConnected();
-                    IoC.Commands.IsConnectionCompleted = mdbus.GetConnected();
+                   // Progress bar is visible
+                    IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.ModbusClient.GetConnected();
 
                     // change color of Cancel Command button to Green
                     IoC.Commands.CancelForegroundColor = "00ff00";
@@ -294,19 +302,30 @@ namespace metering.core
                 // Process test steps
                 for (double testStartValue = From; testStartValue <= To; testStartValue += Delta)
                 {
+                    // set timer to read modbus register per the user specified time.
                     Timer mdbusTimer = new Timer(TimerTick, Register, TimeSpan.FromSeconds(StartMeasurementDelay), TimeSpan.FromMilliseconds(MeasurementInterval));
 
                     Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {Register}\tTest value: {testStartValue:F3}");
                     IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {Register} --- Test value: {testStartValue:F3}\n";
 
                     // set voltage amplifiers default values.
+                    // Analog signal: Voltage Output 1:
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", testStartValue, phase, nominalFrequency);
+
+                    // Analog signal: Voltage Output 2:
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", 0, 0, nominalFrequency);
+
+                    // Analog signal: Voltage Output 3:
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", 0, 0, nominalFrequency);
 
                     // set current amplifiers default values.
+                    // Analog signal: Current Output 1:
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", 0, 0, nominalFrequency);
+
+                    // Analog signal: Current Output 2:
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", 0, 0, nominalFrequency);
+
+                    // Analog signal: Current Output 3:
                     OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", 0, 0, nominalFrequency);
 
                     // Turn On Omicron Analog Outputs per the user input
@@ -315,27 +334,34 @@ namespace metering.core
                     // Start reading the user specified Register
                     var t = Task.Run(async delegate
                     {
+                        // wait until the user specified "Dwell Time" expires.
                         await Task.Delay(TimeSpan.FromSeconds(DwellTime));
+
+                        // terminate reading modbus register because "Dwell Time" is over.
                         mdbusTimer.Dispose();
 
                         // Remember first test case and Add +1.
                         Debug.WriteLine($"{Convert.ToDouble(progressStep) / Math.Ceiling(Math.Abs(To - From) / Delta) + 1}");
+
+                        // increment progress percentage
                         Progress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
-
-
+                        
                         // Progress cannot be larger than 100%
                         if (Progress <= 1.00)
                         {
+                            // update multiple texts to present new progress percentage to the user/developer.
                             Debug.WriteLine($"\t\t\t\t\t\t\t\tMin value: {MinTestValue}\t\tMax value: {MaxTestValue}\tProgress: {Progress * 100:F2}% completed.\n");
                             IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Min value: {MinTestValue} Max value: {MaxTestValue}\n";
                             message += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{Register},{testStartValue},{MinTestValue},{MaxTestValue}";
                         }
 
-                        // log test results to a ".csv" format file
+                        // log the test step result to a ".csv" format file
                         LogTestResults(message, Register, From, To, fileId);
 
-                        // reset min and max test values for the next test range
+                        // reset min test value for the next test range
                         MinTestValue = 0;
+
+                        // reset max test value for the next test range
                         MaxTestValue = 0;
 
                         // clear message for the next test values
@@ -344,7 +370,7 @@ namespace metering.core
                         // increment progress
                         progressStep++;
 
-                        // increment progress bar strip
+                        // increment progress bar strip on the "Button"
                         IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
                     });
 
@@ -352,7 +378,10 @@ namespace metering.core
                     t.Wait();
                 }
 
+                // update developer "Test completed"
                 Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tTest completed for register: {Register}\n");
+
+                // update the user "Test completed"
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed for register: {Register}.\n";                
             }
             catch (Exception ex)
@@ -375,11 +404,11 @@ namespace metering.core
             TurnOffCMC();
 
             // Disconnect Modbus Communication
-            mdbus.Disconnect();
+            IoC.Communication.ModbusClient.Disconnect(); //  mdbus.Disconnect();
 
             // Progress bar is invisible
-            IoC.Commands.IsConnecting = mdbus.GetConnected();
-            IoC.Commands.IsConnectionCompleted = mdbus.GetConnected();
+            IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.ModbusClient.GetConnected(); // mdbus.GetConnected();
+            // mdbus.GetConnected();
 
             // change color of Cancel Command button to Red
             IoC.Commands.CancelForegroundColor = "ff0000";
@@ -413,21 +442,6 @@ namespace metering.core
         }
 
         /// <summary>
-        /// Instance of Modbus Communication library.
-        /// </summary>
-        ModbusClient mdbus = new ModbusClient();
-
-        /// <summary>
-        /// Holds minimum value for test register.
-        /// </summary>
-        public int MinTestValue { get; set; }
-
-        /// <summary>
-        /// Holds minimum value for test register.
-        /// </summary>
-        public int MaxTestValue { get; set; }
-
-        /// <summary>
         /// Allows to read test register values specified by "Measurement Interval".
         /// </summary>
         private void TimerTick(object Register)
@@ -435,7 +449,7 @@ namespace metering.core
             try
             {
                 int register = Convert.ToInt32(Register);
-                int[] serverResponse = Task.Factory.StartNew(() => mdbus.ReadHoldingRegisters(register, 1)).Result;
+                int[] serverResponse = Task.Factory.StartNew(() => IoC.Communication.ModbusClient.ReadHoldingRegisters(register, 1)).Result; // mdbus.ReadHoldingRegisters(register, 1)).Result;
                 for (int i = 0; i < serverResponse.Length; i++)
                 {
                     if (MinTestValue > serverResponse[i] || MinTestValue == 0)
@@ -454,11 +468,5 @@ namespace metering.core
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.\n";
             }
         }
-
-        /// <summary>
-        /// Hold progress information per test register.
-        /// </summary>
-        public double Progress { get; set; }
-
     }
 }
