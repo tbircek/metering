@@ -9,12 +9,12 @@ namespace meteringspecs.features.communication
     [Binding]
     public class CommunicationSteps
     {
-        private readonly ModbusClient mdbus = new ModbusClient();
+        private readonly EasyModbus.ModbusClient mdbus = IoC.Communication.EAModbusClient;
 
         [Given(@"I have entered a connectible IpAddress")]
         public void GivenIHaveEnteredAConnectableIpaddress()
         {
-            mdbus.IpAddress = "192.168.0.122";
+            mdbus.IPAddress = "192.168.0.122";
         }
         
         [Given(@"I have entered connectible modbus port")]
@@ -26,14 +26,14 @@ namespace meteringspecs.features.communication
         [Given(@"I have connection to the client")]
         public void GivenIHaveConnectionToTheClient()
         {
-            Assert.IsTrue(mdbus.GetConnected());
+            Assert.IsTrue(mdbus.Connected);
         }
         
         [Given(@"I have entered a non-connectible IpAddress")]
         public void GivenIHaveEnteredANon_ConnectableIpaddress()
         {
             mdbus.ConnectionTimeout = 20000;
-            mdbus.IpAddress = "192.168.0.1";
+            mdbus.IPAddress = "192.168.0.1";
         }
         
         [Given(@"I have entered non-connectible modbus port")]
@@ -59,13 +59,13 @@ namespace meteringspecs.features.communication
         [Then(@"the result should be connected")]
         public void ThenTheResultShouldBeConnected()
         {
-            Assert.IsTrue(mdbus.GetConnected());
+            Assert.IsTrue(mdbus.Connected);
         }
         
         [Then(@"the result should be a TimeOut")]
         public void ThenTheResultShouldBeATimeOut()
         {
-            Assert.IsFalse(mdbus.GetConnected());
+            Assert.IsFalse(mdbus.Connected);
         }
 
         [Then(@"the result should be some numbers")]
