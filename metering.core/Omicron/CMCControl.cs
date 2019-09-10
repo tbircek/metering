@@ -479,28 +479,47 @@ namespace metering.core
         /// </summary>
         private void TimerTick(object Register)
         {
+            // read Modbus register in interval that specified by the user 
             try
             {
+                // convert register string to integer.
                 int register = Convert.ToInt32(Register);
-                int[] serverResponse = Task.Factory.StartNew(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register, 1)).Result;
 
-                if (serverResponse.Length > 0)
+                // verify the register is a legit
+                if (register >= 0 && register <= 65535)
                 {
-                    for (int i = 0; i < serverResponse.Length; i++)
+                    // receive serverResponse, register is 0 based 
+                    int[] serverResponse = Task.Factory.StartNew(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1)).Result;
+
+                    // decide if serverResponse is acceptable only criteria is the length of the response.
+                    if (serverResponse.Length > 0)
                     {
-                        if (MinTestValue > serverResponse[i] || MinTestValue == 0)
+                        // establish minimum and maximum values.
+                        for (int i = 0; i < serverResponse.Length; i++)
                         {
-                            MinTestValue = serverResponse[i];
+                            // update minimum value with new value if new value is less or minimum value was 0
+                            if (MinTestValue > serverResponse[i] || MinTestValue == 0)
+                            {
+                                // update minimum value
+                                MinTestValue = serverResponse[i];
+                            }
+
+                            // update maximum value with new value if new value is less or maximum value was 0
+                            if (MaxTestValue < serverResponse[i] || MaxTestValue == 0)
+                            {
+                                // update maximum value
+                                MaxTestValue = serverResponse[i];
+                            }
                         }
-                        if (MaxTestValue < serverResponse[i] || MaxTestValue == 0)
-                        {
-                            MaxTestValue = serverResponse[i];
-                        }
+                    }
+                    else
+                    {
+                        //TODO: server failed to respond. Ignoring it until find a better option.
                     }
                 }
                 else
                 {
-                    // server failed to respond. Ignoring it until find a better option.
+                    // TODO: Terminate timer, close communication port and close omicron analog outputs
                 }
 
             }
@@ -512,7 +531,8 @@ namespace metering.core
                 // catch inner exceptions if exists
                 if (ex.InnerException != null)
                 {
-                   IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                    // update the user.
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
                 }
             }
         }
