@@ -17,7 +17,12 @@ namespace metering.core
         /// <summary>
         /// Modbus Client for all modbus protocol communication
         /// </summary>
-        public ModbusClient ModbusClient { get; set; }
+        // public ModbusClient ModbusClient { get; set; }
+
+        /// <summary>
+        /// ModbusClient for modbus protocol communication.
+        /// </summary>
+        public EasyModbus.ModbusClient EAModbusClient { get; set; }
 
         /// <summary>
         /// Omicron CMC Engine
@@ -103,6 +108,21 @@ namespace metering.core
                         CMEngine = new CMEngine()
                     };
 
+                    // get new construct of ModbusClient
+                    EAModbusClient = new EasyModbus.ModbusClient
+                    {
+                        IPAddress = IpAddress,
+                        Port = Convert.ToInt32(Port),
+                        ConnectionTimeout = 20000,
+                        // LogFileFilename = @"C:\Users\TBircek\Documents\metering\modbus.log"
+                    };
+
+                    // ModbusClient.Connect();
+                    if (EAModbusClient.Available(10000))
+                    {
+                        EAModbusClient.Connect();
+                    }
+
                     // find any CMCEngine attached to this computer
                     if (CMCControl.FindCMC())
                     {
@@ -154,6 +174,14 @@ namespace metering.core
                 {
 
                     Debug.WriteLine(ex.Message);
+                    // TODO: show error once and terminate connection
+                    Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Start Communication failed: {ex.Message}.\n";
+
+                    // catch inner exceptions if exists
+                    if (ex.InnerException != null)
+                    {
+                        Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                    }
                 }
             });
         }
