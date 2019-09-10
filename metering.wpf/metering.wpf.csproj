@@ -271,9 +271,7 @@
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="metering.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
