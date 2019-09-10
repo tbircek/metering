@@ -28,7 +28,7 @@ namespace metering.core
         /// <summary>
         /// Default Voltage magnitude to use through out the test
         /// </summary>
-        public string NominalVoltage { get; set; } = "3.333";
+        public string NominalVoltage { get; set; } = "0.000";
 
         /// <summary>
         /// Hint for the Nominal Current text entry
@@ -38,7 +38,7 @@ namespace metering.core
         /// <summary>
         /// Default Current magnitude to use through out the test
         /// </summary>
-        public string NominalCurrent { get; set; } = "100.0";
+        public string NominalCurrent { get; set; } = "0.0";
 
         /// <summary>
         /// Hint for the Nominal Frequency text entry

@@ -45,7 +45,7 @@ namespace metering.core
         /// <summary>
         /// How long should <see cref="Register"/> be poll.
         /// </summary>
-        public string DwellTime { get; set; } = "120";
+        public string DwellTime { get; set; } = "20";
 
         /// <summary>
         /// Provides a hint text for the <see cref="StartDelayTime"/> textbox
@@ -55,7 +55,7 @@ namespace metering.core
         /// <summary>
         /// The time to wait until test step #1.
         /// </summary>
-        public string StartDelayTime { get; set; } = "1";
+        public string StartDelayTime { get; set; } = "0.1";
 
         /// <summary>
         /// Provides a hint text for the <see cref="MeasurementInterval"/> textbox
@@ -65,7 +65,7 @@ namespace metering.core
         /// <summary>
         /// How often should <see cref="Register"/> be poll.
         /// </summary>
-        public string MeasurementInterval { get; set; } = "100";
+        public string MeasurementInterval { get; set; } = "250";
 
         /// <summary>
         /// Provides a hint text for the <see cref="StartMeasurementDelay"/> textbox
