@@ -185,10 +185,16 @@ namespace metering.core
                 //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", nominalCurrent, phase, nominalFrequency);
 
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                Debug.WriteLine($"initial setup::Exception InnerException is : {err.Message}");
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {err.Message}\n";
+                Debug.WriteLine($"initial setup::Exception InnerException is : {ex.Message}");
+                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}\n";
+
+                // catch inner exceptions if exists
+                if (ex.InnerException != null)
+                {
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                }
             }
         }
 
@@ -203,10 +209,16 @@ namespace metering.core
                 CMEngine.DevUnlock(DeviceID);
                 CMEngine = null;
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                Debug.WriteLine($"release Omicron::Exception InnerException is : {err.Message}");
+                Debug.WriteLine($"release Omicron::Exception InnerException is : {ex.Message}");
                 IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\trelease Omicron: error detected\n";
+
+                // catch inner exceptions if exists
+                if (ex.InnerException != null)
+                {
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                }
             }
         }
 
@@ -225,10 +237,16 @@ namespace metering.core
                 t.Wait();
                 ReleaseOmicron();
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                Debug.WriteLine($"turnOffCMC setup::Exception InnerException is : {err.Message}");
+                Debug.WriteLine($"turnOffCMC setup::Exception InnerException is : {ex.Message}");
                 IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOffCMC setup: error detected\n";
+
+                // catch inner exceptions if exists
+                if (ex.InnerException != null)
+                {
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                }
             }
         }
 
@@ -241,12 +259,18 @@ namespace metering.core
             {
                 // Send command to Turn On Analog Outputs
                 OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_outputOn);
-                Debug.WriteLine( $"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: turnOnCMC setup: started\t");
+                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: turnOnCMC setup: started\t");
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
-                Debug.WriteLine($"turnONCMC setup::Exception InnerException is : {err.Message}");
+                Debug.WriteLine($"turnONCMC setup::Exception InnerException is : {ex.Message}");
                 IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOnCMC setup: error detected\n";
+
+                // catch inner exceptions if exists
+                if (ex.InnerException != null)
+                {
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                }
             }
         }
 
@@ -272,15 +296,15 @@ namespace metering.core
                 Debug.Indent();
                 Debug.WriteLine($"From: {From:F3}\tTo: {To}\t\tDelta: {Delta:F3}\t\t\t\t\tDwell time: {DwellTime}sec\r\tStart delay time: {StartDelayTime}min\tMeasurement interval: {MeasurementInterval}mSec\tStart measurement delay: {StartMeasurementDelay}sec\n");
                 Debug.Unindent();
-                
+
                 // Wait StartDelayTime to start Modbus communication
                 var delay = Task.Run(async delegate
                 {
                     // wait for the user specified "Start Delay Time"
                     await Task.Delay(TimeSpan.FromMinutes(StartDelayTime));
 
-                   // Progress bar is visible
-                    IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.ModbusClient.GetConnected();
+                    // Progress bar is visible
+                    IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
 
                     // change color of Cancel Command button to Green
                     IoC.Commands.CancelForegroundColor = "00ff00";
@@ -345,7 +369,7 @@ namespace metering.core
 
                         // increment progress percentage
                         Progress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
-                        
+
                         // Progress cannot be larger than 100%
                         if (Progress <= 1.00)
                         {
@@ -382,11 +406,20 @@ namespace metering.core
                 Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tTest completed for register: {Register}\n");
 
                 // update the user "Test completed"
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed for register: {Register}.\n";                
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed for register: {Register}.\n";
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tException: {ex.Message}\n");
+
+                // TODO: show error once and terminate connection
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test failed: {ex.Message}.\n";
+
+                // catch inner exceptions if exists
+                if (ex.InnerException != null)
+                {
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                }
             }
             finally
             {
@@ -404,10 +437,10 @@ namespace metering.core
             TurnOffCMC();
 
             // Disconnect Modbus Communication
-            IoC.Communication.ModbusClient.Disconnect(); //  mdbus.Disconnect();
+            IoC.Communication.EAModbusClient.Disconnect();
 
             // Progress bar is invisible
-            IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.ModbusClient.GetConnected(); // mdbus.GetConnected();
+            IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
             // mdbus.GetConnected();
 
             // change color of Cancel Command button to Red
@@ -425,7 +458,7 @@ namespace metering.core
         private void LogTestResults(string message, int Register, double From, double To, string fileId)
         {
             // specify a "metering" that under the current user's "MyDocuments" folder
-            var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"metering");
+            var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "metering");
 
             // generate the folder
             Directory.CreateDirectory(directory);
@@ -449,23 +482,38 @@ namespace metering.core
             try
             {
                 int register = Convert.ToInt32(Register);
-                int[] serverResponse = Task.Factory.StartNew(() => IoC.Communication.ModbusClient.ReadHoldingRegisters(register, 1)).Result; // mdbus.ReadHoldingRegisters(register, 1)).Result;
-                for (int i = 0; i < serverResponse.Length; i++)
+                int[] serverResponse = Task.Factory.StartNew(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register, 1)).Result;
+
+                if (serverResponse.Length > 0)
                 {
-                    if (MinTestValue > serverResponse[i] || MinTestValue == 0)
+                    for (int i = 0; i < serverResponse.Length; i++)
                     {
-                        MinTestValue = serverResponse[i];
-                    }
-                    if (MaxTestValue < serverResponse[i] || MaxTestValue == 0)
-                    {
-                        MaxTestValue = serverResponse[i];
+                        if (MinTestValue > serverResponse[i] || MinTestValue == 0)
+                        {
+                            MinTestValue = serverResponse[i];
+                        }
+                        if (MaxTestValue < serverResponse[i] || MaxTestValue == 0)
+                        {
+                            MaxTestValue = serverResponse[i];
+                        }
                     }
                 }
+                else
+                {
+                    // server failed to respond. Ignoring it until find a better option.
+                }
+
             }
             catch (Exception ex)
             {
                 // TODO: show error once and terminate connection
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.\n";
+
+                // catch inner exceptions if exists
+                if (ex.InnerException != null)
+                {
+                   IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                }
             }
         }
     }
