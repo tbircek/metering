@@ -6,9 +6,14 @@ using OMICRON.CMEngAL;
 
 namespace metering.core
 {
+    /// <summary>
+    /// Generates necessary strings to control Omicron Test Set.
+    /// </summary>
     public class StringCommands
-    {
-        // ExtractParameters result = new ExtractParameters();
+    {        
+        #region Private Members
+
+        #endregion
 
         /// <summary>
         /// Omicron Test Set generator short names.
@@ -36,17 +41,25 @@ namespace metering.core
         /// <param name="frequency">Frequency of analog signal.</param>
         public void SendOutAna(CMEngine engine, int deviceID, int generator, string generatorNumber, double amplitude, double phase, double frequency)
         {
-            string generatorType = (string)Enum.GetName(typeof(GeneratorList), generator);
+            // obtain appropriate generator short name 
+            string generatorType = Enum.GetName(typeof(GeneratorList), generator);
 
             try
             {
-                StringBuilder stringBuilder = new StringBuilder(string.Format(OmicronStringCmd.out_analog_setOutput, generatorType, generatorNumber, amplitude, phase, frequency));
-                //result.Parameters(engine.Exec(deviceID, stringBuilder.ToString()), stringBuilder.ToString());
-                engine.Exec(deviceID, stringBuilder.ToString());
+                // check if the user canceling test
+                if (!IoC.Commands.Token.IsCancellationRequested)
+                {
+                    // build a string to send to Omicron Test set
+                    StringBuilder stringBuilder = new StringBuilder(string.Format(OmicronStringCmd.out_analog_setOutput, generatorType, generatorNumber, amplitude, phase, frequency));
+
+                    // send newly generated string command to Omicron Test Set
+                    engine.Exec(deviceID, stringBuilder.ToString());
+                }
             }
             catch (Exception err)
             {
-                Debug.WriteLine(string.Format("sendOutAna_2::InnerException is : {0}", err.Message));
+                // inform the developer about error.
+                Debug.WriteLine(string.Format("sendOutAna::Exception is : {0}", err.Message));
             }
         }
 
@@ -60,12 +73,17 @@ namespace metering.core
         {
             try
             {
-                //result.Parameters(engine.Exec(deviceID, omicronCommand), omicronCommand);
-                engine.Exec(deviceID, omicronCommand);
+                // check if the user canceling test
+                if(!IoC.Commands.Token.IsCancellationRequested)
+                {
+                    // pass received string command to Omicron Test set
+                    engine.Exec(deviceID, omicronCommand);
+                }
             }
             catch (Exception err)
             {
-                Debug.WriteLine(String.Format("sendStringCommand::InnerException is : {0}", err.Message));
+                // inform the developer about error.
+                Debug.WriteLine(String.Format("sendStringCommand::Exception is : {0}", err.Message));
             }
         }
     }
