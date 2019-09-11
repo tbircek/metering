@@ -39,6 +39,11 @@ namespace metering.core
         /// </summary>
         public static CommunicationViewModel Communication => Get<CommunicationViewModel>();
 
+        /// <summary>
+        /// A shortcut to access to <see cref="CMCControl"/>
+        /// </summary>
+        public static CMCControl CMCControl => Get<CMCControl>();
+
         #endregion
 
         #region Setup
@@ -51,6 +56,18 @@ namespace metering.core
         {
             // Bind all required view models
             BindViewModels();
+
+            // Bind all required classes
+            BindClasses();
+        }
+
+        /// <summary>
+        /// Binds single instance of the classes
+        /// </summary>
+        private static void BindClasses()
+        {
+            // Bind a single instance of CMCControl class
+            Kernel.Bind<CMCControl>().ToConstant(new CMCControl());
         }
 
         /// <summary>
