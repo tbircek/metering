@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using OMICRON.CMEngAL;
 
 namespace metering.core
@@ -56,6 +57,17 @@ namespace metering.core
         /// </summary>
         public bool IsUnitUnderTestConnected { get; set; } = false;
 
+        /// <summary>
+        /// a command detects left double clicks on the controls
+        /// if control is a textbox then select all text
+        /// </summary>
+        public ICommand LeftDoubleClickCommand { get; set; }
+
+        /// <summary>
+        /// a flag to indicate if the control left double clicked.
+        /// </summary>
+        public bool IsDoubleLeftClick { get; set; } = false;
+
         #endregion
 
         #region Constructor
@@ -72,11 +84,25 @@ namespace metering.core
 
             // inform the user Application started.
             Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Application Starts\n";
+
+            LeftDoubleClickCommand = new RelayCommand(() => LeftDoubleClick());
         }
 
         #endregion
 
         #region Public Method
+
+        /// <summary>
+        /// if the user left double clicks on a control and the control is a textbox
+        /// this function will select all text in the field.
+        /// </summary>
+        private void LeftDoubleClick()
+        {
+            Debug.WriteLine("Someone left double clicked me...");
+
+            // update IsDoubLeftClick property value
+            IsDoubleLeftClick = true;
+        }
 
         /// <summary>
         /// Starts a test with the values specified in Nominal Values page and

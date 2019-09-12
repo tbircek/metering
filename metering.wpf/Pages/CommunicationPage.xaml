@@ -9,12 +9,13 @@
     xmlns:core="clr-namespace:metering.core;assembly=metering.core" 
     x:Class="metering.CommunicationPage"    
     mc:Ignorable="d">
-  
+
     <Grid>
+
         <Border             
             Margin="10">
 
-            <Grid>
+            <Grid>                
                 <Grid.ColumnDefinitions>
                     <!-- IpAddress Text box-->
                     <ColumnDefinition Width="Auto"/>
@@ -25,7 +26,7 @@
                     <!-- Log text box-->
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
+               
                 <!-- IPADDRESS text box -->
                 <TextBox
                     Grid.Column="0"
@@ -36,8 +37,13 @@
                     Margin="15 5 5 5"
                     FontSize="16"
                     ToolTip="Enter IpAddress of the unit under the test"
-                    Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"/>
-
+                    Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"
+                    local:FocusAndSelectProperty.Value="{Binding IsDoubleLeftClick}">
+                    <TextBox.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding LeftDoubleClickCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                               
                 <!-- PORT text box -->
                 <TextBox
                     Grid.Column="1"
@@ -48,8 +54,13 @@
                     Margin="15 5 15 5"
                     FontSize="16"
                     ToolTip="Enter Port number of the unit under the test"
-                    Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"/>
-                
+                    Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"
+                    local:FocusAndSelectProperty.Value="{Binding IsDoubleLeftClick}">
+                    <TextBox.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding LeftDoubleClickCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+
                 <!-- Log text box-->
                 <Border Grid.Column="2"
                         Margin="5 5 20 5"
@@ -63,17 +74,21 @@
                             HorizontalScrollBarVisibility="Auto"
                             local:AutoScrollToBottomProperty.Value="True">
                         
-                            <!-- Log text box -->
+                        <!-- Log text box -->
                         <TextBox
                             Padding="5"
                             TextWrapping="Wrap"               
                             Text="{Binding Log, UpdateSourceTrigger=PropertyChanged}"
                             TextAlignment="Left"
                             IsReadOnly="True"
-                            ToolTip="The information about test process and more">
+                            ToolTip="The information about test process and more"
+                            local:FocusAndSelectProperty.Value="{Binding IsDoubleLeftClick}">
+                            <TextBox.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding LeftDoubleClickCommand}"/>
+                            </TextBox.InputBindings>
                         </TextBox>
 
-                        </ScrollViewer>
+                    </ScrollViewer>
                 </Border>
             </Grid>
         </Border>        

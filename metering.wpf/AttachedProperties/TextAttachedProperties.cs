@@ -1,7 +1,7 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using metering.core;
 
 namespace metering
 {
@@ -40,23 +40,27 @@ namespace metering
 
 
     /// <summary>
-    /// Focuses (keyboard) to this element and selects all text if true
+    /// Focuses (keyboard) to this element and selects all text if this element is a textbox
     /// </summary>
     public class FocusAndSelectProperty : BaseAttachedProperty<FocusAndSelectProperty, bool>
     {
+
         public override void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            // is it a control?
-            if (!(sender is TextBoxBase control))
-                return;
-                        
-            if ((bool)e.NewValue)
-            {
-                // focus the control
-                control.Focus();
+            // is it a textbox control?
+            if (sender is TextBoxBase control)
+             {
 
-                // select all text 
-                control.SelectAll();
+                // the control has focus and has a new value that is true
+                if ((bool)e.NewValue && control.IsFocused)
+                {                   
+                    // select all text 
+                    control.SelectAll();
+
+                    // already processed left double click 
+                    // reset value
+                    IoC.Communication.IsDoubleLeftClick = false;
+                }
             }
         }
     }
