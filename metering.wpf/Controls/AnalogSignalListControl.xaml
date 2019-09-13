@@ -23,7 +23,15 @@
                     VerticalScrollBarVisibility="Auto" 
                     HorizontalScrollBarVisibility="Auto">
 
-                        <ItemsControl ItemsSource="{Binding AnalogSignals}" Margin="2">
+                        <ItemsControl ItemsSource="{Binding AnalogSignals}" 
+                                      Margin="2"
+                                      local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+                            <!-- left click to select all text -->
+                            <ItemsControl.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                            </ItemsControl.InputBindings>
+                            
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <local:AnalogSignalListItemControl/>
