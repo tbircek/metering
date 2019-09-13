@@ -21,7 +21,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.InputBindings>
-            <MouseBinding MouseAction="LeftClick" local:FocusAndSelectProperty.Value="True" />
+            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
         </Grid.InputBindings>
 
         <!-- Analog signal values -->
@@ -30,33 +30,41 @@
             BorderBrush="Black" 
             BorderThickness="1" 
             ClipToBounds="True">
-            
+
             <Grid                 
                 Margin="5">
-
+                
+                <!-- Analog signals list -->
                 <local:AnalogSignalListControl
                     ClipToBounds="True"
                     d:DataContext="{x:Static core:AnalogSignalDesignModel.Instance}"
-                    Padding="3">
+                    Padding="3"
+                    local:FocusAndSelectProperty.Value="{Binding Selected}">
                 </local:AnalogSignalListControl>
             </Grid>
         </Border>
-        
+
         <!-- Register, Dwell Time, Start Delay Time, Measurement Interval and Start Measurement Delay-->
         <Border
             Grid.Column="0" 
             BorderBrush="Black" 
             BorderThickness="1" 
             ClipToBounds="True">
-        
+
             <Grid Margin="5">
-                
+
                 <Grid.RowDefinitions>
+                    <!-- Register -->
                     <RowDefinition />
+                    <!-- Dwell Time -->
                     <RowDefinition />
+                    <!-- Start Delay Time -->
                     <RowDefinition />
+                    <!-- Measurement Interval -->
                     <RowDefinition />
+                    <!-- Start Measurement Delay -->
                     <RowDefinition />
+                    <!-- Unused -->
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
@@ -68,9 +76,16 @@
                     TabIndex="0"
                     Padding="0 0 5 0"                 
                     HorizontalContentAlignment="Center" 
-                    Text="{Binding Register, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding Register, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F0\}, ConverterCulture=en-US}"
                     FontSize="18"
-                    ToolTip="The communication point to poll during the test steps"/>
+                    ToolTip="The communication point to poll during the test steps"
+                     local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+                    <!-- left click to select all text -->
+                    <TextBox.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
 
                 <!-- Dwell Time Setting -->
                 <TextBox 
@@ -80,9 +95,16 @@
                     TabIndex="1"
                     Padding="0 0 5 0" 
                     HorizontalContentAlignment="Center" 
-                    Text="{Binding DwellTime, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding DwellTime, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F0\}, ConverterCulture=en-US}"
                     FontSize="18"
-                    ToolTip="The duration of test steps"/>
+                    ToolTip="The duration of test steps"
+                    local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+                    <!-- left click to select all text -->
+                    <TextBox.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
 
                 <!-- Start Delay Time -->
                 <TextBox 
@@ -92,9 +114,16 @@
                     TabIndex="2" 
                     Padding="0 0 5 0" 
                     HorizontalContentAlignment="Center" 
-                    Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding StartDelayTime, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F2\}, ConverterCulture=en-US}"
                     FontSize="18"
-                    ToolTip="The delay time before the test step start"/>
+                    ToolTip="The delay time before the test step start"
+                    local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+                    <!-- left click to select all text -->
+                    <TextBox.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
 
                 <!-- Measurement Interval -->
                 <TextBox 
@@ -104,9 +133,16 @@
                     TabIndex="3" 
                     Padding="0 0 5 0"                   
                     HorizontalContentAlignment="Center" 
-                    Text="{Binding MeasurementInterval, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding MeasurementInterval, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F0\}, ConverterCulture=en-US}"
                     FontSize="18"
-                    ToolTip="The communication point polling interval"/>
+                    ToolTip="The communication point polling interval"
+                    local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+                    <!-- left click to select all text -->
+                    <TextBox.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
 
                 <!-- Start Measurement Delay -->
                 <TextBox 
@@ -116,9 +152,16 @@
                     TabIndex="4"
                     Padding="0 0 5 0"                  
                     HorizontalContentAlignment="Center" 
-                    Text="{Binding StartMeasurementDelay, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding StartMeasurementDelay, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F1\}, ConverterCulture=en-US}"
                     FontSize="18"
-                    ToolTip="The delay time before the communication point polling starts"/>
+                    ToolTip="The delay time before the communication point polling starts"
+                    local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+                    <!-- left click to select all text -->
+                    <TextBox.InputBindings>
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
 
             </Grid>
         </Border>

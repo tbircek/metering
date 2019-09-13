@@ -77,14 +77,23 @@ namespace metering.core
         /// </summary>
         public string StartMeasurementDelay { get; set; } = "5";
 
+        /// <summary>
+        /// indicates if the current text double left clicked to highlight the text
+        /// </summary>
+        public bool Selected { get; set; }
+
         #endregion
 
         #region Public Commands
 
+        /// <summary>
+        /// Selects all text on left clicked text box.
+        /// </summary>
+        public ICommand SelectAllTextCommand { get; set; }
 
         /// <summary>
         /// command to provide connection to both Attached Omicron and 
-        /// specified Test Unit ipaddress and port.
+        /// specified Test Unit IpAddress and port.
         /// </summary>
         public ICommand ConnectCommand { get; set; }
 
@@ -102,14 +111,29 @@ namespace metering.core
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
 
-            // create the command.
+            // create the commands.
             ConnectCommand = new RelayCommand(async () => await IoC.Communication.StartCommunicationAsync());
-
+            SelectAllTextCommand = new RelayCommand(SelectAll);
         }
 
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Selects all text on the text box
+        /// </summary>
+        public void SelectAll()
+        {
+            // simulate property change briefly to select all text in the text box
+            // as selecting all text should be last until the user leaves the control or types something
+
+            // Sets FocusAndSelectProperty to true
+            Selected = true;
+
+            // Sets FocusAndSelectProperty to false
+            Selected = false;
+        }
 
         #endregion
 
