@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
     xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:core="clr-namespace:metering.core;assembly=metering.core"
+    xmlns:local="clr-namespace:metering"
     x:Class="metering.AnalogSignalListItemControl"
     mc:Ignorable="d"
     FontSize="20">
@@ -47,8 +48,15 @@
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"             
                  HorizontalContentAlignment="Center" 
-                 Text="{Binding From, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged}"
-                 ToolTip="The test step start value"/>
+                 Text="{Binding From, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
+                 ToolTip="The test step start value"
+                 local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+            <!-- left click to select all text -->
+            <TextBox.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
 
         <!-- To -->
         <TextBox Grid.Column="2"
@@ -58,8 +66,15 @@
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"                
                  HorizontalContentAlignment="Center"
-                 Text="{Binding To, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged}"
-                 ToolTip="The test step end value"/>
+                 Text="{Binding To, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
+                 ToolTip="The test step end value"
+                 local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+            <!-- left click to select all text -->
+            <TextBox.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
 
         <!-- Delta-->
         <TextBox Grid.Column="3"
@@ -69,8 +84,15 @@
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"    
                  HorizontalContentAlignment="Center"
-                 Text="{Binding Delta, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged}"
-                 ToolTip="The test step increment value"/>
+                 Text="{Binding Delta, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
+                 ToolTip="The test step increment value"
+                 local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+            <!-- left click to select all text -->
+            <TextBox.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
 
         <!-- Phase -->
         <TextBox Grid.Column="4"
@@ -80,8 +102,15 @@
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"              
                  HorizontalContentAlignment="Center" 
-                 Text="{Binding Phase, StringFormat=\{0:F2\}, UpdateSourceTrigger=PropertyChanged}"
-                 ToolTip="The omicron analog signal phase value"/>
+                 Text="{Binding Phase, StringFormat=\{0:F2\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
+                 ToolTip="The omicron analog signal phase value"
+                 local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+            <!-- left click to select all text -->
+            <TextBox.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
 
         <!-- Frequency -->
         <TextBox Grid.Column="5"
@@ -91,8 +120,15 @@
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"               
                  HorizontalContentAlignment="Center" 
-                 Text="{Binding Frequency, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged}"
-                 ToolTip="The omicron analog signal frequency value"/>
+                 Text="{Binding Frequency, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
+                 ToolTip="The omicron analog signal frequency value"
+                 local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+            <!-- left click to select all text -->
+            <TextBox.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
 
     </Grid>
 </UserControl>
