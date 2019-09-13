@@ -58,15 +58,18 @@ namespace metering.core
         public bool IsUnitUnderTestConnected { get; set; } = false;
 
         /// <summary>
-        /// a command detects left double clicks on the controls
-        /// if control is a textbox then select all text
+        /// indicates if the current text double left clicked to highlight the text
         /// </summary>
-        public ICommand LeftDoubleClickCommand { get; set; }
+        public bool Selected { get; set; }
+
+        #endregion
+
+        #region Public Commands
 
         /// <summary>
-        /// a flag to indicate if the control left double clicked.
+        /// Selects all text on left clicked text box.
         /// </summary>
-        public bool IsDoubleLeftClick { get; set; } = false;
+        public ICommand SelectAllTextCommand { get; set; }
 
         #endregion
 
@@ -85,7 +88,8 @@ namespace metering.core
             // inform the user Application started.
             Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Application Starts\n";
 
-            LeftDoubleClickCommand = new RelayCommand(() => LeftDoubleClick());
+            // create command
+            SelectAllTextCommand = new RelayCommand(SelectAll);
         }
 
         #endregion
@@ -93,15 +97,18 @@ namespace metering.core
         #region Public Method
 
         /// <summary>
-        /// if the user left double clicks on a control and the control is a textbox
-        /// this function will select all text in the field.
+        /// Selects all text on the text box
         /// </summary>
-        private void LeftDoubleClick()
+        public void SelectAll()
         {
-            Debug.WriteLine("Someone left double clicked me...");
+            // simulate property change briefly to select all text in the text box
+            // as selecting all text should be last until the user leaves the control or types something
 
-            // update IsDoubLeftClick property value
-            IsDoubleLeftClick = true;
+            // Sets FocusAndSelectProperty to true
+            Selected = true;
+
+            // Sets FocusAndSelectProperty to false
+            Selected = false;
         }
 
         /// <summary>
