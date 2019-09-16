@@ -63,7 +63,7 @@ namespace meteringspecs.features.omicron
         {
             // manual observation?
             //engine.TurnOnCMC();
-            await engine.TestSample(Register: 2279,
+            await engine.TestSampleAsync(Register: 2279,
                               From: 4.0 * 100.0 / 120.0,
                               To: 4.0 * 135.0 / 120.0,
                               Delta: 4.0 * 7.0 / 120.0,

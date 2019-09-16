@@ -153,7 +153,7 @@ namespace metering.core
                             if (IoC.CMCControl.DeviceID > 0)
                             {
                                 // Run the test schedule per the user input
-                                await IoC.CMCControl.TestSample
+                                await IoC.CMCControl.TestSampleAsync
                                 (
                                     // communication register to retrieve information from
                                     Register: Convert.ToInt32(IoC.TestDetails.Register),
