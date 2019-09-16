@@ -359,6 +359,39 @@ namespace metering.core
         }
 
         /// <summary>
+        /// Handles errors and stops the app gracefully.
+        /// </summary>
+        /// <param name="userRequest">false if test interrupt requested by the user
+        /// true if test completed itself</param>
+        public void ProcessErrors(bool userRequest)
+        {
+            // lock the thread
+            lock (mThreadLock)
+            {
+                if (!userRequest)
+                {
+                    // update developer "Test interrupted"
+                    Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tTest interrupted\n");
+
+                    // update the user "Test interrupted"
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test interrupted by the user.\n";
+                }
+
+                // Turn off outputs of Omicron Test Set and release it.
+                TurnOffCMC();
+
+                // Disconnect Modbus Communication
+                IoC.Communication.EAModbusClient.Disconnect();
+
+                // Progress bar is invisible
+                IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
+
+                // change color of Cancel Command button to Red
+                IoC.Commands.CancelForegroundColor = "ff0000";
+            }
+        }
+
+        /// <summary>
         /// Presentation quick fix. Would have to be in a separate class.
         /// </summary>
         /// <param name="Register">Modbus register to monitor.</param>
@@ -371,7 +404,7 @@ namespace metering.core
         /// <param name="MeasurementInterval">Specifies register reading interval.</param>
         /// <param name="StartMeasurementDelay">Wait time after a test magnitude applied.</param>
         /// <param name="message">Test message to pass to the Log textbox</param>
-        public async Task TestSample(int Register, double From, double To, double Delta, double DwellTime, double MeasurementDuration, double StartDelayTime, double MeasurementInterval, double StartMeasurementDelay, string message)
+        public async Task TestSampleAsync(int Register, double From, double To, double Delta, double DwellTime, double MeasurementDuration, double StartDelayTime, double MeasurementInterval, double StartMeasurementDelay, string message)
         {
 
             try
@@ -422,13 +455,13 @@ namespace metering.core
                     {
 
                         // set timer to read modbus register per the user specified time.
-                        MdbusTimer = new Timer(TimerTick, Register, TimeSpan.FromSeconds(StartMeasurementDelay), TimeSpan.FromMilliseconds(MeasurementInterval));
+                        MdbusTimer = new Timer(MeasurementIntervalCallbackAsync, Register, TimeSpan.FromSeconds(StartMeasurementDelay), TimeSpan.FromMilliseconds(MeasurementInterval));
 
                         // inform the developer about test register and start value.
-                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {Register}\tTest value: {testStartValue:F3}");
+                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {Register}\tTest value: {testStartValue:F3} started");
 
                         // inform the user about test register and start value.
-                        IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {Register} --- Test value: {testStartValue:F3}\n";
+                        IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {Register} --- Test value: {testStartValue:F3} started\n";
 
                         // set voltage amplifiers default values.
                         // Analog signal: Voltage Output 1:
@@ -502,12 +535,13 @@ namespace metering.core
 
                         // wait for the timer to expire
                         t.Wait();
+                        
+                        // inform the developer about test register and start value.
+                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {Register}\tTest value: {testStartValue:F3} completed.");
 
-                        // update developer "Test completed"
-                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tTest completed for register: {Register}\n");
+                        // inform the user about test register and start value.
+                        IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {Register} --- Test value: {testStartValue:F3} completed.\n";
 
-                        // update the user "Test completed"
-                        IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed for register: {Register}.\n";
                     }
                     else
                     {
@@ -517,6 +551,12 @@ namespace metering.core
                             MdbusTimer.Dispose();
                     }
                 }
+                               
+                // update developer "Test completed"
+                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tTest step completed for register: {Register}\n");
+
+                // update the user "Test completed"
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed for register: {Register}.\n";
 
             }
             catch (Exception ex)
@@ -533,46 +573,20 @@ namespace metering.core
                     // inform the user about more details about error.
                     IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
                 }
+
+                // Trying to stop the app gracefully.
+                await Task.Run(() => ProcessErrors(false));
             }
             finally
             {
                 // Trying to stop the app gracefully.
-                await Task.Run(() => ProcessErrors());
+                await Task.Run(() => ProcessErrors(true));
             }
         }
 
         #endregion
 
         #region Private Methods
-
-        /// <summary>
-        /// Handles errors and stops the app gracefully.
-        /// </summary>
-        private void ProcessErrors()
-        {
-            // lock the thread
-            lock (mThreadLock)
-            {
-
-                // update developer "Test interrupted"
-                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tTest interrupted\n");
-
-                // update the user "Test interrupted"
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test interrupted by the user.\n";
-
-                // Turn off outputs of Omicron Test Set and release it.
-                TurnOffCMC();
-
-                // Disconnect Modbus Communication
-                IoC.Communication.EAModbusClient.Disconnect();
-
-                // Progress bar is invisible
-                IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
-
-                // change color of Cancel Command button to Red
-                IoC.Commands.CancelForegroundColor = "ff0000";
-            }
-        }
 
         /// <summary>
         /// Logs test results
@@ -604,87 +618,28 @@ namespace metering.core
         /// <summary>
         /// Allows to read test register values specified by "Measurement Interval".
         /// </summary>
-        private void TimerTickOld(object Register)
+        private async void MeasurementIntervalCallbackAsync(object Register)
         {
             // read Modbus register in interval that specified by the user 
             try
             {
+
+                // if a cancellation requested stop reading register
+                if (IoC.Commands.Token.IsCancellationRequested)
+                    return;
+                
                 // convert register string to integer.
                 int register = Convert.ToInt32(Register);
 
                 // verify the register is a legit
-                if (register >= 0 && register <= 65535)
+                if (register >= 0 && register <= 65536)
                 {
-                    // receive serverResponse, register is 0 based 
-                    int[] serverResponse = Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1)).Result;
-
-
-                    // decide if serverResponse is acceptable only criteria is the length of the response.
-                    if (serverResponse.Length > 0)
-                    {
-                        // establish minimum and maximum values.
-                        for (int i = 0; i < serverResponse.Length; i++)
-                        {
-                            // update minimum value with new value if new value is less or minimum value was 0
-                            if (MinTestValue > serverResponse[i] || MinTestValue == 0)
-                            {
-                                // update minimum value
-                                MinTestValue = serverResponse[i];
-                            }
-
-                            // update maximum value with new value if new value is less or maximum value was 0
-                            if (MaxTestValue < serverResponse[i] || MaxTestValue == 0)
-                            {
-                                // update maximum value
-                                MaxTestValue = serverResponse[i];
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //TODO: server failed to respond. Ignoring it until find a better option.
-                    }
-                }
-                else
-                {
-                    // TODO: Terminate timer, close communication port and close omicron analog outputs
-                }
-
-            }
-            catch (Exception ex)
-            {
-                // TODO: show error once and terminate connection
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.\n";
-
-                // catch inner exceptions if exists
-                if (ex.InnerException != null)
-                {
-                    // update the user.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// Allows to read test register values specified by "Measurement Interval".
-        /// </summary>
-        private void TimerTick(object Register)
-        {
-            // read Modbus register in interval that specified by the user 
-            try
-            {
-                // convert register string to integer.
-                int register = Convert.ToInt32(Register);
-
-                // verify the register is a legit
-                if (register >= 0 && register <= 65535)
-                {
-                    // start a await-able task wrapper read register specified by the user.
-                    var t = Task.Run(() =>
+                                        
+                    // start a task to read register address specified by the user.
+                    await Task.Run(async () =>
                     {
                         // start a task to read holding register (Function 0x03)
-                        int[] serverResponse = Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1)).Result;
+                        int[] serverResponse = await Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1));
 
                         // decide if serverResponse is acceptable only criteria is the length of the response.
                         if (serverResponse.Length > 0)
@@ -716,8 +671,9 @@ namespace metering.core
                 }
                 else
                 {
+                    // illegal register address
                     // Trying to stop the app gracefully.
-                    var t = Task.Run(() => ProcessErrors());
+                    await Task.Run(() => ProcessErrors(false));
                 }
 
             }
@@ -732,6 +688,9 @@ namespace metering.core
                     // update the user.
                     IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
                 }
+
+                // Trying to stop the app gracefully.
+                await Task.Run(() => ProcessErrors(false));
             }
         }
 

@@ -156,7 +156,7 @@ namespace metering.core
                 TokenSource.Cancel();
 
                 // try to stop Omicron Test Set gracefully
-                IoC.CMCControl.TurnOffCMC();
+                IoC.CMCControl.ProcessErrors(false);
             }
         }
 
