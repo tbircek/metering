@@ -74,7 +74,11 @@ namespace metering
             Current.MainWindow.Show();
 
             // check for the updates
-            CheckForUpdates();
+            Task.Run(async () =>
+            {
+               await CheckForUpdates();
+            });
+           
 
         }
 
