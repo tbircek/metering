@@ -105,7 +105,7 @@
                 <mD:PackIcon.Style>
                     <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
                         <Setter Property="Kind" Value="CloseOctagonOutline"/>
-                        <Setter Property="Foreground" Value="{Binding CancelForegroundColor, 
+                        <Setter Property="Background" Value="{Binding CancelForegroundColor, 
                                                                         Converter={local:StringToBrushConverter}}"/>
                     </Style>
                 </mD:PackIcon.Style>
