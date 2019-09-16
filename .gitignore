@@ -31,8 +31,6 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 .vs*
 /UpgradeLog*
-packages*
-*.ico
+[Pp]ackages*/
 *.nupkg
-*.png
 *.nuspec
