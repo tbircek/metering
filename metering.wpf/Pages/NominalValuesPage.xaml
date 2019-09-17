@@ -108,7 +108,7 @@
                     <StackPanel Orientation="Vertical">
                         
                         <!-- Voltage Phase Option 0°-->
-                        <RadioButton 
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding VoltagePhaseOptionZero}"
                             GroupName="voltage"
                             IsChecked="True"
@@ -120,7 +120,7 @@
                             ToolTip="All voltage phases will be zero"/>
 
                         <!-- Voltage Phase Option Balance-->
-                        <RadioButton 
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding VoltagePhaseOptionBalanced}"
                             GroupName="voltage"
                             Padding="5"
@@ -143,7 +143,7 @@
                     <StackPanel>
                         
                         <!-- Current Phase Option 0°-->
-                        <RadioButton 
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding CurrentPhaseOptionZero}"
                             GroupName="current"
                             IsChecked="True"
@@ -155,7 +155,7 @@
                             ToolTip="All current phases will be zero"/>
 
                         <!-- Current Phase Option Balance-->
-                        <RadioButton 
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding CurrentPhaseOptionBalanced}"
                             GroupName="current"
                             Padding="5"
