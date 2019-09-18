@@ -31,7 +31,7 @@ namespace metering.core
         /// IpAddress of the test unit.
         /// </summary>
         public string IpAddress { get; set; } = "192.168.0.122";
-        
+
         /// <summary>
         /// Hint value for Port textbox
         /// </summary>
@@ -147,45 +147,17 @@ namespace metering.core
                         if (IoC.CMCControl.FindCMC())
                         {
                             // perform initial set up on CMCEngine
-                            IoC.CMCControl.InitialSetup();
+                            IoC.InitialCMCSetup.InitialSetup();
 
                             // Is there Omicron Test Set attached to this app?
                             if (IoC.CMCControl.DeviceID > 0)
                             {
-                                // Run the test schedule per the user input
-                                await IoC.CMCControl.TestSampleAsync
+
+                                await IoC.CMCControl.TestAsync
                                 (
-                                    // communication register to retrieve information from
-                                    Register: Convert.ToInt32(IoC.TestDetails.Register),
-
-                                    // start of the test steps value
-                                    From: Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].From),
-
-                                    // end of the test steps value
-                                    To: Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].To),
-
-                                    // increment of the steps
-                                    Delta: Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Delta),
-
-                                    // duration of the test steps
-                                    DwellTime: Convert.ToDouble(IoC.TestDetails.DwellTime),
-
-                                    // currently not used
-                                    MeasurementDuration: 0d,
-
-                                    // time to start tests
-                                    StartDelayTime: Convert.ToDouble(IoC.TestDetails.StartDelayTime),
-
-                                    // interval to read the register through communication protocol
-                                    MeasurementInterval: Convert.ToDouble(IoC.TestDetails.MeasurementInterval),
-
-                                    // Delay reading of the register to prevent out of range values due to ramp up
-                                    StartMeasurementDelay: Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay),
-
                                     // excel header values for reporting.
-                                    message: $"Time,Register,Test Value,Min Value,Max Value\n"
-                                );
-
+                                    Message: $"Time,Register,Test Value,Min Value,Max Value\n"
+                                 );
                             }
                             else
                             {

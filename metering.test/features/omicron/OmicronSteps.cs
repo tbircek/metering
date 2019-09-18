@@ -54,7 +54,7 @@ namespace meteringspecs.features.omicron
         public void ThenTheResultShouldBeAOkOnTheScreen()
         {
             // initial setup run?
-            engine.InitialSetup();
+            IoC.InitialCMCSetup.InitialSetup();
             Assert.AreEqual(1, engine.DeviceID);
         }
 
@@ -63,17 +63,19 @@ namespace meteringspecs.features.omicron
         {
             // manual observation?
             //engine.TurnOnCMC();
-            await engine.TestSampleAsync(Register: 2279,
-                              From: 4.0 * 100.0 / 120.0,
-                              To: 4.0 * 135.0 / 120.0,
-                              Delta: 4.0 * 7.0 / 120.0,
-                              DwellTime: 15,
-                              MeasurementDuration: 0,
-                              StartDelayTime: 5,
-                              MeasurementInterval: 50,
-                              StartMeasurementDelay: 10,
-                              message: string.Empty
-                              );
+
+            await IoC.CMCControl.TestAsync("test running");
+            //await engine.TestSampleAsync(Register: 2279,
+            //                  From: 4.0 * 100.0 / 120.0,
+            //                  To: 4.0 * 135.0 / 120.0,
+            //                  Delta: 4.0 * 7.0 / 120.0,
+            //                  DwellTime: 15,
+            //                  MeasurementDuration: 0,
+            //                  StartDelayTime: 5,
+            //                  MeasurementInterval: 50,
+            //                  StartMeasurementDelay: 10,
+            //                  message: string.Empty
+            //                  );
         }
 
         [Then(@"Omicron Test Set should be power down")]

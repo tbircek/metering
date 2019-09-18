@@ -88,7 +88,7 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nominal Current (mA):.
+        ///   Looks up a localized string similar to Nominal Current (A):.
         /// </summary>
         public static string global_nominal_current {
             get {
@@ -232,6 +232,24 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delta (A).
+        /// </summary>
+        public static string header_delta_current {
+            get {
+                return ResourceManager.GetString("header_delta_current", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delta (V).
+        /// </summary>
+        public static string header_delta_voltage {
+            get {
+                return ResourceManager.GetString("header_delta_voltage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dwell Time (sec).
         /// </summary>
         public static string header_dwell_time {
@@ -259,7 +277,7 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to From (I).
+        ///   Looks up a localized string similar to From (A).
         /// </summary>
         public static string header_from_current {
             get {
@@ -403,7 +421,7 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To (I).
+        ///   Looks up a localized string similar to To (A).
         /// </summary>
         public static string header_to_current {
             get {

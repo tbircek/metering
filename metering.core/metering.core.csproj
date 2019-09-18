@@ -70,6 +70,7 @@
     <Compile Include="Omicron\PowerOptions.cs" />
     <Compile Include="Omicron\ScanCMC.cs" />
     <Compile Include="Omicron\StringCommands.cs" />
+    <Compile Include="Omicron\TestSignal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\OmicronStringCmd.Designer.cs">
       <DependentUpon>OmicronStringCmd.resx</DependentUpon>

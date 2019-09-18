@@ -38,7 +38,7 @@ namespace metering.core
         /// <summary>
         /// Default Current magnitude to use through out the test
         /// </summary>
-        public string NominalCurrent { get; set; } = "0.0";
+        public string NominalCurrent { get; set; } = "0.000";
 
         /// <summary>
         /// Hint for the Nominal Frequency text entry
@@ -59,7 +59,7 @@ namespace metering.core
         /// Content of the Nominal Voltage Phase 0°
         /// </summary>
         public string VoltagePhaseOptionZero { get; set; } = Resources.Strings.global_nominal_phase_zero;
-        
+
         /// <summary>
         /// Content of the Nominal Voltage Phase Balanced
         /// </summary>
@@ -79,7 +79,7 @@ namespace metering.core
         /// Content of the Nominal Current Phase Balanced
         /// </summary>
         public string CurrentPhaseOptionBalanced { get; set; } = Resources.Strings.global_nominal_phase_balance;
-        
+
         /// <summary>
         /// Default Voltage phase to use through out the test
         /// </summary>
@@ -104,7 +104,7 @@ namespace metering.core
         /// Default Delta value to use through out the test
         /// Delta == magnitude difference between test steps
         /// </summary>
-        public string NominalDelta { get; set; } = "0.0333";
+        public string NominalDelta { get; set; } = "0.033";
 
         /// <summary>
         /// indicates if the current text double left clicked to highlight the text
@@ -191,7 +191,12 @@ namespace metering.core
             // generate AnalogSignalListItems
             for (int i = 1; i <= omicronAnalogSignalNumber; i++)
             {
-                
+
+                // exclude "V4", "I4", "I5", and "I6" signals until further notice
+                if (i == 4 || i > 7)
+                    // continue next iteration
+                    continue;
+
                 // Generate AnalogSignals values.
                 analogSignals.Add(new AnalogSignalListItemViewModel
                 {
@@ -200,7 +205,7 @@ namespace metering.core
                     // current signals names restart at 1 => (i - omicronVoltageSignalNumber)
                     SignalName = i <= omicronVoltageSignalNumber ? "v" + i : "i" + (i - omicronVoltageSignalNumber),
                     From = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
-                    To = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}": $"{Convert.ToDouble(NominalCurrent):F3}",
+                    To = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
                     Delta = $"{Convert.ToDouble(NominalDelta):F3}",
                     Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
                     Frequency = $"{Convert.ToDouble(NominalFrequency):F3}"

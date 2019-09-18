@@ -40,6 +40,7 @@
                             Padding="5"
                             HorizontalContentAlignment="Center"
                             Text="{Binding Path=NominalVoltage, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F2\}, ConverterCulture=en-US}"
+                            FontSize="16"
                             ToolTip="This value will apply to all Voltage related from and to values"
                             local:FocusAndSelectProperty.Value="{Binding Selected}">                                                      
                             
@@ -56,7 +57,8 @@
                             TabIndex="3"  
                             Padding="5"
                             HorizontalContentAlignment="Center"
-                            Text="{Binding NominalCurrent, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F2\}, ConverterCulture=en-US}"
+                            Text="{Binding NominalCurrent, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
+                            FontSize="16"
                             ToolTip="This value will apply to all Current related from and to values"
                             local:FocusAndSelectProperty.Value="{Binding Selected}">
 
@@ -74,6 +76,7 @@
                             Padding="5"
                             HorizontalContentAlignment="Center"
                             Text="{Binding Path=NominalFrequency, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
+                            FontSize="16"
                             ToolTip="This value will apply to all Frequency related from and to values"
                             local:FocusAndSelectProperty.Value="{Binding Selected}">
 
@@ -108,7 +111,7 @@
                     <StackPanel Orientation="Vertical">
                         
                         <!-- Voltage Phase Option 0°-->
-                        <RadioButton 
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding VoltagePhaseOptionZero}"
                             GroupName="voltage"
                             IsChecked="True"
@@ -120,7 +123,7 @@
                             ToolTip="All voltage phases will be zero"/>
 
                         <!-- Voltage Phase Option Balance-->
-                        <RadioButton 
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding VoltagePhaseOptionBalanced}"
                             GroupName="voltage"
                             Padding="5"
@@ -143,7 +146,7 @@
                     <StackPanel>
                         
                         <!-- Current Phase Option 0°-->
-                        <RadioButton 
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding CurrentPhaseOptionZero}"
                             GroupName="current"
                             IsChecked="True"
@@ -155,7 +158,7 @@
                             ToolTip="All current phases will be zero"/>
 
                         <!-- Current Phase Option Balance-->
-                        <RadioButton 
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding CurrentPhaseOptionBalanced}"
                             GroupName="current"
                             Padding="5"
@@ -186,7 +189,8 @@
                             TabIndex="7"  
                             Padding="5"                   
                             HorizontalContentAlignment="Center"
-                            Text="{Binding NominalDelta, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F4\}, ConverterCulture=en-US}"
+                            Text="{Binding NominalDelta, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
+                            FontSize="16"
                             ToolTip="This value will increment all test steps per specified amount"
                             local:FocusAndSelectProperty.Value="{Binding Selected}">
 

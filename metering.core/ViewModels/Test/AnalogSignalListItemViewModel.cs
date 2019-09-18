@@ -29,7 +29,15 @@ namespace metering.core
         /// <summary>
         /// Hint label for From entry.
         /// </summary>
-        public string FromHint { get; set; } = Resources.Strings.header_from;
+        public string FromHint 
+        {
+            get
+            {
+                // Returns Voltage hint text for "v" signals, or Current hint text for "i" signals
+                return SignalName.StartsWith("v") ? Resources.Strings.header_from_voltage : Resources.Strings.header_from_current;
+            }
+            set { }
+        }
 
         /// <summary>
         /// Omicron Analog Output end magnitude 
@@ -39,7 +47,15 @@ namespace metering.core
         /// <summary>
         /// Hint label for To entry.
         /// </summary>
-        public string ToHint { get; set; } = Resources.Strings.header_to;
+        public string ToHint
+        {
+            get
+            {
+                // Returns Voltage hint text for "v" signals, or Current hint text for "i" signals
+                return SignalName.StartsWith("v") ? Resources.Strings.header_to_voltage : Resources.Strings.header_to_current;
+            }
+            set { }
+        }
 
         /// <summary>
         /// Omicron Analog Output magnitude increment/decrement
@@ -49,8 +65,16 @@ namespace metering.core
         /// <summary>
         /// Hint label for Delta entry.
         /// </summary>
-        public string DeltaHint { get; set; } = Resources.Strings.header_delta;
-
+        public string DeltaHint
+        {
+            get
+            {
+                // Returns Voltage hint text for "v" signals, or Current hint text for "i" signals
+                return SignalName.StartsWith("v") ? Resources.Strings.header_delta_voltage : Resources.Strings.header_delta_current;
+            }
+            set { }
+        }
+        
         /// <summary>
         /// Omicron Analog Output phase
         /// </summary>
