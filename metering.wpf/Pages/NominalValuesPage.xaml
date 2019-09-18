@@ -56,7 +56,7 @@
                             TabIndex="3"  
                             Padding="5"
                             HorizontalContentAlignment="Center"
-                            Text="{Binding NominalCurrent, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F2\}, ConverterCulture=en-US}"
+                            Text="{Binding NominalCurrent, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
                             ToolTip="This value will apply to all Current related from and to values"
                             local:FocusAndSelectProperty.Value="{Binding Selected}">
 
@@ -186,7 +186,7 @@
                             TabIndex="7"  
                             Padding="5"                   
                             HorizontalContentAlignment="Center"
-                            Text="{Binding NominalDelta, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F4\}, ConverterCulture=en-US}"
+                            Text="{Binding NominalDelta, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
                             ToolTip="This value will increment all test steps per specified amount"
                             local:FocusAndSelectProperty.Value="{Binding Selected}">
 

@@ -38,7 +38,7 @@ namespace metering.core
         /// <summary>
         /// Default Current magnitude to use through out the test
         /// </summary>
-        public string NominalCurrent { get; set; } = "0.0";
+        public string NominalCurrent { get; set; } = "0.000";
 
         /// <summary>
         /// Hint for the Nominal Frequency text entry
@@ -104,7 +104,7 @@ namespace metering.core
         /// Default Delta value to use through out the test
         /// Delta == magnitude difference between test steps
         /// </summary>
-        public string NominalDelta { get; set; } = "0.0333";
+        public string NominalDelta { get; set; } = "0.033";
 
         /// <summary>
         /// indicates if the current text double left clicked to highlight the text
