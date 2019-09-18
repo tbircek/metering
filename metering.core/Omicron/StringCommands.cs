@@ -54,12 +54,15 @@ namespace metering.core
 
                     // send newly generated string command to Omicron Test Set
                     engine.Exec(deviceID, stringBuilder.ToString());
+
+                    // inform developer about string command send to omicron test set
+                    Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: device ID: {deviceID}\tcommand: {stringBuilder}");
                 }
             }
             catch (Exception err)
             {
                 // inform the developer about error.
-                Debug.WriteLine(string.Format("sendOutAna::Exception is : {0}", err.Message));
+                Debug.WriteLine($"sendOutAna::Exception is : {err.Message}");
             }
         }
 
@@ -83,7 +86,7 @@ namespace metering.core
             catch (Exception err)
             {
                 // inform the developer about error.
-                Debug.WriteLine(String.Format("sendStringCommand::Exception is : {0}", err.Message));
+                Debug.WriteLine($"sendStringCommand::Exception is : {err.Message}");
             }
         }
     }
