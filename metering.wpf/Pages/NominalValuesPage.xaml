@@ -40,6 +40,7 @@
                             Padding="5"
                             HorizontalContentAlignment="Center"
                             Text="{Binding Path=NominalVoltage, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F2\}, ConverterCulture=en-US}"
+                            FontSize="16"
                             ToolTip="This value will apply to all Voltage related from and to values"
                             local:FocusAndSelectProperty.Value="{Binding Selected}">                                                      
                             
@@ -57,6 +58,7 @@
                             Padding="5"
                             HorizontalContentAlignment="Center"
                             Text="{Binding NominalCurrent, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
+                            FontSize="16"
                             ToolTip="This value will apply to all Current related from and to values"
                             local:FocusAndSelectProperty.Value="{Binding Selected}">
 
@@ -74,6 +76,7 @@
                             Padding="5"
                             HorizontalContentAlignment="Center"
                             Text="{Binding Path=NominalFrequency, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
+                            FontSize="16"
                             ToolTip="This value will apply to all Frequency related from and to values"
                             local:FocusAndSelectProperty.Value="{Binding Selected}">
 
@@ -187,6 +190,7 @@
                             Padding="5"                   
                             HorizontalContentAlignment="Center"
                             Text="{Binding NominalDelta, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
+                            FontSize="16"
                             ToolTip="This value will increment all test steps per specified amount"
                             local:FocusAndSelectProperty.Value="{Binding Selected}">
 
