@@ -27,36 +27,36 @@ namespace metering.core
         /// </summary>
         private StringCommands omicronStringCommands;
 
-        /// <summary>
-        /// Omicron Test Set maximum voltage output limit.
-        /// </summary>
-        private const double maxVoltageMagnitude = 8.0f;
+        ///// <summary>
+        ///// Omicron Test Set maximum voltage output limit.
+        ///// </summary>
+        //private const double maxVoltageMagnitude = 8.0f;
 
-        /// <summary>
-        /// Omicron Test Set maximum voltage output limit.
-        /// </summary>
-        private const double maxCurrentMagnitude = 2.0f;
+        ///// <summary>
+        ///// Omicron Test Set maximum voltage output limit.
+        ///// </summary>
+        //private const double maxCurrentMagnitude = 2.0f;
 
-        /// <summary>
-        /// Default value of Voltage amplifiers while testing non-voltage values.
-        /// </summary>
-        const double nominalVoltage = 120.0f;
+        ///// <summary>
+        ///// Default value of Voltage amplifiers while testing non-voltage values.
+        ///// </summary>
+        //const double nominalVoltage = 120.0f;
 
-        /// <summary>
-        /// Default value of Current amplifiers while testing non-current values.
-        /// </summary>
-        const double nominalCurrent = 0.02f;
+        ///// <summary>
+        ///// Default value of Current amplifiers while testing non-current values.
+        ///// </summary>
+        //const double nominalCurrent = 0.02f;
 
-        /// <summary>
-        /// Default value of amplifiers phase while testing non-phase values.
-        /// </summary>
-        const double phase = 0.0f;
+        ///// <summary>
+        ///// Default value of amplifiers phase while testing non-phase values.
+        ///// </summary>
+        //const double phase = 0.0f;
 
-        /// <summary>
-        /// Default value of Frequency amplifiers while testing non-frequency values and
-        /// must be a non-zero value.
-        /// </summary>
-        const double nominalFrequency = 60.0f;
+        ///// <summary>
+        ///// Default value of Frequency amplifiers while testing non-frequency values and
+        ///// must be a non-zero value.
+        ///// </summary>
+        //const double nominalFrequency = 60.0f;
 
         /// <summary>
         /// a thread lock object for this class
@@ -193,50 +193,50 @@ namespace metering.core
             return true;
         }
 
-        /// <summary>
-        /// Sets Omicron Test Set default values and limits.
-        /// </summary>
-        public void InitialSetup()
-        {
-            try
-            {
-                // initialize routes.
-                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_init);
-                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_def_init);
-                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_voltage);
-                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_current);
+        ///// <summary>
+        ///// Sets Omicron Test Set default values and limits.
+        ///// </summary>
+        //public void InitialSetup()
+        //{
+        //    try
+        //    {
+        //        // initialize routes.
+        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_init);
+        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_def_init);
+        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_voltage);
+        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_current);
 
-                // update ranges.
-                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_voltage, maxVoltageMagnitude));
-                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_current, maxCurrentMagnitude));
+        //        // update ranges.
+        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_voltage, maxVoltageMagnitude));
+        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_current, maxCurrentMagnitude));
 
-                // change power mode.
-                OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_pmode);
+        //        // change power mode.
+        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_pmode);
 
-                //// set voltage amplifiers default values.
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", nominalVoltage, phase, nominalFrequency);
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", nominalVoltage, phase, nominalFrequency);
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", nominalVoltage, phase, nominalFrequency);
+        //        //// set voltage amplifiers default values.
+        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", nominalVoltage, phase, nominalFrequency);
+        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", nominalVoltage, phase, nominalFrequency);
+        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", nominalVoltage, phase, nominalFrequency);
 
-                //// set current amplifiers default values.
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", nominalCurrent, phase, nominalFrequency);
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", nominalCurrent, phase, nominalFrequency);
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", nominalCurrent, phase, nominalFrequency);
+        //        //// set current amplifiers default values.
+        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", nominalCurrent, phase, nominalFrequency);
+        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", nominalCurrent, phase, nominalFrequency);
+        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", nominalCurrent, phase, nominalFrequency);
 
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"initial setup::Exception InnerException is : {ex.Message}");
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}\n";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine($"initial setup::Exception InnerException is : {ex.Message}");
+        //        IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}\n";
 
-                // catch inner exceptions if exists
-                if (ex.InnerException != null)
-                {
-                    // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
-                }
-            }
-        }
+        //        // catch inner exceptions if exists
+        //        if (ex.InnerException != null)
+        //        {
+        //            // inform the user about more details about error.
+        //            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Disconnects and releases associated Omicron Test Set.
@@ -288,7 +288,7 @@ namespace metering.core
                 lock (mThreadLock)
                 {
                     // send Turn off command to Omicron Test Set
-                    OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_outputOff);
+                    IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOff);
 
                     // update the developer
                     Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: turnOffCMC setup: started\t");
@@ -335,7 +335,7 @@ namespace metering.core
                 lock (mThreadLock)
                 {
                     // Send command to Turn On Analog Outputs
-                    OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_outputOn);
+                    IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOn);
 
                     // update the developer
                     Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: turnOnCMC setup: started\t");
@@ -376,6 +376,12 @@ namespace metering.core
                     // update the user "Test interrupted"
                     IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test interrupted by the user.\n";
                 }
+                else
+                {
+
+                    // update the user "Test interrupted"
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed.\n";
+                }
 
                 // Turn off outputs of Omicron Test Set and release it.
                 TurnOffCMC();
@@ -392,40 +398,22 @@ namespace metering.core
         }
 
         /// <summary>
-        /// Presentation quick fix. Would have to be in a separate class.
+        /// Runs Test Steps
         /// </summary>
-        /// <param name="Register">Modbus register to monitor.</param>
-        /// <param name="From">Test start point.</param>
-        /// <param name="To">Test stop point.</param>
-        /// <param name="Delta">Test interval magnitude point.</param>
-        /// <param name="DwellTime">Test interval time point.</param>
-        /// <param name="MeasurementDuration">Overall test time for this particular register.</param>
-        /// <param name="StartDelayTime">Wait time to stay in chamber room before a test magnitude applied.</param>
-        /// <param name="MeasurementInterval">Specifies register reading interval.</param>
-        /// <param name="StartMeasurementDelay">Wait time after a test magnitude applied.</param>
-        /// <param name="message">Test message to pass to the Log textbox</param>
-        public async Task TestSampleAsync(int Register, double From, double To, double Delta, double DwellTime, double MeasurementDuration, double StartDelayTime, double MeasurementInterval, double StartMeasurementDelay, string message)
+        /// <returns></returns>
+        public async Task TestAsync(string Message)
         {
-
             try
             {
-                // inform the developer about test parameters.
-                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tTest parameters:");
 
-                // insert indentation to make it easier to see in console.
-                Debug.Indent();
-
-                // show test parameters to developer
-                Debug.WriteLine($"From: {From:F3}\tTo: {To}\t\tDelta: {Delta:F3}\t\t\t\t\tDwell time: {DwellTime}sec\r\tStart delay time: {StartDelayTime}min\tMeasurement interval: {MeasurementInterval}mSec\tStart measurement delay: {StartMeasurementDelay}sec\n");
-
-                // remove indentation.
-                Debug.Unindent();
+                // update test progress
+                int progressStep = default(int);
 
                 // Wait StartDelayTime to start Modbus communication
-                var delay = Task.Run(async delegate
+                Task.Run(async delegate
                 {
                     // wait for the user specified "Start Delay Time"
-                    await Task.Delay(TimeSpan.FromMinutes(StartDelayTime));
+                    await Task.Delay(TimeSpan.FromMinutes(Convert.ToDouble(IoC.TestDetails.StartDelayTime)), IoC.Commands.Token);
 
                     // Progress bar is visible
                     IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
@@ -433,114 +421,125 @@ namespace metering.core
                     // change color of Cancel Command button to Green
                     IoC.Commands.CancelForegroundColor = "00ff00";
 
-                });
+                    // test starts 
+                    progressStep = 0;
 
-                // wait for modbus connection
-                delay.Wait();
-
-                // update test progress
-                int progressStep = 1;
+                }, IoC.Commands.Token).Wait();
 
                 // report file id to distinguish between test results 
-                string fileId = $"{DateTime.Now.ToLocalTime():MM_dd_yy_hh_mm}";
+                string fileId = $"{DateTime.Now.ToLocalTime():yyyy_MM_dd_HH_mm}";
+
+                // TODO: decide which signal is our ramping signal
+                TestSignal testSignal = new TestSignal();
+
+                // verify we have a ramping signal
+                if (string.IsNullOrWhiteSpace(testSignal.SignalName))
+                {
+                    // inform the user there is no test case
+                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: There is no ramping signal.Please check your entries.\n";
+
+                    // return from this task.
+                    return;
+                }
+
+                // inform the developer of test SignalName
+                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test signal name: {testSignal.SignalName}");
 
                 // set maximum value for the progress bar
-                IoC.Commands.MaximumTestCount = Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
+                IoC.Commands.MaximumTestCount = Math.Ceiling((Math.Abs(testSignal.To - testSignal.From) / testSignal.Delta)) + 1;
+
+                // inform the developer MaximumTestCount
+                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Maximum test count: {IoC.Commands.MaximumTestCount}");
+
+                // initialize new testStartValue
+                double testStartValue;
 
                 // Process test steps
-                for (double testStartValue = From; testStartValue <= To; testStartValue += Delta)
+                for (testStartValue = testSignal.From; testStartValue <= (testSignal.To + testSignal.Delta * 1 / 1000); testStartValue += testSignal.Delta)
                 {
                     // check if the user canceled the tests.
                     if (!IoC.Commands.Token.IsCancellationRequested)
                     {
 
                         // set timer to read modbus register per the user specified time.
-                        MdbusTimer = new Timer(MeasurementIntervalCallbackAsync, Register, TimeSpan.FromSeconds(StartMeasurementDelay), TimeSpan.FromMilliseconds(MeasurementInterval));
+                        MdbusTimer = new Timer(MeasurementIntervalCallbackAsync, IoC.TestDetails.Register, TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)), TimeSpan.FromMilliseconds(Convert.ToDouble(IoC.TestDetails.MeasurementInterval)));
 
                         // inform the developer about test register and start value.
-                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {Register}\tTest value: {testStartValue:F3} started");
+                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {IoC.TestDetails.Register}\tTest value: {testStartValue:F3} started");
 
                         // inform the user about test register and start value.
-                        IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {Register} --- Test value: {testStartValue:F3} started\n";
+                        IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} started\n";
 
-                        // set voltage amplifiers default values.
-                        // Analog signal: Voltage Output 1:
-                        OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", testStartValue, phase, nominalFrequency);
-
-                        // Analog signal: Voltage Output 2:
-                        OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", 0, 0, nominalFrequency);
-
-                        // Analog signal: Voltage Output 3:
-                        OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", 0, 0, nominalFrequency);
-
-                        // set current amplifiers default values.
-                        // Analog signal: Current Output 1:
-                        OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", 0, 0, nominalFrequency);
-
-                        // Analog signal: Current Output 2:
-                        OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", 0, 0, nominalFrequency);
-
-                        // Analog signal: Current Output 3:
-                        OmicronStringCommands.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", 0, 0, nominalFrequency);
+                        // send string commands to Omicron
+                        SendOmicronCommands(testSignal, testStartValue);
 
                         // Turn On Omicron Analog Outputs per the user input
                         TurnOnCMC();
 
                         // Start reading the user specified Register
-                        var t = Task.Run(async delegate
+                        Task.Run(async delegate
                         {
                             // wait until the user specified "Dwell Time" expires.
-                            await Task.Delay(TimeSpan.FromSeconds(DwellTime));
+                            await Task.Delay(TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.DwellTime)));
 
                             // terminate reading modbus register because "Dwell Time" is over.
                             MdbusTimer.Dispose();
 
-                            // Remember first test case and Add +1.
-                            Debug.WriteLine($"{Convert.ToDouble(progressStep) / Math.Ceiling(Math.Abs(To - From) / Delta) + 1}");
-
-                            // increment progress percentage
-                            Progress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(To - From) / Delta) + 1);
-
                             // Progress cannot be larger than 100%
-                            if (Progress <= 1.00)
-                            {
-                                // inform the developer about test progress.
-                                Debug.WriteLine($"\t\t\t\t\t\t\t\tMin value: {MinTestValue}\t\tMax value: {MaxTestValue}\tProgress: {Progress * 100:F2}% completed.\n");
+                            //if (Progress <= 1.0000d)
+                            //{
 
-                                // inform the user about test results.
-                                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Min value: {MinTestValue} Max value: {MaxTestValue}\n";
+                            // inform the developer about test progress.
+                            Debug.WriteLine($"\t\t\t\t\t\t\t\tMin value: {MinTestValue}\t\tMax value: {MaxTestValue}\tProgress: {Progress * 100.0d:F2}% completed.\n");
 
-                                // generate a string to inform the user about test results.
-                                message += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{Register},{testStartValue},{MinTestValue},{MaxTestValue}";
-                            }
+                            // inform the user about test results.
+                            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Min value: {MinTestValue} Max value: {MaxTestValue}\n";
 
-                            // log the test step result to a ".csv" format file
-                            LogTestResults(message, Register, From, To, fileId);
+                            // generate a string to inform the user about test results.
+                            Message += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{IoC.TestDetails.Register},{testStartValue:F3},{MinTestValue:F3},{MaxTestValue:F3}";
 
-                            // reset min test value for the next test range
-                            MinTestValue = 0;
+                            //}
 
-                            // reset max test value for the next test range
-                            MaxTestValue = 0;
+                            // wait task to be over with
+                        }, IoC.Commands.Token).Wait();
 
-                            // clear message for the next test values
-                            message = string.Empty;
+                        // log the test step result to a ".csv" format file
+                        LogTestResults(Message, Convert.ToInt32(IoC.TestDetails.Register), testSignal.From, testSignal.To, fileId);
 
-                            // increment progress
-                            progressStep++;
+                        // reset min test value for the next test range
+                        MinTestValue = 0;
 
-                            // increment progress bar strip on the "Button"
-                            IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
-                        });
+                        // reset max test value for the next test range
+                        MaxTestValue = 0;
 
-                        // wait for the timer to expire
-                        t.Wait();
-                        
+                        // clear message for the next test values
+                        Message = string.Empty;
+
+                        // increment progress bar strip on the "Button"
+                        IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
+
+
+                        // increment progress
+                        progressStep++;
+
                         // inform the developer about test register and start value.
-                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {Register}\tTest value: {testStartValue:F3} completed.");
+                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {IoC.TestDetails.Register}\tTest value: {testStartValue:F3} completed.");
 
                         // inform the user about test register and start value.
-                        IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {Register} --- Test value: {testStartValue:F3} completed.\n";
+                        IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} completed.\n";
+
+                        // inform the developer
+                        Debug.WriteLine($"\n{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test {progressStep} of {IoC.Commands.MaximumTestCount} completed\n");
+
+                        // New method to calculate progress
+                        Debug.WriteLine($"Progress : { progressStep / IoC.Commands.MaximumTestCount }");
+
+                        // increment progress percentage
+                        // Progress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(testSignal.To - testSignal.From) / testSignal.Delta) + 1);
+                        Progress = progressStep / IoC.Commands.MaximumTestCount;
+
+                        // inform the developer
+                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tTest value: {testStartValue:F3} --- testSignal.To: {testSignal.To} --- testStartValue <= testSignal.To: {testStartValue <= testSignal.To}");
 
                     }
                     else
@@ -551,16 +550,10 @@ namespace metering.core
                             MdbusTimer.Dispose();
                     }
                 }
-                               
-                // update developer "Test completed"
-                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tTest step completed for register: {Register}\n");
-
-                // update the user "Test completed"
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed for register: {Register}.\n";
-
             }
             catch (Exception ex)
             {
+
                 // inform developer
                 Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tException: {ex.Message}\n");
 
@@ -587,6 +580,106 @@ namespace metering.core
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Send string commands to Omicron Test Set
+        /// </summary>
+        /// <param name="testSignal">a signal that From and To values are not equal</param>
+        /// <param name="testStartValue">From value that test starts and increments per <see cref="AnalogSignalListItemViewModel.Delta"/></param>
+        private void SendOmicronCommands(TestSignal testSignal, double testStartValue)
+        {
+
+            // inform developer
+            Debug.WriteLine($"SendOmicronCommands started :  ramping signal: {testSignal.SignalName} -- test value: {testStartValue}");
+
+            // set voltage amplifiers default values.
+            // Analog signal: Voltage Output 1:
+            IoC.StringCommands.SendOutAna
+                (
+                // Omicron Test Set internal generator name
+                generator: (int)StringCommands.GeneratorList.v,
+                // generator 
+                generatorNumber: "1:1",
+                // Signal Amplitude
+                amplitude: string.Equals("v1", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].From),
+                // Signal Phase
+                phase: string.Equals("v1", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Phase),
+                // Signal Frequency
+                frequency: string.Equals("v1", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Frequency)
+                );
+
+            // Analog signal: Voltage Output 2:
+            IoC.StringCommands.SendOutAna
+                (
+                // Omicron Test Set internal generator name
+                generator: (int)StringCommands.GeneratorList.v,
+                // generator 
+                generatorNumber: "1:2",
+                 // Signal Amplitude
+                 amplitude: string.Equals("v2", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].From),
+               // Signal Phase
+               phase: string.Equals("v2", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].Phase),
+                // Signal Frequency
+                frequency: string.Equals("v2", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].Frequency));
+
+            // Analog signal: Voltage Output 3:
+            IoC.StringCommands.SendOutAna
+                (
+                   // Omicron Test Set internal generator name
+                   generator: (int)StringCommands.GeneratorList.v,
+                   // generator 
+                   generatorNumber: "1:3",
+                     // Signal Amplitude
+                     amplitude: string.Equals("v3", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].From),
+                   // Signal Phase
+                   phase: string.Equals("v3", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].Phase),
+                    // Signal Frequency
+                    frequency: string.Equals("v3", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].Frequency));
+
+            // set current amplifiers default values.
+            // Analog signal: Current Output 1:
+            IoC.StringCommands.SendOutAna
+                (
+                // Omicron Test Set internal generator name
+                generator: (int)StringCommands.GeneratorList.i,
+                // generator 
+                generatorNumber: "1:1",
+                // Signal Amplitude
+                amplitude: string.Equals("i1", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].From),
+               // Signal Phase
+               phase: string.Equals("i1", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].Phase),
+                // Signal Frequency
+                frequency: string.Equals("i1", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].Frequency));
+
+            // Analog signal: Current Output 2:
+            IoC.StringCommands.SendOutAna
+                (
+               // Omicron Test Set internal generator name
+               generator: (int)StringCommands.GeneratorList.i,
+               // generator 
+               generatorNumber: "1:2",
+                // Signal Amplitude
+                amplitude: string.Equals("i2", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].From),
+              // Signal Phase
+              phase: string.Equals("i2", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].Phase),
+               // Signal Frequency
+               frequency: string.Equals("i2", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].Frequency));
+
+            // Analog signal: Current Output 3:
+            IoC.StringCommands.SendOutAna
+                (
+                // Omicron Test Set internal generator name
+                generator: (int)StringCommands.GeneratorList.i,
+                // generator 
+                generatorNumber: "1:3",
+                // Signal Amplitude
+                amplitude: string.Equals("i3", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].From),
+                // Signal Phase
+                phase: string.Equals("i3", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Phase),
+              // Signal Frequency
+              frequency: string.Equals("i3", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Frequency));
+            
+        }
 
         /// <summary>
         /// Logs test results
@@ -627,19 +720,19 @@ namespace metering.core
                 // if a cancellation requested stop reading register
                 if (IoC.Commands.Token.IsCancellationRequested)
                     return;
-                
+
                 // convert register string to integer.
                 int register = Convert.ToInt32(Register);
 
                 // verify the register is a legit
                 if (register >= 0 && register <= 65536)
                 {
-                                        
+
                     // start a task to read register address specified by the user.
                     await Task.Run(async () =>
                     {
                         // start a task to read holding register (Function 0x03)
-                        int[] serverResponse = await Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1));
+                        int[] serverResponse = await Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1), IoC.Commands.Token);
 
                         // decide if serverResponse is acceptable only criteria is the length of the response.
                         if (serverResponse.Length > 0)
