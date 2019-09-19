@@ -60,7 +60,7 @@
   <!-- <Copy SourceFiles=" $(OutDir)*.*" DestinationFolder="\\volta\Eng_Lab\Software Updates\metering\" /> -->
   <!-- </Target> -->
   <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release'">
-    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetDir)$(SolutionName).wpf.exe">
       <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo" />
     </GetAssemblyIdentity>
     <!-- nuget pack "C:\Users\TBircek\source\repos\metering\metering.package\metering.package.csproj" -OutputDirectory C:\Users\TBircek\source\repos\metering\metering.package\wpf.package\nupkgs -Properties Configuration=Release -->
