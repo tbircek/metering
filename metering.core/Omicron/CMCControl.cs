@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using metering.core.Resources;
-using OMICRON.CMEngAL;
 
 namespace metering.core
 {
@@ -20,7 +19,7 @@ namespace metering.core
         /// <summary>
         /// Omicron CM Engine
         /// </summary>
-        private CMEngine engine;
+        private CMEngine.CMEngine engine;
 
         /// <summary>
         /// a thread lock object for this class
@@ -39,12 +38,12 @@ namespace metering.core
         /// <summary>
         /// Omicron CM Engine
         /// </summary>
-        public CMEngine CMEngine
+        public CMEngine.CMEngine CMEngine
         {
             get
             {
                 if (engine == null)
-                    return new CMEngine();
+                    return new CMEngine.CMEngine();
 
                 return engine;
             }
