@@ -268,7 +268,7 @@
     <value>Frequency (Hz)</value>
   </data>
   <data name="header_from_current" xml:space="preserve">
-    <value>From (I)</value>
+    <value>From (A)</value>
   </data>
   <data name="header_from_frequency" xml:space="preserve">
     <value>From (Hz)</value>
@@ -283,7 +283,7 @@
     <value>Phase (°)</value>
   </data>
   <data name="header_to_current" xml:space="preserve">
-    <value>To (I)</value>
+    <value>To (A)</value>
   </data>
   <data name="header_to_frequency" xml:space="preserve">
     <value>To (Hz)</value>
@@ -298,7 +298,7 @@
     <value>Nominal Analog Values:</value>
   </data>
   <data name="global_nominal_current" xml:space="preserve">
-    <value>Nominal Current (mA):</value>
+    <value>Nominal Current (A):</value>
   </data>
   <data name="global_nominal_delta" xml:space="preserve">
     <value>Nominal Delta:</value>
@@ -339,5 +339,11 @@
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="metering" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>metering.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="header_delta_current" xml:space="preserve">
+    <value>Delta (A)</value>
+  </data>
+  <data name="header_delta_voltage" xml:space="preserve">
+    <value>Delta (V)</value>
   </data>
 </root>

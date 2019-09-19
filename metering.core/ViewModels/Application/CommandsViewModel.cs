@@ -10,8 +10,21 @@ namespace metering.core
     /// </summary>
     public class CommandsViewModel : BaseViewModel
     {
+        #region Private Members
+
+        /// <summary>
+        /// Cancellation token source for Omicron Test Set to stop and power down Omicron Test Set.
+        /// </summary>
+        private CancellationTokenSource TokenSource { get; set; }
+
+        #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Cancellation token for Omicron Test Set to stop and power down Omicron Test Set.
+        /// </summary>
+        public CancellationToken Token { get; set; }
 
         /// <summary>
         /// True if the user hit "+" button
@@ -58,7 +71,7 @@ namespace metering.core
         public ICommand AddNewTestCommand { get; set; }
                 
         /// <summary>
-        /// The command handles cancelling New Test addition view and returns default view
+        /// The command handles canceling New Test addition view and returns default view
         /// </summary>
         public ICommand CancelNewTestCommand { get; set; }
 
@@ -121,7 +134,10 @@ namespace metering.core
             // clear Test details view model
             IoC.Application.CurrentPageViewModel = null;
 
+            // reset test progress to show test canceled.
             TestProgress = 0d;
+
+            // reset StartTestCommand button icon
             IsConnectionCompleted = false;
 
             // Update NominalValues RadioButtons to run a PropertyUpdate event
@@ -130,17 +146,36 @@ namespace metering.core
 
             // Show NominalValues page
             IoC.Application.GoToPage(ApplicationPage.NominalValues);
-        }
 
+            // check if Omicron Test Set is running
+            // if the user never started test and press "Back" button 
+            // DeviceID would be a zero
+            if (IoC.CMCControl.DeviceID > 0 )
+            {
+                // try to cancel thread running Omicron Test Set
+                TokenSource.Cancel();
+
+                // try to stop Omicron Test Set gracefully
+                IoC.CMCControl.ProcessErrors(false);
+            }
+        }
 
         /// <summary>
         /// connects to omicron and test unit.
         /// </summary>    
         private async Task ConnectOmicronAndUnit()
         {
+            // define the cancellation token source.
+            TokenSource = new CancellationTokenSource();
+
+            // define the cancellation token to use 
+            // terminate tests prematurely.
+            Token = TokenSource.Token;
+
             // Run test command
-            await Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails));
+            await Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails), Token);
         }
+
         #endregion
     }
 }

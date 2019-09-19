@@ -20,88 +20,98 @@
                 <ColumnDefinition />
                 <!-- Test Values -->
                 <ColumnDefinition /> 
-                
-                <!-- try new group box-->
-                <!--<ColumnDefinition />-->
             </Grid.ColumnDefinitions>
 
+            <!-- Nominal Analog Values -->
             <Grid Grid.Column="0"
                   Margin="10">
                 <GroupBox 
                     Header="{Binding AnalogValuesHeaderTitle}" 
                     Margin="16">
 
+                    <!-- Nominal Analog Values -->
                     <StackPanel Orientation="Vertical">
+                        
+                        <!-- Nominal Voltage -->
                         <TextBox
                             mD:HintAssist.Hint="{Binding NominalVoltageHint}"                        
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                            TabIndex="0"  
-                            Padding="5"
-                            HorizontalContentAlignment="Center"
-                            ToolTip="This value will apply to all Voltage related from and to values">
-                            
-                            <TextBox.Text>
-                                <Binding 
-                                    Path="NominalVoltage"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    StringFormat="{}{0:F2}"/>
-                            </TextBox.Text>
-                        </TextBox>
-
-                        <TextBox
-                            mD:HintAssist.Hint="{Binding NominalCurrentHint}"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                            TabIndex="1"  
-                            Padding="5"
-                            HorizontalContentAlignment="Center"
-                            ToolTip="This value will apply to all Current related from and to values">
-                            
-                            <TextBox.Text>
-                                <Binding 
-                                    Path="NominalCurrent"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    ConverterCulture='en-US'
-                                    StringFormat="{}{0:F2}"/>
-                            </TextBox.Text>
-
-                        </TextBox>
-
-                        <TextBox
-                            mD:HintAssist.Hint="{Binding NominalFrequencyHint}"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                             TabIndex="2"  
                             Padding="5"
                             HorizontalContentAlignment="Center"
-                            ToolTip="This value will apply to all Frequency related from and to values">
-
-                            <TextBox.Text>
-                                <Binding 
-                                    Path="NominalFrequency"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    ConverterCulture='en-US'
-                                    StringFormat="{}{0:F3}"/>
-                            </TextBox.Text>
-
+                            Text="{Binding Path=NominalVoltage, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F2\}, ConverterCulture=en-US}"
+                            FontSize="16"
+                            ToolTip="This value will apply to all Voltage related from and to values"
+                            local:FocusAndSelectProperty.Value="{Binding Selected}">                                                      
+                            
+                            <!-- left click to select all text -->
+                            <TextBox.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                            </TextBox.InputBindings>
                         </TextBox>
+
+                        <!-- Nominal Current -->
+                        <TextBox
+                            mD:HintAssist.Hint="{Binding NominalCurrentHint}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                            TabIndex="3"  
+                            Padding="5"
+                            HorizontalContentAlignment="Center"
+                            Text="{Binding NominalCurrent, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
+                            FontSize="16"
+                            ToolTip="This value will apply to all Current related from and to values"
+                            local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+                            <!-- left click to select all text -->
+                            <TextBox.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+
+                        <!-- Nominal Frequency -->
+                        <TextBox
+                            mD:HintAssist.Hint="{Binding NominalFrequencyHint}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                            TabIndex="4"  
+                            Padding="5"
+                            HorizontalContentAlignment="Center"
+                            Text="{Binding Path=NominalFrequency, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
+                            FontSize="16"
+                            ToolTip="This value will apply to all Frequency related from and to values"
+                            local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+                            <!-- left click to select all text -->
+                            <TextBox.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+
                     </StackPanel>
                 </GroupBox>
             </Grid>
 
+            <!-- Nominal Phase-->
             <Grid Grid.Column="1"
                   Margin="10">
                 
                 <Grid.RowDefinitions>
+                    <!-- Nominal Voltage Phase GroupBox -->
                     <RowDefinition Height="Auto"/>
+                    <!-- Nominal Current Phase GroupBox -->
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
+                <!-- Nominal Voltage Phase Group -->
                 <GroupBox 
                     Header="{Binding VoltagePhaseHeaderTitle}" 
                     Margin="16" 
                     Grid.Row="0">
                     
+                    <!-- Voltage Phase Options -->
                     <StackPanel Orientation="Vertical">
-                        <RadioButton 
+                        
+                        <!-- Voltage Phase Option 0°-->
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding VoltagePhaseOptionZero}"
                             GroupName="voltage"
                             IsChecked="True"
@@ -112,7 +122,8 @@
                             CommandParameter="Voltage.AllZero"
                             ToolTip="All voltage phases will be zero"/>
 
-                        <RadioButton 
+                        <!-- Voltage Phase Option Balance-->
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding VoltagePhaseOptionBalanced}"
                             GroupName="voltage"
                             Padding="5"
@@ -125,13 +136,17 @@
                     </StackPanel>
                 </GroupBox>
 
+                <!-- Nominal Current Phase Group -->
                 <GroupBox 
                     Header="{Binding CurrentPhaseHeaderTitle}" 
                     Margin="16" 
                     Grid.Row="1">
-                                        
+
+                    <!-- Current Phase Options -->
                     <StackPanel>
-                        <RadioButton 
+                        
+                        <!-- Current Phase Option 0°-->
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding CurrentPhaseOptionZero}"
                             GroupName="current"
                             IsChecked="True"
@@ -142,7 +157,8 @@
                             CommandParameter="Current.AllZero"
                             ToolTip="All current phases will be zero"/>
 
-                        <RadioButton 
+                        <!-- Current Phase Option Balance-->
+                        <RadioButton Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                             Content="{Binding CurrentPhaseOptionBalanced}"
                             GroupName="current"
                             Padding="5"
@@ -156,30 +172,34 @@
                 </GroupBox>
             </Grid>
 
+            <!-- Nominal Test -->
             <Grid Grid.Column="2"
                   Margin="10">
                 <GroupBox 
                     Header="{Binding TestValuesHeaderTitle}" 
                     Margin="16">
 
+                    <!-- Nominal Test Values -->
                     <StackPanel>
+                        
+                        <!-- Nominal Delta -->
                         <TextBox
                             mD:HintAssist.Hint="{Binding NominalDeltaHint}"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                             TabIndex="7"  
                             Padding="5"                   
                             HorizontalContentAlignment="Center"
-                            ToolTip="This value will increment all test steps per specified amount">
-                            
-                            <TextBox.Text>
-                                <Binding 
-                                    Path="NominalDelta"
-                                    UpdateSourceTrigger="PropertyChanged"
-                                    ConverterCulture='en-US'
-                                    StringFormat="{}{0:F2}"/>
-                            </TextBox.Text>
+                            Text="{Binding NominalDelta, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F3\}, ConverterCulture=en-US}"
+                            FontSize="16"
+                            ToolTip="This value will increment all test steps per specified amount"
+                            local:FocusAndSelectProperty.Value="{Binding Selected}">
 
+                            <!-- left click to select all text -->
+                            <TextBox.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                            </TextBox.InputBindings>
                         </TextBox>
+                        
                     </StackPanel>
                 </GroupBox>
             </Grid>

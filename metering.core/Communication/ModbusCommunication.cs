@@ -18,7 +18,7 @@ namespace metering.core
         /// <summary>
         /// use properties to specify the client
         /// </summary>
-            public ModbusClient()
+        public ModbusClient()
         {
             try
             {
@@ -140,7 +140,7 @@ namespace metering.core
                 // TODO: Log this error in to log file.
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connection error. {ex.Message}.\n";
             }
-            
+
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace metering.core
             catch (Exception ex)
             {
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception occurred. {ex.Message}.\n";
-            }            
+            }
         }
 
     }

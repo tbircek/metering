@@ -25,7 +25,6 @@
                 mD:ButtonProgressAssist.Value="{Binding TestProgress}"
                 mD:ButtonProgressAssist.IsIndeterminate="True"
                 Background="Transparent"
-                IsDefault="True"
                 ToolTip="Start all test steps"
                 Visibility="{Binding NewTestAvailable,
                                     Converter={local:BooleanToVisibilityConverter},
@@ -68,7 +67,6 @@
                 Cursor="Hand"
                 TabIndex="9"
                 Background="Transparent"
-                IsDefault="True"
                 Command="{Binding AddNewTestCommand}"
                 ToolTip="Add new test steps"
                 Visibility="{Binding NewTestAvailable,
@@ -94,8 +92,7 @@
                 Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                 Cursor="Hand"
                 TabIndex="8"
-                Background="Red" 
-                IsCancel="True"
+                Background="Red"
                 Command="{Binding Path=CancelNewTestCommand}"
                 ToolTip="Cancel all test steps and go back to main page">
 
@@ -108,7 +105,7 @@
                 <mD:PackIcon.Style>
                     <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
                         <Setter Property="Kind" Value="CloseOctagonOutline"/>
-                        <Setter Property="Foreground" Value="{Binding CancelForegroundColor, 
+                        <Setter Property="Background" Value="{Binding CancelForegroundColor, 
                                                                         Converter={local:StringToBrushConverter}}"/>
                     </Style>
                 </mD:PackIcon.Style>

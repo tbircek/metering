@@ -39,6 +39,21 @@ namespace metering.core
         /// </summary>
         public static CommunicationViewModel Communication => Get<CommunicationViewModel>();
 
+        /// <summary>
+        /// A shortcut to access to <see cref="CMCControl"/>
+        /// </summary>
+        public static CMCControl CMCControl => Get<CMCControl>();
+
+        /// <summary>
+        /// A shortcut to access to <see cref="StringCommands"/>
+        /// </summary>
+        public static StringCommands StringCommands => Get<StringCommands>();
+
+        /// <summary>
+        /// A shortcut to access to <see cref="InitialCMCSetup"/>
+        /// </summary>
+        public static InitialCMCSetup InitialCMCSetup => Get<InitialCMCSetup>();
+        
         #endregion
 
         #region Setup
@@ -51,6 +66,24 @@ namespace metering.core
         {
             // Bind all required view models
             BindViewModels();
+
+            // Bind all required classes
+            BindClasses();
+        }
+
+        /// <summary>
+        /// Binds single instance of the classes
+        /// </summary>
+        private static void BindClasses()
+        {
+            // Bind a single instance of CMCControl class
+            Kernel.Bind<CMCControl>().ToConstant(new CMCControl());
+
+            // Bind a single instance of Omicron StringCommands
+            Kernel.Bind<StringCommands>().ToConstant(new StringCommands());
+
+            // Bind a single instance of Omicron InitialCMCSetup
+            Kernel.Bind<InitialCMCSetup>().ToConstant(new InitialCMCSetup());
         }
 
         /// <summary>
