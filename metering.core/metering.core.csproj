@@ -66,6 +66,7 @@
     <Compile Include="IoC\Base\IoC.cs" />
     <Compile Include="Omicron\CMCControl.cs" />
     <Compile Include="Omicron\ExtractParameters.cs" />
+    <Compile Include="Omicron\FindCMC.cs" />
     <Compile Include="Omicron\InitialCMCSetup.cs" />
     <Compile Include="Omicron\PowerOptions.cs" />
     <Compile Include="Omicron\ScanCMC.cs" />

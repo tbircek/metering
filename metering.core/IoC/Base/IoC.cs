@@ -53,7 +53,17 @@ namespace metering.core
         /// A shortcut to access to <see cref="InitialCMCSetup"/>
         /// </summary>
         public static InitialCMCSetup InitialCMCSetup => Get<InitialCMCSetup>();
-        
+
+        /// <summary>
+        /// A shortcut to access to <see cref="FindCMC"/>
+        /// </summary>
+        public static FindCMC FindCMC => Get<FindCMC>();
+
+        /// <summary>
+        /// A shortcut to access to <see cref="PowerOptions"/>
+        /// </summary>
+        public static PowerOptions PowerOptions => Get<PowerOptions>();
+
         #endregion
 
         #region Setup
@@ -84,6 +94,12 @@ namespace metering.core
 
             // Bind a single instance of Omicron InitialCMCSetup
             Kernel.Bind<InitialCMCSetup>().ToConstant(new InitialCMCSetup());
+
+            // Bind a single instance of Omicron FindCMC
+            Kernel.Bind<FindCMC>().ToConstant(new FindCMC());
+
+            // Bind a single instance of Omicron PowerOptions
+            Kernel.Bind<PowerOptions>().ToConstant(new PowerOptions());
         }
 
         /// <summary>
