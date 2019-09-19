@@ -1,7 +1,7 @@
 ﻿
 using System;
 using System.Diagnostics;
-using OMICRON.CMEngAL;
+using CMEngine;
 
 namespace metering.core
 {
@@ -19,7 +19,7 @@ namespace metering.core
         public bool Find()
         {
             // initialize CMEngine class
-            IoC.CMCControl.CMEngine = new CMEngine();
+            IoC.CMCControl.CMEngine = new CMEngine.CMEngine();
 
             // Scan for attached Omicron Test Sets
             IoC.CMCControl.CMEngine.DevScanForNew();

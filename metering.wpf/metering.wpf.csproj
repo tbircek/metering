@@ -59,7 +59,7 @@
     <StartupObject>metering.WpfApp</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>metering.ico</ApplicationIcon>
+    <ApplicationIcon>Images\Icons\metering.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
@@ -240,17 +240,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="CMEngine">
-      <Guid>{5B3333C1-FDA0-11CE-8B06-444553540000}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
@@ -273,9 +262,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="metering.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Resource Include="Images\Backgrounds\1.png" />
+    <Resource Include="Images\Backgrounds\11.png" />
+    <Resource Include="Images\Backgrounds\111.png" />
+    <Resource Include="Images\Backgrounds\meteringBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\metering.ico" />
+    <Resource Include="Images\Icons\metering.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

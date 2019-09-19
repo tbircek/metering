@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using OMICRON.CMEngAL;
 
 namespace metering.core
 {
