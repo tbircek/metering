@@ -1,145 +1,59 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\PropertyChanged.Fody.2.6.1\build\PropertyChanged.Fody.props" Condition="Exists('..\packages\PropertyChanged.Fody.2.6.1\build\PropertyChanged.Fody.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5C7027D5-4B49-4F50-8AD6-E23234C1855D}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>metering.core</RootNamespace>
-    <AssemblyName>metering.core</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\metering.ico</ApplicationIcon>
-  </PropertyGroup>
+
+  <ItemGroup>
+    <COMReference Include="CMEngine.dll">
+      <Guid>5b3333c1-fda0-11ce-8b06-444553540000</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fody" Version="4.2.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="PropertyChanged.Fody" Version="2.6.1" />
+    <PackageReference Include="System.IO.Ports" Version="4.5.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="EasyModbus">
       <HintPath>\\eng04-win10\c$\Users\tbircek\Downloads\EasyModbusTCP .NET Package V5.5\EasyModbusLibrary for .NET (DLL)\EasyModbus.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="PropertyChanged, Version=2.6.1.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
-      <HintPath>..\packages\PropertyChanged.Fody.2.6.1\lib\net452\PropertyChanged.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="DataModels\ApplicationPage.cs" />
-    <Compile Include="Expressions\ExpressionHelpers.cs" />
-    <Compile Include="IoC\Base\IoC.cs" />
-    <Compile Include="Omicron\CMCControl.cs" />
-    <Compile Include="Omicron\ExtractParameters.cs" />
-    <Compile Include="Omicron\FindCMC.cs" />
-    <Compile Include="Omicron\InitialCMCSetup.cs" />
-    <Compile Include="Omicron\PowerOptions.cs" />
-    <Compile Include="Omicron\ScanCMC.cs" />
-    <Compile Include="Omicron\StringCommands.cs" />
-    <Compile Include="Omicron\TestSignal.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\OmicronStringCmd.Designer.cs">
+    <Compile Update="Resources\OmicronStringCmd.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>OmicronStringCmd.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\Strings.Designer.cs">
+    <Compile Update="Resources\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>Strings.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="ViewModels\Application\ApplicationViewModel.cs" />
-    <Compile Include="ViewModels\Base\BaseViewModel.cs" />
-    <Compile Include="ViewModels\Base\IOmicron.cs" />
-    <Compile Include="ViewModels\Base\RelayCommand.cs" />
-    <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
-    <Compile Include="ViewModels\Application\CommandsViewModel.cs" />
-    <Compile Include="ViewModels\Application\CommunicationViewModel.cs" />
-    <Compile Include="ViewModels\Application\NominalValuesViewModel.cs" />
-    <Compile Include="ViewModels\Application\TestDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Test\AnalogSignalListItemViewModel.cs" />
-    <Compile Include="ViewModels\Test\AnalogSignalViewModel.cs" />
-    <Compile Include="ViewModels\Test\Design\AnalogSignalDesignModel.cs" />
-    <Compile Include="ViewModels\Test\Design\AnalogSignalListItemDesignModel.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="CMEngine">
-      <Guid>{5B3333C1-FDA0-11CE-8B06-444553540000}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\OmicronStringCmd.resx">
+    <EmbeddedResource Update="Resources\OmicronStringCmd.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>OmicronStringCmd.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.resx">
+    <EmbeddedResource Update="Resources\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="FodyWeavers.xml" />
-    <Content Include="Resources\metering.png" />
-    <Resource Include="Resources\111.png" />
-    <Resource Include="Resources\11.png" />
-    <Resource Include="Resources\metering.ico" />
-    <Resource Include="Resources\meteringBackground.png" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\packages\Fody.4.2.1\build\Fody.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.4.2.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.4.2.1\build\Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\PropertyChanged.Fody.2.6.1\build\PropertyChanged.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PropertyChanged.Fody.2.6.1\build\PropertyChanged.Fody.props'))" />
-  </Target>
+
 </Project>
