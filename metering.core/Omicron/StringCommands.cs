@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Text;
 using metering.core.Resources;
-using OMICRON.CMEngAL;
 
 namespace metering.core
 {

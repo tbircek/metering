@@ -13,8 +13,8 @@ namespace metering.core
     /// </summary>
     public class CommunicationViewModel : BaseViewModel
     {
-        // TODO: squirrel.windows update tool
         // TODO: use dependency injection for EasyModbus library
+
         #region Public Properties
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace metering.core
                     Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Communication starts\n";
 
                     // get new construct of CMCControl
-                    IoC.CMCControl.CMEngine = new CMEngine();
+                    // IoC.CMCControl.CMEngine = new CMEngine();
 
                     // get new construct of ModbusClient
                     EAModbusClient = new EasyModbus.ModbusClient
@@ -144,7 +144,7 @@ namespace metering.core
                         EAModbusClient.Connect();
 
                         // find any CMCEngine attached to this computer
-                        if (IoC.CMCControl.FindCMC())
+                        if (IoC.FindCMC.Find())
                         {
                             // perform initial set up on CMCEngine
                             IoC.InitialCMCSetup.InitialSetup();

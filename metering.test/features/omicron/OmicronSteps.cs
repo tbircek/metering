@@ -19,7 +19,7 @@ namespace meteringspecs.features.omicron
         [Given(@"I have Omicron Test Set available on network")]
         public void GivenIHaveOmicronTestSetAvailableOnNetwork()
         {
-            Assert.AreEqual(true, engine.FindCMC());
+            Assert.AreEqual(true, IoC.FindCMC.Find());
         }
 
         [Given(@"I have a DeviceID")]
@@ -41,7 +41,7 @@ namespace meteringspecs.features.omicron
         public void WhenIHavePressConnect()
         {
             // was InitialSetup success?
-            Assert.IsTrue(engine.FindCMC());
+            Assert.IsTrue(IoC.FindCMC.Find());
         }
 
         [Then(@"the result should be a DeviceID on the screen")]
@@ -82,7 +82,7 @@ namespace meteringspecs.features.omicron
         public void ThenOmicronTestSetShouldBePowerDown()
         {
             // manual observation?
-            engine.TurnOffCMC();
+            IoC.PowerOptions.TurnOffCMC();
         }
     }
 }

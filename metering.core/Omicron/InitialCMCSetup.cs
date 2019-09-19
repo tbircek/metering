@@ -45,11 +45,21 @@ namespace metering.core
 
         #endregion
 
-        private void SendOmicronCommand (string CommandToSend)
+        #region Private Methods
+
+        /// <summary>
+        /// Sends Omicron commands to CMEngine
+        /// </summary>
+        /// <param name="CommandToSend">Omicron String Command</param>
+        private void SendOmicronCommand(string CommandToSend)
         {
             // send commands to Omicron Test Set
             IoC.StringCommands.SendStringCommand(omicronCommand: CommandToSend);
         }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Sets Omicron Test Set default values and limits.
@@ -58,7 +68,7 @@ namespace metering.core
         {
             try
             {
-                
+
                 // initialize Omicron amplifier route
                 SendOmicronCommand(OmicronStringCmd.amp_route_init);
 
@@ -80,16 +90,7 @@ namespace metering.core
                 // change power mode.
                 SendOmicronCommand(OmicronStringCmd.out_analog_pmode);
 
-                //// set voltage amplifiers default values.
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", nominalVoltage, phase, nominalFrequency);
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", nominalVoltage, phase, nominalFrequency);
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", nominalVoltage, phase, nominalFrequency);
-
-                //// set current amplifiers default values.
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", nominalCurrent, phase, nominalFrequency);
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", nominalCurrent, phase, nominalFrequency);
-                //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", nominalCurrent, phase, nominalFrequency);
-
+                // TODO: need to communicate attached Omicron earlier to obtain more information about it.
             }
             catch (Exception ex)
             {
@@ -103,7 +104,8 @@ namespace metering.core
                     IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
                 }
             }
-        }
+        } 
 
+        #endregion
     }
 }

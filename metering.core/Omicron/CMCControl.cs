@@ -23,42 +23,6 @@ namespace metering.core
         private CMEngine engine;
 
         /// <summary>
-        ///  Omicron Test Set string commands.
-        /// </summary>
-        private StringCommands omicronStringCommands;
-
-        ///// <summary>
-        ///// Omicron Test Set maximum voltage output limit.
-        ///// </summary>
-        //private const double maxVoltageMagnitude = 8.0f;
-
-        ///// <summary>
-        ///// Omicron Test Set maximum voltage output limit.
-        ///// </summary>
-        //private const double maxCurrentMagnitude = 2.0f;
-
-        ///// <summary>
-        ///// Default value of Voltage amplifiers while testing non-voltage values.
-        ///// </summary>
-        //const double nominalVoltage = 120.0f;
-
-        ///// <summary>
-        ///// Default value of Current amplifiers while testing non-current values.
-        ///// </summary>
-        //const double nominalCurrent = 0.02f;
-
-        ///// <summary>
-        ///// Default value of amplifiers phase while testing non-phase values.
-        ///// </summary>
-        //const double phase = 0.0f;
-
-        ///// <summary>
-        ///// Default value of Frequency amplifiers while testing non-frequency values and
-        ///// must be a non-zero value.
-        ///// </summary>
-        //const double nominalFrequency = 60.0f;
-
-        /// <summary>
         /// a thread lock object for this class
         /// </summary>
         private readonly object mThreadLock = new object();
@@ -91,24 +55,6 @@ namespace metering.core
         }
 
         /// <summary>
-        /// Omicron Test Set string commands.
-        /// </summary>
-        public StringCommands OmicronStringCommands
-        {
-            get
-            {
-                if (omicronStringCommands == null)
-                    return new StringCommands();
-
-                return omicronStringCommands;
-            }
-            set
-            {
-                omicronStringCommands = value;
-            }
-        }
-
-        /// <summary>
         /// Holds minimum value for test register.
         /// </summary>
         public int MinTestValue { get; set; }
@@ -136,108 +82,7 @@ namespace metering.core
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Scans for Omicron CMC's that associated and NOT locked.
-        /// </summary>
-        public bool FindCMC()
-        {
-            // Scan for attached Omicron Test Sets
-            CMEngine.DevScanForNew();
-
-            // generate storage for the attached Omicron Test Sets
-            string deviceList = "";
-
-            // initialize extract parameters function
-            ExtractParameters extract = new ExtractParameters();
-
-            // get list of Omicron Test Set attached to this computer but it is unlocked.
-            deviceList = CMEngine.DevGetList(ListSelectType.lsUnlockedAssociated);
-
-            // verify at least one device met search criteria
-            if (string.IsNullOrWhiteSpace(deviceList))
-            {
-                // no Omicron Test Set met search criteria and inform the user.
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Unable to find any device attach to this computer\n";
-
-                // return negative result.
-                return false;
-            }
-
-            // log Omicron Test Set debug information.
-            CMEngine.LogNew(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\cmc.log");
-
-            // set log level for Omicron Test Set Logging
-            CMEngine.LogSetLevel((short)LogLevels.Level3);
-
-            // inform the developer about search results.
-            Debug.WriteLine($"Found device: {deviceList}", "info");
-
-            // inform the developer about errors.
-            Debug.WriteLine($"Error text: {CMEngine.GetExtError()}");
-
-            // extract the device id that matched search criteria 
-            DeviceID = Convert.ToInt32(extract.Parameters(1, deviceList));
-
-            // attempt to attached device that matched search criteria.
-            CMEngine.DevLock(DeviceID);
-
-            // inform the user about attached device that matched search criteria.
-            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connecting device: {extract.Parameters(2, deviceList)}\n";
-
-            // Searches for external Omicron amplifiers and returns a list of IDs.
-            // Future use.
-            // omicron.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_scan);
-
-            // return positive result.
-            return true;
-        }
-
-        ///// <summary>
-        ///// Sets Omicron Test Set default values and limits.
-        ///// </summary>
-        //public void InitialSetup()
-        //{
-        //    try
-        //    {
-        //        // initialize routes.
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_init);
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_def_init);
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_voltage);
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_current);
-
-        //        // update ranges.
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_voltage, maxVoltageMagnitude));
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_current, maxCurrentMagnitude));
-
-        //        // change power mode.
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_pmode);
-
-        //        //// set voltage amplifiers default values.
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", nominalVoltage, phase, nominalFrequency);
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", nominalVoltage, phase, nominalFrequency);
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", nominalVoltage, phase, nominalFrequency);
-
-        //        //// set current amplifiers default values.
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", nominalCurrent, phase, nominalFrequency);
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", nominalCurrent, phase, nominalFrequency);
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", nominalCurrent, phase, nominalFrequency);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.WriteLine($"initial setup::Exception InnerException is : {ex.Message}");
-        //        IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}\n";
-
-        //        // catch inner exceptions if exists
-        //        if (ex.InnerException != null)
-        //        {
-        //            // inform the user about more details about error.
-        //            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
-        //        }
-        //    }
-        //}
-
+        
         /// <summary>
         /// Disconnects and releases associated Omicron Test Set.
         /// </summary>
@@ -277,52 +122,52 @@ namespace metering.core
             }
         }
 
-        /// <summary>
-        /// Turns off outputs of Omicron Test Set and release it.
-        /// </summary>
-        public void TurnOffCMC()
-        {
-            try
-            {
-                // lock the thread
-                lock (mThreadLock)
-                {
-                    // send Turn off command to Omicron Test Set
-                    IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOff);
+        ///// <summary>
+        ///// Turns off outputs of Omicron Test Set and release it.
+        ///// </summary>
+        //public void TurnOffCMC()
+        //{
+        //    try
+        //    {
+        //        // lock the thread
+        //        lock (mThreadLock)
+        //        {
+        //            // send Turn off command to Omicron Test Set
+        //            IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOff);
 
-                    // update the developer
-                    Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: turnOffCMC setup: started\t");
+        //            // update the developer
+        //            Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: turnOffCMC setup: started\t");
 
-                    // wait for Omicron Test Set to turn off Analog Outputs.
-                    var t = Task.Run(async delegate
-                        {
-                            // wait for 100 milliseconds 
-                            await Task.Delay(TimeSpan.FromSeconds(0.1));
-                        });
+        //            // wait for Omicron Test Set to turn off Analog Outputs.
+        //            var t = Task.Run(async delegate
+        //                {
+        //                    // wait for 100 milliseconds 
+        //                    await Task.Delay(TimeSpan.FromSeconds(0.1));
+        //                });
 
-                    // wait for thread to close
-                    t.Wait();
-                }
+        //            // wait for thread to close
+        //            t.Wait();
+        //        }
 
-                // release Omicron Test Set.
-                ReleaseOmicron();
-            }
-            catch (Exception ex)
-            {
-                // inform the developer about error.
-                Debug.WriteLine($"turnOffCMC setup::Exception InnerException is : {ex.Message}");
+        //        // release Omicron Test Set.
+        //        ReleaseOmicron();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // inform the developer about error.
+        //        Debug.WriteLine($"turnOffCMC setup::Exception InnerException is : {ex.Message}");
 
-                // inform the user about error.
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOffCMC setup: error detected\n";
+        //        // inform the user about error.
+        //        IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOffCMC setup: error detected\n";
 
-                // catch inner exceptions if exists
-                if (ex.InnerException != null)
-                {
-                    // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
-                }
-            }
-        }
+        //        // catch inner exceptions if exists
+        //        if (ex.InnerException != null)
+        //        {
+        //            // inform the user about more details about error.
+        //            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Turns on outputs of Omicron Test Set.
@@ -384,7 +229,7 @@ namespace metering.core
                 }
 
                 // Turn off outputs of Omicron Test Set and release it.
-                TurnOffCMC();
+                IoC.PowerOptions.TurnOffCMC();
 
                 // Disconnect Modbus Communication
                 IoC.Communication.EAModbusClient.Disconnect();
@@ -429,7 +274,8 @@ namespace metering.core
                 // report file id to distinguish between test results 
                 string fileId = $"{DateTime.Now.ToLocalTime():yyyy_MM_dd_HH_mm}";
 
-                // TODO: decide which signal is our ramping signal
+                // decides which signal is our ramping signal by comparing the mismatch of any "From" and "To" values.
+                // after the user clicked "Go" button
                 TestSignal testSignal = new TestSignal();
 
                 // verify we have a ramping signal
@@ -557,7 +403,7 @@ namespace metering.core
                 // inform developer
                 Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tException: {ex.Message}\n");
 
-                // TODO: show error once and terminate connection
+                // update the user about failed test.
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test failed: {ex.Message}.\n";
 
                 // catch inner exceptions if exists
@@ -772,7 +618,7 @@ namespace metering.core
             }
             catch (Exception ex)
             {
-                // TODO: show error once and terminate connection
+                // update the user about the error.
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.\n";
 
                 // catch inner exceptions if exists
