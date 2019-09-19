@@ -502,16 +502,6 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon metering {
-            get {
-                object obj = ResourceManager.GetObject("metering", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to max. test value.
         /// </summary>
         public static string modal_max_test_value {
