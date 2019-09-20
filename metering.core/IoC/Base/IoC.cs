@@ -64,6 +64,11 @@ namespace metering.core
         /// </summary>
         public static PowerOptions PowerOptions => Get<PowerOptions>();
 
+        /// <summary>
+        /// A shortcut to access to <see cref="ILogFactory"/>
+        /// </summary>
+        public static ILogFactory Logger => Get<ILogFactory>();
+
         #endregion
 
         #region Setup
@@ -100,6 +105,9 @@ namespace metering.core
 
             // Bind a single instance of Omicron PowerOptions
             Kernel.Bind<PowerOptions>().ToConstant(new PowerOptions());
+
+            // Bind a logger
+            Kernel.Bind<ILogFactory>().ToConstant(new BaseLogFactory());
         }
 
         /// <summary>
