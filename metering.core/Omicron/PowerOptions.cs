@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using metering.core.Resources;
 
@@ -25,7 +24,7 @@ namespace metering.core
                 IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOff);
 
                 // update the developer
-                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: turnOffCMC setup: started\t");
+                IoC.Logger.Log($"turnOffCMC setup: started",LogLevel.Informative);
 
                 // wait for Omicron Test Set to turn off Analog Outputs.
                 var t = Task.Run(async delegate
@@ -44,7 +43,7 @@ namespace metering.core
             catch (Exception ex)
             {
                 // inform the developer about error.
-                Debug.WriteLine($"turnOffCMC setup::Exception InnerException is : {ex.Message}");
+                IoC.Logger.Log($"InnerException: {ex.Message}");
 
                 // inform the user about error.
                 IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOffCMC setup: error detected\n";

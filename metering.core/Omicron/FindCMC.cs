@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Diagnostics;
 using CMEngine;
 
 namespace metering.core
@@ -25,7 +24,7 @@ namespace metering.core
             IoC.CMCControl.CMEngine.DevScanForNew();
 
             // generate storage for the attached Omicron Test Sets
-            string deviceList = "";
+            string deviceList = default(string);
 
             // initialize extract parameters function
             ExtractParameters extract = new ExtractParameters();
@@ -47,13 +46,13 @@ namespace metering.core
             IoC.CMCControl.CMEngine.LogNew(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\cmc.log");
 
             // set log level for Omicron Test Set Logging
-            IoC.CMCControl.CMEngine.LogSetLevel((short)CMCControl.LogLevels.Level3);
+            IoC.CMCControl.CMEngine.LogSetLevel((short)CMCControl.OmicronLoggingLevels.Level3);
 
             // inform the developer about search results.
-            Debug.WriteLine($"Found device: {deviceList}", "info");
+            IoC.Logger.Log($"Found device: {deviceList}",LogLevel.Informative);
 
             // inform the developer about errors.
-            Debug.WriteLine($"Error text: {IoC.CMCControl.CMEngine.GetExtError()}");
+            IoC.Logger.Log($"Error text: {IoC.CMCControl.CMEngine.GetExtError()}");
 
             // extract the device id that matched search criteria 
             IoC.CMCControl.DeviceID = Convert.ToInt32(extract.Parameters(1, deviceList));
@@ -68,7 +67,7 @@ namespace metering.core
             // Future use.
             // omicron.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_scan);
 
-            // return positive result.
+            // return a positive result.
             return true;
         }
 
