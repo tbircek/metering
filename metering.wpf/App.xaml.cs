@@ -68,7 +68,7 @@ namespace metering
 
             // Setup the main application
             ApplicationSetup();
-            
+
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
@@ -94,14 +94,14 @@ namespace metering
             // IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
         }
 
-        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            // Process unhandled exception
-            WriteApplicationLogEntry("Unhandled failure. ", 1);
+        //void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        //{
+        //    // Process unhandled exception
+        //    WriteApplicationLogEntry("Unhandled failure. ", 1);
 
-            // Prevent default unhandled exception processing
-            e.Handled = true;
-        }
+        //    // Prevent default unhandled exception processing
+        //    e.Handled = true;
+        //}
 
         protected override void OnExit(ExitEventArgs e)
         {
@@ -112,61 +112,63 @@ namespace metering
 
         void App_Exit(object sender, ExitEventArgs e)
         {
-            try
-            {
-                // Write entry to application log
-                if (e.ApplicationExitCode == (int)ApplicationExitCode.Success)
-                {
-                    WriteApplicationLogEntry("Success", e.ApplicationExitCode);
-                }
-                else
-                {
-                    WriteApplicationLogEntry("Failure", e.ApplicationExitCode);
-                }
-            }
-            catch
-            {
-                // Update exit code to reflect failure to write to application log
-                e.ApplicationExitCode = (int)ApplicationExitCode.CantWriteToApplicationLog;
-            }
+            //try
+            //{
+                //// Write entry to application log
+                //if (e.ApplicationExitCode == (int)ApplicationExitCode.Success)
+                //{
+                //    WriteApplicationLogEntry("Success", e.ApplicationExitCode);
+                //}
+                //else
+                //{
+                //    WriteApplicationLogEntry("Failure", e.ApplicationExitCode);
+                //}
 
-            // Persist application state
-            try
-            {
-                PersistApplicationState();
-            }
-            catch
-            {
-                // Update exit code to reflect failure to persist application state
-                e.ApplicationExitCode = (int)ApplicationExitCode.CantPersistApplicationState;
-            }
+                IoC.Logger.Log("Exiting the application",LogLevel.Informative);
+           //  }
+            //catch
+            //{
+            //    // Update exit code to reflect failure to write to application log
+            //    e.ApplicationExitCode = (int)ApplicationExitCode.CantWriteToApplicationLog;
+            //}
+
+            //// Persist application state
+            //try
+            //{
+            //    PersistApplicationState();
+            //}
+            //catch
+            //{
+            //    // Update exit code to reflect failure to persist application state
+            //    e.ApplicationExitCode = (int)ApplicationExitCode.CantPersistApplicationState;
+            //}
         }
 
-        void WriteApplicationLogEntry(string message, int exitCode)
-        {
-            // Write log entry to file in isolated storage for the user
-            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
+        //void WriteApplicationLogEntry(string message, int exitCode)
+        //{
+        //    // Write log entry to file in isolated storage for the user
+        //    IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
 
-            using (Stream stream = new IsolatedStorageFileStream("log.txt", FileMode.Append, FileAccess.Write, store))
-            using (StreamWriter writer = new StreamWriter(stream))
-            {
-                string entry = $"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: {exitCode} - {message}";
-                writer.WriteLine(entry);
-            }
-        }
+        //    using (Stream stream = new IsolatedStorageFileStream("log.txt", FileMode.Append, FileAccess.Write, store))
+        //    using (StreamWriter writer = new StreamWriter(stream))
+        //    {
+        //        string entry = $"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: {exitCode} - {message}";
+        //        writer.WriteLine(entry);
+        //    }
+        //}
 
-        void PersistApplicationState()
-        {
-            // Persist application state to file in isolated storage for the user
-            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
-            using (Stream stream = new IsolatedStorageFileStream("state.txt", FileMode.Create, store))
-            using (StreamWriter writer = new StreamWriter(stream))
-            {
-                foreach (DictionaryEntry entry in Properties)
-                {
-                    writer.WriteLine(entry.Value);
-                }
-            }
-        }
+        //void PersistApplicationState()
+        //{
+        //    // Persist application state to file in isolated storage for the user
+        //    IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
+        //    using (Stream stream = new IsolatedStorageFileStream("state.txt", FileMode.Create, store))
+        //    using (StreamWriter writer = new StreamWriter(stream))
+        //    {
+        //        foreach (DictionaryEntry entry in Properties)
+        //        {
+        //            writer.WriteLine(entry.Value);
+        //        }
+        //    }
+        //}
     }
 }

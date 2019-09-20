@@ -208,8 +208,12 @@ namespace metering.core
                 // Wait StartDelayTime to start Modbus communication
                 Task.Run(async delegate
                 {
-                    // wait for the user specified "Start Delay Time"
-                    await Task.Delay(TimeSpan.FromMinutes(Convert.ToDouble(IoC.TestDetails.StartDelayTime)), IoC.Commands.Token);
+                    // lock the task
+                    await AsyncAwaiter.AwaitAsync(nameof(Test), async () =>
+                    {
+                        // wait for the user specified "Start Delay Time"
+                        await Task.Delay(TimeSpan.FromMinutes(Convert.ToDouble(IoC.TestDetails.StartDelayTime)), IoC.Commands.Token);
+                    });
 
                     // Progress bar is visible
                     IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
@@ -276,14 +280,20 @@ namespace metering.core
                         // Start reading the user specified Register
                         Task.Run(async delegate
                         {
-                            // wait until the user specified "Dwell Time" expires.
-                            await Task.Delay(TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.DwellTime)),IoC.Commands.Token);
+
+                            // lock the task
+                            await AsyncAwaiter.AwaitAsync(nameof(Test), async () =>
+                            {
+
+                                // wait until the user specified "Dwell Time" expires.
+                                await Task.Delay(TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.DwellTime)));
+                            });
 
                             // terminate reading modbus register because "Dwell Time" is over.
                             MdbusTimer.Dispose();
 
                             // inform the developer about test progress.
-                            IoC.Logger.Log($"Min value: {MinTestValue} --- Max value: {MaxTestValue} --- Progress: {Progress * 100.0d:F2}% completed", LogLevel.Informative);
+                            //IoC.Logger.Log($"Min value: {MinTestValue} --- Max value: {MaxTestValue} --- Progress: {Progress * 100.0d:F2}% completed", LogLevel.Informative);
 
                             // inform the user about test results.
                             IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Min value: {MinTestValue} Max value: {MaxTestValue}\n";
@@ -296,15 +306,6 @@ namespace metering.core
 
                         // log the test step result to a ".csv" format file
                         LogTestResults(Message, Convert.ToInt32(IoC.TestDetails.Register), testSignal.From, testSignal.To, fileId);
-
-                        // reset min test value for the next test range
-                        MinTestValue = 0;
-
-                        // reset max test value for the next test range
-                        MaxTestValue = 0;
-
-                        // reset message for the next test step
-                        Message = default(string);
 
                         // increment progress bar strip on the "Button"
                         IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
@@ -325,7 +326,17 @@ namespace metering.core
                         Progress = progressStep / IoC.Commands.MaximumTestCount;
 
                         // update the developer about progress
-                        IoC.Logger.Log($"Progress : {Progress * 100d}%", LogLevel.Informative);
+                        IoC.Logger.Log($"Min value: {MinTestValue} --- Max value: {MaxTestValue} --- Progress : {Progress * 100d:F2}% completed", LogLevel.Informative);
+
+                        // reset min test value for the next test range
+                        MinTestValue = 0;
+
+                        // reset max test value for the next test range
+                        MaxTestValue = 0;
+
+                        // reset message for the next test step
+                        Message = default(string);
+
                     }
                     else
                     {

@@ -56,10 +56,16 @@ namespace metering.core
         /// <summary>
         /// Default constructor
         /// </summary>
-        public BaseLogFactory()
+        /// <param name="loggers">the loggers to add to the factory</param>
+        public BaseLogFactory(ILogger[] loggers)
         {
             // add a debug logger
             AddLogger(new DebugLogger());
+
+            // add any other loggers passed in
+            if (loggers != null)
+                foreach (var logger in loggers)
+                    AddLogger(logger);
         }
 
         #endregion
