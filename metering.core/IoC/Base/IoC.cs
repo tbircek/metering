@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using System;
+using Ninject;
 
 namespace metering.core
 {
@@ -64,6 +65,21 @@ namespace metering.core
         /// </summary>
         public static PowerOptions PowerOptions => Get<PowerOptions>();
 
+        /// <summary>
+        /// A shortcut to access to <see cref="ILogFactory"/>
+        /// </summary>
+        public static ILogFactory Logger => Get<ILogFactory>();
+
+        /// <summary>
+        /// A shortcut to access to <see cref="IFileManager"/>
+        /// </summary>
+        public static IFileManager File => Get<IFileManager>();
+
+        /// <summary>
+        /// A shortcut to access to <see cref="ITaskManager"/>
+        /// </summary>
+        public static ITaskManager Task => Get<ITaskManager>();
+
         #endregion
 
         #region Setup
@@ -74,11 +90,16 @@ namespace metering.core
         /// </summary>
         public static void Setup()
         {
+            // Bind all required classes
+            BindClasses();
+
+            // log application start
+            Logger.Log("============================================================================", LogLevel.Informative);
+            Logger.Log("Application starts", LogLevel.Informative);
+
             // Bind all required view models
             BindViewModels();
 
-            // Bind all required classes
-            BindClasses();
         }
 
         /// <summary>
@@ -86,20 +107,40 @@ namespace metering.core
         /// </summary>
         private static void BindClasses()
         {
-            // Bind a single instance of CMCControl class
-            Kernel.Bind<CMCControl>().ToConstant(new CMCControl());
+            // !!! ORDER IS IMPORTANT !!!
+            // Bind a logger
+            Kernel.Bind<ILogFactory>().ToConstant(new BaseLogFactory(new[] 
+            {
+                // TODO: Add ApplicationSettings so the user can set/edit a log location along other stuff
+                // for now just put it in where this application is running
+                new FileLogger(
+                    filePath: $"metering_{DateTime.Now.ToLocalTime():yyyy-MM-dd}_log.txt",
+                    logTime: true
+                    ),
+
+            }));
+
+            // Bind a task manager
+            Kernel.Bind<ITaskManager>().ToConstant(new TaskManager());
+
+            // Bind a file manager
+            Kernel.Bind<IFileManager>().ToConstant(new FileManager());
 
             // Bind a single instance of Omicron StringCommands
             Kernel.Bind<StringCommands>().ToConstant(new StringCommands());
 
-            // Bind a single instance of Omicron InitialCMCSetup
-            Kernel.Bind<InitialCMCSetup>().ToConstant(new InitialCMCSetup());
-
             // Bind a single instance of Omicron FindCMC
             Kernel.Bind<FindCMC>().ToConstant(new FindCMC());
 
+            // Bind a single instance of Omicron InitialCMCSetup
+            Kernel.Bind<InitialCMCSetup>().ToConstant(new InitialCMCSetup());
+
             // Bind a single instance of Omicron PowerOptions
             Kernel.Bind<PowerOptions>().ToConstant(new PowerOptions());
+
+            // Bind a single instance of CMCControl class
+            Kernel.Bind<CMCControl>().ToConstant(new CMCControl());
+
         }
 
         /// <summary>
@@ -110,17 +151,18 @@ namespace metering.core
             // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
 
-            // bind to a single instance of NominalValues view model
-            Kernel.Bind<NominalValuesViewModel>().ToConstant(new NominalValuesViewModel());
+            // bind to a single instance of CommunicationViewModel
+            Kernel.Bind<CommunicationViewModel>().ToConstant(new CommunicationViewModel());
 
             // bind to a single instance of CommandsViewModel view model
             Kernel.Bind<CommandsViewModel>().ToConstant(new CommandsViewModel());
 
+            // bind to a single instance of NominalValues view model
+            Kernel.Bind<NominalValuesViewModel>().ToConstant(new NominalValuesViewModel());
+
             // bind to a single instance of TestDetailsViewModel
             Kernel.Bind<TestDetailsViewModel>().ToConstant(new TestDetailsViewModel());
 
-            // bind to a single instance of CommunicationViewModel
-            Kernel.Bind<CommunicationViewModel>().ToConstant(new CommunicationViewModel());
         }
 
         #endregion

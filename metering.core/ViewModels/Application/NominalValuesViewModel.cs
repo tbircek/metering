@@ -104,7 +104,7 @@ namespace metering.core
         /// Default Delta value to use through out the test
         /// Delta == magnitude difference between test steps
         /// </summary>
-        public string NominalDelta { get; set; } = "0.033";
+        public string NominalDelta { get; set; } = "0.000";
 
         /// <summary>
         /// indicates if the current text double left clicked to highlight the text

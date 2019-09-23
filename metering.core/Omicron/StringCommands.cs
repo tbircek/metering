@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Text;
 using metering.core.Resources;
 
@@ -53,13 +52,13 @@ namespace metering.core
                     IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, stringBuilder.ToString());
 
                     // inform developer about string command send to omicron test set
-                    Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: device ID: {IoC.CMCControl.DeviceID}\tcommand: {stringBuilder}");
+                    IoC.Logger.Log($"device ID: {IoC.CMCControl.DeviceID}\tcommand: {stringBuilder}",LogLevel.Informative);
                 }
             }
             catch (Exception err)
             {
                 // inform the developer about error.
-                Debug.WriteLine($"sendOutAna::Exception is : {err.Message}");
+                IoC.Logger.Log($"Exception: {err.Message}");
             }
         }
 
@@ -81,7 +80,7 @@ namespace metering.core
             catch (Exception err)
             {
                 // inform the developer about error.
-                Debug.WriteLine($"sendStringCommand::Exception is : {err.Message}");
+                IoC.Logger.Log($"Exception: {err.Message}");
             }
         }
     }

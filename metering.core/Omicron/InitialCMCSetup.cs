@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using metering.core.Resources;
 
 namespace metering.core
@@ -94,7 +93,7 @@ namespace metering.core
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"initial setup::Exception InnerException is : {ex.Message}");
+                IoC.Logger.Log($"InnerException: {ex.Message}");
                 IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}\n";
 
                 // catch inner exceptions if exists

@@ -14,7 +14,7 @@
         
         <!-- Start Test Button -->
         <!-- Only visible after the user hits "AddNewTest" button -->
-        <Button Margin="10 5" 
+        <Button Margin="10 20 10 5" 
                 Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                 Command="{Binding StartTestCommand}"
                 mD:ButtonProgressAssist.IsIndicatorVisible="{Binding IsConnecting}"
@@ -38,10 +38,13 @@
                 <mD:PackIcon.Style>
                     <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
                         <Setter Property="Kind" Value="PlayCircleFilled"/>
+                        <!--<Setter Property="Background" 
+                                Value="{Binding CancelForegroundColor, 
+                                        Converter={local:StringToBrushConverter}}"/>-->
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsConnectionCompleted}" Value="True">
                                 <Setter Property="Kind" Value="ProgressClock"/>
-                                <Setter Property="Background" Value="Red"/>
+                                <Setter Property="Background" Value="Green"/>
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
@@ -62,7 +65,8 @@
  
         <!-- Add New Test Button-->
         <!-- visible by default, invisible after the user hits "StartTest" button -->
-        <Button Margin="10 5" 
+        <Button Margin="10 20 10 5" 
+                Padding="0"
                 Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                 Cursor="Hand"
                 TabIndex="9"
@@ -81,20 +85,26 @@
                 <mD:PackIcon.Style>
                     <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
                         <Setter Property="Kind" Value="PlusCircle"/>
-                        <Setter Property="Foreground" Value="Red"/>
+                        <Setter Property="Background" 
+                                Value="{Binding CancelForegroundColor, 
+                                        Converter={local:StringToBrushConverter}}"/>
+                        <!--<Setter Property="Foreground" Value="Green"/>-->
                     </Style>                    
                 </mD:PackIcon.Style>
             </mD:PackIcon>
         </Button>
 
         <!-- Cancel Button -->
-        <Button Margin="10 5"
+        <Button Margin="10 20 10 5" 
                 Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                 Cursor="Hand"
                 TabIndex="8"
-                Background="Red"
+                Background="Transparent"
                 Command="{Binding Path=CancelNewTestCommand}"
-                ToolTip="Cancel all test steps and go back to main page">
+                ToolTip="Cancel all test steps and go back to main page"
+                Visibility="{Binding NewTestAvailable,
+                                    Converter={local:BooleanToVisibilityConverter},
+                                    ConverterParameter=False}">
 
                 <!-- icon on the button -->
             <mD:PackIcon Padding="5"
@@ -105,8 +115,9 @@
                 <mD:PackIcon.Style>
                     <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
                         <Setter Property="Kind" Value="CloseOctagonOutline"/>
-                        <Setter Property="Background" Value="{Binding CancelForegroundColor, 
-                                                                        Converter={local:StringToBrushConverter}}"/>
+                        <Setter Property="Background" Value="Red"/>
+                        <!--<Setter Property="Background" Value="{Binding CancelForegroundColor, 
+                                                                        Converter={local:StringToBrushConverter}}"/>-->
                     </Style>
                 </mD:PackIcon.Style>
             </mD:PackIcon>

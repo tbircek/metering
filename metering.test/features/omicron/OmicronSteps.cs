@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using metering.core;
+﻿using metering.core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TechTalk.SpecFlow;
 
@@ -13,7 +12,7 @@ namespace meteringspecs.features.omicron
         [Given(@"I start the application")]
         public void GivenIStartTheApplication()
         {
-            Debug.WriteLine("Application is running ;)");
+            IoC.Logger.Log("Application is running ;)",LogLevel.Informative);
         }
 
         [Given(@"I have Omicron Test Set available on network")]

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace metering.core
+﻿namespace metering.core
 {
     /// <summary>
     /// Extract parameters from Omicron Test Set's responses
@@ -37,7 +35,7 @@ namespace metering.core
         public void Parameters(string CmdResult, string CmdSend)
         {
             // inform developer
-            Debug.WriteLine($"Omicron response: {CmdResult}\tsend command: {CmdSend}");
+            IoC.Logger.Log($"Omicron response: {CmdResult}\tCommand send: {CmdSend}",LogLevel.Informative);
         }
     }
 }

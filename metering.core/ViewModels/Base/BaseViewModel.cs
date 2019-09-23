@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -33,7 +32,7 @@ namespace metering.core
         public void OnPropertyChanged(string name)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(name));
-            Debug.WriteLine($"{DateTime.Now.ToLocalTime()}: SetProperty: (name: {name}) processed successfully.");
+            IoC.Logger.Log($"(name: {name}) processed successfully.");
         }
 
         #region Helpers
