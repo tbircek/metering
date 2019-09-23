@@ -50,6 +50,18 @@
       <Name>metering.wpf</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="metering.package.nuspec" />
+    <None Include="wpf.package\nupkgs\metering.1.0.1.nupkg" />
+    <None Include="wpf.package\nupkgs\metering.package.1.0.0.nupkg" />
+    <None Include="wpf.package\nupkgs\metering.package.1.0.1.nupkg" />
+    <None Include="wpf.package\Release\metering-1.0.1-full.nupkg" />
+    <None Include="wpf.package\Release\RELEASES" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="nuget.exe" />
+    <Content Include="wpf.package\Release\Setup.exe" />
+  </ItemGroup>
   <PropertyGroup>
     <IconLocation>$(TargetDir)$(SolutionName)</IconLocation>
   </PropertyGroup>
