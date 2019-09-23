@@ -53,6 +53,13 @@ namespace metering.core
         }
 
         /// <summary>
+        /// holds information about the test completion.
+        /// if true test ran and completed without any interruption
+        /// else the user interrupted the test
+        /// </summary>
+        public bool IsTestRunning { get; set; }
+
+        /// <summary>
         /// Holds minimum value for test register.
         /// </summary>
         public int MinTestValue { get; set; }
@@ -165,7 +172,7 @@ namespace metering.core
             lock (mThreadLock)
             {
                 if (!userRequest)
-                {
+                {                   
                     // update developer "Test interrupted"
                     IoC.Logger.Log($"Test interrupted",LogLevel.Informative);
 
@@ -174,6 +181,11 @@ namespace metering.core
                 }
                 else
                 {
+                    // test completed
+                    IsTestRunning ^= true;
+
+                    // update developer "Test completed"
+                    IoC.Logger.Log($"Test completed", LogLevel.Informative);
 
                     // update the user "Test interrupted"
                     IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed.\n";
@@ -209,7 +221,7 @@ namespace metering.core
                 IoC.Task.Run(async delegate
                 {
                     // lock the task
-                    await AsyncAwaiter.AwaitAsync(nameof(Test), async () =>
+                    await AsyncAwaiter.AwaitAsync(nameof(TestAsync), async () =>
                     {
                         // wait for the user specified "Start Delay Time"
                         await Task.Delay(TimeSpan.FromMinutes(Convert.ToDouble(IoC.TestDetails.StartDelayTime)), IoC.Commands.Token);
@@ -282,7 +294,7 @@ namespace metering.core
                         {
 
                             // lock the task
-                            await AsyncAwaiter.AwaitAsync(nameof(Test), async () =>
+                            await AsyncAwaiter.AwaitAsync(nameof(TestAsync), async () =>
                             {
 
                                 // wait until the user specified "Dwell Time" expires.
@@ -291,9 +303,6 @@ namespace metering.core
 
                             // terminate reading modbus register because "Dwell Time" is over.
                             MdbusTimer.Dispose();
-
-                            // inform the developer about test progress.
-                            //IoC.Logger.Log($"Min value: {MinTestValue} --- Max value: {MaxTestValue} --- Progress: {Progress * 100.0d:F2}% completed", LogLevel.Informative);
 
                             // inform the user about test results.
                             IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Min value: {MinTestValue} Max value: {MaxTestValue}\n";
@@ -335,7 +344,7 @@ namespace metering.core
                         MaxTestValue = 0;
 
                         // reset message for the next test step
-                        Message = default(string);
+                        Message = string.Empty;
 
                     }
                     else
@@ -522,7 +531,7 @@ namespace metering.core
                 int register = Convert.ToInt32(Register);
 
                 // verify the register is a legit
-                if (register >= 0 && register <= 65536)
+                if (register >= 0 && register <= 65535)
                 {
 
                     // start a task to read register address specified by the user.
