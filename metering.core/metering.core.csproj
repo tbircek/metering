@@ -5,6 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Communication\**" />
+    <EmbeddedResource Remove="Communication\**" />
+    <None Remove="Communication\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataModels\CommunicationModel.cs" />
+    <Compile Remove="DataModels\NominalValuesModel.cs" />
+    <Compile Remove="DataModels\TestDetailModel.cs" />
+    <Compile Remove="DataModels\TestDetailsModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <COMReference Include="CMEngine.dll">
       <Guid>5b3333c1-fda0-11ce-8b06-444553540000</Guid>
       <VersionMajor>2</VersionMajor>

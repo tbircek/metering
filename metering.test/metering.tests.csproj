@@ -101,7 +101,9 @@
     <None Include="app.config" />
     <None Include="features\communication\communication.feature" />
     <None Include="features\omicron\omicron.feature" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="runtests.cmd" />
     <None Include="SpecRunTestProfile.xsd">
       <SubType>Designer</SubType>
