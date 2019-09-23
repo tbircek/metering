@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using metering.core.Resources;
 
 namespace metering.core
@@ -17,25 +16,12 @@ namespace metering.core
         {
             try
             {
-                // lock the thread
-                //lock (mThreadLock)
-                //{
+                
                 // send Turn off command to Omicron Test Set
                 IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOff);
 
                 // update the developer
-                IoC.Logger.Log($"turnOffCMC setup: started",LogLevel.Informative);
-
-                // wait for Omicron Test Set to turn off Analog Outputs.
-                var t = Task.Run(async delegate
-                {
-                        // wait for 100 milliseconds 
-                        await Task.Delay(TimeSpan.FromSeconds(0.1));
-                });
-
-                // wait for thread to close
-                t.Wait();
-                //}
+                IoC.Logger.Log($"turnOffCMC setup: started", LogLevel.Informative);
 
                 // release Omicron Test Set.
                 IoC.CMCControl.ReleaseOmicron();

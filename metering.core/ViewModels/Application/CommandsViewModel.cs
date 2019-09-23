@@ -173,7 +173,7 @@ namespace metering.core
             Token = TokenSource.Token;
 
             // Run test command
-            await Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails), Token);
+            await IoC.Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails), Token);
         }
 
         #endregion

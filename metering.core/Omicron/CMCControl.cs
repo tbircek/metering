@@ -206,7 +206,7 @@ namespace metering.core
                 int progressStep = default(int);
 
                 // Wait StartDelayTime to start Modbus communication
-                Task.Run(async delegate
+                IoC.Task.Run(async delegate
                 {
                     // lock the task
                     await AsyncAwaiter.AwaitAsync(nameof(Test), async () =>
@@ -278,7 +278,7 @@ namespace metering.core
                         TurnOnCMC();
 
                         // Start reading the user specified Register
-                        Task.Run(async delegate
+                        IoC.Task.Run(async delegate
                         {
 
                             // lock the task
@@ -364,12 +364,12 @@ namespace metering.core
                 }
 
                 // Trying to stop the app gracefully.
-                await Task.Run(() => ProcessErrors(false));
+                await IoC.Task.Run(() => ProcessErrors(false));
             }
             finally
             {
                 // Trying to stop the app gracefully.
-                await Task.Run(() => ProcessErrors(true));
+                await IoC.Task.Run(() => ProcessErrors(true));
             }
         }
 
@@ -526,10 +526,10 @@ namespace metering.core
                 {
 
                     // start a task to read register address specified by the user.
-                    await Task.Run(async () =>
+                    await IoC.Task.Run(async () =>
                     {
                         // start a task to read holding register (Function 0x03)
-                        int[] serverResponse = await Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1), IoC.Commands.Token);
+                        int[] serverResponse = await IoC.Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1), IoC.Commands.Token);
 
                         // decide if serverResponse is acceptable only criteria is the length of the response.
                         if (serverResponse.Length > 0)
@@ -563,7 +563,7 @@ namespace metering.core
                 {
                     // illegal register address
                     // Trying to stop the app gracefully.
-                    await Task.Run(() => ProcessErrors(false));
+                    await IoC.Task.Run(() => ProcessErrors(false));
                 }
 
             }
@@ -580,7 +580,7 @@ namespace metering.core
                 }
 
                 // Trying to stop the app gracefully.
-                await Task.Run(() => ProcessErrors(false));
+                await IoC.Task.Run(() => ProcessErrors(false));
             }
         }
 
