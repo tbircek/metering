@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Globalization;
-using System.IO;
-using System.IO.IsolatedStorage;
+﻿using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
-using System.Windows.Threading;
 using metering.core;
 using Squirrel;
 
@@ -17,18 +12,52 @@ namespace metering
     /// </summary>
     public partial class WpfApp : Application
     {
-        public enum ApplicationExitCode
-        {
-            Success = 0,
-            Failure = 1,
-            CantWriteToApplicationLog = 2,
-            CantPersistApplicationState = 3
-        }
 
-        //private static Task<UpdateManager> _updateManager = null;
+        #region Private Variables
 
         /// <summary>
-        /// Main WpfApp
+        /// holds squirrel update manager instance to dispose appropriately
+        /// </summary>
+        private static Task<UpdateManager> _updateManager = null;
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Checks for the updates if there is one updates application for next start up
+        /// </summary>
+        /// <returns></returns>
+        private async Task CheckForUpdates()
+        {
+            // specify the location of update
+            using (UpdateManager _updateManager = new UpdateManager(@"\\volta\Eng_Lab\Software Updates\metering"))
+            {
+                // if update location contains update for this application
+                if (_updateManager.IsInstalledApp)
+                    // update this application
+                    await _updateManager.UpdateApp();
+            }
+        }
+
+        /// <summary>
+        /// Configures Dependency Injection for this application
+        /// </summary>
+        private void ApplicationSetup()
+        {
+            // Setup IoC
+            IoC.Setup();
+
+            // Bind a IUIManager
+            // IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
+        }
+
+        #endregion
+
+        #region WpfApp startup
+
+        /// <summary>
+        /// Main entry point for this application
         /// </summary>
         static WpfApp()
         {
@@ -45,22 +74,16 @@ namespace metering
                 typeof(FrameworkElement),
                 new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
-        }
+        } 
 
-        private async Task CheckForUpdates()
-        {
-            using (UpdateManager updateManager = new UpdateManager(@"\\volta\Eng_Lab\Software Updates\metering"))
-            {
+        #endregion
 
-                if (updateManager.IsInstalledApp)
-                    await updateManager.UpdateApp();
-            }
-        }
+        #region Protected Methods
 
         /// <summary>
         /// Override Startup event to show default view and view model.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">start up event arguments</param>
         protected override void OnStartup(StartupEventArgs e)
         {
             // Allow the base start
@@ -74,101 +97,30 @@ namespace metering
             Current.MainWindow.Show();
 
             // check for the updates
-            Task.Run(async () =>
+            IoC.Task.Run(async () =>
             {
-               await CheckForUpdates();
+                // await for application update
+                await CheckForUpdates();
             });
-           
-
         }
 
         /// <summary>
-        /// Configures the application
+        /// Overrides application Exit event to dispose update manager and logs information to the logger
         /// </summary>
-        private void ApplicationSetup()
-        {
-            // Setup IoC
-            IoC.Setup();
-
-            // Bind a IUIManager
-            // IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
-        }
-
-        //void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        //{
-        //    // Process unhandled exception
-        //    WriteApplicationLogEntry("Unhandled failure. ", 1);
-
-        //    // Prevent default unhandled exception processing
-        //    e.Handled = true;
-        //}
-
+        /// <param name="e">exit event arguments</param>
         protected override void OnExit(ExitEventArgs e)
         {
-            //_updateManager?.Dispose();
-            App_Exit(null, e);
+            // dispose updateManager appropriately
+            _updateManager?.Dispose();
+
+            // log application exits message
+            IoC.Logger.Log("Exiting the application", LogLevel.Informative);
+
+            // end application
             base.OnExit(e);
         }
 
-        void App_Exit(object sender, ExitEventArgs e)
-        {
-            //try
-            //{
-                //// Write entry to application log
-                //if (e.ApplicationExitCode == (int)ApplicationExitCode.Success)
-                //{
-                //    WriteApplicationLogEntry("Success", e.ApplicationExitCode);
-                //}
-                //else
-                //{
-                //    WriteApplicationLogEntry("Failure", e.ApplicationExitCode);
-                //}
+        #endregion
 
-                IoC.Logger.Log("Exiting the application",LogLevel.Informative);
-           //  }
-            //catch
-            //{
-            //    // Update exit code to reflect failure to write to application log
-            //    e.ApplicationExitCode = (int)ApplicationExitCode.CantWriteToApplicationLog;
-            //}
-
-            //// Persist application state
-            //try
-            //{
-            //    PersistApplicationState();
-            //}
-            //catch
-            //{
-            //    // Update exit code to reflect failure to persist application state
-            //    e.ApplicationExitCode = (int)ApplicationExitCode.CantPersistApplicationState;
-            //}
-        }
-
-        //void WriteApplicationLogEntry(string message, int exitCode)
-        //{
-        //    // Write log entry to file in isolated storage for the user
-        //    IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
-
-        //    using (Stream stream = new IsolatedStorageFileStream("log.txt", FileMode.Append, FileAccess.Write, store))
-        //    using (StreamWriter writer = new StreamWriter(stream))
-        //    {
-        //        string entry = $"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: {exitCode} - {message}";
-        //        writer.WriteLine(entry);
-        //    }
-        //}
-
-        //void PersistApplicationState()
-        //{
-        //    // Persist application state to file in isolated storage for the user
-        //    IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForAssembly();
-        //    using (Stream stream = new IsolatedStorageFileStream("state.txt", FileMode.Create, store))
-        //    using (StreamWriter writer = new StreamWriter(stream))
-        //    {
-        //        foreach (DictionaryEntry entry in Properties)
-        //        {
-        //            writer.WriteLine(entry.Value);
-        //        }
-        //    }
-        //}
     }
 }
