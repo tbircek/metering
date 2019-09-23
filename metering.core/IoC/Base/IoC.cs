@@ -75,6 +75,11 @@ namespace metering.core
         /// </summary>
         public static IFileManager File => Get<IFileManager>();
 
+        /// <summary>
+        /// A shortcut to access to <see cref="ITaskManager"/>
+        /// </summary>
+        public static ITaskManager Task => Get<ITaskManager>();
+
         #endregion
 
         #region Setup
@@ -89,7 +94,8 @@ namespace metering.core
             BindClasses();
 
             // log application start
-            IoC.Logger.Log("Application starts", LogLevel.Informative);
+            Logger.Log("============================================================================", LogLevel.Informative);
+            Logger.Log("Application starts", LogLevel.Informative);
 
             // Bind all required view models
             BindViewModels();
@@ -107,9 +113,15 @@ namespace metering.core
             {
                 // TODO: Add ApplicationSettings so the user can set/edit a log location along other stuff
                 // for now just put it in where this application is running
-                new FileLogger($"metering_{DateTime.Now.ToLocalTime():yyyy-MM-dd}_log.txt"),
+                new FileLogger(
+                    filePath: $"metering_{DateTime.Now.ToLocalTime():yyyy-MM-dd}_log.txt",
+                    logTime: true
+                    ),
 
             }));
+
+            // Bind a task manager
+            Kernel.Bind<ITaskManager>().ToConstant(new TaskManager());
 
             // Bind a file manager
             Kernel.Bind<IFileManager>().ToConstant(new FileManager());

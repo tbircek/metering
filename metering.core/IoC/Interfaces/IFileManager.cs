@@ -17,5 +17,18 @@ namespace metering.core
         /// <returns></returns>
         Task WriteTextToFileAsync(string text, string path, bool append = true);
 
+        /// <summary>
+        /// normalizes a path based on the current operating system
+        /// </summary>
+        /// <param name="path">the path to normalize</param>
+        /// <returns></returns>
+        string NormalizePath(string path);
+
+        /// <summary>
+        /// resolves any relative elements of the path to absolute
+        /// </summary>
+        /// <param name="path">the path to resolve</param>
+        /// <returns></returns>
+        string ResolvePath(string path);
     }
 }

@@ -26,7 +26,10 @@ namespace metering.core
             }
             catch (EasyModbus.Exceptions.ModbusException ex)
             {
-                // TODO: Log this error in to log file.
+                // log this error in to log file.
+                IoC.Logger.Log($"{ex.Message}");
+
+                // inform the user about this error
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: ModbusException error. {ex.Message}.\n";
             }
         }
@@ -42,9 +45,13 @@ namespace metering.core
             {
                 modbusClient = new EasyModbus.ModbusClient(ipAddress, port);
             }
-            catch (EasyModbus.Exceptions.ConnectionException)
+            catch (EasyModbus.Exceptions.ConnectionException ex)
             {
-                // TODO: Log this error in to log file.
+
+                // log this error in to log file.
+                IoC.Logger.Log($"{ex.Message}");
+
+                // inform the user about this error
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connection error. Please check connection.\n";
             }
         }
@@ -137,7 +144,11 @@ namespace metering.core
             }
             catch (EasyModbus.Exceptions.ConnectionException ex)
             {
-                // TODO: Log this error in to log file.
+
+                // log this error in to log file.
+                IoC.Logger.Log($"{ex.Message}");
+
+                // inform the user about this error
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connection error. {ex.Message}.\n";
             }
 
@@ -156,7 +167,11 @@ namespace metering.core
             }
             catch (EasyModbus.Exceptions.ConnectionException ex)
             {
-                // TODO: Log this error in to log file.
+
+                // log this error in to log file.
+                IoC.Logger.Log($"{ex.Message}");
+
+                // inform the user about this error
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connection error. {ex.Message}.\n";
             }
         }
@@ -181,7 +196,11 @@ namespace metering.core
             }
             catch (Exception ex)
             {
-                // TODO: Log this error in to log file.
+
+                // log this error in to log file.
+                IoC.Logger.Log($"{ex.Message}");
+
+                // inform the user about this error
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception occurred. {ex.Message}.\n";
                 return null;
             }

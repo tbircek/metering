@@ -1,5 +1,6 @@
 ﻿
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace metering.core
@@ -30,16 +31,17 @@ namespace metering.core
         {
             // TODO: Add exception catching
 
-            // TODO: normalize and resolve path
-            // path = Path.GetFullPath(path.Replace("/", "\\").Trim());
+            // normalize and resolve path
+            path = NormalizePath(path);
+
+            // resolve to absolute path
+            path = ResolvePath(path);
 
             // lock the task
             await AsyncAwaiter.AwaitAsync(nameof(FileManager) + path, async () =>
-            {
-                // TODO: add IoC.Task.Run that logs to logger on failure
-
+            {                
                 // run the synchronous file access as new task
-                await Task.Run(() =>
+                await IoC.Task.Run(() =>
                 {
                     // write the log message to a file
                     using (var fileStream = (TextWriter)new StreamWriter(File.Open(path, append ? FileMode.Append : FileMode.Create)))
@@ -47,6 +49,37 @@ namespace metering.core
 
                 });
             });
+        }
+
+
+        /// <summary>
+        /// normalizes a path based on the current operating system
+        /// </summary>
+        /// <param name="path">the path to normalize</param>
+        /// <returns></returns>
+        public string NormalizePath(string path)
+        {
+            // if on Windows
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                // replace any / with \\ 
+                return path?.Replace('/', '\\').Trim();
+            // if on Linux/Mac
+            else
+                // replace any \\ with /
+                return path?.Replace('\\', '/').Trim();
+
+        }
+
+
+        /// <summary>
+        /// resolves any relative elements of the path to absolute
+        /// </summary>
+        /// <param name="path">the path to resolve</param>
+        /// <returns></returns>
+        public string ResolvePath(string path)
+        {
+            // resolve the path
+            return Path.GetFullPath(path);
         }
 
         #endregion
