@@ -1,8 +1,7 @@
 ﻿using System;
-using TechTalk.SpecFlow;
 using metering.core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
+using TechTalk.SpecFlow;
 
 namespace meteringspecs.features.communication
 {
@@ -76,7 +75,7 @@ namespace meteringspecs.features.communication
                 int[] serverResponse = mdbus.ReadHoldingRegisters(2279, 3);
                 for (int i = 0; i < serverResponse.Length; i++)
                 {
-                    Debug.WriteLine(string.Format("{0} value {1}", 2279 + i , serverResponse[i]));
+                    IoC.Logger.Log($"{2279 + i} value {serverResponse[i]}", LogLevel.Informative);
 
                 }
                 WhenIPressDisconnect();

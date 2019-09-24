@@ -8,10 +8,12 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>metering.package</RootNamespace>
-    <AssemblyName>metering.package</AssemblyName>
+    <AssemblyName>metering</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +50,18 @@
       <Name>metering.wpf</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="metering.package.nuspec" />
+    <None Include="wpf.package\nupkgs\metering.1.0.1.nupkg" />
+    <None Include="wpf.package\nupkgs\metering.package.1.0.0.nupkg" />
+    <None Include="wpf.package\nupkgs\metering.package.1.0.1.nupkg" />
+    <None Include="wpf.package\Release\metering-1.0.1-full.nupkg" />
+    <None Include="wpf.package\Release\RELEASES" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="nuget.exe" />
+    <Content Include="wpf.package\Release\Setup.exe" />
+  </ItemGroup>
   <PropertyGroup>
     <IconLocation>$(TargetDir)$(SolutionName)</IconLocation>
   </PropertyGroup>
@@ -65,7 +79,7 @@
     </GetAssemblyIdentity>
     <!-- nuget pack "C:\Users\TBircek\source\repos\metering\metering.package\metering.package.csproj" -OutputDirectory C:\Users\TBircek\source\repos\metering\metering.package\wpf.package\nupkgs -Properties Configuration=Release -->
     <Exec Command="nuget pack $(ProjectDir)$(ProjectName).csproj -Version %(myAssemblyInfo.Version) -Properties Configuration=Release -OutputDirectory $(ProjectDir)wpf.package\nupkgs" />
-    <Exec Command="$(SolutionDir)packages\squirrel.windows.1.9.1\tools\squirrel.exe --releasify $(ProjectDir)wpf.package\nupkgs\$(ProjectName).$([System.Version]::Parse(%(myAssemblyInfo.Version)).ToString(3)).nupkg --no-msi --no-delta --icon $(SolutionDir)$(SolutionName).core\Resources\$(SolutionName).ico --setupicon $(SolutionDir)$(SolutionName).core\Resources\$(SolutionName).ico --releaseDir $(ProjectDir)wpf.package\Release" />
+    <Exec Command="$(SolutionDir)packages\squirrel.windows.1.9.1\tools\squirrel.exe --releasify $(ProjectDir)wpf.package\nupkgs\$(SolutionName).$([System.Version]::Parse(%(myAssemblyInfo.Version)).ToString(3)).nupkg --no-msi --no-delta --icon $(SolutionDir)$(SolutionName).wpf\Images\Icons\$(SolutionName).ico --setupicon $(SolutionDir)$(SolutionName).wpf\Images\Icons\$(SolutionName).ico --releaseDir $(ProjectDir)wpf.package\Release" />
     <!-- <Copy SourceFiles=" $(ProjectDir)Releases\*.*" DestinationFolder="\\volta\Eng_Lab\Software Updates\metering\" /> -->
   </Target>
   <PropertyGroup>

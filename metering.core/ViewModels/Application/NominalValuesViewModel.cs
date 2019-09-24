@@ -104,7 +104,7 @@ namespace metering.core
         /// Default Delta value to use through out the test
         /// Delta == magnitude difference between test steps
         /// </summary>
-        public string NominalDelta { get; set; } = "0.033";
+        public string NominalDelta { get; set; } = "0.000";
 
         /// <summary>
         /// indicates if the current text double left clicked to highlight the text
@@ -168,55 +168,66 @@ namespace metering.core
         /// </summary>
         public void CopyNominalValues()
         {
-            // change CancelForegroundColor to Red
-            IoC.Commands.CancelForegroundColor = "ff0000";
-
-            // set visibility of Command buttons
-            IoC.Commands.NewTestAvailable = true;
-
-            // generate AnalogSignals from nominal values.
-            ObservableCollection<AnalogSignalListItemViewModel> analogSignals = new ObservableCollection<AnalogSignalListItemViewModel>();
-
-
-            // TODO: these values should receive from associated Omicron test set
-            // Voltage Amplifier number
-            int omicronVoltageSignalNumber = 4;
-
-            // Current Amplifier number
-            int omicronCurrentSignalNumber = 6;
-
-            // total of current and voltage Analog Signals of associated Omicron Test set
-            int omicronAnalogSignalNumber = omicronVoltageSignalNumber + omicronCurrentSignalNumber;
-
-            // generate AnalogSignalListItems
-            for (int i = 1; i <= omicronAnalogSignalNumber; i++)
+            try
             {
+                // change CancelForegroundColor to Red
+                IoC.Commands.CancelForegroundColor = "ff0000";
 
-                // exclude "V4", "I4", "I5", and "I6" signals until further notice
-                if (i == 4 || i > 7)
-                    // continue next iteration
-                    continue;
+                // set visibility of Command buttons
+                IoC.Commands.NewTestAvailable = true;
 
-                // Generate AnalogSignals values.
-                analogSignals.Add(new AnalogSignalListItemViewModel
+                // generate AnalogSignals from nominal values.
+                ObservableCollection<AnalogSignalListItemViewModel> analogSignals = new ObservableCollection<AnalogSignalListItemViewModel>();
+
+
+                // TODO: these values should receive from associated Omicron test set
+                // Voltage Amplifier number
+                int omicronVoltageSignalNumber = 4;
+
+                // Current Amplifier number
+                int omicronCurrentSignalNumber = 6;
+
+                // total of current and voltage Analog Signals of associated Omicron Test set
+                int omicronAnalogSignalNumber = omicronVoltageSignalNumber + omicronCurrentSignalNumber;
+
+                // generate AnalogSignalListItems
+                for (int i = 1; i <= omicronAnalogSignalNumber; i++)
                 {
-                    // is this condition true ? yes : no
 
-                    // current signals names restart at 1 => (i - omicronVoltageSignalNumber)
-                    SignalName = i <= omicronVoltageSignalNumber ? "v" + i : "i" + (i - omicronVoltageSignalNumber),
-                    From = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
-                    To = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
-                    Delta = $"{Convert.ToDouble(NominalDelta):F3}",
-                    Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
-                    Frequency = $"{Convert.ToDouble(NominalFrequency):F3}"
-                });
+                    // exclude "V4", "I4", "I5", and "I6" signals until further notice
+                    if (i == 4 || i > 7)
+                        // continue next iteration
+                        continue;
+
+                    // Generate AnalogSignals values.
+                    analogSignals.Add(new AnalogSignalListItemViewModel
+                    {
+                        // is this condition true ? yes : no
+
+                        // current signals names restart at 1 => (i - omicronVoltageSignalNumber)
+                        SignalName = i <= omicronVoltageSignalNumber ? "v" + i : "i" + (i - omicronVoltageSignalNumber),
+                        From = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
+                        To = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
+                        Delta = $"{Convert.ToDouble(NominalDelta):F3}",
+                        Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
+                        Frequency = $"{Convert.ToDouble(NominalFrequency):F3}"
+                    });
+                }
+
+                // Update only AnalogSignal values in the single instance of TestDetailsViewModel
+                IoC.TestDetails.AnalogSignals = analogSignals;
+
+                // Show TestDetails page
+                IoC.Application.GoToPage(ApplicationPage.TestDetails);
             }
+            catch (Exception ex)
+            {
+                // log the error
+                IoC.Logger.Log($"Exception: {ex.Message}");
 
-            // Update only AnalogSignal values of single instance of the TestDetailsViewModel
-            IoC.TestDetails.AnalogSignals = analogSignals;
-
-            // Show TestDetails page
-            IoC.Application.GoToPage(ApplicationPage.TestDetails);
+                // inform the user
+                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.\n";
+            }
 
         }
 

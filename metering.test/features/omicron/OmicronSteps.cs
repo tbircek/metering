@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using metering.core;
+﻿using metering.core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TechTalk.SpecFlow;
 
@@ -13,13 +12,13 @@ namespace meteringspecs.features.omicron
         [Given(@"I start the application")]
         public void GivenIStartTheApplication()
         {
-            Debug.WriteLine("Application is running ;)");
+            IoC.Logger.Log("Application is running ;)",LogLevel.Informative);
         }
 
         [Given(@"I have Omicron Test Set available on network")]
         public void GivenIHaveOmicronTestSetAvailableOnNetwork()
         {
-            Assert.AreEqual(true, engine.FindCMC());
+            Assert.AreEqual(true, IoC.FindCMC.Find());
         }
 
         [Given(@"I have a DeviceID")]
@@ -41,7 +40,7 @@ namespace meteringspecs.features.omicron
         public void WhenIHavePressConnect()
         {
             // was InitialSetup success?
-            Assert.IsTrue(engine.FindCMC());
+            Assert.IsTrue(IoC.FindCMC.Find());
         }
 
         [Then(@"the result should be a DeviceID on the screen")]
@@ -82,7 +81,7 @@ namespace meteringspecs.features.omicron
         public void ThenOmicronTestSetShouldBePowerDown()
         {
             // manual observation?
-            engine.TurnOffCMC();
+            IoC.PowerOptions.TurnOffCMC();
         }
     }
 }

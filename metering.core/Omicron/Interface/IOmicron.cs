@@ -1,6 +1,4 @@
-﻿using OMICRON.CMEngAL;
-
-namespace metering.core
+﻿namespace metering.core
 {
     /// <summary>
     /// Provides interface class to Omicron commands

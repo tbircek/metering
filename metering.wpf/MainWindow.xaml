@@ -10,7 +10,7 @@
     x:Name="AppWindow"
     mc:Ignorable="d"
     Title="{Binding AppTitle}"
-    Icon="/metering.core;component/Resources/metering.ico"
+    Icon="Images/Icons/metering.ico"
     ShowIconOnTitleBar="True"
     ShowTitleBar="True"
     BorderThickness="0"
@@ -22,7 +22,7 @@
 
     <!-- Background Image -->
     <Window.Background>
-        <ImageBrush Opacity="0.1" ImageSource="/metering.core;component/Resources/meteringBackground.png"/>
+        <ImageBrush Opacity="0.1" ImageSource="Images/Backgrounds/meteringBackground.png"/>
     </Window.Background>
 
     <Grid>

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using metering.core.Resources;
-using OMICRON.CMEngAL;
 
 namespace metering.core
 {
@@ -20,67 +18,31 @@ namespace metering.core
         /// <summary>
         /// Omicron CM Engine
         /// </summary>
-        private CMEngine engine;
-
-        /// <summary>
-        ///  Omicron Test Set string commands.
-        /// </summary>
-        private StringCommands omicronStringCommands;
+        private CMEngine.CMEngine engine;
 
         ///// <summary>
-        ///// Omicron Test Set maximum voltage output limit.
+        ///// a thread lock object for this class
         ///// </summary>
-        //private const double maxVoltageMagnitude = 8.0f;
-
-        ///// <summary>
-        ///// Omicron Test Set maximum voltage output limit.
-        ///// </summary>
-        //private const double maxCurrentMagnitude = 2.0f;
-
-        ///// <summary>
-        ///// Default value of Voltage amplifiers while testing non-voltage values.
-        ///// </summary>
-        //const double nominalVoltage = 120.0f;
-
-        ///// <summary>
-        ///// Default value of Current amplifiers while testing non-current values.
-        ///// </summary>
-        //const double nominalCurrent = 0.02f;
-
-        ///// <summary>
-        ///// Default value of amplifiers phase while testing non-phase values.
-        ///// </summary>
-        //const double phase = 0.0f;
-
-        ///// <summary>
-        ///// Default value of Frequency amplifiers while testing non-frequency values and
-        ///// must be a non-zero value.
-        ///// </summary>
-        //const double nominalFrequency = 60.0f;
-
-        /// <summary>
-        /// a thread lock object for this class
-        /// </summary>
-        private readonly object mThreadLock = new object();
-
-        /// <summary>
-        /// Timer ticks used to read ModbusClient
-        /// </summary>
-        private Timer MdbusTimer { get; set; }
+        //private readonly object mThreadLock = new object();
 
         #endregion
 
         #region Public Properties
 
         /// <summary>
+        /// Timer ticks used to read ModbusClient
+        /// </summary>
+        public Timer MdbusTimer { get; set; }
+
+        /// <summary>
         /// Omicron CM Engine
         /// </summary>
-        public CMEngine CMEngine
+        public CMEngine.CMEngine CMEngine
         {
             get
             {
                 if (engine == null)
-                    return new CMEngine();
+                    return new CMEngine.CMEngine();
 
                 return engine;
             }
@@ -91,22 +53,11 @@ namespace metering.core
         }
 
         /// <summary>
-        /// Omicron Test Set string commands.
+        /// holds information about the test completion.
+        /// if true test ran and completed without any interruption
+        /// else the user interrupted the test
         /// </summary>
-        public StringCommands OmicronStringCommands
-        {
-            get
-            {
-                if (omicronStringCommands == null)
-                    return new StringCommands();
-
-                return omicronStringCommands;
-            }
-            set
-            {
-                omicronStringCommands = value;
-            }
-        }
+        public bool IsTestRunning { get; set; }
 
         /// <summary>
         /// Holds minimum value for test register.
@@ -131,272 +82,12 @@ namespace metering.core
         /// <summary>
         /// Omicron Test Set debugging log levels.
         /// </summary>
-        public enum LogLevels : short { None, Level1, Level2, Level3, };
+        public enum OmicronLoggingLevels : short { None, Level1, Level2, Level3, };
 
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Scans for Omicron CMC's that associated and NOT locked.
-        /// </summary>
-        public bool FindCMC()
-        {
-            // Scan for attached Omicron Test Sets
-            CMEngine.DevScanForNew();
-
-            // generate storage for the attached Omicron Test Sets
-            string deviceList = "";
-
-            // initialize extract parameters function
-            ExtractParameters extract = new ExtractParameters();
-
-            // get list of Omicron Test Set attached to this computer but it is unlocked.
-            deviceList = CMEngine.DevGetList(ListSelectType.lsUnlockedAssociated);
-
-            // verify at least one device met search criteria
-            if (string.IsNullOrWhiteSpace(deviceList))
-            {
-                // no Omicron Test Set met search criteria and inform the user.
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Unable to find any device attach to this computer\n";
-
-                // return negative result.
-                return false;
-            }
-
-            // log Omicron Test Set debug information.
-            CMEngine.LogNew(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\cmc.log");
-
-            // set log level for Omicron Test Set Logging
-            CMEngine.LogSetLevel((short)LogLevels.Level3);
-
-            // inform the developer about search results.
-            Debug.WriteLine($"Found device: {deviceList}", "info");
-
-            // inform the developer about errors.
-            Debug.WriteLine($"Error text: {CMEngine.GetExtError()}");
-
-            // extract the device id that matched search criteria 
-            DeviceID = Convert.ToInt32(extract.Parameters(1, deviceList));
-
-            // attempt to attached device that matched search criteria.
-            CMEngine.DevLock(DeviceID);
-
-            // inform the user about attached device that matched search criteria.
-            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connecting device: {extract.Parameters(2, deviceList)}\n";
-
-            // Searches for external Omicron amplifiers and returns a list of IDs.
-            // Future use.
-            // omicron.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_scan);
-
-            // return positive result.
-            return true;
-        }
-
-        ///// <summary>
-        ///// Sets Omicron Test Set default values and limits.
-        ///// </summary>
-        //public void InitialSetup()
-        //{
-        //    try
-        //    {
-        //        // initialize routes.
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_init);
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_def_init);
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_voltage);
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_route_current);
-
-        //        // update ranges.
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_voltage, maxVoltageMagnitude));
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, string.Format(OmicronStringCmd.amp_range_current, maxCurrentMagnitude));
-
-        //        // change power mode.
-        //        OmicronStringCommands.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.out_analog_pmode);
-
-        //        //// set voltage amplifiers default values.
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:1", nominalVoltage, phase, nominalFrequency);
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:2", nominalVoltage, phase, nominalFrequency);
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.v, "1:3", nominalVoltage, phase, nominalFrequency);
-
-        //        //// set current amplifiers default values.
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:1", nominalCurrent, phase, nominalFrequency);
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:2", nominalCurrent, phase, nominalFrequency);
-        //        //omicron.SendOutAna(CMEngine, DeviceID, (int)StringCommands.GeneratorList.i, "1:3", nominalCurrent, phase, nominalFrequency);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.WriteLine($"initial setup::Exception InnerException is : {ex.Message}");
-        //        IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}\n";
-
-        //        // catch inner exceptions if exists
-        //        if (ex.InnerException != null)
-        //        {
-        //            // inform the user about more details about error.
-        //            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
-        //        }
-        //    }
-        //}
-
-        /// <summary>
-        /// Disconnects and releases associated Omicron Test Set.
-        /// </summary>
-        public void ReleaseOmicron()
-        {
-            try
-            {
-                // lock the thread
-                lock (mThreadLock)
-                {
-
-                    // inform the developer
-                    Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: ReleaseOmicron: started\t");
-
-                    // unlock attached Omicron Test Set                    
-                    CMEngine.DevUnlock(DeviceID);
-
-                    // Destruct Omicron Test set
-                    CMEngine = null;
-
-                }
-            }
-            catch (Exception ex)
-            {
-                // inform the developer about error
-                Debug.WriteLine($"release Omicron::Exception InnerException is : {ex.Message}");
-
-                // inform the user about error
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\trelease Omicron: error detected\n";
-
-                // catch inner exceptions if exists
-                if (ex.InnerException != null)
-                {
-                    // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
-                }
-            }
-        }
-
-        /// <summary>
-        /// Turns off outputs of Omicron Test Set and release it.
-        /// </summary>
-        public void TurnOffCMC()
-        {
-            try
-            {
-                // lock the thread
-                lock (mThreadLock)
-                {
-                    // send Turn off command to Omicron Test Set
-                    IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOff);
-
-                    // update the developer
-                    Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: turnOffCMC setup: started\t");
-
-                    // wait for Omicron Test Set to turn off Analog Outputs.
-                    var t = Task.Run(async delegate
-                        {
-                            // wait for 100 milliseconds 
-                            await Task.Delay(TimeSpan.FromSeconds(0.1));
-                        });
-
-                    // wait for thread to close
-                    t.Wait();
-                }
-
-                // release Omicron Test Set.
-                ReleaseOmicron();
-            }
-            catch (Exception ex)
-            {
-                // inform the developer about error.
-                Debug.WriteLine($"turnOffCMC setup::Exception InnerException is : {ex.Message}");
-
-                // inform the user about error.
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOffCMC setup: error detected\n";
-
-                // catch inner exceptions if exists
-                if (ex.InnerException != null)
-                {
-                    // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
-                }
-            }
-        }
-
-        /// <summary>
-        /// Turns on outputs of Omicron Test Set.
-        /// </summary>
-        public void TurnOnCMC()
-        {
-            try
-            {
-                // lock the thread
-                lock (mThreadLock)
-                {
-                    // Send command to Turn On Analog Outputs
-                    IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOn);
-
-                    // update the developer
-                    Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}: turnOnCMC setup: started\t");
-                }
-            }
-            catch (Exception ex)
-            {
-                // inform the developer about error.
-                Debug.WriteLine($"turnONCMC setup::Exception InnerException is : {ex.Message}");
-
-                // inform the user about error.
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOnCMC setup: error detected\n";
-
-                // catch inner exceptions if exists
-                if (ex.InnerException != null)
-                {
-                    // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
-                }
-            }
-        }
-
-        /// <summary>
-        /// Handles errors and stops the app gracefully.
-        /// </summary>
-        /// <param name="userRequest">false if test interrupt requested by the user
-        /// true if test completed itself</param>
-        public void ProcessErrors(bool userRequest)
-        {
-            // lock the thread
-            lock (mThreadLock)
-            {
-                if (!userRequest)
-                {
-                    // update developer "Test interrupted"
-                    Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tTest interrupted\n");
-
-                    // update the user "Test interrupted"
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test interrupted by the user.\n";
-                }
-                else
-                {
-
-                    // update the user "Test interrupted"
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed.\n";
-                }
-
-                // Turn off outputs of Omicron Test Set and release it.
-                TurnOffCMC();
-
-                // Disconnect Modbus Communication
-                IoC.Communication.EAModbusClient.Disconnect();
-
-                // Progress bar is invisible
-                IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
-
-                // change color of Cancel Command button to Red
-                IoC.Commands.CancelForegroundColor = "ff0000";
-            }
-        }
-
+      
         /// <summary>
         /// Runs Test Steps
         /// </summary>
@@ -410,10 +101,14 @@ namespace metering.core
                 int progressStep = default(int);
 
                 // Wait StartDelayTime to start Modbus communication
-                Task.Run(async delegate
+                IoC.Task.Run(async delegate
                 {
-                    // wait for the user specified "Start Delay Time"
-                    await Task.Delay(TimeSpan.FromMinutes(Convert.ToDouble(IoC.TestDetails.StartDelayTime)), IoC.Commands.Token);
+                    // lock the task
+                    await AsyncAwaiter.AwaitAsync(nameof(TestAsync), async () =>
+                    {
+                        // wait for the user specified "Start Delay Time"
+                        await Task.Delay(TimeSpan.FromMinutes(Convert.ToDouble(IoC.TestDetails.StartDelayTime)), IoC.Commands.Token);
+                    });
 
                     // Progress bar is visible
                     IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
@@ -429,7 +124,8 @@ namespace metering.core
                 // report file id to distinguish between test results 
                 string fileId = $"{DateTime.Now.ToLocalTime():yyyy_MM_dd_HH_mm}";
 
-                // TODO: decide which signal is our ramping signal
+                // decides which signal is our ramping signal by comparing the mismatch of any "From" and "To" values.
+                // after the user clicked "Go" button
                 TestSignal testSignal = new TestSignal();
 
                 // verify we have a ramping signal
@@ -443,13 +139,13 @@ namespace metering.core
                 }
 
                 // inform the developer of test SignalName
-                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test signal name: {testSignal.SignalName}");
+                IoC.Logger.Log($"Test signal name: {testSignal.SignalName}",LogLevel.Informative);
 
                 // set maximum value for the progress bar
                 IoC.Commands.MaximumTestCount = Math.Ceiling((Math.Abs(testSignal.To - testSignal.From) / testSignal.Delta)) + 1;
 
                 // inform the developer MaximumTestCount
-                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Maximum test count: {IoC.Commands.MaximumTestCount}");
+                IoC.Logger.Log($"Maximum test count: {IoC.Commands.MaximumTestCount}",LogLevel.Informative);
 
                 // initialize new testStartValue
                 double testStartValue;
@@ -465,7 +161,7 @@ namespace metering.core
                         MdbusTimer = new Timer(MeasurementIntervalCallbackAsync, IoC.TestDetails.Register, TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)), TimeSpan.FromMilliseconds(Convert.ToDouble(IoC.TestDetails.MeasurementInterval)));
 
                         // inform the developer about test register and start value.
-                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {IoC.TestDetails.Register}\tTest value: {testStartValue:F3} started");
+                        IoC.Logger.Log($"Register: {IoC.TestDetails.Register}\tTest value: {testStartValue:F3} started",LogLevel.Informative);
 
                         // inform the user about test register and start value.
                         IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} started\n";
@@ -474,37 +170,55 @@ namespace metering.core
                         SendOmicronCommands(testSignal, testStartValue);
 
                         // Turn On Omicron Analog Outputs per the user input
-                        TurnOnCMC();
+                        await IoC.Task.Run(() => IoC.PowerOptions.TurnOnCMC());
 
                         // Start reading the user specified Register
-                        Task.Run(async delegate
+                        IoC.Task.Run(async delegate
                         {
-                            // wait until the user specified "Dwell Time" expires.
-                            await Task.Delay(TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.DwellTime)));
+
+                            // lock the task
+                            await AsyncAwaiter.AwaitAsync(nameof(TestAsync), async () =>
+                            {
+
+                                // wait until the user specified "Dwell Time" expires.
+                                await Task.Delay(TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.DwellTime)));
+                            });
 
                             // terminate reading modbus register because "Dwell Time" is over.
                             MdbusTimer.Dispose();
-
-                            // Progress cannot be larger than 100%
-                            //if (Progress <= 1.0000d)
-                            //{
-
-                            // inform the developer about test progress.
-                            Debug.WriteLine($"\t\t\t\t\t\t\t\tMin value: {MinTestValue}\t\tMax value: {MaxTestValue}\tProgress: {Progress * 100.0d:F2}% completed.\n");
 
                             // inform the user about test results.
                             IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Min value: {MinTestValue} Max value: {MaxTestValue}\n";
 
                             // generate a string to inform the user about test results.
                             Message += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{IoC.TestDetails.Register},{testStartValue:F3},{MinTestValue:F3},{MaxTestValue:F3}";
-
-                            //}
-
-                            // wait task to be over with
+                            
+                        // wait task to be over with
                         }, IoC.Commands.Token).Wait();
 
                         // log the test step result to a ".csv" format file
                         LogTestResults(Message, Convert.ToInt32(IoC.TestDetails.Register), testSignal.From, testSignal.To, fileId);
+
+                        // increment progress bar strip on the "Button"
+                        IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
+                        
+                        // increment progress
+                        progressStep++;
+
+                        // inform the developer about test register and start value.
+                        IoC.Logger.Log($"Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} completed", LogLevel.Informative);
+
+                        // inform the user about test register and start value.
+                        IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} completed.\n";
+
+                        // inform the developer
+                        IoC.Logger.Log($"Test {progressStep} of {IoC.Commands.MaximumTestCount} completed",LogLevel.Informative);
+
+                        // increment progress percentage
+                        Progress = progressStep / IoC.Commands.MaximumTestCount;
+
+                        // update the developer about progress
+                        IoC.Logger.Log($"Min value: {MinTestValue} --- Max value: {MaxTestValue} --- Progress : {Progress * 100d:F2}% completed", LogLevel.Informative);
 
                         // reset min test value for the next test range
                         MinTestValue = 0;
@@ -512,34 +226,8 @@ namespace metering.core
                         // reset max test value for the next test range
                         MaxTestValue = 0;
 
-                        // clear message for the next test values
+                        // reset message for the next test step
                         Message = string.Empty;
-
-                        // increment progress bar strip on the "Button"
-                        IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
-
-
-                        // increment progress
-                        progressStep++;
-
-                        // inform the developer about test register and start value.
-                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tRegister: {IoC.TestDetails.Register}\tTest value: {testStartValue:F3} completed.");
-
-                        // inform the user about test register and start value.
-                        IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} completed.\n";
-
-                        // inform the developer
-                        Debug.WriteLine($"\n{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test {progressStep} of {IoC.Commands.MaximumTestCount} completed\n");
-
-                        // New method to calculate progress
-                        Debug.WriteLine($"Progress : { progressStep / IoC.Commands.MaximumTestCount }");
-
-                        // increment progress percentage
-                        // Progress = Convert.ToDouble(progressStep) / Math.Ceiling((Math.Abs(testSignal.To - testSignal.From) / testSignal.Delta) + 1);
-                        Progress = progressStep / IoC.Commands.MaximumTestCount;
-
-                        // inform the developer
-                        Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tTest value: {testStartValue:F3} --- testSignal.To: {testSignal.To} --- testStartValue <= testSignal.To: {testStartValue <= testSignal.To}");
 
                     }
                     else
@@ -555,9 +243,9 @@ namespace metering.core
             {
 
                 // inform developer
-                Debug.WriteLine($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}\tException: {ex.Message}\n");
+                IoC.Logger.Log($"Exception: {ex.Message}");
 
-                // TODO: show error once and terminate connection
+                // update the user about failed test.
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test failed: {ex.Message}.\n";
 
                 // catch inner exceptions if exists
@@ -568,12 +256,12 @@ namespace metering.core
                 }
 
                 // Trying to stop the app gracefully.
-                await Task.Run(() => ProcessErrors(false));
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
             }
             finally
             {
                 // Trying to stop the app gracefully.
-                await Task.Run(() => ProcessErrors(true));
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors(false));
             }
         }
 
@@ -588,9 +276,10 @@ namespace metering.core
         /// <param name="testStartValue">From value that test starts and increments per <see cref="AnalogSignalListItemViewModel.Delta"/></param>
         private void SendOmicronCommands(TestSignal testSignal, double testStartValue)
         {
+            // TODO: Move this methods to its own class and automate
 
             // inform developer
-            Debug.WriteLine($"SendOmicronCommands started :  ramping signal: {testSignal.SignalName} -- test value: {testStartValue}");
+            IoC.Logger.Log($"SendOmicronCommands started :  ramping signal: {testSignal.SignalName} -- test value: {testStartValue}",LogLevel.Informative);
 
             // set voltage amplifiers default values.
             // Analog signal: Voltage Output 1:
@@ -725,14 +414,14 @@ namespace metering.core
                 int register = Convert.ToInt32(Register);
 
                 // verify the register is a legit
-                if (register >= 0 && register <= 65536)
+                if (register >= 0 && register <= 65535)
                 {
 
                     // start a task to read register address specified by the user.
-                    await Task.Run(async () =>
+                    await IoC.Task.Run(async () =>
                     {
                         // start a task to read holding register (Function 0x03)
-                        int[] serverResponse = await Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1), IoC.Commands.Token);
+                        int[] serverResponse = await IoC.Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1), IoC.Commands.Token);
 
                         // decide if serverResponse is acceptable only criteria is the length of the response.
                         if (serverResponse.Length > 0)
@@ -765,25 +454,32 @@ namespace metering.core
                 else
                 {
                     // illegal register address
-                    // Trying to stop the app gracefully.
-                    await Task.Run(() => ProcessErrors(false));
+                    throw new ArgumentOutOfRangeException($"Register: {register} is out of range");
+
+                    // await IoC.Task.Run(() => ProcessErrors(false));
                 }
 
             }
             catch (Exception ex)
             {
-                // TODO: show error once and terminate connection
+                // inform the developer about error
+                IoC.Logger.Log($"Exception is : {ex.Message}");
+
+                // update the user about the error.
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.\n";
 
                 // catch inner exceptions if exists
                 if (ex.InnerException != null)
                 {
+                    // inform the developer about error
+                    IoC.Logger.Log($"InnerException is : {ex.Message}");
+
                     // update the user.
                     IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
                 }
 
                 // Trying to stop the app gracefully.
-                await Task.Run(() => ProcessErrors(false));
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
             }
         }
 
