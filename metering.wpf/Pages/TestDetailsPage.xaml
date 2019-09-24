@@ -33,7 +33,7 @@
 
             <Grid                 
                 Margin="5">
-                
+
                 <!-- Analog signals list -->
                 <local:AnalogSignalListControl
                     ClipToBounds="True"
@@ -54,6 +54,8 @@
             <Grid Margin="5">
 
                 <Grid.RowDefinitions>
+                    <!-- Ramping Signal Selection -->
+                    <RowDefinition />
                     <!-- Register -->
                     <RowDefinition />
                     <!-- Dwell Time -->
@@ -64,13 +66,71 @@
                     <RowDefinition />
                     <!-- Start Measurement Delay -->
                     <RowDefinition />
-                    <!-- Unused -->
-                    <RowDefinition />
                 </Grid.RowDefinitions>
 
+                <!-- Ramping Signal Selection -->
+                <Border
+                    BorderBrush="Black" 
+                    BorderThickness="1" 
+                    ClipToBounds="True">
+                    
+                    <StackPanel Orientation="Vertical"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+
+                        <!-- Ramping selection label -->
+                        <TextBlock 
+                            Margin="16 16 12 8"
+                            FontSize="16"
+                            Text="Ramping Signals"/>
+                        
+                        <!-- Separate controls -->
+                        <Separator
+                              Style="{StaticResource MaterialDesignLightSeparator}" />
+                        
+                        <!-- Voltage/Current Ramping Selection -->
+                        <RadioButton 
+                            Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
+                            Content="Voltage/Current"
+                            GroupName="ramping"
+                            IsChecked="True"
+                            Padding="5"
+                            FontSize="16"
+                            VerticalContentAlignment="Center" 
+                            Command="" 
+                            CommandParameter="Ramp.Magnitude"
+                            ToolTip="Use Signals Voltage or Current Magnitude as a ramping"/>
+
+                        <!-- Frequency Ramping Selection -->
+                        <RadioButton 
+                            Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
+                            Content="Frequency"
+                            GroupName="ramping"
+                            Padding="5"
+                            FontSize="16"
+                            VerticalContentAlignment="Center" 
+                            Command="" 
+                            CommandParameter="Ramp.Frequency"
+                            ToolTip="Use Signals Frequency as a ramping"/>
+
+                        <!-- Frequency Ramping Selection -->
+                        <RadioButton 
+                            Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
+                            Content="Phase"
+                            GroupName="ramping"
+                            Padding="5"
+                            FontSize="16"
+                            VerticalContentAlignment="Center" 
+                            Command="" 
+                            CommandParameter="Ramp.Phase"
+                            ToolTip="Use Signals Phase as a ramping"/>
+
+                    </StackPanel>
+                </Border>
+                
                 <!-- Register Setting -->
                 <TextBox
-                    Grid.Row="0"
+                    Grid.Row="1"
                     mD:HintAssist.Hint="{Binding RegisterHint}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                     TabIndex="0"
@@ -89,7 +149,7 @@
 
                 <!-- Dwell Time Setting -->
                 <TextBox 
-                    Grid.Row="1"
+                    Grid.Row="2"
                     mD:HintAssist.Hint="{Binding DwellTimeHint}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                     TabIndex="1"
@@ -108,7 +168,7 @@
 
                 <!-- Start Delay Time -->
                 <TextBox 
-                    Grid.Row="2"
+                    Grid.Row="3"
                     mD:HintAssist.Hint="{Binding StartDelayTimeHint}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                     TabIndex="2" 
@@ -127,7 +187,7 @@
 
                 <!-- Measurement Interval -->
                 <TextBox 
-                    Grid.Row="3"                 
+                    Grid.Row="4"                 
                     mD:HintAssist.Hint="{Binding MeasurementIntervalHint}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                     TabIndex="3" 
@@ -146,7 +206,7 @@
 
                 <!-- Start Measurement Delay -->
                 <TextBox 
-                    Grid.Row="4"
+                    Grid.Row="5"
                     mD:HintAssist.Hint="{Binding StartMeasurementDelayHint}"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                     TabIndex="4"
