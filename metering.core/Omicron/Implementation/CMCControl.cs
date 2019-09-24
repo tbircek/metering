@@ -20,19 +20,19 @@ namespace metering.core
         /// </summary>
         private CMEngine.CMEngine engine;
 
-        /// <summary>
-        /// a thread lock object for this class
-        /// </summary>
-        private readonly object mThreadLock = new object();
-
-        /// <summary>
-        /// Timer ticks used to read ModbusClient
-        /// </summary>
-        private Timer MdbusTimer { get; set; }
+        ///// <summary>
+        ///// a thread lock object for this class
+        ///// </summary>
+        //private readonly object mThreadLock = new object();
 
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Timer ticks used to read ModbusClient
+        /// </summary>
+        public Timer MdbusTimer { get; set; }
 
         /// <summary>
         /// Omicron CM Engine
@@ -87,124 +87,7 @@ namespace metering.core
         #endregion
 
         #region Public Methods
-        
-        /// <summary>
-        /// Disconnects and releases associated Omicron Test Set.
-        /// </summary>
-        public void ReleaseOmicron()
-        {
-            try
-            {
-                // lock the thread
-                lock (mThreadLock)
-                {
-
-                    // inform the developer
-                    IoC.Logger.Log($"ReleaseOmicron: started",LogLevel.Informative);
-
-                    // unlock attached Omicron Test Set                    
-                    CMEngine.DevUnlock(DeviceID);
-
-                    // Destruct Omicron Test set
-                    CMEngine = null;
-
-                }
-            }
-            catch (Exception ex)
-            {
-                // inform the developer about error
-                IoC.Logger.Log($"InnerException is : {ex.Message}");
-
-                // inform the user about error
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\trelease Omicron: error detected\n";
-
-                // catch inner exceptions if exists
-                if (ex.InnerException != null)
-                {
-                    // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
-                }
-            }
-        }
-
-        /// <summary>
-        /// Turns on outputs of Omicron Test Set.
-        /// </summary>
-        public void TurnOnCMC()
-        {
-            try
-            {
-                // lock the thread
-                lock (mThreadLock)
-                {
-                    // Send command to Turn On Analog Outputs
-                    IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOn);
-
-                    // update the developer
-                    IoC.Logger.Log($"turnOnCMC setup: started",LogLevel.Informative);
-                }
-            }
-            catch (Exception ex)
-            {
-                // inform the developer about error.
-                IoC.Logger.Log($"InnerException: {ex.Message}");
-
-                // inform the user about error.
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOnCMC setup: error detected\n";
-
-                // catch inner exceptions if exists
-                if (ex.InnerException != null)
-                {
-                    // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
-                }
-            }
-        }
-
-        /// <summary>
-        /// Handles errors and stops the app gracefully.
-        /// </summary>
-        /// <param name="userRequest">false if test interrupt requested by the user
-        /// true if test completed itself</param>
-        public void ProcessErrors(bool userRequest)
-        {
-            // lock the thread
-            lock (mThreadLock)
-            {
-                if (!userRequest)
-                {                   
-                    // update developer "Test interrupted"
-                    IoC.Logger.Log($"Test interrupted",LogLevel.Informative);
-
-                    // update the user "Test interrupted"
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test interrupted by the user.\n";
-                }
-                else
-                {
-                    // test completed
-                    IsTestRunning ^= true;
-
-                    // update developer "Test completed"
-                    IoC.Logger.Log($"Test completed", LogLevel.Informative);
-
-                    // update the user "Test interrupted"
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed.\n";
-                }
-
-                // Turn off outputs of Omicron Test Set and release it.
-                IoC.PowerOptions.TurnOffCMC();
-
-                // Disconnect Modbus Communication
-                IoC.Communication.EAModbusClient.Disconnect();
-
-                // Progress bar is invisible
-                IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
-
-                // change color of Cancel Command button to Red
-                IoC.Commands.CancelForegroundColor = "ff0000";
-            }
-        }
-
+      
         /// <summary>
         /// Runs Test Steps
         /// </summary>
@@ -287,7 +170,7 @@ namespace metering.core
                         SendOmicronCommands(testSignal, testStartValue);
 
                         // Turn On Omicron Analog Outputs per the user input
-                        TurnOnCMC();
+                        await IoC.Task.Run(() => IoC.PowerOptions.TurnOnCMC());
 
                         // Start reading the user specified Register
                         IoC.Task.Run(async delegate
@@ -373,12 +256,12 @@ namespace metering.core
                 }
 
                 // Trying to stop the app gracefully.
-                await IoC.Task.Run(() => ProcessErrors(false));
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
             }
             finally
             {
                 // Trying to stop the app gracefully.
-                await IoC.Task.Run(() => ProcessErrors(true));
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors(false));
             }
         }
 
@@ -571,25 +454,32 @@ namespace metering.core
                 else
                 {
                     // illegal register address
-                    // Trying to stop the app gracefully.
-                    await IoC.Task.Run(() => ProcessErrors(false));
+                    throw new ArgumentOutOfRangeException($"Register: {register} is out of range");
+
+                    // await IoC.Task.Run(() => ProcessErrors(false));
                 }
 
             }
             catch (Exception ex)
             {
+                // inform the developer about error
+                IoC.Logger.Log($"Exception is : {ex.Message}");
+
                 // update the user about the error.
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.\n";
 
                 // catch inner exceptions if exists
                 if (ex.InnerException != null)
                 {
+                    // inform the developer about error
+                    IoC.Logger.Log($"InnerException is : {ex.Message}");
+
                     // update the user.
                     IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
                 }
 
                 // Trying to stop the app gracefully.
-                await IoC.Task.Run(() => ProcessErrors(false));
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
             }
         }
 
