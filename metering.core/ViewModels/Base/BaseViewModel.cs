@@ -32,7 +32,7 @@ namespace metering.core
         public void OnPropertyChanged(string name)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(name));
-            IoC.Logger.Log($"(name: {name}) processed successfully.");
+            // IoC.Logger.Log($"(name: {name}) processed successfully.");
         }
 
         #region Helpers

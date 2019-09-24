@@ -223,7 +223,7 @@ namespace metering.core
             catch (Exception ex)
             {
                 // log the error
-                IoC.Logger.Log($"Exception: {ex.Message}");
+                // IoC.Logger.Log($"Exception: {ex.Message}");
 
                 // inform the user
                 IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.\n";
