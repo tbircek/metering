@@ -62,7 +62,7 @@ namespace metering.core
                 //
                 // It is vital to ALWAYS release the semaphore when we are ready
                 // or else we will end up with a Semaphore that is forever locked
-                // This is why it is important to do the Release within a try...finally clause
+                // This is why it is important to do the ReleaseOmicron within a try...finally clause
                 // Program execution may crash or take a different path, this way you are guaranteed execution
                 //
                 SelfLock.Release();
@@ -84,7 +84,7 @@ namespace metering.core
             }
             finally
             {
-                // Release the semaphore
+                // ReleaseOmicron the semaphore
                 semaphore.Release();
             }
         }
@@ -122,7 +122,7 @@ namespace metering.core
                 //
                 // It is vital to ALWAYS release the semaphore when we are ready
                 // or else we will end up with a Semaphore that is forever locked
-                // This is why it is important to do the Release within a try...finally clause
+                // This is why it is important to do the ReleaseOmicron within a try...finally clause
                 // Program execution may crash or take a different path, this way you are guaranteed execution
                 //
                 SelfLock.Release();
@@ -159,7 +159,7 @@ namespace metering.core
             }
             finally
             {
-                // Release the semaphore
+                // ReleaseOmicron the semaphore
                 semaphore.Release();
             }
         }

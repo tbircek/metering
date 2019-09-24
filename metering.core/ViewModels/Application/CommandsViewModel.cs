@@ -12,14 +12,14 @@ namespace metering.core
     {
         #region Private Members
 
-        /// <summary>
-        /// Cancellation token source for Omicron Test Set to stop and power down Omicron Test Set.
-        /// </summary>
-        private CancellationTokenSource TokenSource { get; set; }
-
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Cancellation token source for Omicron Test Set to stop and power down Omicron Test Set.
+        /// </summary>
+        public CancellationTokenSource TokenSource { get; private set; }
 
         /// <summary>
         /// Cancellation token for Omicron Test Set to stop and power down Omicron Test Set.
@@ -159,7 +159,7 @@ namespace metering.core
                     TokenSource.Cancel();
 
                     // try to stop Omicron Test Set gracefully
-                    IoC.CMCControl.ProcessErrors(false);
+                    IoC.ReleaseOmicron.ProcessErrors(true);
                 }
             }
         }

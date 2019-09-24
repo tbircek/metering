@@ -66,6 +66,11 @@ namespace metering.core
         public static PowerOptions PowerOptions => Get<PowerOptions>();
 
         /// <summary>
+        /// A shortcut to access to <see cref="ReleaseOmicron"/>
+        /// </summary>
+        public static ReleaseOmicron ReleaseOmicron => Get<ReleaseOmicron>();
+
+        /// <summary>
         /// A shortcut to access to <see cref="ILogFactory"/>
         /// </summary>
         public static ILogFactory Logger => Get<ILogFactory>();
@@ -137,6 +142,9 @@ namespace metering.core
 
             // Bind a single instance of Omicron PowerOptions
             Kernel.Bind<PowerOptions>().ToConstant(new PowerOptions());
+
+            // Bind a single instance of ReleaseOmicron class
+            Kernel.Bind<ReleaseOmicron>().ToConstant(new ReleaseOmicron());
 
             // Bind a single instance of CMCControl class
             Kernel.Bind<CMCControl>().ToConstant(new CMCControl());
