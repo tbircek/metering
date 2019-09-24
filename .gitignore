@@ -32,5 +32,3 @@ _ReSharper*/
 .vs*
 /UpgradeLog*
 [Pp]ackages*/
-*.nupkg
-*.nuspec
