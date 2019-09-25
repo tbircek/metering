@@ -169,24 +169,6 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IL1.
-        /// </summary>
-        public static string header_current_1 {
-            get {
-                return ResourceManager.GetString("header_current_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to IL2.
-        /// </summary>
-        public static string header_current_2 {
-            get {
-                return ResourceManager.GetString("header_current_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to IL3.
         /// </summary>
         public static string header_current_3 {
@@ -309,6 +291,24 @@ namespace metering.core.Resources {
         public static string header_from_voltage {
             get {
                 return ResourceManager.GetString("header_from_voltage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magnitude(A).
+        /// </summary>
+        public static string header_magnitude_current {
+            get {
+                return ResourceManager.GetString("header_magnitude_current", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magnitude(V).
+        /// </summary>
+        public static string header_magnitude_voltage {
+            get {
+                return ResourceManager.GetString("header_magnitude_voltage", resourceCulture);
             }
         }
         
