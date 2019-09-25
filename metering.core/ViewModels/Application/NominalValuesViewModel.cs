@@ -205,20 +205,30 @@ namespace metering.core
                         // is this condition true ? yes : no
 
                         // current signals names restart at 1 => (i - omicronVoltageSignalNumber)
+
+                        // Omicron Analog Signal Name
                         SignalName = i <= omicronVoltageSignalNumber ? "v" + i : "i" + (i - omicronVoltageSignalNumber),
+                        // Omicron Analog Signal Magnitude
+                        Magnitude = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
+                        // Omicron Analog Signal Magnitude From value
                         From = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
+                        // Omicron Analog Signal Magnitude To value
                         To = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
+                        // Omicron Analog Signal Magnitude Delta value
                         Delta = $"{Convert.ToDouble(NominalDelta):F3}",
+                        // Omicron Analog Signal Phase
                         Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
+                        // Omicron Analog Signal Frequency
                         Frequency = $"{Convert.ToDouble(NominalFrequency):F3}"
                     });
                 }
 
                 // Update only AnalogSignal values in the single instance of TestDetailsViewModel
                 IoC.TestDetails.AnalogSignals = analogSignals;
+                IoC.TestDetails.SelectRampingSignalCommand.Execute(IoC.TestDetails.SelectedRampingSignal);
 
                 // Show TestDetails page
-                IoC.Application.GoToPage(ApplicationPage.TestDetails);
+                IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
             }
             catch (Exception ex)
             {

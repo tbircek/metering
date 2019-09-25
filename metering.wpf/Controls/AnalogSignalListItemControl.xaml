@@ -17,15 +17,17 @@
         <Grid.ColumnDefinitions>
             <!-- Signal Name -->
             <ColumnDefinition Width="60"/>
-            <!-- From -->
-            <ColumnDefinition Width="90"/>
-            <!-- To -->
-            <ColumnDefinition Width="90"/>
-            <!-- Delta-->
-            <ColumnDefinition Width="90"/>
+           <!-- Magnitude -->
+            <ColumnDefinition Width="120"/>
             <!-- Phase -->
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="120"/>
             <!-- Frequency -->
+            <ColumnDefinition Width="120"/>
+            <!-- Delta-->
+            <ColumnDefinition Width="120"/>
+            <!-- From -->
+            <ColumnDefinition Width="120"/>
+            <!-- To -->
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
 
@@ -39,53 +41,17 @@
                  HorizontalContentAlignment="Center" 
                  Text="{Binding SignalName}"
                  ToolTip="Omicron analog signal name"/>
-
-        <!-- From -->
+        
+        <!-- Magnitude -->
         <TextBox Grid.Column="1"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                 mD:HintAssist.Hint="{Binding FromHint}"        
+                 mD:HintAssist.Hint="{Binding MagnitudeHint}"        
                  TabIndex="0"  
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"             
                  HorizontalContentAlignment="Center" 
-                 Text="{Binding From, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
-                 ToolTip="The test step start value"
-                 local:FocusAndSelectProperty.Value="{Binding Selected}">
-
-            <!-- left click to select all text -->
-            <TextBox.InputBindings>
-                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
-            </TextBox.InputBindings>
-        </TextBox>
-
-        <!-- To -->
-        <TextBox Grid.Column="2"
-                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                 mD:HintAssist.Hint="{Binding ToHint}"
-                 TabIndex="1" 
-                 Padding="2 0 2 0"     
-                 Margin="5 10 5 10"                
-                 HorizontalContentAlignment="Center"
-                 Text="{Binding To, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
-                 ToolTip="The test step end value"
-                 local:FocusAndSelectProperty.Value="{Binding Selected}">
-
-            <!-- left click to select all text -->
-            <TextBox.InputBindings>
-                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
-            </TextBox.InputBindings>
-        </TextBox>
-
-        <!-- Delta-->
-        <TextBox Grid.Column="3"
-                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                 mD:HintAssist.Hint="{Binding DeltaHint}"
-                 TabIndex="2"
-                 Padding="2 0 2 0"     
-                 Margin="5 10 5 10"    
-                 HorizontalContentAlignment="Center"
-                 Text="{Binding Delta, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
-                 ToolTip="The test step increment value"
+                 Text="{Binding Magnitude, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
+                 ToolTip="The omicron analog signal magnitude value"
                  local:FocusAndSelectProperty.Value="{Binding Selected}">
 
             <!-- left click to select all text -->
@@ -95,10 +61,10 @@
         </TextBox>
 
         <!-- Phase -->
-        <TextBox Grid.Column="4"
+        <TextBox Grid.Column="2"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                  mD:HintAssist.Hint="{Binding PhaseHint}"
-                 TabIndex="3" 
+                 TabIndex="1" 
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"              
                  HorizontalContentAlignment="Center" 
@@ -113,15 +79,69 @@
         </TextBox>
 
         <!-- Frequency -->
-        <TextBox Grid.Column="5"
+        <TextBox Grid.Column="3"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                  mD:HintAssist.Hint="{Binding FrequencyHint}"
-                 TabIndex="4" 
+                 TabIndex="2" 
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"               
                  HorizontalContentAlignment="Center" 
                  Text="{Binding Frequency, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
                  ToolTip="The omicron analog signal frequency value"
+                 local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+            <!-- left click to select all text -->
+            <TextBox.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <!-- Delta-->
+        <TextBox Grid.Column="4"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                 mD:HintAssist.Hint="{Binding DeltaHint}"
+                 TabIndex="3"
+                 Padding="2 0 2 0"     
+                 Margin="5 10 5 10"    
+                 HorizontalContentAlignment="Center"
+                 Text="{Binding Delta, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
+                 ToolTip="The test step increment value"
+                 local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+            <!-- left click to select all text -->
+            <TextBox.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <!-- From -->
+        <TextBox Grid.Column="5"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 mD:HintAssist.Hint="{Binding FromHint}"        
+                 TabIndex="4"  
+                 Padding="2 0 2 0"     
+                 Margin="5 10 5 10"             
+                 HorizontalContentAlignment="Center" 
+                 Text="{Binding From, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
+                 ToolTip="The test step start value"
+                 local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+            <!-- left click to select all text -->
+            <TextBox.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <!-- To -->
+        <TextBox Grid.Column="6"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                 mD:HintAssist.Hint="{Binding ToHint}"
+                 TabIndex="5" 
+                 Padding="2 0 2 0"     
+                 Margin="5 10 5 10"                
+                 HorizontalContentAlignment="Center"
+                 Text="{Binding To, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
+                 ToolTip="The test step end value"
                  local:FocusAndSelectProperty.Value="{Binding Selected}">
 
             <!-- left click to select all text -->
