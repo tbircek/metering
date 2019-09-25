@@ -24,6 +24,24 @@ namespace metering.core
         /// <summary>
         /// Omicron Analog Output start magnitude 
         /// </summary>
+        public string Magnitude { get; set; }
+
+        /// <summary>
+        /// Hint label for From entry.
+        /// </summary>
+        public string MagnitudeHint
+        {
+            get
+            {
+                // Returns Voltage hint text for "v" signals, or Current hint text for "i" signals
+                return SignalName.StartsWith("v") ? Resources.Strings.header_magnitude_voltage : Resources.Strings.header_magnitude_current;
+            }
+            set { }
+        }
+
+        /// <summary>
+        /// Omicron Analog Output start magnitude 
+        /// </summary>
         public string From { get; set; }
 
         /// <summary>
