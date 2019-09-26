@@ -169,24 +169,6 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IL3.
-        /// </summary>
-        public static string header_current_3 {
-            get {
-                return ResourceManager.GetString("header_current_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to IL4.
-        /// </summary>
-        public static string header_current_4 {
-            get {
-                return ResourceManager.GetString("header_current_4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to IL5.
         /// </summary>
         public static string header_current_5 {
@@ -219,6 +201,24 @@ namespace metering.core.Resources {
         public static string header_delta_current {
             get {
                 return ResourceManager.GetString("header_delta_current", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delta (Hz).
+        /// </summary>
+        public static string header_delta_frequency {
+            get {
+                return ResourceManager.GetString("header_delta_frequency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delta (°).
+        /// </summary>
+        public static string header_delta_phase {
+            get {
+                return ResourceManager.GetString("header_delta_phase", resourceCulture);
             }
         }
         

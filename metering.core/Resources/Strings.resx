@@ -243,11 +243,11 @@
   <data name="header_magnitude_current" xml:space="preserve">
     <value>Magnitude(A)</value>
   </data>
-  <data name="header_current_3" xml:space="preserve">
-    <value>IL3</value>
+  <data name="header_delta_phase" xml:space="preserve">
+    <value>Delta (°)</value>
   </data>
-  <data name="header_current_4" xml:space="preserve">
-    <value>IL4</value>
+  <data name="header_delta_frequency" xml:space="preserve">
+    <value>Delta (Hz)</value>
   </data>
   <data name="header_current_5" xml:space="preserve">
     <value>IL5</value>
