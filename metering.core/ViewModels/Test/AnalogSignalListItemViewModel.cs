@@ -40,9 +40,19 @@ namespace metering.core
         }
 
         /// <summary>
+        /// inversely indicates if the ramping signal is Magnitude (false == yes, true == no)
+        /// </summary>
+        public bool IsMagnitudeEnabled { get; set; } = false;
+
+        /// <summary>
         /// Omicron Analog Output start magnitude 
         /// </summary>
         public string From { get; set; }
+
+        /// <summary>
+        /// private Hint label for To entry.
+        /// </summary>
+        private string fromHint = string.Empty;
 
         /// <summary>
         /// Hint label for From entry.
@@ -51,10 +61,26 @@ namespace metering.core
         {
             get
             {
-                // Returns Voltage hint text for "v" signals, or Current hint text for "i" signals
-                return SignalName.StartsWith("v") ? Resources.Strings.header_from_voltage : Resources.Strings.header_from_current;
+                // if it is first loading of the page fromHint will be empty string.
+                // per design this Magnitude condition. showing magnitude hint text.
+                if (string.IsNullOrWhiteSpace(fromHint))
+                    return SignalName.StartsWith("v") ? Resources.Strings.header_from_voltage : Resources.Strings.header_from_current;
+
+                // Returns private value
+                return fromHint;
             }
-            set { }
+            set
+            {
+                if (value != fromHint)
+                {
+                    fromHint = value;
+                }
+                else if (string.IsNullOrWhiteSpace(value))
+                {
+                    // hint text for "v" signals, or Current hint text for "i" signals
+                    fromHint = SignalName.StartsWith("v") ? Resources.Strings.header_from_voltage : Resources.Strings.header_from_current;
+                }
+            }
         }
 
         /// <summary>
@@ -63,16 +89,37 @@ namespace metering.core
         public string To { get; set; }
 
         /// <summary>
+        /// private Hint label for To entry.
+        /// </summary>
+        private string toHint = string.Empty;
+
+        /// <summary>
         /// Hint label for To entry.
         /// </summary>
         public string ToHint
         {
             get
             {
-                // Returns Voltage hint text for "v" signals, or Current hint text for "i" signals
-                return SignalName.StartsWith("v") ? Resources.Strings.header_to_voltage : Resources.Strings.header_to_current;
+                // if it is first loading of the page toHint will be empty string.
+                // per design this Magnitude condition. showing magnitude hint text.
+                if (string.IsNullOrWhiteSpace(toHint))
+                    return SignalName.StartsWith("v") ? Resources.Strings.header_to_voltage : Resources.Strings.header_to_current;
+
+                // Returns private value
+                return toHint;
             }
-            set { }
+            set
+            {
+                if (value != toHint)
+                {
+                    toHint = value;
+                }
+                else if (string.IsNullOrWhiteSpace(value))
+                {
+                    // hint text for "v" signals, or Current hint text for "i" signals
+                    toHint = SignalName.StartsWith("v") ? Resources.Strings.header_to_voltage : Resources.Strings.header_to_current;
+                }
+            }
         }
 
         /// <summary>
@@ -81,16 +128,37 @@ namespace metering.core
         public string Delta { get; set; }
 
         /// <summary>
+        /// private Hint label for Delta entry.
+        /// </summary>
+        private string deltaHint = string.Empty;
+
+        /// <summary>
         /// Hint label for Delta entry.
         /// </summary>
         public string DeltaHint
         {
             get
             {
-                // Returns Voltage hint text for "v" signals, or Current hint text for "i" signals
-                return SignalName.StartsWith("v") ? Resources.Strings.header_delta_voltage : Resources.Strings.header_delta_current;
+                // if it is first loading of the page deltaHint will be empty string.
+                // per design this Magnitude condition. showing magnitude hint text.
+                if(string.IsNullOrWhiteSpace(deltaHint))
+                    return SignalName.StartsWith("v") ? Resources.Strings.header_delta_voltage : Resources.Strings.header_delta_current;
+
+                // Returns private value
+                return deltaHint;
             }
-            set { }
+            set
+            {
+                if (value != deltaHint)
+                {
+                    deltaHint = value;
+                }
+                else if (string.IsNullOrWhiteSpace(value))
+                {
+                    // hint text for "v" signals, or Current hint text for "i" signals
+                    deltaHint = SignalName.StartsWith("v") ? Resources.Strings.header_delta_voltage : Resources.Strings.header_delta_current;
+                }
+            }
         }
         
         /// <summary>
@@ -104,6 +172,11 @@ namespace metering.core
         public string PhaseHint { get; set; } = Resources.Strings.header_phase;
 
         /// <summary>
+        /// inversely indicates if the ramping signal is Phase (false == yes, true == no)
+        /// </summary>
+        public bool IsPhaseEnabled { get; set; } = true;
+
+        /// <summary>
         /// Omicron Analog Output frequency
         /// </summary>
         public string Frequency { get; set; }
@@ -112,6 +185,11 @@ namespace metering.core
         /// Hint label for Frequency entry.
         /// </summary>
         public string FrequencyHint { get; set; } = Resources.Strings.header_frequency;
+
+        /// <summary>
+        /// inversely indicates if the ramping signal is Frequency (false == yes, true == no)
+        /// </summary>
+        public bool IsFrequencyEnabled { get; set; } = true;
 
         /// <summary>
         /// indicates if the current text double left clicked to highlight the text

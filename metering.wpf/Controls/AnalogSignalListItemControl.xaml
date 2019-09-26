@@ -47,6 +47,7 @@
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                  mD:HintAssist.Hint="{Binding MagnitudeHint}"        
                  TabIndex="0"  
+                 IsEnabled="{Binding IsMagnitudeEnabled}"
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"             
                  HorizontalContentAlignment="Center" 
@@ -64,7 +65,8 @@
         <TextBox Grid.Column="2"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                  mD:HintAssist.Hint="{Binding PhaseHint}"
-                 TabIndex="1" 
+                 TabIndex="1"   
+                 IsEnabled="{Binding IsPhaseEnabled}"
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"              
                  HorizontalContentAlignment="Center" 
@@ -82,7 +84,8 @@
         <TextBox Grid.Column="3"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                  mD:HintAssist.Hint="{Binding FrequencyHint}"
-                 TabIndex="2" 
+                 TabIndex="2"   
+                 IsEnabled="{Binding IsFrequencyEnabled}"
                  Padding="2 0 2 0"     
                  Margin="5 10 5 10"               
                  HorizontalContentAlignment="Center" 
@@ -96,26 +99,8 @@
             </TextBox.InputBindings>
         </TextBox>
 
-        <!-- Delta-->
-        <TextBox Grid.Column="4"
-                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                 mD:HintAssist.Hint="{Binding DeltaHint}"
-                 TabIndex="3"
-                 Padding="2 0 2 0"     
-                 Margin="5 10 5 10"    
-                 HorizontalContentAlignment="Center"
-                 Text="{Binding Delta, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
-                 ToolTip="The test step increment value"
-                 local:FocusAndSelectProperty.Value="{Binding Selected}">
-
-            <!-- left click to select all text -->
-            <TextBox.InputBindings>
-                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
-            </TextBox.InputBindings>
-        </TextBox>
-
         <!-- From -->
-        <TextBox Grid.Column="5"
+        <TextBox Grid.Column="4"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                  mD:HintAssist.Hint="{Binding FromHint}"        
                  TabIndex="4"  
@@ -133,7 +118,7 @@
         </TextBox>
 
         <!-- To -->
-        <TextBox Grid.Column="6"
+        <TextBox Grid.Column="5"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                  mD:HintAssist.Hint="{Binding ToHint}"
                  TabIndex="5" 
@@ -142,6 +127,24 @@
                  HorizontalContentAlignment="Center"
                  Text="{Binding To, StringFormat=\{0:F1\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
                  ToolTip="The test step end value"
+                 local:FocusAndSelectProperty.Value="{Binding Selected}">
+
+            <!-- left click to select all text -->
+            <TextBox.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <!-- Delta-->
+        <TextBox Grid.Column="6"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                 mD:HintAssist.Hint="{Binding DeltaHint}"
+                 TabIndex="3"
+                 Padding="2 0 2 0"     
+                 Margin="5 10 5 10"    
+                 HorizontalContentAlignment="Center"
+                 Text="{Binding Delta, StringFormat=\{0:F3\}, UpdateSourceTrigger=PropertyChanged, ConverterCulture=en-US}"
+                 ToolTip="The test step increment value"
                  local:FocusAndSelectProperty.Value="{Binding Selected}">
 
             <!-- left click to select all text -->
