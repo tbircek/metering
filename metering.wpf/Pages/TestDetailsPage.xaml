@@ -68,66 +68,23 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <ListBox
-                    SelectedItem="{Binding Path=SelectedRampingSignal, UpdateSourceTrigger=PropertyChanged}"
-                    Background="Transparent"
-                    HorizontalContentAlignment="Stretch"
-                    VerticalContentAlignment="Center">
-                    <TextBox
-                        mD:HintAssist.Hint="Ramping"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                        Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                        TabIndex="0"
-                        Padding="0 0 5 0"                 
-                        HorizontalContentAlignment="Center" 
-                        FontSize="18"
-                        ToolTip="Select your Ramping Signal"
-                        IsEnabled="False"/>
-
-                    <RadioButton
-                        Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                        Foreground="{StaticResource SecondaryAccentForegroundBrush}"
-                        Content="Magnitude"
-                        IsChecked="True"
-                        Command="{Binding SelectRampingSignalCommand}" 
-                        CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
-
-                    <RadioButton
-                        Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                        Foreground="{StaticResource SecondaryAccentForegroundBrush}"
-                        Content="Phase"
-                        Command="{Binding SelectRampingSignalCommand}" 
-                        CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
-
-                    <RadioButton
-                        Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                        Foreground="{StaticResource SecondaryAccentForegroundBrush}"
-                        Content="Frequency"
-                        Command="{Binding SelectRampingSignalCommand}" 
-                        CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
-                    
-                    <!--<ListBox.ItemTemplate>
-                        <DataTemplate DataType="{x:Type RadioButton}">
-                            
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>-->
-                </ListBox>
-                <!-- Ramping Signal Selection -->
-                <!--<Border
+                <!-- Ramping Signal Selection -->                
+                <Border
                     BorderBrush="Black" 
                     BorderThickness="1" 
                     ClipToBounds="True">
 
-                    --><!-- Ramping selection zone --><!--
+                    <!-- Ramping selection zone -->
                     <StackPanel 
                         Orientation="Vertical"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
-
-                        --><!-- Ramping selection label --><!--
+                        
+                        <!-- Ramping selection label -->
                         <TextBox
                             mD:HintAssist.Hint="Ramping"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
                             TabIndex="0"
                             Padding="0 0 5 0"                 
                             HorizontalContentAlignment="Center" 
@@ -135,113 +92,42 @@
                             ToolTip="Select your Ramping Signal"
                             IsEnabled="False"/>
 
-                        --><!-- Separate controls --><!--
-                        <Separator
-                              Style="{StaticResource MaterialDesignLightSeparator}" />
+                        <!-- Separate controls -->
+                        <Separator Style="{StaticResource MaterialDesignLightSeparator}" />
 
-                        --><!-- Magnitude Ramping Selection --><!--
+                        <!-- Magnitude Ramping Selection -->
                         <RadioButton
                             Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
+                            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
                             Content="Magnitude"
-                            Command="{Binding SelectRampingSignalCommand}" 
-                            CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}">
-                            <RadioButton.IsChecked>
-                                <Binding Path="RampingSelect"
-                                         Converter="{local:EnumMatchToBooleanConverter}">
-                                    --><!--<Binding.ValidationRules>
-                                        <domain:IsCheckedValidationRule xmlns:domain="clr-namespace:MaterialDesignDemo.Domain" />
-                                    </Binding.ValidationRules>--><!--
-                                </Binding>
-                            </RadioButton.IsChecked>
-                        </RadioButton>
-
-                        <RadioButton
-                            Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                            Content="Frequency"
-                            Command="{Binding SelectRampingSignalCommand}" 
-                            CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}">
-                            <RadioButton.IsChecked>
-                                <Binding Path="RampingSelect"
-                                         Converter="{local:EnumMatchToBooleanConverter}">
-                                    --><!--ConverterParameter="Frequency">-->
-                                    <!--<Binding.ValidationRules>
-                                        <domain:IsCheckedValidationRule xmlns:domain="clr-namespace:MaterialDesignDemo.Domain" />
-                                    </Binding.ValidationRules>--><!--
-                                </Binding>
-                            </RadioButton.IsChecked>
-                        </RadioButton>
-
-                        <RadioButton
-                            Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                            Content="Phase"
-                            Command="{Binding SelectRampingSignalCommand}" 
-                            CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}">
-                            <RadioButton.IsChecked>
-                                <Binding Path="RampingSelect"                                         
-                                         Converter="{local:EnumMatchToBooleanConverter}">
-                                    --><!--<Binding.ValidationRules>
-                                        <domain:IsCheckedValidationRule xmlns:domain="clr-namespace:MaterialDesignDemo.Domain" />
-                                    </Binding.ValidationRules>--><!--
-                                </Binding>
-                            </RadioButton.IsChecked>
-                        </RadioButton>
-
-                        --><!--<RadioButton 
-                            
-                            IsChecked="{Binding Path=RampingSelect, 
-                                                Mode=TwoWay, 
-                                                Converter={local:EnumMatchToBooleanConverter}, 
-                                                ConverterParameter=Magnitude}"
-                            GroupName="Magnitude"
-                            Padding="5"
                             FontSize="18"
-                            VerticalContentAlignment="Center" 
-                            ToolTip="Use Signals Magnitude as a ramping"/>-->
-
-
-                        <!--Command="{Binding SelectRampingSignal}" 
-                            CommandParameter="{Binding Content, ElementName=Magnitude}"-->
+                            VerticalContentAlignment="Center"
+                            IsChecked="True"
+                            Command="{Binding SelectRampingSignalCommand}" 
+                            CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
 
                         <!-- Phase Ramping Selection -->
-                        <!--<RadioButton 
-                            x:Name="Phase"
+                        <RadioButton
                             Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                            Content="Phase" 
-                            IsChecked="{Binding Path=RampingSelect, 
-                                                Mode=TwoWay, 
-                                                Converter={local:EnumMatchToBooleanConverter}, 
-                                                ConverterParameter=Phase}"
-                            GroupName="Phase"
-                            Padding="5"
+                            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
+                            Content="Phase"
                             FontSize="18"
-                            VerticalContentAlignment="Center" 
-                            ToolTip="Use Signals Phase as a ramping"/>-->
-
-
-                        <!--Command="{Binding SelectRampingSignal}" 
-                            CommandParameter="{Binding Content, ElementName=Phase}"-->
+                            VerticalContentAlignment="Center"
+                            Command="{Binding SelectRampingSignalCommand}" 
+                            CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
 
                         <!-- Frequency Ramping Selection -->
-                        <!--<RadioButton 
-                            x:Name="Frequency"
+                        <RadioButton
                             Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                            Content="Frequency"                            
-                            IsChecked="{Binding Path=RampingSelect, 
-                                                Mode=TwoWay, 
-                                                Converter={local:EnumMatchToBooleanConverter}, 
-                                                ConverterParameter=Frequency}"
-                            GroupName="Frequency"
-                            Padding="5"
+                            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
+                            Content="Frequency"
                             FontSize="18"
-                            VerticalContentAlignment="Center" 
-                            ToolTip="Use Signals Frequency as a ramping"/>-->
-
-
-                        <!--Command="{Binding SelectRampingSignal}"
-                            CommandParameter="{Binding Content, ElementName=Frequency}"--><!--
+                            VerticalContentAlignment="Center"
+                            Command="{Binding SelectRampingSignalCommand}" 
+                            CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
 
                     </StackPanel>
-                </Border>-->
+                </Border>
 
                 <!-- Register Setting -->
                 <TextBox

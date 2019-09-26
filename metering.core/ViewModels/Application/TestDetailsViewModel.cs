@@ -115,12 +115,6 @@ namespace metering.core
         /// </summary>
         public string SelectedRampingSignal { get; set; } = "Magnitude";
         
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool RampingSelect { get; set; }
-
-
         #endregion
 
         #region Public Commands
@@ -196,7 +190,7 @@ namespace metering.core
 
             foreach (var item in AnalogSignals)
             {
-                // enable/disable our own text field
+                // enable/disable our own text field... these fields work inversely.
                 item.IsMagnitudeEnabled = !(string.Equals(selectedOption, nameof(RampingSignals.Magnitude)));
                 item.IsPhaseEnabled = !(string.Equals(selectedOption, nameof(RampingSignals.Phase)));
                 item.IsFrequencyEnabled = !(string.Equals(selectedOption, nameof(RampingSignals.Frequency)));

@@ -225,8 +225,6 @@ namespace metering.core
 
                 // Update only AnalogSignal values in the single instance of TestDetailsViewModel
                 IoC.TestDetails.AnalogSignals = analogSignals;
-                // IoC.TestDetails.SelectedRampingSignal = "Magnitude";
-                IoC.TestDetails.OnPropertyChanged("SelectedRampingSignal");
 
                 // Show TestDetails page
                 IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
