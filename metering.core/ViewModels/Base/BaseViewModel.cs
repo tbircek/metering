@@ -32,7 +32,11 @@ namespace metering.core
         public void OnPropertyChanged(string name)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(name));
-            IoC.Logger.Log($"(name: {name}) processed successfully.");
+
+            // these line requires .NET Core 3.0 Preview RC1 as of 9/26/2016
+            //if (!DesignerProperties.GetIsInDesignMode(this))
+            //IoC.Logger.Log($"(name: {name}) processed successfully.");
+            System.Diagnostics.Debug.WriteLine($"(name: {name}) processed successfully.");
         }
 
         #region Helpers

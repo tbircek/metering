@@ -98,10 +98,6 @@ namespace metering.core
             // Bind all required classes
             BindClasses();
 
-            // log application start
-            Logger.Log("============================================================================", LogLevel.Informative);
-            Logger.Log("Application starts", LogLevel.Informative);
-
             // Bind all required view models
             BindViewModels();
 
