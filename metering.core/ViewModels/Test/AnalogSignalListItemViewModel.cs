@@ -9,6 +9,25 @@ namespace metering.core
     /// </summary>
     public class AnalogSignalListItemViewModel : BaseViewModel
     {
+        #region Private Properties
+
+        /// <summary>
+        /// private Hint label for From entry.
+        /// </summary>
+        private string fromHint = string.Empty;
+
+        /// <summary>
+        /// private Hint label for To entry.
+        /// </summary>
+        private string toHint = string.Empty;
+
+        /// <summary>
+        /// private Hint label for Delta entry.
+        /// </summary>
+        private string deltaHint = string.Empty;
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
@@ -50,11 +69,6 @@ namespace metering.core
         public string From { get; set; }
 
         /// <summary>
-        /// private Hint label for To entry.
-        /// </summary>
-        private string fromHint = string.Empty;
-
-        /// <summary>
         /// Hint label for From entry.
         /// </summary>
         public string FromHint 
@@ -89,11 +103,6 @@ namespace metering.core
         public string To { get; set; }
 
         /// <summary>
-        /// private Hint label for To entry.
-        /// </summary>
-        private string toHint = string.Empty;
-
-        /// <summary>
         /// Hint label for To entry.
         /// </summary>
         public string ToHint
@@ -126,11 +135,6 @@ namespace metering.core
         /// Omicron Analog Output magnitude increment/decrement
         /// </summary>
         public string Delta { get; set; }
-
-        /// <summary>
-        /// private Hint label for Delta entry.
-        /// </summary>
-        private string deltaHint = string.Empty;
 
         /// <summary>
         /// Hint label for Delta entry.

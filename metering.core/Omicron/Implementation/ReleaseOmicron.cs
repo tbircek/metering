@@ -66,7 +66,8 @@ namespace metering.core
                 IoC.Commands.TokenSource.Cancel();
 
                 // Trying to stop the communication timer.
-                IoC.CMCControl.MdbusTimer.Dispose();
+                if(IoC.CMCControl.MdbusTimer != null)
+                    IoC.CMCControl.MdbusTimer.Dispose();
 
             }
             else

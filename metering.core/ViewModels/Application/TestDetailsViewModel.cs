@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using metering.core.Resources;
 
@@ -186,20 +184,27 @@ namespace metering.core
         private void RampingSelectionAsync(object parameter)
         {
             // convert command parameter to string
-            string selectedOption = (string)parameter;
+            SelectedRampingSignal = (string)parameter;
 
             foreach (var item in AnalogSignals)
             {
-                // enable/disable our own text field... these fields work inversely.
-                item.IsMagnitudeEnabled = !(string.Equals(selectedOption, nameof(RampingSignals.Magnitude)));
-                item.IsPhaseEnabled = !(string.Equals(selectedOption, nameof(RampingSignals.Phase)));
-                item.IsFrequencyEnabled = !(string.Equals(selectedOption, nameof(RampingSignals.Frequency)));
-
+                // these fields work inversely.
+                // enable/disable Magnitude text field...
+                item.IsMagnitudeEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Magnitude)));
+                // enable/disable Phase text field...
+                item.IsPhaseEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Phase)));
+                // enable/disable Frequency text field...
+                item.IsFrequencyEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Frequency)));
+                
                 // process radio button parameter
-                switch (selectedOption)
+                switch (SelectedRampingSignal)
                 {
                     // Phase option selected:
-                    case nameof(RampingSignals.Phase):
+                    case nameof(RampingSignals.Phase): 
+                        // Update From value with Phase value
+                        item.From = item.Phase;
+                        // Update To value with Phase value
+                        item.To = item.Phase;
                         // From text field hint
                         item.FromHint = Strings.header_from_phase;
                         // To text field hint
@@ -210,6 +215,10 @@ namespace metering.core
 
                     // Frequency option selected:
                     case nameof(RampingSignals.Frequency):
+                        // Update From value with Frequency value
+                        item.From = item.Frequency;
+                        // Update To value with Frequency value
+                        item.To = item.Frequency;
                         // From text field hint
                         item.FromHint = Strings.header_from_frequency;
                         // To text field hint
@@ -221,6 +230,10 @@ namespace metering.core
                     // Magnitude or first load up selected:
                     default:
                         // Magnitude values return appropriate string values when they empty
+                        // Update From value with Magnitude value
+                        item.From = item.Magnitude;
+                        // Update To value with Magnitude value
+                        item.To = item.Magnitude;
                         // From text field hint
                         item.FromHint = string.Empty;
                         // To text field hint
