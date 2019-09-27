@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Threading;
 using System.Windows.Input;
+using metering.core.Resources;
 
 namespace metering.core
 {
@@ -11,6 +12,31 @@ namespace metering.core
     /// </summary>
     public class TestDetailsViewModel : BaseViewModel
     {
+        #region Public Enums
+
+        /// <summary>
+        /// Holds all possible Ramping signal names
+        /// </summary>
+        public enum RampingSignals
+        {
+            /// <summary>
+            /// Ramping signal is "Magnitude"
+            /// </summary>
+            Magnitude = 0,
+
+            /// <summary>
+            /// Ramping signal is "Phase"
+            /// </summary>
+            Phase = 1,
+
+            /// <summary>
+            /// Ramping Signal is "Frequency"
+            /// </summary>
+            Frequency = 2,
+        }
+
+        #endregion
+        
         #region Public Properties
 
         /// <summary>
@@ -82,6 +108,11 @@ namespace metering.core
         /// </summary>
         public bool Selected { get; set; }
 
+        /// <summary>
+        /// Holds information about the signal parameter to ramp
+        /// </summary>
+        public string SelectedRampingSignal { get; set; } = "Magnitude";
+        
         #endregion
 
         #region Public Commands
@@ -96,6 +127,11 @@ namespace metering.core
         /// specified Test Unit IpAddress and port.
         /// </summary>
         public ICommand ConnectCommand { get; set; }
+
+        /// <summary>
+        /// The command handles radio button selections
+        /// </summary>
+        public ICommand SelectRampingSignalCommand { get; set; }
 
         #endregion
 
@@ -114,6 +150,8 @@ namespace metering.core
             // create the commands.
             ConnectCommand = new RelayCommand(async () => await IoC.Communication.StartCommunicationAsync());
             SelectAllTextCommand = new RelayCommand(SelectAll);
+            SelectRampingSignalCommand = new RelayParameterizedCommand((parameter) => RampingSelectionAsync((string)parameter));
+
         }
 
         #endregion
@@ -137,8 +175,75 @@ namespace metering.core
 
         #endregion
 
-        #region Helpers
+        #region Private Helpers
 
+        /// <summary>
+        /// Modifies textbox hint text per selected ramping signal option.
+        /// </summary>
+        /// <returns></returns>
+        private void RampingSelectionAsync(object parameter)
+        {
+            // convert command parameter to string
+            SelectedRampingSignal = (string)parameter;
+
+            foreach (var item in AnalogSignals)
+            {
+                // these fields work inversely.
+                // enable/disable Magnitude text field...
+                item.IsMagnitudeEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Magnitude)));
+                // enable/disable Phase text field...
+                item.IsPhaseEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Phase)));
+                // enable/disable Frequency text field...
+                item.IsFrequencyEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Frequency)));
+                
+                // process radio button parameter
+                switch (SelectedRampingSignal)
+                {
+                    // Phase option selected:
+                    case nameof(RampingSignals.Phase): 
+                        // Update From value with Phase value
+                        item.From = item.Phase;
+                        // Update To value with Phase value
+                        item.To = item.Phase;
+                        // From text field hint
+                        item.FromHint = Strings.header_from_phase;
+                        // To text field hint
+                        item.ToHint = Strings.header_to_phase;
+                        // Delta text field hint
+                        item.DeltaHint = Strings.header_delta_phase;
+                        break;
+
+                    // Frequency option selected:
+                    case nameof(RampingSignals.Frequency):
+                        // Update From value with Frequency value
+                        item.From = item.Frequency;
+                        // Update To value with Frequency value
+                        item.To = item.Frequency;
+                        // From text field hint
+                        item.FromHint = Strings.header_from_frequency;
+                        // To text field hint
+                        item.ToHint = Strings.header_to_frequency;
+                        // Delta text field hint
+                        item.DeltaHint = Strings.header_delta_frequency;
+                        break;
+
+                    // Magnitude or first load up selected:
+                    default:
+                        // Magnitude values return appropriate string values when they empty
+                        // Update From value with Magnitude value
+                        item.From = item.Magnitude;
+                        // Update To value with Magnitude value
+                        item.To = item.Magnitude;
+                        // From text field hint
+                        item.FromHint = string.Empty;
+                        // To text field hint
+                        item.ToHint = string.Empty;
+                        // Delta text field hint
+                        item.DeltaHint = string.Empty;
+                        break;
+                }
+            }
+        }
         #endregion
     }
 }

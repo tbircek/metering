@@ -87,7 +87,7 @@ namespace metering.core
         #endregion
 
         #region Public Methods
-      
+
         /// <summary>
         /// Runs Test Steps
         /// </summary>
@@ -139,13 +139,13 @@ namespace metering.core
                 }
 
                 // inform the developer of test SignalName
-                IoC.Logger.Log($"Test signal name: {testSignal.SignalName}",LogLevel.Informative);
+                IoC.Logger.Log($"Test signal name: {testSignal.SignalName}", LogLevel.Informative);
 
                 // set maximum value for the progress bar
                 IoC.Commands.MaximumTestCount = Math.Ceiling((Math.Abs(testSignal.To - testSignal.From) / testSignal.Delta)) + 1;
 
                 // inform the developer MaximumTestCount
-                IoC.Logger.Log($"Maximum test count: {IoC.Commands.MaximumTestCount}",LogLevel.Informative);
+                IoC.Logger.Log($"Maximum test count: {IoC.Commands.MaximumTestCount}", LogLevel.Informative);
 
                 // initialize new testStartValue
                 double testStartValue;
@@ -161,7 +161,7 @@ namespace metering.core
                         MdbusTimer = new Timer(MeasurementIntervalCallbackAsync, IoC.TestDetails.Register, TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)), TimeSpan.FromMilliseconds(Convert.ToDouble(IoC.TestDetails.MeasurementInterval)));
 
                         // inform the developer about test register and start value.
-                        IoC.Logger.Log($"Register: {IoC.TestDetails.Register}\tTest value: {testStartValue:F3} started",LogLevel.Informative);
+                        IoC.Logger.Log($"Register: {IoC.TestDetails.Register}\tTest value: {testStartValue:F3} started", LogLevel.Informative);
 
                         // inform the user about test register and start value.
                         IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} started\n";
@@ -192,8 +192,8 @@ namespace metering.core
 
                             // generate a string to inform the user about test results.
                             Message += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{IoC.TestDetails.Register},{testStartValue:F3},{MinTestValue:F3},{MaxTestValue:F3}";
-                            
-                        // wait task to be over with
+
+                            // wait task to be over with
                         }, IoC.Commands.Token).Wait();
 
                         // log the test step result to a ".csv" format file
@@ -201,7 +201,7 @@ namespace metering.core
 
                         // increment progress bar strip on the "Button"
                         IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
-                        
+
                         // increment progress
                         progressStep++;
 
@@ -212,7 +212,7 @@ namespace metering.core
                         IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} completed.\n";
 
                         // inform the developer
-                        IoC.Logger.Log($"Test {progressStep} of {IoC.Commands.MaximumTestCount} completed",LogLevel.Informative);
+                        IoC.Logger.Log($"Test {progressStep} of {IoC.Commands.MaximumTestCount} completed", LogLevel.Informative);
 
                         // increment progress percentage
                         Progress = progressStep / IoC.Commands.MaximumTestCount;
@@ -279,7 +279,7 @@ namespace metering.core
             // TODO: Move this methods to its own class and automate
 
             // inform developer
-            IoC.Logger.Log($"SendOmicronCommands started :  ramping signal: {testSignal.SignalName} -- test value: {testStartValue}",LogLevel.Informative);
+            IoC.Logger.Log($"SendOmicronCommands started :  ramping signal: {testSignal.SignalName} -- test value: {testStartValue}", LogLevel.Informative);
 
             // set voltage amplifiers default values.
             // Analog signal: Voltage Output 1:
@@ -290,11 +290,11 @@ namespace metering.core
                 // generator 
                 generatorNumber: "1:1",
                 // Signal Amplitude
-                amplitude: string.Equals("v1", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].From),
+                amplitude: (string.Equals("v1", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Magnitude),
                 // Signal Phase
-                phase: string.Equals("v1", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Phase),
+                phase: (string.Equals("v1", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Phase),
                 // Signal Frequency
-                frequency: string.Equals("v1", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Frequency)
+                frequency: (string.Equals("v1", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Frequency)
                 );
 
             // Analog signal: Voltage Output 2:
@@ -305,25 +305,28 @@ namespace metering.core
                 // generator 
                 generatorNumber: "1:2",
                  // Signal Amplitude
-                 amplitude: string.Equals("v2", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].From),
-               // Signal Phase
-               phase: string.Equals("v2", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].Phase),
+                 amplitude: (string.Equals("v2", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].Magnitude),
+                // Signal Phase
+                phase: (string.Equals("v2", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].Phase),
                 // Signal Frequency
-                frequency: string.Equals("v2", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].Frequency));
+                frequency: (string.Equals("v2", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].Frequency)
+                );
 
             // Analog signal: Voltage Output 3:
             IoC.StringCommands.SendOutAna
                 (
-                   // Omicron Test Set internal generator name
-                   generator: (int)StringCommands.GeneratorList.v,
-                   // generator 
-                   generatorNumber: "1:3",
-                     // Signal Amplitude
-                     amplitude: string.Equals("v3", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].From),
-                   // Signal Phase
-                   phase: string.Equals("v3", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].Phase),
-                    // Signal Frequency
-                    frequency: string.Equals("v3", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].Frequency));
+
+                // Omicron Test Set internal generator name
+                generator: (int)StringCommands.GeneratorList.v,
+                // generator 
+                generatorNumber: "1:3",
+                // Signal Amplitude
+                amplitude: (string.Equals("v3", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].Magnitude),
+                // Signal Phase
+                phase: (string.Equals("v3", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].Phase),
+                // Signal Frequency
+                frequency: (string.Equals("v3", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].Frequency)
+                );
 
             // set current amplifiers default values.
             // Analog signal: Current Output 1:
@@ -334,11 +337,12 @@ namespace metering.core
                 // generator 
                 generatorNumber: "1:1",
                 // Signal Amplitude
-                amplitude: string.Equals("i1", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].From),
-               // Signal Phase
-               phase: string.Equals("i1", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].Phase),
+                amplitude: (string.Equals("i1", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].Magnitude),
+                // Signal Phase
+                phase: (string.Equals("i1", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].Phase),
                 // Signal Frequency
-                frequency: string.Equals("i1", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].Frequency));
+                frequency: (string.Equals("i1", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].Frequency)
+                );
 
             // Analog signal: Current Output 2:
             IoC.StringCommands.SendOutAna
@@ -347,12 +351,13 @@ namespace metering.core
                generator: (int)StringCommands.GeneratorList.i,
                // generator 
                generatorNumber: "1:2",
-                // Signal Amplitude
-                amplitude: string.Equals("i2", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].From),
-              // Signal Phase
-              phase: string.Equals("i2", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].Phase),
-               // Signal Frequency
-               frequency: string.Equals("i2", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].Frequency));
+               // Signal Amplitude
+               amplitude: (string.Equals("i2", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].Magnitude),
+                // Signal Phase
+                phase: (string.Equals("i2", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].Phase),
+                // Signal Frequency
+                frequency: (string.Equals("i2", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].Frequency)
+                );
 
             // Analog signal: Current Output 3:
             IoC.StringCommands.SendOutAna
@@ -362,12 +367,13 @@ namespace metering.core
                 // generator 
                 generatorNumber: "1:3",
                 // Signal Amplitude
-                amplitude: string.Equals("i3", testSignal.SignalName) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].From),
+                amplitude: (string.Equals("i3", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Magnitude),
                 // Signal Phase
-                phase: string.Equals("i3", testSignal.SignalName) ? testSignal.Phase : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Phase),
-              // Signal Frequency
-              frequency: string.Equals("i3", testSignal.SignalName) ? testSignal.Frequency : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Frequency));
-            
+                phase: (string.Equals("i3", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Phase),
+                // Signal Frequency
+                frequency: (string.Equals("i3", testSignal.SignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Frequency)
+                );
+
         }
 
         /// <summary>

@@ -92,6 +92,9 @@ namespace metering
             // Setup the main application
             ApplicationSetup();
 
+            // log application start message
+            IoC.Logger.Log("Starting the application", LogLevel.Informative);
+
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
