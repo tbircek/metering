@@ -36,7 +36,7 @@ namespace metering.core
             if (string.IsNullOrWhiteSpace(deviceList))
             {
                 // no Omicron Test Set met search criteria and inform the user.
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Unable to find any device attach to this computer\n";
+                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Unable to find any device attach to this computer.";
 
                 // return negative result.
                 return false;
@@ -61,11 +61,11 @@ namespace metering.core
             IoC.CMCControl.CMEngine.DevLock(IoC.CMCControl.DeviceID);
 
             // inform the user about attached device that matched search criteria.
-            IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connecting device: {extract.Parameters(2, deviceList)}\n";
+            IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Connecting device: {extract.Parameters(2, deviceList)}";
 
             // Searches for external Omicron amplifiers and returns a list of IDs.
             // Future use.
-            // omicron.SendStringCommand(CMEngine, DeviceID, OmicronStringCmd.amp_scan);
+            // omicron.SendStringCommandAsync(CMEngine, DeviceID, OmicronStringCmd.amp_scan);
 
             // return a positive result.
             return true;

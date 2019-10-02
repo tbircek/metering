@@ -95,16 +95,19 @@ namespace metering
             // log application start message
             IoC.Logger.Log("Starting the application", LogLevel.Informative);
 
-            // Show the main window
-            Current.MainWindow = new MainWindow();
-            Current.MainWindow.Show();
-
             // check for the updates
             IoC.Task.Run(async () =>
             {
+                // log application start message
+                IoC.Logger.Log("Checking for updates", LogLevel.Informative);
+
                 // await for application update
                 await CheckForUpdates();
             });
+            
+            // Show the main window
+            Current.MainWindow = new MainWindow();
+            Current.MainWindow.Show();
         }
 
         /// <summary>
