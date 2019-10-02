@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,6 +13,21 @@ namespace metering.core
     public class CommunicationViewModel : BaseViewModel
     {
         // TODO: use dependency injection for EasyModbus library
+
+        #region Private Variables
+
+        /// <summary>
+        /// Holds the user information
+        /// </summary>
+        private StringBuilder logBuilder = new StringBuilder();
+
+
+        /// <summary>
+        /// thread lock object
+        /// </summary>
+        private readonly object lockObject = new object();
+
+        #endregion
 
         #region Public Properties
 
@@ -43,7 +59,30 @@ namespace metering.core
         /// <summary>
         /// Holds info about IpAddress:port, connected Omicron Serial # and etc.
         /// </summary>
-        public string Log { get; set; } = "";
+        public string Log
+        {
+            // return StringBuilder holds log information
+            get
+            {
+                // lock the thread
+                lock (lockObject)
+                {
+                    // return log builder's string
+                    return logBuilder.ToString();
+                }
+            }
+
+            // update the string with a line.
+            set
+            {
+                // lock the thread
+                lock (lockObject)
+                {
+                    // set log builder's text
+                    logBuilder.AppendLine(value);
+                }
+            }
+        }
 
         /// <summary>
         /// a flag indicating Omicron Test Set connected and running
@@ -84,7 +123,7 @@ namespace metering.core
             Thread.CurrentThread.CurrentCulture = ci;
 
             // inform the user Application started.
-            Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Application Starts\n";
+            Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Application Starts.";
 
             // create command
             SelectAllTextCommand = new RelayCommand(SelectAll);
@@ -121,7 +160,7 @@ namespace metering.core
                 try
                 {
                     // update the user
-                    Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Communication starts\n";
+                    Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Communication starts.";
 
                     // get new construct of CMCControl
                     // IoC.CMCControl.CMEngine = new CMEngine();
@@ -154,13 +193,13 @@ namespace metering.core
                                 await IoC.CMCControl.TestAsync
                                 (
                                     // excel header values for reporting.
-                                    Message: $"Time,Register,Test Value,Min Value,Max Value\n"
+                                    Message: new StringBuilder().AppendLine("Time,Register,Test Value,Min Value,Max Value")
                                  );
                             }
                             else
                             {
                                 // inform the user 
-                                Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: Omicron Test Set ID is a zero\n";
+                                Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: Omicron Test Set ID is a zero.";
                             }
                         }
                         else
@@ -169,7 +208,7 @@ namespace metering.core
                             // IoC.Logger.Log("Find no Omicron");
 
                             // inform the user 
-                            Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: There is no attached Omicron Test Set. Please attached a Omicron Test Set before test\n";
+                            Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: There is no attached Omicron Test Set. Please attached a Omicron Test Set before test.";
                         }
                     }
                     else
@@ -178,7 +217,7 @@ namespace metering.core
                         // IoC.Logger.Log($"The server {EAModbusClient.IPAddress} is not available.");
 
                         // inform the user 
-                        Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: The server is not available: {EAModbusClient.IPAddress}\n";
+                        Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: The server is not available: {EAModbusClient.IPAddress}.";
                     }
                 }
                 catch (Exception ex)
@@ -187,13 +226,13 @@ namespace metering.core
                     // IoC.Logger.Log(ex.Message);
 
                     // inform the user about error.
-                    Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Start Communication failed: {ex.Message}.\n";
+                    Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Start Communication failed: {ex.Message}.";
 
                     // catch inner exceptions if exists
                     if (ex.InnerException != null)
                     {
                         // inform the user about more details about error.
-                        Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                        Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
                     }
                 }
             });
