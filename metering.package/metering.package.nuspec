@@ -6,11 +6,11 @@
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <projectUrl>https://bitbucket.org/tbircek/metering/</projectUrl>
+    <projectUrl>https://github.com/tbircek/metering</projectUrl>
     <iconUrl>file:///C:/Users/TBircek/source/repos/metering/metering.core/Resources/metering.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>initial release of the package.</releaseNotes>
+    <releaseNotes>Added logging, phase and frequency ramping functionality. improved code, performance and fixed minor bugs.</releaseNotes>
     <copyright>Copyright 2019 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric turgay bircek</tags>
     <dependencies/>
