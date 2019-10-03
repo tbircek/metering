@@ -84,7 +84,7 @@
                         <TextBox
                             mD:HintAssist.Hint="Ramping"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
                             TabIndex="0"
                             Padding="0 0 5 0"                 
                             HorizontalContentAlignment="Center" 

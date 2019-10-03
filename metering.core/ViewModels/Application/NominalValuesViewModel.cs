@@ -235,7 +235,7 @@ namespace metering.core
                 // IoC.Logger.Log($"Exception: {ex.Message}");
 
                 // inform the user
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.\n";
+                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.";
             }
 
         }

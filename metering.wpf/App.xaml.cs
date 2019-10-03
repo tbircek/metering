@@ -15,10 +15,10 @@ namespace metering
 
         #region Private Variables
 
-        /// <summary>
-        /// holds squirrel update manager instance to dispose appropriately
-        /// </summary>
-        private static Task<UpdateManager> _updateManager = null;
+        ///// <summary>
+        ///// holds squirrel update manager instance to dispose appropriately
+        ///// </summary>
+        //private static Task<UpdateManager> updateManager = null;
 
         #endregion
 
@@ -27,16 +27,34 @@ namespace metering
         /// <summary>
         /// Checks for the updates if there is one updates application for next start up
         /// </summary>
-        /// <returns></returns>
+        /// <returns>AsyncStateMachine of Squirrel</returns>
         private async Task CheckForUpdates()
         {
             // specify the location of update
-            using (UpdateManager _updateManager = new UpdateManager(@"\\volta\Eng_Lab\Software Updates\metering"))
+            using (UpdateManager updateManager = new UpdateManager(@"\\volta\Eng_Lab\Software Updates\metering"))
             {
+                // check if there is an update
+                UpdateInfo updateInfo = await updateManager.CheckForUpdate();
+
+                // log the current installed version of the application
+                IoC.Logger.Log($"Current version: {updateInfo.CurrentlyInstalledVersion.Version}", LogLevel.Informative);
+
                 // if update location contains update for this application
-                if (_updateManager.IsInstalledApp)
+                if (updateInfo.ReleasesToApply.Count > 0)
+                {
+                    // log the current installed version of the application
+                    IoC.Logger.Log($"Update version: {updateInfo.FutureReleaseEntry.Version}", LogLevel.Informative);
+
                     // update this application
-                    await _updateManager.UpdateApp();
+                    await updateManager.UpdateApp();
+
+                }
+                // no update available
+                else
+                {
+                    // log application update message
+                    IoC.Logger.Log($"No updates: Update version: {updateInfo.FutureReleaseEntry.Version}", LogLevel.Informative);
+                }
             }
         }
 
@@ -95,16 +113,19 @@ namespace metering
             // log application start message
             IoC.Logger.Log("Starting the application", LogLevel.Informative);
 
-            // Show the main window
-            Current.MainWindow = new MainWindow();
-            Current.MainWindow.Show();
-
             // check for the updates
             IoC.Task.Run(async () =>
             {
+                // log application update message
+                IoC.Logger.Log("Checking for updates", LogLevel.Informative);
+
                 // await for application update
                 await CheckForUpdates();
             });
+            
+            // Show the main window
+            Current.MainWindow = new MainWindow();
+            Current.MainWindow.Show();
         }
 
         /// <summary>
@@ -113,8 +134,8 @@ namespace metering
         /// <param name="e">exit event arguments</param>
         protected override void OnExit(ExitEventArgs e)
         {
-            // dispose updateManager appropriately
-            _updateManager?.Dispose();
+            //// dispose updateManager appropriately
+            //updateManager?.Dispose();
 
             // log application exits message
             IoC.Logger.Log("Exiting the application", LogLevel.Informative);

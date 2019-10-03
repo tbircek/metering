@@ -53,7 +53,7 @@ namespace metering.core
         private void SendOmicronCommand(string CommandToSend)
         {
             // send commands to Omicron Test Set
-            IoC.StringCommands.SendStringCommand(omicronCommand: CommandToSend);
+            IoC.StringCommands.SendStringCommandAsync(omicronCommand: CommandToSend);
         }
 
         #endregion
@@ -94,13 +94,13 @@ namespace metering.core
             catch (Exception ex)
             {
                 IoC.Logger.Log($"InnerException: {ex.Message}");
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}\n";
+                IoC.Communication.Log = $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}.";
 
                 // catch inner exceptions if exists
                 if (ex.InnerException != null)
                 {
                     // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
                 }
             }
         } 

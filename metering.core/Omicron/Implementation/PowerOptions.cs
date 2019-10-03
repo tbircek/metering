@@ -24,7 +24,7 @@ namespace metering.core
                     IoC.Logger.Log($"turnOffCMC setup: runs", LogLevel.Informative);
 
                     // send Turn off command to Omicron Test Set
-                    await IoC.Task.Run(() => IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOff));
+                    await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandAsync(OmicronStringCmd.out_analog_outputOff));
 
                     // release Omicron Test Set.
                     await IoC.Task.Run(() => IoC.ReleaseOmicron.Release());
@@ -37,13 +37,13 @@ namespace metering.core
                 IoC.Logger.Log($"InnerException: {ex.Message}");
 
                 // inform the user about error.
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOffCMC setup: error detected\n";
+                IoC.Communication.Log = $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOffCMC setup: error detected.";
 
                 // catch inner exceptions if exists
                 if (ex.InnerException != null)
                 {
                     // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace metering.core
                     IoC.Logger.Log($"turnOnCMC setup runs", LogLevel.Informative);
 
                     // Send command to Turn On Analog Outputs
-                    await IoC.Task.Run(() => IoC.StringCommands.SendStringCommand(OmicronStringCmd.out_analog_outputOn));
+                    await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandAsync(OmicronStringCmd.out_analog_outputOn));
 
                 });
             }
@@ -73,13 +73,13 @@ namespace metering.core
                 IoC.Logger.Log($"InnerException: {ex.Message}");
 
                 // inform the user about error.
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOnCMC setup: error detected\n";
+                IoC.Communication.Log = $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tturnOnCMC setup: error detected.";
 
                 // catch inner exceptions if exists
                 if (ex.InnerException != null)
                 {
                     // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
                 }
             }
         }

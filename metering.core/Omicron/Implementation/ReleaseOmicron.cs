@@ -36,13 +36,13 @@ namespace metering.core
                 IoC.Logger.Log($"InnerException is : {ex.Message}");
 
                 // inform the user about error
-                IoC.Communication.Log += $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\trelease Omicron: error detected\n";
+                IoC.Communication.Log = $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\trelease Omicron: error detected.";
 
                 // catch inner exceptions if exists
                 if (ex.InnerException != null)
                 {
                     // inform the user about more details about error.
-                    IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.\n";
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace metering.core
                 IoC.Logger.Log($"Test interrupted", LogLevel.Informative);
 
                 // update the user "Test interrupted"
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test interrupted by the user.\n";
+                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test interrupted by the user.";
 
                 // try to cancel thread running Omicron Test Set
                 IoC.Commands.TokenSource.Cancel();
@@ -76,7 +76,7 @@ namespace metering.core
                 IoC.Logger.Log($"Test completed", LogLevel.Informative);
 
                 // update the user "Test interrupted"
-                IoC.Communication.Log += $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed.\n";
+                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed.";
             }
 
             // test completed

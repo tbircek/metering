@@ -115,7 +115,7 @@ namespace metering.core
                 // TODO: Add ApplicationSettings so the user can set/edit a log location along other stuff
                 // for now just put it in where this application is running
                 new FileLogger(
-                    filePath: $"metering_{DateTime.Now.ToLocalTime():yyyy-MM-dd}_log.txt",
+                    filePath: $"{DateTime.Now.ToLocalTime():yyyy-MM-dd}.log",
                     logTime: true
                     ),
 

@@ -19,7 +19,7 @@
                 Command="{Binding StartTestCommand}"
                 mD:ButtonProgressAssist.IsIndicatorVisible="{Binding IsConnecting}"
                 mD:ButtonProgressAssist.IndicatorBackground="Red"
-                mD:ButtonProgressAssist.IndicatorForeground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                mD:ButtonProgressAssist.IndicatorForeground="{StaticResource SecondaryAccentForegroundBrush}"
                 mD:ButtonProgressAssist.Minimum="0.0"
                 mD:ButtonProgressAssist.Maximum="{Binding MaximumTestCount}"
                 mD:ButtonProgressAssist.Value="{Binding TestProgress}"
@@ -34,7 +34,7 @@
             <mD:PackIcon Padding="5" 
                          Height="Auto" 
                          Width="Auto"
-                         Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">                        
+                         Foreground="{StaticResource SecondaryAccentForegroundBrush}">                        
                 <mD:PackIcon.Style>
                     <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
                         <Setter Property="Kind" Value="PlayCircleFilled"/>
@@ -80,7 +80,7 @@
             <mD:PackIcon Padding="5"
                          Height="Auto" 
                          Width="Auto"
-                         Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                         Foreground="{StaticResource SecondaryAccentForegroundBrush}">
                 
                 <mD:PackIcon.Style>
                     <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
@@ -110,7 +110,7 @@
             <mD:PackIcon Padding="5"
                          Height="Auto" 
                          Width="Auto"
-                         Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                         Foreground="{StaticResource SecondaryAccentForegroundBrush}">
 
                 <mD:PackIcon.Style>
                     <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">

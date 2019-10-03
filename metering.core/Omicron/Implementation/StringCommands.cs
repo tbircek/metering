@@ -35,25 +35,29 @@ namespace metering.core
         /// <param name="amplitude">Magnitude of analog signal.</param>
         /// <param name="phase">Phase of analog signal.</param>
         /// <param name="frequency">Frequency of analog signal.</param>
-        public void SendOutAna(int generator, string generatorNumber, double amplitude, double phase, double frequency)
+        public async void SendOutAnaAsync(int generator, string generatorNumber, double amplitude, double phase, double frequency)
         {
             // obtain appropriate generator short name 
             string generatorType = Enum.GetName(typeof(GeneratorList), generator);
 
             try
             {
-                // check if the user canceling test
-                if (!IoC.Commands.Token.IsCancellationRequested)
+                // lock the task
+                await AsyncAwaiter.AwaitAsync(nameof(SendOutAnaAsync), async () =>
                 {
-                    // build a string to send to Omicron Test set
-                    StringBuilder stringBuilder = new StringBuilder(string.Format(OmicronStringCmd.out_analog_setOutput, generatorType, generatorNumber, amplitude, phase, frequency));
+                    // check if the user canceling test
+                    if (!IoC.Commands.Token.IsCancellationRequested)
+                    {
+                        // build a string to send to Omicron Test set
+                        StringBuilder stringBuilder = new StringBuilder(string.Format(OmicronStringCmd.out_analog_setOutput, generatorType, generatorNumber, amplitude, phase, frequency));
 
-                    // send newly generated string command to Omicron Test Set
-                    IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, stringBuilder.ToString());
+                        // send newly generated string command to Omicron Test Set
+                        await IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, stringBuilder.ToString()));
 
-                    // inform developer about string command send to omicron test set
-                    IoC.Logger.Log($"device ID: {IoC.CMCControl.DeviceID}\tcommand: {stringBuilder}",LogLevel.Informative);
-                }
+                        // inform developer about string command send to omicron test set
+                        IoC.Logger.Log($"device ID: {IoC.CMCControl.DeviceID}\tcommand: {stringBuilder}", LogLevel.Informative);
+                    }
+                });
             }
             catch (Exception err)
             {
@@ -66,16 +70,21 @@ namespace metering.core
         /// Sends string command to Omicron Test Set.
         /// </summary>
         /// <param name="omicronCommand">This is the command to send Omicron Test Set.</param>
-        public void SendStringCommand(string omicronCommand)
+        public async void SendStringCommandAsync(string omicronCommand)
         {
             try
             {
-                // check if the user canceling test
-                if(!IoC.Commands.Token.IsCancellationRequested)
+                // lock the task
+                await AsyncAwaiter.AwaitAsync(nameof(SendOutAnaAsync), async () =>
                 {
-                    // pass received string command to Omicron Test set
-                    IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand);
-                }
+
+                    // check if the user canceling test
+                    if (!IoC.Commands.Token.IsCancellationRequested)
+                    {
+                        // pass received string command to Omicron Test set
+                        await IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand));
+                    }
+                });
             }
             catch (Exception err)
             {
