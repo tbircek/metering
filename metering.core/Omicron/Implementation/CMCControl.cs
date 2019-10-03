@@ -86,7 +86,7 @@ namespace metering.core
         /// <summary>
         /// Runs Test Steps
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns nothing</returns>
         public async Task TestAsync(StringBuilder Message)
         {
             try
@@ -123,13 +123,11 @@ namespace metering.core
                 // after the user clicked "Go" button
                 TestSignal testSignal = new TestSignal();
 
+                // loads TestSignal information as a Tuple
                 var (SignalName, From, To, Delta, Phase, Frequency) = testSignal.GetRampingSignal();
 
                 // initialize new testStartValue
-                //string testSignalName = testSignal.GetRampingSignal().SignalName;
                 double testStartValue = default(double);
-                //double testStopValue = testSignal.GetRampingSignal().To;
-                //double testValueInterval = testSignal.GetRampingSignal().Delta;
 
                 // verify we have a ramping signal
                 if (string.IsNullOrWhiteSpace(SignalName))
@@ -141,6 +139,15 @@ namespace metering.core
                     return;
                 }
 
+                // create a TestResultLogger to generate a test report in .csv format.
+                var testResultLog = new TestResultLogger
+                    (
+                        // set file path and name
+                        filePath: Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "metering"), $"{IoC.TestDetails.Register}_{From:F3}-{To:F3}_{fileId}.csv"),
+                        // no need to save time
+                        logTime: false
+                    );
+
                 // inform the developer of test SignalName
                 IoC.Logger.Log($"Test signal name: {SignalName}", LogLevel.Informative);
 
@@ -151,6 +158,7 @@ namespace metering.core
                 IoC.Logger.Log($"Maximum test count: {IoC.Commands.MaximumTestCount}", LogLevel.Informative);
 
                 // Process test steps
+                // due to nature of double calculations use this formula "testStartValue <= (To + Delta * 1 / 1000)" to make sure the last test step always runs
                 for (testStartValue = From; testStartValue <= (To + Delta * 1 / 1000); testStartValue += Delta)
                 {
                     // check if the user canceled the tests.
@@ -196,13 +204,8 @@ namespace metering.core
                             // wait task to be over with
                         }, IoC.Commands.Token).Wait();
 
-                        // lock the task
-                        await AsyncAwaiter.AwaitAsync(nameof(TestAsync), async () =>
-                        {
-                            // log the test step result to a ".csv" format file
-                            await IoC.Task.Run(() => LogTestResults(Message.ToString(), Convert.ToInt32(IoC.TestDetails.Register), From, To, fileId));
-
-                        });
+                        // update test result report
+                        testResultLog.Log(Message.ToString(), LogLevel.Informative);
 
                         // increment progress bar strip on the "Button"
                         IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
@@ -383,40 +386,6 @@ namespace metering.core
                 // Signal Frequency
                 frequency: (string.Equals("i3", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Frequency)
                 );
-
-        }
-
-        /// <summary>
-        /// Logs test results
-        /// </summary>
-        /// <param name="message">test values to write in to a file</param>
-        /// <param name="Register">the Register number read during the test</param>
-        /// <param name="From">the start value of the test step</param>
-        /// <param name="To">the end value of the test step</param>
-        /// <param name="fileId">the test start time to add the end of the report file name</param>
-        private void LogTestResults(string message, int Register, double From, double To, string fileId)
-        {
-            // inform the developer about test register and start value.
-            IoC.Logger.Log($"Message: {message}:\nRegister: {Register} --- Test value: {From:F3} --- {To:F3} --- {fileId} start writing file...", LogLevel.Informative);
-
-            // specify a "metering" that under the current user's "MyDocuments" folder
-            var directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "metering");
-
-            // generate the folder
-            Directory.CreateDirectory(directory);
-
-            // generate a file and a fileStream to write the test results
-            using (var fileStream = new StreamWriter(File.OpenWrite(Path.Combine(directory, $"{Register}_{From:F3}-{To:F3}_{fileId}.csv"))))
-            {
-                // find the end of the file
-                fileStream.BaseStream.Seek(0, SeekOrigin.End);
-
-                // add the message at the of the file
-                fileStream.WriteLineAsync(message);
-            }
-
-            // inform the developer about test register and start value.
-            IoC.Logger.Log($"Message: {message}:\nRegister: {Register} --- Test value: {From:F3} --- {To:F3} --- {fileId} start writing file... completed.", LogLevel.Informative);
 
         }
 
