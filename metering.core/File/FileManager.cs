@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace metering.core
 
             // lock the task
             await AsyncAwaiter.AwaitAsync(nameof(FileManager) + path, async () =>
-            {                
+            {
                 // run the synchronous file access as new task
                 await IoC.Task.Run(() =>
                 {
@@ -51,6 +52,51 @@ namespace metering.core
             });
         }
 
+        /// <summary>
+        /// writes the text to the specified file
+        /// </summary>
+        /// <param name="text">the text to write</param>
+        /// <param name="path">the path of the file</param>
+        /// <param name="append">if true, writes the text to the end of the file, otherwise overrides any existing file</param>
+        /// <param name="useParentFolder">if true, the file would be generated at parent folder instead of the startup path</param>
+        /// <param name="newFolderName">if <paramref name="useParentFolder"/> true, what is the new folder name?</param>
+        /// <returns></returns>
+        public async Task WriteTextToFileAsync(string text, string path, bool append = true, bool useParentFolder = false, string newFolderName = "")
+        {
+            // TODO: Add exception catching
+
+            // normalize and resolve path
+            path = NormalizePath(path);
+
+            // are we using parent folder?
+            if (useParentFolder)
+            {
+                // normalize and resolve path
+                path = NormalizePath(Path.Combine($@"..\{newFolderName}", path));
+
+            }
+
+            // resolve to absolute path
+            path = ResolvePath(path);
+
+            // is the path exits?
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+                // generate a new folder in specified location
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+            // lock the task
+            await AsyncAwaiter.AwaitAsync(nameof(FileManager) + path, async () =>
+            {
+                // run the synchronous file access as new task
+                await IoC.Task.Run(() =>
+                {
+                    // write the log message to a file
+                    using (var fileStream = (TextWriter)new StreamWriter(File.Open(path, append ? FileMode.Append : FileMode.Create)))
+                        fileStream.Write(text);
+
+                });
+            });
+        }
 
         /// <summary>
         /// normalizes a path based on the current operating system

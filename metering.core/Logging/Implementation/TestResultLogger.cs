@@ -6,7 +6,7 @@ namespace metering.core
     /// <summary>
     /// logs to a specific file
     /// </summary>
-    public class FileLogger: ILogger
+    public class TestResultLogger : ILogger
     {
         #region Public Properties
 
@@ -29,11 +29,12 @@ namespace metering.core
         /// </summary>
         /// <param name="filePath">the path to log file</param>
         /// <param name="logTime">whether log the time or not</param>
-        public FileLogger(string filePath, bool logTime)
+        public TestResultLogger(string filePath, bool logTime)
         {
             // set the file path property
             FilePath = filePath;
-
+            // set the log time option
+            LogTime = logTime;
         }
 
         #endregion
@@ -47,14 +48,13 @@ namespace metering.core
         /// <param name="level"></param>
         public void Log(string message, LogLevel level)
         {
-            // get current time
-            var currentTime = DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            // IncludeOriginDetails = false;
 
             // prepends time string if desired
-            var timeLogString = LogTime ? $"{currentTime}": string.Empty;
+            var timeLogString = LogTime ? $"{DateTime.Now.ToLocalTime():yyyy/MM/dd HH:mm:ss.fff}" : string.Empty;
 
             // write the message to the log file
-            IoC.File.WriteTextToFileAsync($"[{timeLogString}] {message}" + Environment.NewLine, FilePath, append: true, useParentFolder: true, newFolderName: "log");
+            IoC.File.WriteTextToFileAsync($"{timeLogString}{message}" + Environment.NewLine, FilePath, append: true);
         }
 
         #endregion
