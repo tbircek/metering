@@ -50,19 +50,22 @@
       <Name>metering.wpf</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="metering.package.nuspec" />
+  </ItemGroup>
   <!--<ItemGroup>-->
-    <!--<None Include="app.config" />-->
-    <!--<None Include="metering.package.nuspec" />-->
-    <!--<None Include="wpf.package\nupkgs\metering.1.0.1.nupkg" />-->
-    <!--<None Include="wpf.package\nupkgs\metering.package.1.0.0.nupkg" />-->
-    <!--<None Include="wpf.package\nupkgs\metering.package.1.0.1.nupkg" />-->
-    <!--<None Include="wpf.package\Release\metering-1.0.1-full.nupkg" />-->
-    <!--<None Include="wpf.package\Release\RELEASES" />-->
-    <!--<None Include="app.config" />-->
+  <!--<None Include="app.config" />-->
+  <!--<None Include="metering.package.nuspec" />-->
+  <!--<None Include="wpf.package\nupkgs\metering.1.0.1.nupkg" />-->
+  <!--<None Include="wpf.package\nupkgs\metering.package.1.0.0.nupkg" />-->
+  <!--<None Include="wpf.package\nupkgs\metering.package.1.0.1.nupkg" />-->
+  <!--<None Include="wpf.package\Release\metering-1.0.1-full.nupkg" />-->
+  <!--<None Include="wpf.package\Release\RELEASES" />-->
+  <!--<None Include="app.config" />-->
   <!--</ItemGroup>-->
   <!--<ItemGroup>-->
-    <!--<Content Include="nuget.exe" />-->
-    <!--<Content Include="wpf.package\Release\Setup.exe" />-->
+  <!--<Content Include="nuget.exe" />-->
+  <!--<Content Include="wpf.package\Release\Setup.exe" />-->
   <!--</ItemGroup>-->
   <PropertyGroup>
     <IconLocation>$(TargetDir)$(SolutionName)</IconLocation>

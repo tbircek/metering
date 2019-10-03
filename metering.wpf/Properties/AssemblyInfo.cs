@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("metering")]
-[assembly: AssemblyDescription("metering automation to test Beckwith products")]
+[assembly: AssemblyDescription("Metering automation for all Beckwith Products.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Beckwith Electric Co Inc")]
 [assembly: AssemblyProduct("metering")]
