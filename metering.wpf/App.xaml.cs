@@ -36,8 +36,10 @@ namespace metering
                 // check if there is an update
                 UpdateInfo updateInfo = await updateManager.CheckForUpdate();
 
-                // log the current installed version of the application
-                IoC.Logger.Log($"Current version: {updateInfo.CurrentlyInstalledVersion.Version}", LogLevel.Informative);
+                // prevent error in development computer
+                if (updateInfo.CurrentlyInstalledVersion != null)
+                    // log the current installed version of the application
+                    IoC.Logger.Log($"Current version: {updateInfo.CurrentlyInstalledVersion.Version}", LogLevel.Informative);
 
                 // if update location contains update for this application
                 if (updateInfo.ReleasesToApply.Count > 0)
