@@ -38,14 +38,20 @@ namespace metering.core
             // resolve to absolute path
             path = ResolvePath(path);
 
+            // is the path exits?
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+                // generate a new folder in specified location
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+
             // lock the task
             await AsyncAwaiter.AwaitAsync(nameof(FileManager) + path, async () =>
             {
-                // run the synchronous file access as new task
-                await IoC.Task.Run(() =>
-                {
-                    // write the log message to a file
-                    using (var fileStream = (TextWriter)new StreamWriter(File.Open(path, append ? FileMode.Append : FileMode.Create)))
+                    // run the synchronous file access as new task
+                    await IoC.Task.Run(() =>
+                        {
+                        // write the log message to a file
+                        using (var fileStream = (TextWriter)new StreamWriter(File.Open(path, append ? FileMode.Append : FileMode.Create)))
                         fileStream.Write(text);
 
                 });

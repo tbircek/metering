@@ -10,7 +10,7 @@
     <iconUrl>file:///C:/Users/TBircek/source/repos/metering/metering.core/Resources/metering.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Added logging, phase and frequency ramping functionality. improved code, performance and fixed minor bugs.</releaseNotes>
+    <releaseNotes>fixed #1: "The application would not create test result file."</releaseNotes>
     <copyright>Copyright 2019 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric turgay bircek</tags>
     <dependencies/>

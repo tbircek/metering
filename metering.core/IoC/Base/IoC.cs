@@ -71,6 +71,16 @@ namespace metering.core
         public static ReleaseOmicron ReleaseOmicron => Get<ReleaseOmicron>();
 
         /// <summary>
+        /// A shortcut to access to <see cref="ModbusCommunication"/>
+        /// </summary>
+        public static ModbusCommunication Modbus => Get<ModbusCommunication>();
+
+        /// <summary>
+        /// A shortcut to access to <see cref="GenerateOmicronStringCommands"/>
+        /// </summary>
+        public static GenerateOmicronStringCommands SetOmicron => Get<GenerateOmicronStringCommands>();
+
+        /// <summary>
         /// A shortcut to access to <see cref="ILogFactory"/>
         /// </summary>
         public static ILogFactory Logger => Get<ILogFactory>();
