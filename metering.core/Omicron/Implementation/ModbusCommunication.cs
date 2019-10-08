@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace metering.core
 {
     /// <summary>
-    ///
+    /// Provides asynchronous and multiple register reading capabilities to the application.
     /// </summary>
     public class ModbusCommunication
     {
@@ -20,8 +20,7 @@ namespace metering.core
         }
 
         #endregion
-
-
+        
         /// <summary>
         /// Allows to read test register values separated with comma specified by "Measurement Interval".
         /// </summary>
@@ -34,81 +33,67 @@ namespace metering.core
                 // if a cancellation requested stop reading register
                 if (IoC.Commands.Token.IsCancellationRequested)
                     return;
+                
+                // initialize a default register value
+                ushort register = default(ushort);
 
-                List<Tuple<int>> registerList = new List<Tuple<int>>();
+                // generate register(s) list
+                List<string> registerStrings = new List<string>();
 
+                // add Register to the list
+                registerStrings.AddRange(Register.ToString().Split(','));
 
-                int register = default(int);
-
-                // does Register object contains any commas?
-                IoC.Logger.Log($"Number of commas : {Register.ToString().IndexOf(',')}");
-
-                // does Register object contains any commas?
-                if (Register.ToString().IndexOf(',') > -1)
+                // inquire each register that specified by the user.
+                foreach (var registerString in registerStrings)
                 {
-                    string[] registers = Register.ToString().Split(',');
-
-                    foreach (var item in registers)
+                    // is the register is between modbus holding register range?
+                    if (ushort.TryParse(registerString.Trim(), out register))
                     {
-                        // yes. create a Tuple List
-                        registerList.Add(new Tuple<int>(Convert.ToInt16(item)));
+
+                        int Index = registerStrings.IndexOf(registerString);
+
+                        // start a task to read register address specified by the user.
+                        await IoC.Task.Run(async () =>
+                        {
+                            // start a task to read holding register (Function 0x03)
+                            int[] serverResponse = await IoC.Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1), IoC.Commands.Token);
+
+                            // decide if serverResponse is acceptable only criteria is the length of the response.
+                            if (serverResponse.Length > 0)
+                            {
+
+                                // save server response information as a Tuple
+                                var (MaxRegisterValue, MinRegisterValue) = GetServerResponseAsync(serverResponse[0], Index);
+
+
+                                // assign MaxTestValue
+                                IoC.CMCControl.MaxValues.SetValue(MaxRegisterValue, Index);
+
+                                // assign MinTestValue
+                                IoC.CMCControl.MinValues.SetValue(MinRegisterValue, Index);
+                                                                
+                                // inform the developer about error
+                                IoC.Logger.Log($"register: {register} -- serverResponse : {serverResponse[0]} -- MinResponse: {MinRegisterValue} -- MaxResponse: {MaxRegisterValue}");
+
+                            }
+                            else
+                            {
+                                // server failed to respond. Ignoring it until find a better option.
+                                // inform the developer about error
+                                IoC.Logger.Log($"register: {register} -- serverResponse : No server response");
+
+                            }
+
+                        }, IoC.Commands.Token);
+                    }
+                    else
+                    {
+                        // illegal register address
+                        throw new ArgumentOutOfRangeException($"Register: {registerString} is out of range");
                     }
 
+
                 }
-                // no
-                else
-                {
-                    // convert register string to integer.
-                    register = Convert.ToInt32(Register);
-                }
-
-
-                // verify the register is a legit
-                if (register >= 0 && register <= 65535)
-                {
-
-                    // start a task to read register address specified by the user.
-                    await IoC.Task.Run(async () =>
-                    {
-                        // start a task to read holding register (Function 0x03)
-                        int[] serverResponse = await IoC.Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1), IoC.Commands.Token);
-
-                        // decide if serverResponse is acceptable only criteria is the length of the response.
-                        if (serverResponse.Length > 0)
-                        {
-                            // establish minimum and maximum values.
-                            for (int i = 0; i < serverResponse.Length; i++)
-                            {
-                                // update minimum value with new value if new value is less or minimum value was 0
-                                if (IoC.CMCControl.MinTestValue > serverResponse[i] || IoC.CMCControl.MinTestValue == 0)
-                                {
-                                    // update minimum value
-                                    IoC.CMCControl.MinTestValue = serverResponse[i];
-                                }
-
-                                // update maximum value with new value if new value is less or maximum value was 0
-                                if (IoC.CMCControl.MaxTestValue < serverResponse[i] || IoC.CMCControl.MaxTestValue == 0)
-                                {
-                                    // update maximum value
-                                    IoC.CMCControl.MaxTestValue = serverResponse[i];
-                                }
-                            }
-                        }
-                        else
-                        {
-                            //TODO: server failed to respond. Ignoring it until find a better option.
-                        }
-
-                    }, IoC.Commands.Token);
-                }
-                else
-                {
-                    // illegal register address
-                    throw new ArgumentOutOfRangeException($"Register: {register} is out of range");
-
-                    // await IoC.Task.Run(() => ProcessErrors(false));
-                }
-
             }
             catch (Exception ex)
             {
@@ -137,31 +122,26 @@ namespace metering.core
         /// Function to return a Tuple that holds <see cref="MinTestValue"/> and <see cref="MaxTestValue"/>
         /// </summary>
         /// <returns>Returns a Tuple with ramping signal properties</returns>       
-        public (int MinResponse, int MaxResponse) GetServerResponseAsync(object Registers)
+        private (int MaxResponse, int MinResponse) GetServerResponseAsync(int serverResponse, int Index)
         {
             try
             {
                 // initialize Tuple variables with default values
-                int MinResponse = default(int);
-                int MaxResponse = default(int);
+                int MinResponse = (int)IoC.CMCControl.MinValues.GetValue(Index);
+                int MaxResponse = (int)IoC.CMCControl.MaxValues.GetValue(Index);
 
-                // send query for each register specified by the user.
-                foreach (AnalogSignalListItemViewModel signal in IoC.TestDetails.AnalogSignals)
-                {
-                    // scan TestDetailsViewModel and return all signal properties where From and To values are not same
-                    if (!Convert.ToDouble(signal.From).Equals(Convert.ToDouble(signal.To)))
-                    {
-                        // server response values
-                        MinResponse = default(int);
-                        MaxResponse = default(int);
+                //if new value is less or minimum value was 0
+                // if ( Math.Min(MinResponse, serverResponse)) //  MinResponse > serverResponse || (int)IoC.CMCControl.MinValues.GetValue(Index) == 0)
+                // update minimum value with new value 
+                MinResponse = Math.Min(MinResponse, serverResponse); // serverResponse;
 
-                        // return minimum and maximum values per Register specified.
-                        return (MinResponse, MaxResponse);
-                    }
-                }
+                // if new value is less or maximum value was 0
+                // if (MaxResponse < serverResponse || (int)IoC.CMCControl.MaxValues.GetValue(Index) == 0)
+                // update maximum value with new value 
+                MaxResponse = Math.Max(MaxResponse, serverResponse); // serverResponse;
 
                 // return no server response
-                return (default(int), default(int));
+                return (MaxResponse, MinResponse);
             }
             catch (Exception ex)
             {
