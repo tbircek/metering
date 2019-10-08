@@ -190,11 +190,7 @@ namespace metering.core
                             if (IoC.CMCControl.DeviceID > 0)
                             {
 
-                                await IoC.CMCControl.TestAsync
-                                (
-                                    // excel header values for reporting.
-                                    Message: new StringBuilder().AppendLine("Time,Register,Test Value,Min Value,Max Value")
-                                 );
+                                await IoC.CMCControl.TestAsync();
                             }
                             else
                             {

@@ -92,7 +92,7 @@ namespace metering.core
         /// Runs Test Steps
         /// </summary>
         /// <returns>Returns nothing</returns>
-        public async Task TestAsync(StringBuilder Message)
+        public async Task TestAsync()
         {
             try
             {
@@ -232,17 +232,6 @@ namespace metering.core
                             // Time Test Value Register 1  Min Value 1 Max Value 1 Register 2  Min Value 2 Max Value 2 Register 3  Min Value 3 Max Value 3
                             @string.Append($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{testStartValue:F3}");
 
-                            //foreach (var register in IoC.TestDetails.Register.ToString().Split(','))
-                            //{
-
-                            //    // inform the user about test results.
-                            //    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Min value: Max value: {MaxTestValue}";
-
-                            //    // generate a string to inform the user about test results.
-                            //    Message.Append($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{IoC.TestDetails.Register},{testStartValue:F3},{MinTestValue:F3},{MaxTestValue:F3}");
-
-                            //}
-
                             // generate variable portion of header information based on Register entry.
                             for (int i = 0; i < IoC.TestDetails.Register.ToString().Split(',').Length; i++)
                             {
@@ -273,16 +262,7 @@ namespace metering.core
                         IoC.Logger.Log($"Test {progressStep} of {IoC.Commands.MaximumTestCount} completed", LogLevel.Informative);
 
                         // increment progress percentage
-                        Progress = progressStep / IoC.Commands.MaximumTestCount;
-
-                        //// update the developer about progress
-                        //IoC.Logger.Log($"Min value: {MinTestValue} --- Max value: {MaxTestValue} --- Progress : {Progress * 100d:F2}% completed", LogLevel.Informative);
-
-                        //// reset min test value for the next test range
-                        //MinTestValue = 0;
-
-                        //// reset max test value for the next test range
-                        //MaxTestValue = 0;
+                        Progress = progressStep / IoC.Commands.MaximumTestCount;                        
 
                         // reset message for the next test step
                         @string.Clear();
