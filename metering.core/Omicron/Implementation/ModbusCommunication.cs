@@ -126,21 +126,17 @@ namespace metering.core
         {
             try
             {
-                // initialize Tuple variables with default values
+                // load Tuple variables with default or previously stored values
                 int MinResponse = (int)IoC.CMCControl.MinValues.GetValue(Index);
                 int MaxResponse = (int)IoC.CMCControl.MaxValues.GetValue(Index);
 
-                //if new value is less or minimum value was 0
-                // if ( Math.Min(MinResponse, serverResponse)) //  MinResponse > serverResponse || (int)IoC.CMCControl.MinValues.GetValue(Index) == 0)
-                // update minimum value with new value 
-                MinResponse = Math.Min(MinResponse, serverResponse); // serverResponse;
+                // update minimum value with new min value or not
+                MinResponse = Math.Min(MinResponse, serverResponse);
 
-                // if new value is less or maximum value was 0
-                // if (MaxResponse < serverResponse || (int)IoC.CMCControl.MaxValues.GetValue(Index) == 0)
-                // update maximum value with new value 
-                MaxResponse = Math.Max(MaxResponse, serverResponse); // serverResponse;
+                // update maximum value with new max value or not
+                MaxResponse = Math.Max(MaxResponse, serverResponse);
 
-                // return no server response
+                // return server response
                 return (MaxResponse, MinResponse);
             }
             catch (Exception ex)
