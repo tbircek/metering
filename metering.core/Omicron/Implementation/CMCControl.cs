@@ -223,7 +223,7 @@ namespace metering.core
                             {
 
                                 // wait until the user specified "Dwell Time" expires.
-                                await Task.Delay(TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.DwellTime)));
+                                await Task.Delay(TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.DwellTime) + Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)));
                             });
 
                             // terminate reading modbus register because "Dwell Time" is over.
