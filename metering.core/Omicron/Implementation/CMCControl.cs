@@ -65,8 +65,6 @@ namespace metering.core
         /// <summary>
         /// Holds minimum value for test register.
         /// </summary>
-        public int MaxTestValue { get; set; }
-
         public int[] MaxValues { get; set; }
 
         /// <summary>
@@ -198,7 +196,7 @@ namespace metering.core
                             // Turn On Omicron Analog Outputs per the user input
                             await IoC.Task.Run(() => IoC.PowerOptions.TurnOnCMC());
 
-                        });
+                        },IoC.Commands.Token);
 
                         // initialize Minimum Value List with the highest int32 to capture every minimum value
                         MinValues = Enumerable.Repeat(Int32.MaxValue, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
@@ -208,7 +206,7 @@ namespace metering.core
 
                         // set timer to read modbus register per the user specified time.
                         MdbusTimer = new Timer(
-                                                callback: IoC.Modbus.MeasurementIntervalWithCommaCallbackAsync,
+                                                callback: IoC.Modbus.MeasurementIntervalCallback,
                                                 state: IoC.TestDetails.Register,
                                                 dueTime: TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)),
                                                 period: TimeSpan.FromMilliseconds(Convert.ToDouble(IoC.TestDetails.MeasurementInterval)
@@ -275,10 +273,27 @@ namespace metering.core
                             // terminate reading modbus register because the user canceled the test.
                             MdbusTimer.Dispose();
 
+                        // throw an error if we canceled already.
+                        IoC.Commands.Token.ThrowIfCancellationRequested();
+
                         // exit from this task
                         return;
                     }
                 }
+            }
+            catch (OperationCanceledException ex)
+            {
+                //// test completed
+                //IoC.CMCControl.IsTestRunning = false;
+
+                // inform the developer about error
+                IoC.Logger.Log($"Exception is : {ex.Message}");
+
+                // update the user about the error.
+                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.";
+
+                // Trying to stop the app gracefully.
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
             }
             catch (Exception ex)
             {

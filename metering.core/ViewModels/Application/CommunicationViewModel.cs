@@ -155,7 +155,9 @@ namespace metering.core
         public async Task StartCommunicationAsync()
         {
             // start point of all test steps with the first mouse click and it will ignore subsequent mouse clicks
-            await RunCommand(() => IsUnitUnderTestConnected, async () =>
+            // await RunCommand(() => IsUnitUnderTestConnected, async () =>
+            // lock the task
+            await AsyncAwaiter.AwaitAsync(nameof(StartCommunicationAsync), async () =>
             {
                 try
                 {
@@ -186,6 +188,9 @@ namespace metering.core
                             // Is there Omicron Test Set attached to this app?
                             if (IoC.CMCControl.DeviceID > 0)
                             {
+                                // indicates the test is running.
+                                IoC.CMCControl.IsTestRunning = true;
+
                                 // there is a test set attached so run specified tests.
                                 await IoC.CMCControl.TestAsync();
                             }

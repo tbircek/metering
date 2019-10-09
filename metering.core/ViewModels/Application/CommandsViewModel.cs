@@ -169,8 +169,13 @@ namespace metering.core
         /// </summary>    
         private async Task ConnectOmicronAndUnit()
         {
-            await RunCommand(() => IoC.CMCControl.IsTestRunning, async () =>
+            // await RunCommand(() => IoC.CMCControl.IsTestRunning, async () =>
+
+            // there is a test set attached so run specified tests.
+            // lock the task
+            await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnit), async () =>
             {
+
                 // define the cancellation token source.
                 TokenSource = new CancellationTokenSource();
 
