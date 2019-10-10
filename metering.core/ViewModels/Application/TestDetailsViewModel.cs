@@ -51,7 +51,7 @@ namespace metering.core
         /// <summary>
         /// Provides a hint text for the <see cref="Register"/> textbox
         /// </summary>
-        public string RegisterHint { get; set; } = Resources.Strings.header_register;
+        public string RegisterHint { get; set; } = Strings.header_register;
 
         /// <summary>
         /// The register to monitor while testing.
@@ -66,7 +66,7 @@ namespace metering.core
         /// <summary>
         /// Provides a hint text for the <see cref="DwellTime"/> textbox
         /// </summary>
-        public string DwellTimeHint { get; set; } = Resources.Strings.header_dwell_time;
+        public string DwellTimeHint { get; set; } = Strings.header_dwell_time;
 
         /// <summary>
         /// How long should <see cref="Register"/> be poll.
@@ -76,7 +76,7 @@ namespace metering.core
         /// <summary>
         /// Provides a hint text for the <see cref="StartDelayTime"/> textbox
         /// </summary>
-        public string StartDelayTimeHint { get; set; } = Resources.Strings.header_start_delay_time;
+        public string StartDelayTimeHint { get; set; } = Strings.header_start_delay_time;
 
         /// <summary>
         /// The time to wait until test step #1.
@@ -86,7 +86,7 @@ namespace metering.core
         /// <summary>
         /// Provides a hint text for the <see cref="MeasurementInterval"/> textbox
         /// </summary>
-        public string MeasurementIntervalHint { get; set; } = Resources.Strings.header_measurement_interval;
+        public string MeasurementIntervalHint { get; set; } = Strings.header_measurement_interval;
 
         /// <summary>
         /// How often should <see cref="Register"/> be poll.
@@ -96,7 +96,7 @@ namespace metering.core
         /// <summary>
         /// Provides a hint text for the <see cref="StartMeasurementDelay"/> textbox
         /// </summary>
-        public string StartMeasurementDelayHint { get; set; } = Resources.Strings.header_start_measurement_delay;
+        public string StartMeasurementDelayHint { get; set; } = Strings.header_start_measurement_delay;
 
         /// <summary>
         /// The time to wait after analog signals applied before <see cref="DwellTime"/> starts.
