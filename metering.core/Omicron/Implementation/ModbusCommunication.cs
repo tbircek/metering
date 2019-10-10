@@ -27,12 +27,7 @@ namespace metering.core
         /// Allows to read test register values separated with comma specified by "Measurement Interval".
         /// </summary>
         public void MeasurementIntervalCallback(object Register)
-        {
-
-            // if a cancellation requested stop reading register
-            if (IoC.Commands.Token.IsCancellationRequested)
-                return;
-
+        {                        
             // generate register(s) list
             List<string> registerStrings = new List<string>();
 
@@ -42,7 +37,9 @@ namespace metering.core
             // Use ParallelOptions instance to store the CancellationToken
             ParallelOptions parallelingOptions = new ParallelOptions
             {
+                // associate cancellation token.
                 CancellationToken = IoC.Commands.Token,
+                // set limit for the parallelism equivalent of hardware core count
                 MaxDegreeOfParallelism = Environment.ProcessorCount
             };
 
@@ -86,16 +83,11 @@ namespace metering.core
                                         // save server response information as a Tuple
                                         var (MaxRegisterValue, MinRegisterValue) = GetServerResponseAsync(serverResponse[0], i);
 
-
                                         // assign MaxTestValue
                                         IoC.CMCControl.MaxValues.SetValue(MaxRegisterValue, i);
 
                                         // assign MinTestValue
                                         IoC.CMCControl.MinValues.SetValue(MinRegisterValue, i);
-
-                                        // inform the developer about error
-                                        IoC.Logger.Log($"register: {register} -- serverResponse : {serverResponse[0]} -- MinResponse: {MinRegisterValue} -- MaxResponse: {MaxRegisterValue}");
-
                                     }
                                     else
                                     {
@@ -119,6 +111,17 @@ namespace metering.core
                     IoC.Commands.Token.ThrowIfCancellationRequested();
                 }
                 catch (OperationCanceledException ex)
+                {
+                    // inform the developer about error
+                    IoC.Logger.Log($"Exception is : {ex.Message}");
+
+                    // update the user about the error.
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.";
+
+                    // Trying to stop the app gracefully.
+                    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                }
+                catch (System.IO.IOException ex)
                 {
                     // inform the developer about error
                     IoC.Logger.Log($"Exception is : {ex.Message}");
