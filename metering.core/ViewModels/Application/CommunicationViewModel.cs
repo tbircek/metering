@@ -155,8 +155,6 @@ namespace metering.core
         public async Task StartCommunicationAsync()
         {
             // start point of all test steps with the first mouse click and it will ignore subsequent mouse clicks
-            // await RunCommand(() => IsUnitUnderTestConnected, async () =>
-            // lock the task
             await AsyncAwaiter.AwaitAsync(nameof(StartCommunicationAsync), async () =>
             {
                 try
