@@ -79,8 +79,10 @@ namespace metering.core
                 IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed.";
             }
 
-            // test completed
-            IoC.CMCControl.IsTestRunning ^= true;
+            // if timer is initialized
+            if (!IoC.CMCControl.MdbusTimer.Equals(null))
+                // terminate reading modbus register because the test is over for some reason.
+                IoC.CMCControl.MdbusTimer.Dispose();
 
             // Turn off outputs of Omicron Test Set and release it.
             IoC.PowerOptions.TurnOffCMC();
