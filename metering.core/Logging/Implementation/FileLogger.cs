@@ -48,7 +48,7 @@ namespace metering.core
         public void Log(string message, LogLevel level)
         {
             // get current time
-            var currentTime = DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var currentTime = DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
             // prepends time string if desired
             var timeLogString = LogTime ? $"{currentTime}": string.Empty;

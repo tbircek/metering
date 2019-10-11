@@ -155,15 +155,12 @@ namespace metering.core
         public async Task StartCommunicationAsync()
         {
             // start point of all test steps with the first mouse click and it will ignore subsequent mouse clicks
-            await RunCommand(() => IsUnitUnderTestConnected, async () =>
+            await AsyncAwaiter.AwaitAsync(nameof(StartCommunicationAsync), async () =>
             {
                 try
                 {
                     // update the user
                     Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Communication starts.";
-
-                    // get new construct of CMCControl
-                    // IoC.CMCControl.CMEngine = new CMEngine();
 
                     // get new construct of ModbusClient
                     EAModbusClient = new EasyModbus.ModbusClient
@@ -189,12 +186,11 @@ namespace metering.core
                             // Is there Omicron Test Set attached to this app?
                             if (IoC.CMCControl.DeviceID > 0)
                             {
+                                // indicates the test is running.
+                                IoC.CMCControl.IsTestRunning = true;
 
-                                await IoC.CMCControl.TestAsync
-                                (
-                                    // excel header values for reporting.
-                                    Message: new StringBuilder().AppendLine("Time,Register,Test Value,Min Value,Max Value")
-                                 );
+                                // there is a test set attached so run specified tests.
+                                await IoC.CMCControl.TestAsync();
                             }
                             else
                             {
@@ -205,7 +201,7 @@ namespace metering.core
                         else
                         {
                             // inform the developer
-                            // IoC.Logger.Log("Find no Omicron");
+                            IoC.Logger.Log("Find no Omicron");
 
                             // inform the user 
                             Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: There is no attached Omicron Test Set. Please attached a Omicron Test Set before test.";
@@ -214,7 +210,7 @@ namespace metering.core
                     else
                     {
                         // inform the developer
-                        // IoC.Logger.Log($"The server {EAModbusClient.IPAddress} is not available.");
+                        IoC.Logger.Log($"The server {EAModbusClient.IPAddress} is not available.");
 
                         // inform the user 
                         Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: The server is not available: {EAModbusClient.IPAddress}.";
@@ -223,7 +219,7 @@ namespace metering.core
                 catch (Exception ex)
                 {
                     // inform the developer about error.
-                    // IoC.Logger.Log(ex.Message);
+                    IoC.Logger.Log(ex.Message);
 
                     // inform the user about error.
                     Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Start Communication failed: {ex.Message}.";

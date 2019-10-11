@@ -10,12 +10,14 @@
     <iconUrl>file:///C:/Users/TBircek/source/repos/metering/metering.core/Resources/metering.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>fixed #1: "The application would not create test result file."</releaseNotes>
+    <releaseNotes>Added feature "Multiple register polling" to the application.</releaseNotes>
     <copyright>Copyright 2019 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric turgay bircek</tags>
     <dependencies/>
   </metadata>
   <files>
-    <file src="C:\Users\TBircek\source\repos\metering\metering.wpf\bin\Release\*.*" target="lib\net472" exclude="C:\Users\TBircek\source\repos\metering\metering.wpf\bin\Release\*.pdb;C:\Users\TBircek\source\repos\metering\metering.wpf\bin\Release\metering.package.dll" />
+    <file src="C:\Users\TBircek\source\repos\metering\metering.wpf\bin\Release\*.*" 
+          target="lib\net472" 
+          exclude="C:\Users\TBircek\source\repos\metering\metering.wpf\bin\Release\*.pdb;C:\Users\TBircek\source\repos\metering\metering.wpf\bin\Release\metering.package.dll" />
   </files>
 </package>
