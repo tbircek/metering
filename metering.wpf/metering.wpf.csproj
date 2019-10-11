@@ -168,6 +168,7 @@
     <Compile Include="Controls\AnalogSignalListItemControl.xaml.cs">
       <DependentUpon>AnalogSignalListItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IoC\SaveNew.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
     <Page Include="Controls\AnalogSignalListControl.xaml">
@@ -255,12 +256,12 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <!--<VisualStudio>-->
-      <!--<UserProperties cards_4testCard_1json__JSONSchema="http://adaptivecards.io/schemas/adaptive-card.json" />-->
+    <!--<UserProperties cards_4testCard_1json__JSONSchema="http://adaptivecards.io/schemas/adaptive-card.json" />-->
     <!--</VisualStudio>-->
   </ProjectExtensions>
   <!-- For more information https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets -->
   <!--<Target Name="CopyPackage" AfterTargets="Pack">-->
-    <!--<Copy SourceFiles="$(ProjectDir)Releases\*.*" DestinationFolder="\\volta\Eng_Lab\Software Updates\metering\" />-->
+  <!--<Copy SourceFiles="$(ProjectDir)Releases\*.*" DestinationFolder="\\volta\Eng_Lab\Software Updates\metering\" />-->
   <!--</Target>-->
   <PropertyGroup>
     <PostBuildEvent>

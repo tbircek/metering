@@ -95,6 +95,11 @@ namespace metering.core
         /// </summary>
         public static ITaskManager Task => Get<ITaskManager>();
 
+        /// <summary>
+        /// A shortcut to access to <see cref="ICommandManager"/>
+        /// </summary>
+        public static ICommandManager Commander => Get<ICommandManager>();
+
         #endregion
 
         #region Setup

@@ -81,6 +81,24 @@ namespace metering.core
         /// </summary>
         public ICommand StartTestCommand { get; set; }
 
+        /// <summary>
+        /// The command to handle saving test step to the user specified location
+        /// default location interface opens at "\\my documents\\metering\\tests"
+        /// </summary>
+        public ICommand SaveNewTestCommand { get; set; }
+
+        /// <summary>
+        /// The command to handle loading test step(s) from the user specified location
+        /// default location interface opens at "\\my documents\\metering\\tests"
+        /// </summary>
+        public ICommand LoadTestsCommand { get; set; }
+
+        /// <summary>
+        /// The command to handle removing test step(s) from the test strip in the <see cref="CommunicationViewModel"/>
+        /// this command will not delete any test step from folder that located at "\\my documents\\metering\\tests"
+        /// </summary>
+        public ICommand DeleteSelectedTestCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -98,11 +116,20 @@ namespace metering.core
             // Show a new Test details page populated with the user specified/accepted values
             AddNewTestCommand = new RelayCommand(() => IoC.NominalValues.CopyNominalValues());
 
-            // create the command.
-            StartTestCommand = new RelayCommand(async () => await ConnectOmicronAndUnit());
+            // starts the test specified by the user.
+            StartTestCommand = new RelayCommand(async () => await ConnectOmicronAndUnitAsync());
 
             // navigate back to nominal values page.
             CancelNewTestCommand = new RelayCommand(() => CancelTestDetailsPageShowing());
+
+            // save the test step to the user specified location.
+            SaveNewTestCommand = new RelayCommand(async () => await IoC.Commander.SaveNewTestAsync());
+
+            //// load the test step(s) from the user specified location.
+            //LoadTestsCommand = new RelayCommand(async () => await LoadTestsAsync());
+
+            //// remove the test step(s) from the test strip.
+            //DeleteSelectedTestCommand = new RelayCommand(async () => await DeleteSelectedTestAsync());
 
             // default StartTestForegroundColor is Green
             StartTestForegroundColor = "00ff00";
@@ -114,7 +141,7 @@ namespace metering.core
         #endregion
 
         #region Helper Methods
-
+        
         /// <summary>
         /// Navigate backwards to main view / shows default nominal values
         /// resets values specified in test step view to nominal values
@@ -167,11 +194,11 @@ namespace metering.core
         /// <summary>
         /// connects to omicron and test unit.
         /// </summary>    
-        private async Task ConnectOmicronAndUnit()
+        private async Task ConnectOmicronAndUnitAsync()
         {           
             // there is a test set attached so run specified tests.
             // lock the task
-            await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnit), async () =>
+            await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnitAsync), async () =>
             {
 
                 // define the cancellation token source.
