@@ -88,6 +88,9 @@ namespace metering.core
 
                                         // assign MinTestValue
                                         IoC.CMCControl.MinValues.SetValue(MinRegisterValue, i);
+
+                                        // inform the developer about register reading
+                                        IoC.Logger.Log($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: register: {register} -- maxResponse : {MaxRegisterValue} -- minResponse : {MinRegisterValue}");
                                     }
                                     else
                                     {
