@@ -68,8 +68,9 @@ namespace metering
             // Setup IoC
             IoC.Setup();
 
-            // Bind a IUIManager
-            // IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
+            // Bind the commander
+           IoC.Kernel.Bind<ICommandManager>().ToConstant(new SaveNewManager());
+
         }
 
         #endregion
