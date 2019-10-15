@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -123,7 +124,8 @@ namespace metering.core
             CancelNewTestCommand = new RelayCommand(() => CancelTestDetailsPageShowing());
 
             // save the test step to the user specified location.
-            SaveNewTestCommand = new RelayCommand(async () => await IoC.Commander.SaveNewTestAsync());
+            SaveNewTestCommand = new RelayCommand(async() => await SaveTestStepsAsync());
+
 
             //// load the test step(s) from the user specified location.
             //LoadTestsCommand = new RelayCommand(async () => await LoadTestsAsync());
@@ -141,7 +143,34 @@ namespace metering.core
         #endregion
 
         #region Helper Methods
-        
+
+        /// <summary>
+        /// Save current <see cref="TestDetailsViewModel"/> to the user specified location
+        /// </summary>
+        private async Task SaveTestStepsAsync()
+        {
+            // retrieve file name
+            string fileName = await IoC.Commander.SaveNewTestAsync();
+
+            // the user press OK button
+            if (!string.IsNullOrWhiteSpace(fileName))
+            {
+                // generate a new Test Steps Logger
+                new TestStepsLogger(
+                    // file location and name as specified by the user
+                    filePath: fileName,
+                    // don't need to save time
+                    logTime: false,
+                    // test details need to be saved
+                    test: IoC.TestDetails
+                    );
+            }
+            // the user press Cancel button.
+            else
+                IoC.Logger.Log($"the user press Cancel button.");
+
+        }
+
         /// <summary>
         /// Navigate backwards to main view / shows default nominal values
         /// resets values specified in test step view to nominal values
@@ -195,7 +224,7 @@ namespace metering.core
         /// connects to omicron and test unit.
         /// </summary>    
         private async Task ConnectOmicronAndUnitAsync()
-        {           
+        {
             // there is a test set attached so run specified tests.
             // lock the task
             await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnitAsync), async () =>

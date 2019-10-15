@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using metering.core;
@@ -10,7 +9,7 @@ namespace metering
     /// <summary>
     /// saves the test step to the user specified location.
     /// </summary>
-    public class SaveNewManager: ICommandManager
+    public class SaveNewManager : ICommandManager
     {
         #region Constructor
 
@@ -49,7 +48,7 @@ namespace metering
 
         #endregion
 
-        public Task SaveNewTestAsync()
+        public Task<string> SaveNewTestAsync()
         {
             // Configure save file dialog box
             SaveFileDialog dlg = new SaveFileDialog
@@ -57,33 +56,48 @@ namespace metering
                 // Default file name
                 FileName = "NewMeteringTest",
                 // Default file extension
-                DefaultExt = ".txt",
+                DefaultExt = ".bmtf",
                 // Filter files by extension
-                Filter = "Metering test files (.txt)|*.txt",
+                Filter = "Beckwith metering test files (.bmtf)|*.bmtf",
                 // automatically add an extension to a file name
                 AddExtension = true,
                 // sets the initial directory that is displayed by a file dialog.
-                InitialDirectory = Path.Combine(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "metering"), "tests")),
+                InitialDirectory = IoC.CMCControl.TestsFolder,
                 // sets the text that appears in the title bar of a file dialog.
                 Title = "Save your test step...",
             };
+
+            // check if the Results directory exists... 
+            if (!Directory.Exists(IoC.CMCControl.ResultsFolder))
+                // if not create the Result directory...
+                Directory.CreateDirectory(IoC.CMCControl.ResultsFolder);
 
             // check if the InitialDirectory exists... 
             if (!Directory.Exists(dlg.InitialDirectory))
                 // if not create the InitialDirectory...
                 Directory.CreateDirectory(dlg.InitialDirectory);
 
+            // add the list of custom places for file dialog boxes.
+            dlg.CustomPlaces.Add(
+                new FileDialogCustomPlace(IoC.CMCControl.ResultsFolder)
+                );
+
+            // add the list of custom places for file dialog boxes.
+            dlg.CustomPlaces.Add(
+                new FileDialogCustomPlace(IoC.CMCControl.TestsFolder)
+                );
+
             // Show save file dialog box
             bool? result = dlg.ShowDialog();
 
             // Process save file dialog box results
             if (result == true)
-            {
-                // Save document
-                string filename = dlg.FileName;
-            }
-
-            return null;
+                // return the user specified file name
+                return Task.FromResult(dlg.FileName);
+            else
+                // the user canceled the task
+                return Task.FromResult(string.Empty);
         }
+
     }
 }

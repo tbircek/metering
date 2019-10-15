@@ -11,7 +11,7 @@ namespace metering.core
         /// saves the test step to the user specified location.
         /// </summary>
         /// <returns></returns>
-        Task SaveNewTestAsync();
+        Task<string> SaveNewTestAsync();
 
         /// <summary>
         /// normalizes a path based on the current operating system
