@@ -10,7 +10,7 @@
     <iconUrl>file:///C:/Users/TBircek/source/repos/metering/metering.core/Resources/metering.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Enable register values in the log file.</releaseNotes>
+    <releaseNotes>Disable register values in the log file. Verified that the application samples correct number of the register.</releaseNotes>
     <copyright>Copyright 2019 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric turgay bircek</tags>
     <dependencies/>
