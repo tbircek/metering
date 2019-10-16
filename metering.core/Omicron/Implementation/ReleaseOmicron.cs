@@ -54,35 +54,19 @@ namespace metering.core
         /// true if test completed itself</param>
         public void ProcessErrors(bool userRequest = true)
         {
+            // if the user want s to stop the test
             if (userRequest)
-            {
-                // update developer "Test interrupted"
-                IoC.Logger.Log($"Test interrupted", LogLevel.Informative);
-
-                // update the user "Test interrupted"
-                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test interrupted by the user.";
-
                 // try to cancel thread running Omicron Test Set
                 IoC.Commands.TokenSource.Cancel();
+            
+            // update developer
+            IoC.Logger.Log($"Test {(userRequest ? "interrupted" : "completed")}", LogLevel.Informative);
 
-                // Trying to stop the communication timer.
-                if(IoC.CMCControl.MdbusTimer != null)
-                    IoC.CMCControl.MdbusTimer.Dispose();
+            // update the user
+            IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test { (userRequest ? "interrupted by the user." : "completed.")}";
 
-            }
-            else
-            {
-                // update developer "Test completed"
-                IoC.Logger.Log($"Test completed", LogLevel.Informative);
-
-                // update the user "Test interrupted"
-                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test completed.";
-            }
-
-            // if timer is initialized
-            if (!IoC.CMCControl.MdbusTimer.Equals(null))
-                // terminate reading modbus register because the test is over for some reason.
-                IoC.CMCControl.MdbusTimer.Dispose();
+            // check if timer is initialized then dispose it.
+            IoC.CMCControl.MdbusTimer?.Dispose();
 
             // Turn off outputs of Omicron Test Set and release it.
             IoC.PowerOptions.TurnOffCMC();
