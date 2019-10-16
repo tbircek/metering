@@ -15,6 +15,51 @@ namespace metering
 
         public SaveNewManager() { }
 
+        public Task<string> LoadNewTestsAsync()
+        {
+            // Configure save file dialog box
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                // Default file name
+                FileName = "NewMeteringTest",
+                // Default file extension
+                DefaultExt = ".bmtf",
+                // Filter files by extension
+                Filter = "Beckwith metering test files (.bmtf)|*.bmtf",
+                // automatically add an extension to a file name
+                AddExtension = true,
+                // sets the initial directory that is displayed by a file dialog.
+                InitialDirectory = IoC.CMCControl.TestsFolder,
+                // sets the text that appears in the title bar of a file dialog.
+                Title = "Save your test step...",
+                // allow the users to select multiple files
+                //Multiselect = true,
+            };
+
+            // add the list of custom places for file dialog boxes.
+            dlg.CustomPlaces.Add(
+                new FileDialogCustomPlace(IoC.CMCControl.ResultsFolder)
+                );
+
+            // add the list of custom places for file dialog boxes.
+            dlg.CustomPlaces.Add(
+                new FileDialogCustomPlace(IoC.CMCControl.TestsFolder)
+                );
+
+            // Show save file dialog box
+            bool? result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+                // return the user specified file name
+                return Task.FromResult(dlg.FileName);
+            //return Task.FromResult(dlg.FileNames);
+            else
+                // the user canceled the task
+                return Task.FromResult(string.Empty);
+                //return Task.FromResult(new string[] {string.Empty} );
+        }
+
         /// <summary>
         /// normalizes a path based on the current operating system
         /// </summary>

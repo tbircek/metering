@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <Authors>Turgay Bircek</Authors>
+    <Company>Beckwith Electric Co. Inc.</Company>
+    <Product>metering</Product>
   </PropertyGroup>
 
   <ItemGroup>
