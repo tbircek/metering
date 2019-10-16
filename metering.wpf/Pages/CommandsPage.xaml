@@ -11,10 +11,14 @@
     mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical">
-        
-        <!-- Start Test Button -->
-        <!-- Only visible after the user hits "AddNewTest" button -->
-        <Button Margin="10 20 10 5" 
+        <!-- Test operation commands -->
+        <Border BorderBrush="Black"
+                BorderThickness="1">
+            <!-- Test operation commands holder -->
+            <StackPanel Orientation="Vertical">
+                <!-- Start Test Button -->
+                <!-- Only visible after the user hits "AddNewTest" button -->
+                <Button Margin="10 20 10 5" 
                 Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                 Command="{Binding StartTestCommand}"
                 mD:ButtonProgressAssist.IsIndicatorVisible="{Binding IsConnecting}"
@@ -30,42 +34,42 @@
                                     Converter={local:BooleanToVisibilityConverter},
                                     ConverterParameter=False}">
 
-            <!-- icon on the button-->
-            <mD:PackIcon Padding="5" 
+                    <!-- icon on the button-->
+                    <mD:PackIcon Padding="5" 
                          Height="Auto" 
                          Width="Auto"
-                         Foreground="{StaticResource SecondaryAccentForegroundBrush}">                        
-                <mD:PackIcon.Style>
-                    <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
-                        <Setter Property="Kind" Value="PlayCircleFilled"/>
-                        <!--<Setter Property="Background" 
+                         Foreground="{StaticResource SecondaryAccentForegroundBrush}">
+                        <mD:PackIcon.Style>
+                            <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                                <Setter Property="Kind" Value="PlayCircleFilled"/>
+                                <!--<Setter Property="Background" 
                                 Value="{Binding CancelForegroundColor, 
                                         Converter={local:StringToBrushConverter}}"/>-->
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsConnectionCompleted}" Value="True">
-                                <Setter Property="Kind" Value="ProgressClock"/>
-                                <Setter Property="Background" Value="Green"/>
-                                <DataTrigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation 
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsConnectionCompleted}" Value="True">
+                                        <Setter Property="Kind" Value="ProgressClock"/>
+                                        <Setter Property="Background" Value="Green"/>
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation 
                                                 Storyboard.TargetProperty="Opacity"
                                                 From="0"
                                                 To="1"
                                                 Duration="0:0:0.8"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.EnterActions>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </mD:PackIcon.Style>
-            </mD:PackIcon>
-        </Button>
- 
-        <!-- Add New Test Button-->
-        <!-- visible by default, invisible after the user hits "StartTest" button -->
-        <Button Margin="10 20 10 5" 
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </mD:PackIcon.Style>
+                    </mD:PackIcon>
+                </Button>
+
+                <!-- Add New Test Button-->
+                <!-- visible by default, invisible after the user hits "StartTest" button -->
+                <Button Margin="10 20 10 5" 
                 Padding="0"
                 Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                 Cursor="Hand"
@@ -76,26 +80,26 @@
                 Visibility="{Binding NewTestAvailable,
                                         Converter={local:BooleanToVisibilityConverter}}">
 
-                 <!-- icon on the button-->
-            <mD:PackIcon Padding="5"
+                    <!-- icon on the button-->
+                    <mD:PackIcon Padding="5"
                          Height="Auto" 
                          Width="Auto"
                          Foreground="{StaticResource SecondaryAccentForegroundBrush}">
-                
-                <mD:PackIcon.Style>
-                    <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
-                        <Setter Property="Kind" Value="PlusCircle"/>
-                        <Setter Property="Background" 
+
+                        <mD:PackIcon.Style>
+                            <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                                <Setter Property="Kind" Value="PlusCircle"/>
+                                <Setter Property="Background" 
                                 Value="{Binding CancelForegroundColor, 
                                         Converter={local:StringToBrushConverter}}"/>
-                        <!--<Setter Property="Foreground" Value="Green"/>-->
-                    </Style>                    
-                </mD:PackIcon.Style>
-            </mD:PackIcon>
-        </Button>
+                                <!--<Setter Property="Foreground" Value="Green"/>-->
+                            </Style>
+                        </mD:PackIcon.Style>
+                    </mD:PackIcon>
+                </Button>
 
-        <!-- Cancel Button -->
-        <Button Margin="10 20 10 5" 
+                <!-- Cancel Button -->
+                <Button Margin="10 20 10 10" 
                 Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                 Cursor="Hand"
                 TabIndex="8"
@@ -106,21 +110,116 @@
                                     Converter={local:BooleanToVisibilityConverter},
                                     ConverterParameter=False}">
 
-                <!-- icon on the button -->
-            <mD:PackIcon Padding="5"
+                    <!-- icon on the button -->
+                    <mD:PackIcon Padding="5"
+                         Margin="-2"
                          Height="Auto" 
                          Width="Auto"
                          Foreground="{StaticResource SecondaryAccentForegroundBrush}">
 
-                <mD:PackIcon.Style>
-                    <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
-                        <Setter Property="Kind" Value="CloseOctagonOutline"/>
-                        <Setter Property="Background" Value="Red"/>
-                        <!--<Setter Property="Background" Value="{Binding CancelForegroundColor, 
+                        <mD:PackIcon.Style>
+                            <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                                <Setter Property="Kind" Value="CloseOctagonOutline"/>
+                                <Setter Property="Background" Value="Red"/>
+                                <!--<Setter Property="Background" Value="{Binding CancelForegroundColor, 
                                                                         Converter={local:StringToBrushConverter}}"/>-->
-                    </Style>
-                </mD:PackIcon.Style>
-            </mD:PackIcon>
-            </Button>  
+                            </Style>
+                        </mD:PackIcon.Style>
+                    </mD:PackIcon>
+                </Button>
+            </StackPanel>
+        </Border>
+        
+        <!-- File operation commands -->
+        <Border BorderBrush="Black"
+                BorderThickness="1 1 1 0">
+            
+            <!-- File operation commands holder -->
+            <StackPanel Orientation="Vertical">
+                <!-- Save Test Command Button -->
+                <Button Margin="10 20 10 5" 
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                        Cursor="Hand"
+                        TabIndex="8"
+                        Background="Transparent"
+                        Command="{Binding Path=SaveNewTestCommand}"
+                        ToolTip="Save this test step to your computer"
+                        Visibility="{Binding NewTestAvailable,
+                                            Converter={local:BooleanToVisibilityConverter},
+                                            ConverterParameter=False}">
+                    <!-- icon on the button -->
+                    <mD:PackIcon Padding="5"
+                                 Height="Auto" 
+                                 Width="Auto"
+                                 Foreground="{StaticResource SecondaryAccentForegroundBrush}">
+
+                        <mD:PackIcon.Style>
+                            <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                                <Setter Property="Kind" Value="ThermometerAdd"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <!--<Setter Property="Background" Value="{Binding CancelForegroundColor, 
+                                                                        Converter={local:StringToBrushConverter}}"/>-->
+                            </Style>
+                        </mD:PackIcon.Style>
+                    </mD:PackIcon>
+                </Button>
+
+                <!-- Load Test Command Button -->
+                <Button Margin="10 20 10 5" 
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                        Cursor="Hand"
+                        TabIndex="8"
+                        Background="Transparent"
+                        Command="{Binding Path=LoadTestsCommand}"
+                        ToolTip="Load previously saved test steps from your computer"
+                        Visibility="{Binding NewTestAvailable,
+                                            Converter={local:BooleanToVisibilityConverter},
+                                            ConverterParameter=False}">
+                    <!-- icon on the button -->
+                    <mD:PackIcon Padding="5"
+                                 Height="Auto" 
+                                 Width="Auto"
+                                 Foreground="{StaticResource SecondaryAccentForegroundBrush}">
+
+                        <mD:PackIcon.Style>
+                            <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                                <Setter Property="Kind" Value="ThermometerChevronUp"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <!--<Setter Property="Background" Value="{Binding CancelForegroundColor, 
+                                                                        Converter={local:StringToBrushConverter}}"/>-->
+                            </Style>
+                        </mD:PackIcon.Style>
+                    </mD:PackIcon>
+                </Button>
+
+                <!-- Delete Test Command Button -->
+                <Button Margin="10 20 10 5" 
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                        Cursor="Hand"
+                        TabIndex="8"
+                        Background="Transparent"
+                        Command="{Binding Path=DeleteSelectedTestCommand}"
+                        ToolTip="Delete selected test step from the current test strip"
+                        Visibility="{Binding NewTestAvailable,
+                                            Converter={local:BooleanToVisibilityConverter},
+                                            ConverterParameter=False}">
+                    <!-- icon on the button -->
+                    <mD:PackIcon Padding="5"
+                                 Height="Auto" 
+                                 Width="Auto"
+                                 Foreground="{StaticResource SecondaryAccentForegroundBrush}">
+
+                        <mD:PackIcon.Style>
+                            <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                                <Setter Property="Kind" Value="ThermometerMinus"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <!--<Setter Property="Background" Value="{Binding CancelForegroundColor, 
+                                                                        Converter={local:StringToBrushConverter}}"/>-->
+                            </Style>
+                        </mD:PackIcon.Style>
+                    </mD:PackIcon>
+                </Button>
+            </StackPanel>
+        </Border>
     </StackPanel>
 </local:BasePage>

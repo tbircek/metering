@@ -200,8 +200,8 @@ namespace metering.core
                         }
                         else
                         {
-                            // inform the developer
-                            IoC.Logger.Log("Find no Omicron");
+                            //// inform the developer
+                            //IoC.Logger.Log("Find no Omicron");
 
                             // inform the user 
                             Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: There is no attached Omicron Test Set. Please attached a Omicron Test Set before test.";
@@ -209,8 +209,8 @@ namespace metering.core
                     }
                     else
                     {
-                        // inform the developer
-                        IoC.Logger.Log($"The server {EAModbusClient.IPAddress} is not available.");
+                        //// inform the developer
+                        //IoC.Logger.Log($"The server {EAModbusClient.IPAddress} is not available.");
 
                         // inform the user 
                         Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: The server is not available: {EAModbusClient.IPAddress}.";
@@ -218,8 +218,8 @@ namespace metering.core
                 }
                 catch (Exception ex)
                 {
-                    // inform the developer about error.
-                    IoC.Logger.Log(ex.Message);
+                    //// inform the developer about error.
+                    //IoC.Logger.Log(ex.Message);
 
                     // inform the user about error.
                     Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Start Communication failed: {ex.Message}.";
