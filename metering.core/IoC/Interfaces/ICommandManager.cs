@@ -8,10 +8,16 @@ namespace metering.core
     public interface ICommandManager
     {
         /// <summary>
-        /// saves the test step to the user specified location.
+        /// saves the test step from the screen to the user specified location.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>the user selected path with name of the file</returns>
         Task<string> SaveNewTestAsync();
+
+        /// <summary>
+        /// loads the test steps from the user specified location to the test strip.
+        /// </summary>
+        /// <returns>the user selected path(s) of the file(s)</returns>
+        Task<string> LoadNewTestsAsync();
 
         /// <summary>
         /// normalizes a path based on the current operating system
