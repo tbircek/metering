@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
+using Dna;
 using metering.core;
 using Squirrel;
 
@@ -65,6 +66,11 @@ namespace metering
         /// </summary>
         private void ApplicationSetup()
         {
+            // set up dna framework
+            new DefaultFrameworkConstruction()
+                .AddFileLogger()
+                .Build();
+
             // Setup IoC
             IoC.Setup();
 
@@ -105,7 +111,7 @@ namespace metering
         /// Override Startup event to show default view and view model.
         /// </summary>
         /// <param name="e">start up event arguments</param>
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             // Allow the base start
             base.OnStartup(e);
@@ -117,7 +123,7 @@ namespace metering
             IoC.Logger.Log("Starting the application", LogLevel.Informative);
 
             // check for the updates
-            IoC.Task.Run(async () =>
+            await IoC.Task.Run(async () =>
             {
                 // log application update message
                 IoC.Logger.Log("Checking for updates", LogLevel.Informative);
