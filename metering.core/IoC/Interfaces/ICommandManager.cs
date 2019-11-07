@@ -8,29 +8,26 @@ namespace metering.core
     public interface ICommandManager
     {
         /// <summary>
-        /// saves the test step from the screen to the user specified location.
+        /// Shows a <see cref="SaveFileDialog"/> or <see cref="OpenFileDialog"/> per the user selection.
         /// </summary>
-        /// <returns>the user selected path with name of the file</returns>
-        Task<string> SaveNewTestAsync();
-
-        /// <summary>
-        /// loads the test steps from the user specified location to the test strip.
-        /// </summary>
-        /// <returns>the user selected path(s) of the file(s)</returns>
-        Task<string> LoadNewTestsAsync();
-
-        /// <summary>
-        /// normalizes a path based on the current operating system
-        /// </summary>
-        /// <param name="path">the path to normalize</param>
+        /// <param name="option"><see cref="FileDialogOption"/> to allow the user select save or open test file(s)</param>
         /// <returns></returns>
-        string NormalizePath(string path);
+        Task ShowFileDialogAsync(FileDialogOption option);
+    }
+
+    /// <summary>
+    /// FileDialog options to generate the UI correctly per the user request.
+    /// </summary>
+    public enum FileDialogOption
+    {
+        /// <summary>
+        /// Represents <see cref="SaveFileDialog"/> 
+        /// </summary>
+        Save,
 
         /// <summary>
-        /// resolves any relative elements of the path to absolute
+        /// Represents <see cref="OpenFileDialog"/>
         /// </summary>
-        /// <param name="path">the path to resolve</param>
-        /// <returns></returns>
-        string ResolvePath(string path);
+        Open,
     }
 }
