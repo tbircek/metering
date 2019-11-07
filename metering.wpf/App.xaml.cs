@@ -31,6 +31,10 @@ namespace metering
         /// <returns>AsyncStateMachine of Squirrel</returns>
         private async Task CheckForUpdates()
         {
+            // for future use 
+            // change update location to github
+            // using (var updateManager = UpdateManager.GitHubUpdateManager("https://github.com/tbircek/metering"))
+
             // specify the location of update
             using (UpdateManager updateManager = new UpdateManager(@"\\volta\Eng_Lab\Software Updates\metering"))
             {
