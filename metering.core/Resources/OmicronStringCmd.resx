@@ -117,48 +117,72 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="amp_def_init" xml:space="preserve">
+  <data name="amp_cfg" xml:space="preserve">
+    <value>amp:cfg?</value>
+    <comment>the CMC's test set number and the number of available configurations</comment>
+  </data>
+  <data name="amp_cfg_0" xml:space="preserve">
+    <value>amp:cfg?({0})</value>
+    <comment>the characteristics of the configuration if the optional &lt;cfg_no&gt; parameter is provided.</comment>
+  </data>
+  <data name="amp_ctrl_i0_2" xml:space="preserve">
+    <value>amp:ctrl(i({0}),{1})</value>
+    <comment>This command executes a power optimization of an amplifier for a specific CMC application. {0} = triple number = 1, {1} =  the peak no-load output voltage (in V) of the amplifier outputs.</comment>
+  </data>
+  <data name="amp_def_clr" xml:space="preserve">
     <value>amp:def(clrnooff)</value>
-    <comment>This command to undefine all amplifiers.</comment>
+    <comment>Command to undefine an amplifier.</comment>
   </data>
-  <data name="amp_range_current" xml:space="preserve">
-    <value>amp:range(i(1),{0})</value>
-    <comment>Selects current amplifier range in the CMC.</comment>
+  <data name="amp_def_off" xml:space="preserve">
+    <value>amp:def(off)</value>
+    <comment>Turns off unused "EXTERNAL" amplifiers.</comment>
   </data>
-  <data name="amp_range_voltage" xml:space="preserve">
-    <value>amp:range(v(1),{0})</value>
-    <comment>Selects voltage amplifier range in the CMC.</comment>
+  <data name="amp_def_param_0" xml:space="preserve">
+    <value>amp:def?({0})</value>
+    <comment>Returns the parameters of a specified amplifier. {0} = amp number</comment>
   </data>
-  <data name="amp_route_current" xml:space="preserve">
-    <value>amp:route(i(1),14)</value>
-    <comment>This command to get the current route settings of current triple</comment>
+  <data name="amp_def_param_0_1" xml:space="preserve">
+    <value>amp:def?({0},{1})</value>
+    <comment>Returns the parameters of a specified amplifier. {0} = amp number, {1} = int or ext?</comment>
   </data>
-  <data name="amp_route_init" xml:space="preserve">
+  <data name="amp_range_i_0_1" xml:space="preserve">
+    <value>amp:range(i({0}),{1})</value>
+    <comment>Selects current amplifier range in the CMC.  {0} = amp number,</comment>
+  </data>
+  <data name="amp_range_v_0_1" xml:space="preserve">
+    <value>amp:range(v({0}),{1})</value>
+    <comment>Selects voltage amplifier range in the CMC. {0} = amp number,</comment>
+  </data>
+  <data name="amp_route_clr" xml:space="preserve">
     <value>amp:route(clrnooff)</value>
-    <comment>Clears the routings of all triples.</comment>
+    <comment>Clears the routings of all triples and the amplifier’s power supply that is turned off (clr) or not (clrnooff).</comment>
   </data>
-  <data name="amp_route_voltage" xml:space="preserve">
-    <value>amp:route(v(1),9)</value>
-    <comment>This command to get the current route settings of voltage triple</comment>
+  <data name="amp_route_i_0_1" xml:space="preserve">
+    <value>amp:route(i({0}),{1})</value>
+    <comment>This command to get the current route settings of current triple. {0} = amp number, {1} = configuration number</comment>
+  </data>
+  <data name="amp_route_v_0_1" xml:space="preserve">
+    <value>amp:route(v({0}),{1})</value>
+    <comment>This command to get the current route settings of voltage triple. {0} = amp number, {1} = configuration number</comment>
   </data>
   <data name="amp_scan" xml:space="preserve">
     <value>amp:scan?</value>
     <comment>Searches for external Omicron amplifiers and returns a list of IDs.</comment>
   </data>
-  <data name="out_analog_outputOff" xml:space="preserve">
+  <data name="out_ana_off" xml:space="preserve">
     <value>out:ana:off</value>
     <comment>Turns Omicron Test Set analog output OFF</comment>
   </data>
-  <data name="out_analog_outputOn" xml:space="preserve">
+  <data name="out_ana_on" xml:space="preserve">
     <value>out:ana:on</value>
     <comment>Turns Omicron Test Set analog output ON</comment>
   </data>
-  <data name="out_analog_pmode" xml:space="preserve">
-    <value>out:ana:pmode(abs)</value>
-    <comment>Sets the phase mode to Absolute</comment>
+  <data name="out_ana_pmode_0" xml:space="preserve">
+    <value>out:ana:pmode({0})</value>
+    <comment>Sets the phase mode to Absolute. Options: abs, diff. =&gt; {0} = "abs"</comment>
   </data>
-  <data name="out_analog_setOutput" xml:space="preserve">
-    <value>out:ana:{0}({1}):a({2});p({3});f({4});wav(sin)</value>
-    <comment>Apply Omicron Test Set analog signal to specified values.</comment>
+  <data name="out_ana_setOutput" xml:space="preserve">
+    <value>out:ana:{0}({1}):a({2});p({3});f({4});wav({5})</value>
+    <comment>Apply Omicron Test Set analog signal to specified values. {0} = generator type (v or i), {1} = triplet number (1:1,1:3, 2:2 and etc.), {2} = Magnitude of analog signal, {3} = Phase of analog signal, {4} = Frequency of analog signal, {5} = waveform of the signal (sin, square, etc) use "sin"</comment>
   </data>
 </root>
