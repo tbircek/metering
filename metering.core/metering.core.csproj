@@ -19,6 +19,7 @@
     <Compile Remove="DataModels\NominalValuesModel.cs" />
     <Compile Remove="DataModels\TestDetailModel.cs" />
     <Compile Remove="DataModels\TestDetailsModel.cs" />
+    <Compile Remove="IoC\Interfaces\IUIManager.cs" />
   </ItemGroup>
 
   <ItemGroup>
