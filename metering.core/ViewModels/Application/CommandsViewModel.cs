@@ -1,9 +1,7 @@
 ﻿using System.Globalization;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Newtonsoft.Json;
 
 namespace metering.core
 {
@@ -125,10 +123,10 @@ namespace metering.core
             CancelNewTestCommand = new RelayCommand(() => CancelTestDetailsPageShowing());
 
             // save the test step to the user specified location.
-            SaveNewTestCommand = new RelayCommand(async () => await SaveTestStepsAsync());
+            SaveNewTestCommand = new RelayCommand(async() => await IoC.Commander.ShowFileDialogAsync(FileDialogOption.Save));
 
             // load the test step(s) from the user specified location.
-            LoadTestsCommand = new RelayCommand(async () => await LoadTestsAsync());
+            LoadTestsCommand = new RelayCommand(async () => await IoC.Commander.ShowFileDialogAsync(FileDialogOption.Open));
 
             //// remove the test step(s) from the test strip.
             //DeleteSelectedTestCommand = new RelayCommand(async () => await DeleteSelectedTestAsync());
@@ -145,156 +143,76 @@ namespace metering.core
         #region Helper Methods
 
         /// <summary>
-        /// Load a saved <see cref="TestDetailsViewModel"/> to the screen.
+        /// Navigate backwards to main view / shows default nominal values
+        /// resets values specified in test step view to nominal values
         /// </summary>
-        private async Task LoadTestsAsync()
+        private void CancelTestDetailsPageShowing()
         {
-            // retrieve file name
-            string fileName = await IoC.Commander.LoadNewTestsAsync();
 
-            // the user press OK button
-            if (!string.IsNullOrWhiteSpace(fileName))
+            // reset maximum value for progress bar for the next run
+            MaximumTestCount = 0d;
+
+            // change CancelForegroundColor to Red
+            CancelForegroundColor = "00ff00";
+
+            // set visibility of the Command Buttons
+            NewTestAvailable = false;
+
+            // clear Test details view model
+            IoC.Application.CurrentPageViewModel = null;
+
+            // reset test progress to show test canceled.
+            TestProgress = 0d;
+
+            // reset StartTestCommand button icon
+            IsConnectionCompleted = false;
+
+            // Update NominalValues RadioButtons to run a PropertyUpdate event
+            IoC.NominalValues.SelectedVoltagePhase = "AllZero";
+            IoC.NominalValues.SelectedCurrentPhase = "AllZero";
+
+            // Show NominalValues page
+            IoC.Application.GoToPage(ApplicationPage.NominalValues);
+
+            // if the test completed normally no need to cancel token as it is canceled already
+            if (IoC.CMCControl.IsTestRunning)
             {
+                // check if Omicron Test Set is running
+                // if the user never started test and press "Back" button 
+                // DeviceID would be a zero
+                if (IoC.CMCControl.DeviceID > 0)
                 {
-                    // initialize a new TestDetailsViewModel
-                    TestDetailsViewModel test = new TestDetailsViewModel();
+                    // try to cancel thread running Omicron Test Set
+                    TokenSource.Cancel();
 
-                    // de-serialize a JSON file to a TestDetailsViewModel to show it the user 
-                    using (StreamReader file = File.OpenText(fileName))
-                    {
-                        // initialize JsonSerializer to de-serialize directly from the file
-                        JsonSerializer serializer = new JsonSerializer();
-
-                        // convert a de-serialize json to TestDetailsViewModel
-                        test = (TestDetailsViewModel)serializer.Deserialize(file, typeof(TestDetailsViewModel));
-                    }
-
-                    // Update values in the single instance of TestDetailsViewModel
-                    // update AnalogSignals
-                    IoC.TestDetails.AnalogSignals = test.AnalogSignals;
-
-                    // update Register
-                    IoC.TestDetails.Register = test.Register;
-
-                    // update DwellTime
-                    IoC.TestDetails.DwellTime = test.DwellTime;
-
-                    // update StartDelayTime
-                    IoC.TestDetails.StartDelayTime = test.StartDelayTime;
-
-                    // update MeasurementInterval
-                    IoC.TestDetails.MeasurementInterval = test.MeasurementInterval;
-
-                    // update StartMeasurementDelay
-                    IoC.TestDetails.StartMeasurementDelay = test.StartMeasurementDelay;
-
-                    // update SelectedRampingSignal
-                    IoC.TestDetails.SelectedRampingSignal = test.SelectedRampingSignal;
-
-                    // Show TestDetails page
-                    IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
+                    // try to stop Omicron Test Set gracefully
+                    IoC.ReleaseOmicron.ProcessErrors(true);
                 }
             }
         }
 
-    /// <summary>
-    /// Save current <see cref="TestDetailsViewModel"/> to the user specified location
-    /// </summary>
-    private async Task SaveTestStepsAsync()
-    {
-        // retrieve file name
-        string fileName = await IoC.Commander.SaveNewTestAsync();
-
-        // the user press OK button
-        if (!string.IsNullOrWhiteSpace(fileName))
+        /// <summary>
+        /// connects to omicron and test unit.
+        /// </summary>    
+        private async Task ConnectOmicronAndUnitAsync()
         {
-            // generate a new Test Steps Logger
-            new TestStepsLogger(
-                // file location and name as specified by the user
-                filePath: fileName,
-                // don't need to save time
-                logTime: false,
-                // test details need to be saved
-                test: IoC.TestDetails
-                );
-        }
-        // the user press Cancel button.
-        else
-            IoC.Logger.Log($"the user press Cancel button.");
-
-    }
-
-    /// <summary>
-    /// Navigate backwards to main view / shows default nominal values
-    /// resets values specified in test step view to nominal values
-    /// </summary>
-    private void CancelTestDetailsPageShowing()
-    {
-
-        // reset maximum value for progress bar for the next run
-        MaximumTestCount = 0d;
-
-        // change CancelForegroundColor to Red
-        CancelForegroundColor = "00ff00";
-
-        // set visibility of the Command Buttons
-        NewTestAvailable = false;
-
-        // clear Test details view model
-        IoC.Application.CurrentPageViewModel = null;
-
-        // reset test progress to show test canceled.
-        TestProgress = 0d;
-
-        // reset StartTestCommand button icon
-        IsConnectionCompleted = false;
-
-        // Update NominalValues RadioButtons to run a PropertyUpdate event
-        IoC.NominalValues.SelectedVoltagePhase = "AllZero";
-        IoC.NominalValues.SelectedCurrentPhase = "AllZero";
-
-        // Show NominalValues page
-        IoC.Application.GoToPage(ApplicationPage.NominalValues);
-
-        // if the test completed normally no need to cancel token as it is canceled already
-        if (IoC.CMCControl.IsTestRunning)
-        {
-            // check if Omicron Test Set is running
-            // if the user never started test and press "Back" button 
-            // DeviceID would be a zero
-            if (IoC.CMCControl.DeviceID > 0)
+            // there is a test set attached so run specified tests.
+            // lock the task
+            await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnitAsync), async () =>
             {
-                // try to cancel thread running Omicron Test Set
-                TokenSource.Cancel();
 
-                // try to stop Omicron Test Set gracefully
-                IoC.ReleaseOmicron.ProcessErrors(true);
-            }
+            // define the cancellation token source.
+            TokenSource = new CancellationTokenSource();
+
+            // define the cancellation token to use 
+            // terminate tests prematurely.
+            Token = TokenSource.Token;
+
+            // Run test command
+            await IoC.Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails), Token);
+            });
         }
+
+        #endregion
     }
-
-    /// <summary>
-    /// connects to omicron and test unit.
-    /// </summary>    
-    private async Task ConnectOmicronAndUnitAsync()
-    {
-        // there is a test set attached so run specified tests.
-        // lock the task
-        await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnitAsync), async () =>
-        {
-
-                // define the cancellation token source.
-                TokenSource = new CancellationTokenSource();
-
-                // define the cancellation token to use 
-                // terminate tests prematurely.
-                Token = TokenSource.Token;
-
-                // Run test command
-                await IoC.Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails), Token);
-        });
-    }
-
-    #endregion
-}
 }

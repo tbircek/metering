@@ -25,11 +25,6 @@ namespace metering.core
         /// </summary>
         public bool LogTime { get; set; } = true;
 
-        /// <summary>
-        /// Stores the <see cref="TestDetailsViewModel"/> to save to a file
-        /// </summary>
-        public TestDetailsViewModel Test { get; set; }
-
         #endregion
 
         #region Constructor
@@ -42,13 +37,12 @@ namespace metering.core
 
             // set the file path property
             FilePath = filePath;
+
             // set the log time option
             LogTime = logTime;
-            // TestViewModel to save to a Beckwith metering test file
-            Test = test;
-
+            
             // generate a serialized JSON string to save 
-            string json = JsonConvert.SerializeObject(Test, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(test, Formatting.Indented);
 
             // save generated string
             Log(json);

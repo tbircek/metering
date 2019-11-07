@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 using metering.core.Resources;
 
 namespace metering.core
@@ -49,7 +50,7 @@ namespace metering.core
                     if (!IoC.Commands.Token.IsCancellationRequested)
                     {
                         // build a string to send to Omicron Test set
-                        StringBuilder stringBuilder = new StringBuilder(string.Format(OmicronStringCmd.out_analog_setOutput, generatorType, generatorNumber, amplitude, phase, frequency));
+                        StringBuilder stringBuilder = new StringBuilder(string.Format(OmicronStringCmd.out_ana_setOutput, generatorType, generatorNumber, amplitude, phase, frequency, "sin"));
 
                         // send newly generated string command to Omicron Test Set
                         await IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, stringBuilder.ToString()));
@@ -90,6 +91,34 @@ namespace metering.core
             {
                 // inform the developer about error.
                 IoC.Logger.Log($"Exception: {err.Message}");
+            }
+        }
+
+        public async Task<string> SendStringCommandWithResponseAsync(string omicronCommand)
+        {
+            try
+            {
+                // lock the task
+                return await AsyncAwaiter.AwaitResultAsync(nameof(SendStringCommandWithResponseAsync), async () =>
+                {
+                    string result = string.Empty;
+
+                    // check if the user canceling test
+                    if (!IoC.Commands.Token.IsCancellationRequested)
+                     {
+                        // pass received string command to Omicron Test set
+                       result = await IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand));
+                     }
+
+                    return result;
+                 });
+            }
+            catch (Exception err)
+            {
+                // inform the developer about error.
+                IoC.Logger.Log($"Exception: {err.Message}");
+
+                return string.Empty;
             }
         }
     }

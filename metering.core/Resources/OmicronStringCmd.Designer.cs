@@ -61,56 +61,110 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to amp:cfg?.
+        /// </summary>
+        public static string amp_cfg {
+            get {
+                return ResourceManager.GetString("amp_cfg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to amp:cfg?({0}).
+        /// </summary>
+        public static string amp_cfg_0 {
+            get {
+                return ResourceManager.GetString("amp_cfg_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to amp:ctrl(i({0}),{1}).
+        /// </summary>
+        public static string amp_ctrl_i0_2 {
+            get {
+                return ResourceManager.GetString("amp_ctrl_i0_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to amp:def(clrnooff).
         /// </summary>
-        public static string amp_def_init {
+        public static string amp_def_clr {
             get {
-                return ResourceManager.GetString("amp_def_init", resourceCulture);
+                return ResourceManager.GetString("amp_def_clr", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to amp:range(i(1),{0}).
+        ///   Looks up a localized string similar to amp:def(off).
         /// </summary>
-        public static string amp_range_current {
+        public static string amp_def_off {
             get {
-                return ResourceManager.GetString("amp_range_current", resourceCulture);
+                return ResourceManager.GetString("amp_def_off", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to amp:range(v(1),{0}).
+        ///   Looks up a localized string similar to amp:def?({0}).
         /// </summary>
-        public static string amp_range_voltage {
+        public static string amp_def_param_0 {
             get {
-                return ResourceManager.GetString("amp_range_voltage", resourceCulture);
+                return ResourceManager.GetString("amp_def_param_0", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to amp:route(i(1),14).
+        ///   Looks up a localized string similar to amp:def?({0},{1}).
         /// </summary>
-        public static string amp_route_current {
+        public static string amp_def_param_0_1 {
             get {
-                return ResourceManager.GetString("amp_route_current", resourceCulture);
+                return ResourceManager.GetString("amp_def_param_0_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to amp:range(i({0}),{1}).
+        /// </summary>
+        public static string amp_range_i_0_1 {
+            get {
+                return ResourceManager.GetString("amp_range_i_0_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to amp:range(v({0}),{1}).
+        /// </summary>
+        public static string amp_range_v_0_1 {
+            get {
+                return ResourceManager.GetString("amp_range_v_0_1", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to amp:route(clrnooff).
         /// </summary>
-        public static string amp_route_init {
+        public static string amp_route_clr {
             get {
-                return ResourceManager.GetString("amp_route_init", resourceCulture);
+                return ResourceManager.GetString("amp_route_clr", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to amp:route(v(1),9).
+        ///   Looks up a localized string similar to amp:route(i({0}),{1}).
         /// </summary>
-        public static string amp_route_voltage {
+        public static string amp_route_i_0_1 {
             get {
-                return ResourceManager.GetString("amp_route_voltage", resourceCulture);
+                return ResourceManager.GetString("amp_route_i_0_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to amp:route(v({0}),{1}).
+        /// </summary>
+        public static string amp_route_v_0_1 {
+            get {
+                return ResourceManager.GetString("amp_route_v_0_1", resourceCulture);
             }
         }
         
@@ -126,36 +180,36 @@ namespace metering.core.Resources {
         /// <summary>
         ///   Looks up a localized string similar to out:ana:off.
         /// </summary>
-        public static string out_analog_outputOff {
+        public static string out_ana_off {
             get {
-                return ResourceManager.GetString("out_analog_outputOff", resourceCulture);
+                return ResourceManager.GetString("out_ana_off", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to out:ana:on.
         /// </summary>
-        public static string out_analog_outputOn {
+        public static string out_ana_on {
             get {
-                return ResourceManager.GetString("out_analog_outputOn", resourceCulture);
+                return ResourceManager.GetString("out_ana_on", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to out:ana:pmode(abs).
+        ///   Looks up a localized string similar to out:ana:pmode({0}).
         /// </summary>
-        public static string out_analog_pmode {
+        public static string out_ana_pmode_0 {
             get {
-                return ResourceManager.GetString("out_analog_pmode", resourceCulture);
+                return ResourceManager.GetString("out_ana_pmode_0", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to out:ana:{0}({1}):a({2});p({3});f({4});wav(sin).
+        ///   Looks up a localized string similar to out:ana:{0}({1}):a({2});p({3});f({4});wav({5}).
         /// </summary>
-        public static string out_analog_setOutput {
+        public static string out_ana_setOutput {
             get {
-                return ResourceManager.GetString("out_analog_setOutput", resourceCulture);
+                return ResourceManager.GetString("out_ana_setOutput", resourceCulture);
             }
         }
     }

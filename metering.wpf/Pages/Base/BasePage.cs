@@ -55,14 +55,15 @@ namespace metering
 
         #region Constructor
 
-        ///// <summary>
-        ///// Default constructor
-        ///// </summary>
-        //public BasePage() :base()
-        //{            
-        //    // Create a default view model
-        //    ViewModel = IoC.Get<VM>();
-        //}
+        /// <summary>
+        /// Default constructor.
+        /// This provides values to views while in design time.
+        /// </summary>
+        public BasePage() : base()
+        {
+            // Create a default view model
+            ViewModel = IoC.Get<VM>();
+        }
 
         /// <summary>
         /// the constructor with specific view model

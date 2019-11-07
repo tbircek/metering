@@ -24,7 +24,7 @@ namespace metering.core
                     IoC.Logger.Log($"turnOffCMC setup: runs", LogLevel.Informative);
 
                     // send Turn off command to Omicron Test Set
-                    await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandAsync(OmicronStringCmd.out_analog_outputOff));
+                    await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandAsync(OmicronStringCmd.out_ana_off));
 
                     // release Omicron Test Set.
                     await IoC.Task.Run(() => IoC.ReleaseOmicron.Release());
@@ -63,7 +63,7 @@ namespace metering.core
                     IoC.Logger.Log($"turnOnCMC setup runs", LogLevel.Informative);
 
                     // Send command to Turn On Analog Outputs
-                    await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandAsync(OmicronStringCmd.out_analog_outputOn));
+                    await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandAsync(OmicronStringCmd.out_ana_on));
 
                 });
             }
