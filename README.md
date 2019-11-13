@@ -20,6 +20,7 @@ Metering designed to apply analog signal(s) to and read Modbus register(s) from 
 ---
 
 > #### Nominal Analog Values ####
+
 > * ##### Nominal Voltage #####
 >     This entry become initial value of "Magnitude(V), From(V)" and "To(V)" in TestDetails page for every supported voltage signal.  
 
