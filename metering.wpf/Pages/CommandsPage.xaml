@@ -105,7 +105,7 @@
                 TabIndex="8"
                 Background="Transparent"
                 Command="{Binding Path=CancelNewTestCommand}"
-                ToolTip="Cancel all test steps and go back to main page"
+                ToolTip="Cancel all test steps"
                 Visibility="{Binding NewTestAvailable,
                                     Converter={local:BooleanToVisibilityConverter},
                                     ConverterParameter=False}">
@@ -143,7 +143,7 @@
                         TabIndex="8"
                         Background="Transparent"
                         Command="{Binding Path=SaveNewTestCommand}"
-                        ToolTip="Save this test step to your computer"
+                        ToolTip="Save this test step"
                         Visibility="{Binding NewTestAvailable,
                                             Converter={local:BooleanToVisibilityConverter},
                                             ConverterParameter=False}">
@@ -171,7 +171,7 @@
                         TabIndex="8"
                         Background="Transparent"
                         Command="{Binding Path=LoadTestsCommand}"
-                        ToolTip="Load previously saved test steps from your computer"
+                        ToolTip="Load test step(s)"
                         Visibility="{Binding NewTestAvailable,
                                             Converter={local:BooleanToVisibilityConverter},
                                             ConverterParameter=False}">
