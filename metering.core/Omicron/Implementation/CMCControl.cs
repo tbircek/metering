@@ -165,15 +165,13 @@ namespace metering.core
                 StringBuilder @string = new StringBuilder("Time, Test Value");
 
                 // generate variable portion of header information based on Register entry.
-                //for (int i = 0; i < IoC.TestDetails.Register.ToString().Split(',').Length; i++)
-                IEnumerable<int> registerValues =  Enumerable.Range(0, IoC.TestDetails.Register.ToString().Split(',').Length).Select(i => i);
+                IEnumerable<int> registerValues = Enumerable.Range(0, IoC.TestDetails.Register.ToString().Split(',').Length).Select(i => i);
 
                 foreach (int i in registerValues)
                 {
                     // append new variable header information to previous string generated.
                     @string.Append($" ,Register {i + 1}, Minimum Value {i + 1}, Maximum Value {i + 1}");
                 }
-
 
                 // add new line to generated string for the test values.
                 @string.AppendLine();
@@ -220,20 +218,24 @@ namespace metering.core
                             await IoC.Task.Run(() => IoC.PowerOptions.TurnOnCMC());
 
                             // set timer to read modbus register per the user specified time.
-                            MdbusTimer = await Task.Run(() => 
-                                                new Timer(
-                                                    callback: IoC.Modbus.MeasurementIntervalCallback,
-                                                    state: IoC.TestDetails.Register,
-                                                    dueTime: TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)),
-                                                    period: TimeSpan.FromMilliseconds(Convert.ToDouble(IoC.TestDetails.MeasurementInterval)
-                                                    )));
+                            MdbusTimer =
+                                await Task.Run(() =>
+                                    new Timer(
+                                        // reads the user specified modbus register(s).
+                                        callback: IoC.Modbus.MeasurementIntervalCallback,
+                                        // pass the use specified modbus register(s) to callback.
+                                        state: IoC.TestDetails.Register,
+                                        // the time delay before modbus register(s) read start. 
+                                        dueTime: TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)),
+                                        // the interval between reading of the modbus register(s).
+                                        period: TimeSpan.FromMilliseconds(Convert.ToDouble(IoC.TestDetails.MeasurementInterval))));
 
+                            // cancel this task if cancellation requested
                         }, IoC.Commands.Token);
 
                         // Start reading the user specified Register
                         IoC.Task.Run(async () =>
                         {
-
                             // lock the task
                             await AsyncAwaiter.AwaitAsync(nameof(TestAsync), async () =>
                             {
@@ -254,7 +256,6 @@ namespace metering.core
                                 // append new variable header information to previous string generated.
                                 await Task.Run(() => @string.Append($" ,{IoC.TestDetails.Register.ToString().Split(',').GetValue(i)} ,{MinValues[i]} , {MaxValues[i]}"));
                             }
-
 
                             // wait task to be over with
                         }, IoC.Commands.Token).Wait();
@@ -288,8 +289,6 @@ namespace metering.core
                     {
                         // if timer is initialized terminate reading modbus register because the user canceled the test.
                         MdbusTimer?.Dispose();
-                        // terminate reading modbus register because the user canceled the test.
-                        // MdbusTimer.Dispose();
 
                         // throw an error if we canceled already.
                         IoC.Commands.Token.ThrowIfCancellationRequested();
@@ -301,9 +300,6 @@ namespace metering.core
             }
             catch (OperationCanceledException ex)
             {
-                //// test completed
-                //IoC.CMCControl.IsTestRunning = false;
-
                 // inform the developer about error
                 IoC.Logger.Log($"Exception is : {ex.Message}");
 

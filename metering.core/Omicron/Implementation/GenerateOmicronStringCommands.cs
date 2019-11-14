@@ -25,107 +25,29 @@ namespace metering.core
         /// </summary>
         /// <param name="testSignalName">the signal that From and To values are not equal</param>
         /// <param name="testStartValue">From value that test starts and increments per <see cref="AnalogSignalListItemViewModel.Delta"/></param>
+        /// <example>Output string ex: out:ana:v(1:1):a(120);p(0);f(60);wav(sin)</example>
         public void SendOmicronCommands(string testSignalName, double testStartValue)
         {
-            // TODO: Move this methods to its own class and automate
-
             // inform developer
-            IoC.Logger.Log($"SendOmicronCommands started :  ramping signal: {testSignalName} -- test value: {testStartValue}", LogLevel.Informative);
+            IoC.Logger.Log($"{nameof(this.SendOmicronCommands)} started :  ramping signal: {testSignalName} -- test value: {testStartValue}", LogLevel.Informative);
 
-            // set voltage amplifiers default values.
-            // Analog signal: Voltage Output 1:
-            IoC.StringCommands.SendOutAnaAsync
-                (
-                // Omicron Test Set internal generator name
-                generator: (int)StringCommands.GeneratorList.v,
-                // generator 
-                generatorNumber: "1:1",
-                // Signal Amplitude
-                amplitude: (string.Equals("v1", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Magnitude),
-                // Signal Phase
-                phase: (string.Equals("v1", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Phase),
-                // Signal Frequency
-                frequency: (string.Equals("v1", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[0].Frequency)
-                );
+            foreach (AnalogSignalListItemViewModel analogSignal in IoC.TestDetails.AnalogSignals)
+            {
+                // set voltage amplifiers values.
 
-            // Analog signal: Voltage Output 2:
-            IoC.StringCommands.SendOutAnaAsync
-                (
-                // Omicron Test Set internal generator name
-                generator: (int)StringCommands.GeneratorList.v,
-                // generator 
-                generatorNumber: "1:2",
-                 // Signal Amplitude
-                 amplitude: (string.Equals("v2", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].Magnitude),
-                // Signal Phase
-                phase: (string.Equals("v2", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].Phase),
-                // Signal Frequency
-                frequency: (string.Equals("v2", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[1].Frequency)
-                );
-
-            // Analog signal: Voltage Output 3:
-            IoC.StringCommands.SendOutAnaAsync
-                (
-
-                // Omicron Test Set internal generator name
-                generator: (int)StringCommands.GeneratorList.v,
-                // generator 
-                generatorNumber: "1:3",
-                // Signal Amplitude
-                amplitude: (string.Equals("v3", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].Magnitude),
-                // Signal Phase
-                phase: (string.Equals("v3", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].Phase),
-                // Signal Frequency
-                frequency: (string.Equals("v3", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[2].Frequency)
-                );
-
-            // set current amplifiers default values.
-            // Analog signal: Current Output 1:
-            IoC.StringCommands.SendOutAnaAsync
-                (
-                // Omicron Test Set internal generator name
-                generator: (int)StringCommands.GeneratorList.i,
-                // generator 
-                generatorNumber: "1:1",
-                // Signal Amplitude
-                amplitude: (string.Equals("i1", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].Magnitude),
-                // Signal Phase
-                phase: (string.Equals("i1", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].Phase),
-                // Signal Frequency
-                frequency: (string.Equals("i1", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[3].Frequency)
-                );
-
-            // Analog signal: Current Output 2:
-            IoC.StringCommands.SendOutAnaAsync
-                (
-               // Omicron Test Set internal generator name
-               generator: (int)StringCommands.GeneratorList.i,
-               // generator 
-               generatorNumber: "1:2",
-               // Signal Amplitude
-               amplitude: (string.Equals("i2", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].Magnitude),
-                // Signal Phase
-                phase: (string.Equals("i2", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].Phase),
-                // Signal Frequency
-                frequency: (string.Equals("i2", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[4].Frequency)
-                );
-
-            // Analog signal: Current Output 3:
-            IoC.StringCommands.SendOutAnaAsync
-                (
-                // Omicron Test Set internal generator name
-                generator: (int)StringCommands.GeneratorList.i,
-                // generator 
-                generatorNumber: "1:3",
-                // Signal Amplitude
-                amplitude: (string.Equals("i3", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Magnitude),
-                // Signal Phase
-                phase: (string.Equals("i3", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Phase),
-                // Signal Frequency
-                frequency: (string.Equals("i3", testSignalName) && (string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)))) ? testStartValue : Convert.ToDouble(IoC.TestDetails.AnalogSignals[5].Frequency)
-                );
-
+                IoC.StringCommands.SendOutAnaAsync(
+                    // Omicron Test Set internal generator type
+                    generatorType: analogSignal.SignalName.ToCharArray()[0],
+                    // tripletNumber --- as long as we use (v|i)1 to 3 this value is 1
+                    tripletNumber: $"1:{analogSignal.SignalName.ToCharArray()[1]}",
+                    // Signal Amplitude
+                    amplitude: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)) ? (string.Equals(analogSignal.SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignal.From) : Convert.ToDouble(analogSignal.Magnitude),
+                    // Signal Phase
+                    phase: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)) ? (string.Equals(analogSignal.SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignal.From) : Convert.ToDouble(analogSignal.Phase),
+                    // Signal Frequency
+                    frequency: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)) ? (string.Equals(analogSignal.SignalName, testSignalName) ? testStartValue : Convert.ToDouble(analogSignal.From)) : Convert.ToDouble(analogSignal.Frequency)
+                    );
+            }
         }
-
     }
 }
