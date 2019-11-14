@@ -204,17 +204,20 @@ namespace metering.core
                         // send Omicron commands
                         await IoC.Task.Run(async () =>
                         {
-                            // send string commands to Omicron
-                            await IoC.Task.Run(() => IoC.SetOmicron.SendOmicronCommands(SignalName, testStartValue));
-
-                            // Turn On Omicron Analog Outputs per the user input
-                            await IoC.Task.Run(() => IoC.PowerOptions.TurnOnCMC());
-
                             // initialize Minimum Value List with the highest int32 to capture every minimum value
                             MinValues = Enumerable.Repeat(int.MaxValue, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
 
                             // initialize Maximum Value List with the lowest int32 to capture every maximum value
                             MaxValues = Enumerable.Repeat(int.MinValue, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
+
+                            // send string commands to Omicron
+                            await IoC.Task.Run(() => IoC.SetOmicron.SendOmicronCommands(SignalName, testStartValue));
+
+                            // delay little bit Omicron CMC power up
+                            await Task.Delay(200);
+
+                            // Turn On Omicron Analog Outputs per the user input
+                            await IoC.Task.Run(() => IoC.PowerOptions.TurnOnCMC());
 
                             // set timer to read modbus register per the user specified time.
                             MdbusTimer = await Task.Run(() => 
