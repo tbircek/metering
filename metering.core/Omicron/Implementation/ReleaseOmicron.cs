@@ -28,6 +28,10 @@ namespace metering.core
 
                     // Destruct Omicron Test set
                     IoC.CMCControl.CMEngine = null;
+                    
+                    // inform the developer
+                    IoC.Logger.Log($"Release: completed", LogLevel.Informative);
+
                 });
             }
             catch (Exception ex)

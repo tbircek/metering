@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace metering.core
 {
@@ -13,7 +14,7 @@ namespace metering.core
         /// different From and To values in <see cref="AnalogSignalViewModel.AnalogSignals"/>
         /// </summary>
         /// <returns>Returns a Tuple with ramping signal properties</returns>       
-        public (string SignalName, double From, double To, double Delta, double Phase, double Frequency) GetRampingSignal()
+        public (string SignalName, double From, double To, double Delta, double Phase, double Frequency, int Precision) GetRampingSignal()
         {
             // initialize Tuple variables with default values
             string SignalName = string.Empty;
@@ -22,6 +23,7 @@ namespace metering.core
             double Delta = default(double);
             double Phase = default(double);
             double Frequency = default(double);
+            int Precision = default;
 
             foreach (AnalogSignalListItemViewModel signal in IoC.TestDetails.AnalogSignals)
             {
@@ -35,14 +37,15 @@ namespace metering.core
                     Delta = Convert.ToDouble(signal.Delta);
                     Phase = Convert.ToDouble(signal.Phase);
                     Frequency = Convert.ToDouble(signal.Frequency);
+                    Precision = signal.From.Substring(signal.From.IndexOf(CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator), signal.From.Length - 1).Length;
 
                     // return properties of the ramping signal found
-                    return (SignalName, From, To, Delta, Phase, Frequency);
+                    return (SignalName, From, To, Delta, Phase, Frequency, Precision);
                 }
             }
 
             // no ramping signal found
-            return (string.Empty, default(double), default(double), default(double), default(double), default(double));
+            return (string.Empty, default(double), default(double), default(double), default(double), default(double), default);
         }
     }
 }
