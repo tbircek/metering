@@ -10,7 +10,10 @@
     <iconUrl>file:///C:/Users/TBircek/source/repos/metering/metering.core/Resources/metering.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Changed Omicron hardware configuration to 3X25A, 140VA @ 15A, 10Vrms</releaseNotes>
+    <releaseNotes>
+      Added a CancellationToken source with a timeout value of "Measurement Interval * 2" to automatically cancel unresponsive communication threads in Parallel.ForEach loop.
+      \nChange reporting of "From" and "To" values precision to "6" decimal points.\nUpdated to c# version 7.2.\nAdded more details to log.
+    </releaseNotes>
     <copyright>Copyright 2019 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric turgay bircek</tags>
     <dependencies/>
