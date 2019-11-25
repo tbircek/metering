@@ -137,10 +137,13 @@ namespace metering.core
                 TestSignal testSignal = new TestSignal();
 
                 // loads TestSignal information as a Tuple
-                var (SignalName, From, To, Delta, Phase, Frequency) = testSignal.GetRampingSignal();
+                var (SignalName, From, To, Delta, Phase, Frequency, Precision) = testSignal.GetRampingSignal();
 
                 // initialize new testStartValue
-                double testStartValue = default(double);
+                double testStartValue = default;
+
+                // precision format text to format strings
+                string precision = $"F{Precision}";
 
                 // verify we have a ramping signal
                 if (string.IsNullOrWhiteSpace(SignalName))
@@ -156,7 +159,7 @@ namespace metering.core
                 var testResultLog = new TestResultLogger
                     (
                         // set file path and name
-                        filePath: Path.Combine(ResultsFolder, $"{IoC.TestDetails.Register}_{From:F3}-{To:F3}_{fileId}.csv"),
+                        filePath: Path.Combine(ResultsFolder, $"{IoC.TestDetails.Register}_{From:F6}-{To:F6}_{fileId}.csv"),
                         // no need to save time
                         logTime: false
                     );
@@ -165,15 +168,13 @@ namespace metering.core
                 StringBuilder @string = new StringBuilder("Time, Test Value");
 
                 // generate variable portion of header information based on Register entry.
-                //for (int i = 0; i < IoC.TestDetails.Register.ToString().Split(',').Length; i++)
-                IEnumerable<int> registerValues =  Enumerable.Range(0, IoC.TestDetails.Register.ToString().Split(',').Length).Select(i => i);
+                IEnumerable<int> registerValues = Enumerable.Range(0, IoC.TestDetails.Register.ToString().Split(',').Length).Select(i => i);
 
                 foreach (int i in registerValues)
                 {
                     // append new variable header information to previous string generated.
                     @string.Append($" ,Register {i + 1}, Minimum Value {i + 1}, Maximum Value {i + 1}");
                 }
-
 
                 // add new line to generated string for the test values.
                 @string.AppendLine();
@@ -196,41 +197,48 @@ namespace metering.core
                     {
 
                         // inform the developer about test register and start value.
-                        await Task.Run(() => IoC.Logger.Log($"Register: {IoC.TestDetails.Register}\tTest value: {testStartValue:F3} started", LogLevel.Informative));
+                        await Task.Run(() => IoC.Logger.Log($"Register: {IoC.TestDetails.Register}\tTest value: {testStartValue:F6} started", LogLevel.Informative));
 
                         // inform the user about test register and start value.
-                        IoC.Communication.Log = await Task.Run(() => $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} started");
+                        IoC.Communication.Log = await Task.Run(() => $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F6} started");
 
                         // send Omicron commands
                         await IoC.Task.Run(async () =>
                         {
-                            // send string commands to Omicron
-                            await IoC.Task.Run(() => IoC.SetOmicron.SendOmicronCommands(SignalName, testStartValue));
-
-                            // Turn On Omicron Analog Outputs per the user input
-                            await IoC.Task.Run(() => IoC.PowerOptions.TurnOnCMC());
-
                             // initialize Minimum Value List with the highest int32 to capture every minimum value
                             MinValues = Enumerable.Repeat(int.MaxValue, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
 
                             // initialize Maximum Value List with the lowest int32 to capture every maximum value
                             MaxValues = Enumerable.Repeat(int.MinValue, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
 
-                            // set timer to read modbus register per the user specified time.
-                            MdbusTimer = await Task.Run(() => 
-                                                new Timer(
-                                                    callback: IoC.Modbus.MeasurementIntervalCallback,
-                                                    state: IoC.TestDetails.Register,
-                                                    dueTime: TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)),
-                                                    period: TimeSpan.FromMilliseconds(Convert.ToDouble(IoC.TestDetails.MeasurementInterval)
-                                                    )));
+                            // send string commands to Omicron
+                            await IoC.Task.Run(() => IoC.SetOmicron.SendOmicronCommands(SignalName, testStartValue));
 
+                            // delay little bit Omicron CMC power up
+                            await Task.Delay(200);
+
+                            // Turn On Omicron Analog Outputs per the user input
+                            await IoC.Task.Run(() => IoC.PowerOptions.TurnOnCMC());
+
+                            // set timer to read modbus register per the user specified time.
+                            MdbusTimer =
+                                await Task.Run(() =>
+                                    new Timer(
+                                        // reads the user specified modbus register(s).
+                                        callback: IoC.Modbus.MeasurementIntervalCallback,  // IoC.Modbus.MeasurementIntervalCallback_New, // 
+                                        // pass the use specified modbus register(s) to callback.
+                                        state: IoC.TestDetails.Register,
+                                        // the time delay before modbus register(s) read start. 
+                                        dueTime: TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)),
+                                        // the interval between reading of the modbus register(s).
+                                        period: TimeSpan.FromMilliseconds(Convert.ToDouble(IoC.TestDetails.MeasurementInterval))));
+
+                            // cancel this task if cancellation requested
                         }, IoC.Commands.Token);
 
                         // Start reading the user specified Register
                         IoC.Task.Run(async () =>
                         {
-
                             // lock the task
                             await AsyncAwaiter.AwaitAsync(nameof(TestAsync), async () =>
                             {
@@ -243,15 +251,14 @@ namespace metering.core
                             MdbusTimer.Dispose();
 
                             // Time Test Value Register 1  Min Value 1 Max Value 1 Register 2  Min Value 2 Max Value 2 Register 3  Min Value 3 Max Value 3 ... etc.
-                            await Task.Run(() => @string.Append($"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{testStartValue:F3}"));
+                            await Task.Run(() => @string.Append(value: $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{testStartValue:F6}"));
 
                             // generate variable portion of header information based on Register entry.
                             foreach (int i in registerValues)
                             {
                                 // append new variable header information to previous string generated.
-                                await Task.Run(() => @string.Append($" ,{IoC.TestDetails.Register.ToString().Split(',').GetValue(i)} ,{MinValues[i]} , {MaxValues[i]}"));
+                                await Task.Run(() => @string.Append(value: $" ,{IoC.TestDetails.Register.ToString().Split(',').GetValue(i)} ,{MinValues[i]} , {MaxValues[i]}"));
                             }
-
 
                             // wait task to be over with
                         }, IoC.Commands.Token).Wait();
@@ -280,13 +287,14 @@ namespace metering.core
                         // reset message for the next test step
                         @string.Clear();
 
+                        // delay little bit for communication clearing up
+                        await Task.Delay(Convert.ToInt32(IoC.TestDetails.MeasurementInterval) * 2);
+
                     }
                     else
                     {
                         // if timer is initialized terminate reading modbus register because the user canceled the test.
                         MdbusTimer?.Dispose();
-                        // terminate reading modbus register because the user canceled the test.
-                        // MdbusTimer.Dispose();
 
                         // throw an error if we canceled already.
                         IoC.Commands.Token.ThrowIfCancellationRequested();
@@ -298,9 +306,6 @@ namespace metering.core
             }
             catch (OperationCanceledException ex)
             {
-                //// test completed
-                //IoC.CMCControl.IsTestRunning = false;
-
                 // inform the developer about error
                 IoC.Logger.Log($"Exception is : {ex.Message}");
 
