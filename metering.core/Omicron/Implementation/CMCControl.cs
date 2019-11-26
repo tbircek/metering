@@ -225,7 +225,7 @@ namespace metering.core
                                 await Task.Run(() =>
                                     new Timer(
                                         // reads the user specified modbus register(s).
-                                        callback: IoC.Modbus.MeasurementIntervalCallback,  // IoC.Modbus.MeasurementIntervalCallback_New, // 
+                                        callback: IoC.Modbus.MeasurementIntervalCallback,
                                         // pass the use specified modbus register(s) to callback.
                                         state: IoC.TestDetails.Register,
                                         // the time delay before modbus register(s) read start. 
