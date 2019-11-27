@@ -24,7 +24,7 @@ namespace metering.core
             IoC.CMCControl.CMEngine.DevScanForNew();
 
             // generate storage for the attached Omicron Test Sets
-            string deviceList = default(string);
+            string deviceList = default;
 
             // initialize extract parameters function
             ExtractParameters extract = new ExtractParameters();

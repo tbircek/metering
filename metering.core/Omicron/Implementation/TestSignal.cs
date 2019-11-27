@@ -18,11 +18,11 @@ namespace metering.core
         {
             // initialize Tuple variables with default values
             string SignalName = string.Empty;
-            double From = default(double);
-            double To = default(double);
-            double Delta = default(double);
-            double Phase = default(double);
-            double Frequency = default(double);
+            double From = default;
+            double To = default;
+            double Delta = default;
+            double Phase = default;
+            double Frequency = default;
             int Precision = default;
 
             foreach (AnalogSignalListItemViewModel signal in IoC.TestDetails.AnalogSignals)
@@ -37,7 +37,8 @@ namespace metering.core
                     Delta = Convert.ToDouble(signal.Delta);
                     Phase = Convert.ToDouble(signal.Phase);
                     Frequency = Convert.ToDouble(signal.Frequency);
-                    Precision = signal.From.Substring(signal.From.IndexOf(CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator), signal.From.Length - 1).Length;
+
+                    Precision = GetPrecision(signal.From);
 
                     // return properties of the ramping signal found
                     return (SignalName, From, To, Delta, Phase, Frequency, Precision);
@@ -45,7 +46,27 @@ namespace metering.core
             }
 
             // no ramping signal found
-            return (string.Empty, default(double), default(double), default(double), default(double), default(double), default);
+            return (string.Empty, default, default, default, default, default, default);
+        }
+
+        /// <summary>
+        /// Retrieves the length of a string after the current culture based decimal separator.
+        /// </summary>
+        /// <param name="valueToConvert">the string to calculate remaining length after the current culture based decimal separator.</param>
+        /// <returns>Returns length after the current culture based decimal separator.</returns>
+        private int GetPrecision(string valueToConvert)
+        {
+            // verify the string contains the current culture based decimal separator.
+            if (!valueToConvert.Contains(CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator))
+            { 
+                // doesn't contain the current culture based decimal separator.
+                return 0;
+            }
+            else
+            {
+                // return string length after the current culture based decimal separator.
+                return valueToConvert.Substring(valueToConvert.IndexOf(CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator) + 1).Length;
+            }
         }
     }
 }
