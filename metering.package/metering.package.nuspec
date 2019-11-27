@@ -11,8 +11,9 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-      Added a CancellationToken source with a timeout value of "Measurement Interval * 2" to automatically cancel unresponsive communication threads in Parallel.ForEach loop.
-      \nChange reporting of "From" and "To" values precision to "6" decimal points.\nUpdated to c# version 7.2.\nAdded more details to log.
+      Increased log values precision to "6" decimal points.
+      Updated language version to c# v7.2.
+      Decreased CancellationToken timeout value to "Measurement Interval" to prevent previous measurement's influence over the current measurements.
     </releaseNotes>
     <copyright>Copyright 2019 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric turgay bircek</tags>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace metering.core
     /// Generates necessary strings to control Omicron Test Set.
     /// </summary>
     public class StringCommands
-    {        
+    {
         #region Private Members
 
         #endregion
@@ -49,17 +50,27 @@ namespace metering.core
 
                         // send newly generated string command to Omicron Test Set
                         await IoC.Task.Run(() =>
-                            IoC.CMCControl.CMEngine.Exec(
-                                DevID: IoC.CMCControl.DeviceID,
-                                Command: stringBuilder.ToString()));
-
+                        {
+                            try
+                            {
+                                // execute the user values.
+                                IoC.CMCControl.CMEngine.Exec(
+                                   DevID: IoC.CMCControl.DeviceID,
+                                   Command: stringBuilder.ToString());
+                            }
+                            catch (COMException ex)
+                            {
+                                // inform the developer about error.
+                                IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
+                            }
+                        });
                     }
                 });
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
                 // inform the developer about error.
-                IoC.Logger.Log($"Exception: {err.Message}");
+                IoC.Logger.Log($"Exception: {ex.Message}");
             }
         }
 
@@ -79,7 +90,18 @@ namespace metering.core
                     if (!IoC.Commands.Token.IsCancellationRequested)
                     {
                         // pass received string command to Omicron Test set
-                        await IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand));
+                        await IoC.Task.Run(() =>
+                        {
+                            try
+                            {
+                                IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand);
+                            }
+                            catch (COMException ex)
+                            {
+                                // inform the developer about error.
+                                IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
+                            }
+                        });
                     }
                 });
             }
@@ -107,14 +129,14 @@ namespace metering.core
 
                     // check if the user canceling test
                     if (!IoC.Commands.Token.IsCancellationRequested)
-                     {
+                    {
                         // pass received string command to Omicron Test set
-                       response = await IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand));
-                     }
+                        response = await IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand));
+                    }
 
                     // return Omicron Test Set response
                     return response;
-                 });
+                });
             }
             catch (Exception err)
             {

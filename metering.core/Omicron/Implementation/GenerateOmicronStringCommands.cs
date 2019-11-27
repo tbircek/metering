@@ -29,7 +29,7 @@ namespace metering.core
         public void SendOmicronCommands(string testSignalName, double testStartValue)
         {
             // inform developer
-            IoC.Logger.Log($"{nameof(this.SendOmicronCommands)} started :  ramping signal: {testSignalName} -- test value: {testStartValue}", LogLevel.Informative);
+            IoC.Logger.Log($"{nameof(this.SendOmicronCommands)} started :  ramping signal: {testSignalName} -- test value: {testStartValue:F6}", LogLevel.Informative);
 
             foreach (AnalogSignalListItemViewModel analogSignal in IoC.TestDetails.AnalogSignals)
             {
