@@ -106,7 +106,7 @@ namespace metering.core
             {
 
                 // update test progress
-                int progressStep = default(int);
+                int progressStep = default;
 
                 // Wait StartDelayTime to start Modbus communication
                 IoC.Task.Run(async () =>
@@ -154,15 +154,6 @@ namespace metering.core
                     // return from this task.
                     return;
                 }
-
-                // create a TestResultLogger to generate a test report in .csv format.
-                var testResultLog = new TestResultLogger
-                    (
-                        // set file path and name
-                        filePath: Path.Combine(ResultsFolder, $"{IoC.TestDetails.Register}_{From:F6}-{To:F6}_{fileId}.csv"),
-                        // no need to save time
-                        logTime: false
-                    );
 
                 // generate fixed portion of header information for reporting.
                 StringBuilder @string = new StringBuilder("Time, Test Value");
@@ -248,7 +239,7 @@ namespace metering.core
                             });
 
                             // terminate reading modbus register because "Dwell Time" is over.
-                            MdbusTimer.Dispose();
+                            MdbusTimer?.Dispose();
 
                             // Time Test Value Register 1  Min Value 1 Max Value 1 Register 2  Min Value 2 Max Value 2 Register 3  Min Value 3 Max Value 3 ... etc.
                             await Task.Run(() => @string.Append(value: $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{testStartValue:F6}"));
@@ -264,7 +255,17 @@ namespace metering.core
                         }, IoC.Commands.Token).Wait();
 
                         // update test result report
-                        await Task.Run(() => testResultLog.Log(@string.ToString(), LogLevel.Informative));
+                        await IoC.Task.Run(() =>
+                        {
+                            // create a TestResultLogger to generate a test report in .csv format.
+                            new TestResultLogger
+                                 (
+                                     // set file path and name
+                                     filePath: Path.Combine(ResultsFolder, $"{IoC.TestDetails.Register}_{From:F6}-{To:F6}_{fileId}.csv"),
+                                     // no need to save time
+                                     logTime: false
+                                 ).Log(@string.ToString(), LogLevel.Informative);
+                        });
 
                         // increment progress bar strip on the "Button"
                         IoC.Commands.TestProgress = Convert.ToDouble(progressStep);
@@ -273,10 +274,10 @@ namespace metering.core
                         progressStep++;
 
                         // inform the developer about test register and start value.
-                        await Task.Run(() => IoC.Logger.Log($"Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} completed", LogLevel.Informative));
+                        await Task.Run(() => IoC.Logger.Log($"Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F6} completed", LogLevel.Informative));
 
                         // inform the user about test register and start value.
-                        IoC.Communication.Log = await Task.Run(() => $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F3} completed.");
+                        IoC.Communication.Log = await Task.Run(() => $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F6} completed.");
 
                         // inform the developer
                         await Task.Run(() => IoC.Logger.Log($"Test {progressStep} of {IoC.Commands.MaximumTestCount} completed", LogLevel.Informative));
