@@ -133,17 +133,20 @@ namespace metering
             // TODO: this code should handle multiple selection as well.
             else if (Equals(dlg.Tag, FileDialogOption.Open))
             {
-                // initialize a new TestDetailsViewModel
-                TestDetailsViewModel test = new TestDetailsViewModel();
-
                 // de-serialize a JSON file to a TestDetailsViewModel to show it the user 
                 using (StreamReader file = File.OpenText(dlg.FileName))
                 {
+                    // initialize a new TestDetailsViewModel
+                    TestDetailsViewModel test = new TestDetailsViewModel();
+
                     // initialize JsonSerializer to de-serialize directly from the file
                     JsonSerializer serializer = new JsonSerializer();
 
                     // convert a de-serialize json to TestDetailsViewModel
                     test = (TestDetailsViewModel)serializer.Deserialize(file, typeof(TestDetailsViewModel));
+
+                    // clear previous test values.
+                    IoC.TestDetails.AnalogSignals.Clear();
 
                     // Update values in the single instance of TestDetailsViewModel
                     // update AnalogSignals
@@ -169,8 +172,17 @@ namespace metering
 
                     // Show TestDetails page
                     IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
+
+                    // dispose serializer
+                    serializer = null;
+
+                    // dispose test
+                    test = null;
                 }
             }
+
+            // dispose dialog box
+            dlg = null;
         }
 
         #endregion
