@@ -81,6 +81,11 @@ namespace metering.core
         public static GenerateOmicronStringCommands SetOmicron => Get<GenerateOmicronStringCommands>();
 
         /// <summary>
+        /// A shortcut to access to <see cref="SettingsViewModel"/>
+        /// </summary>
+        public static SettingsViewModel SettingsViewModel => Get<SettingsViewModel>();
+
+        /// <summary>
         /// A shortcut to access to <see cref="ILogFactory"/>
         /// </summary>
         public static ILogFactory Logger => Get<ILogFactory>();
@@ -181,6 +186,9 @@ namespace metering.core
 
             // bind to a single instance of TestDetailsViewModel
             Kernel.Bind<TestDetailsViewModel>().ToConstant(new TestDetailsViewModel());
+
+            // bind to a single instance of SettingsViewModel
+            Kernel.Bind<SettingsViewModel>().ToConstant(new SettingsViewModel());
 
         }
 
