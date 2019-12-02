@@ -133,16 +133,16 @@ namespace metering
             // TODO: this code should handle multiple selection as well.
             else if (Equals(dlg.Tag, FileDialogOption.Open))
             {
-                // de-serialize a JSON file to a TestDetailsViewModel to show it the user 
+                // convert a JSON file to a TestDetailsViewModel to show it the user 
                 using (StreamReader file = File.OpenText(dlg.FileName))
                 {
                     // initialize a new TestDetailsViewModel
                     TestDetailsViewModel test = new TestDetailsViewModel();
 
-                    // initialize JsonSerializer to de-serialize directly from the file
+                    // initialize JsonSerializer
                     JsonSerializer serializer = new JsonSerializer();
 
-                    // convert a de-serialize json to TestDetailsViewModel
+                    // convert the JsonSerializer to TestDetailsViewModel
                     test = (TestDetailsViewModel)serializer.Deserialize(file, typeof(TestDetailsViewModel));
 
                     // clear previous test values.
@@ -151,6 +151,14 @@ namespace metering
                     // Update values in the single instance of TestDetailsViewModel
                     // update AnalogSignals
                     IoC.TestDetails.AnalogSignals = test.AnalogSignals;
+
+                    // Select Ramping Signal property
+                    // Ramping Signal property is Magnitude.
+                    IoC.TestDetails.IsMagnitude = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude));
+                    // Ramping Signal property is Phase.
+                    IoC.TestDetails.IsPhase = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase));
+                    // Ramping Signal property is Frequency.
+                    IoC.TestDetails.IsFrequency = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency));
 
                     // update Register
                     IoC.TestDetails.Register = test.Register;
@@ -173,7 +181,7 @@ namespace metering
                     // Show TestDetails page
                     IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
 
-                    // dispose serializer
+                    // dispose the JsonSerializer
                     serializer = null;
 
                     // dispose test

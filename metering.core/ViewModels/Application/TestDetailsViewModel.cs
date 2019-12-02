@@ -109,6 +109,21 @@ namespace metering.core
         public bool Selected { get; set; }
 
         /// <summary>
+        /// Indicates Ramping Signal property is Magnitude.
+        /// </summary>
+        public bool IsMagnitude { get; set; } = true;
+
+        /// <summary>
+        /// Indicates Ramping Signal property is Phase.
+        /// </summary>
+        public bool IsPhase { get; set; }
+
+        /// <summary>
+        /// Indicates Ramping Signal property is Frequency.
+        /// </summary>
+        public bool IsFrequency { get; set; }
+
+        /// <summary>
         /// Holds information about the signal parameter to ramp
         /// </summary>
         public string SelectedRampingSignal { get; set; } = "Magnitude";
@@ -186,16 +201,26 @@ namespace metering.core
             // convert command parameter to string
             SelectedRampingSignal = (string)parameter;
 
+            // True = selected signal is NOT ramping so text entry is enabled to the user inputs.
+            // False = selected signal is ramping hence text entry is disabled.
+            // Signal property is Magnitude.
+            bool magnitudeEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Magnitude)));
+            // Signal property is Phase.
+            bool phaseEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Phase)));
+            // Signal property is Frequency.
+            bool frequencyEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Frequency)));
+
             foreach (var item in AnalogSignals)
             {
-                // these fields work inversely.
+                // True = selected signal is NOT ramping so text entry is enabled to the user inputs.
+                // False = selected signal is ramping hence text entry is disabled.
                 // enable/disable Magnitude text field...
-                item.IsMagnitudeEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Magnitude)));
+                item.IsMagnitudeEnabled = magnitudeEnabled;
                 // enable/disable Phase text field...
-                item.IsPhaseEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Phase)));
+                item.IsPhaseEnabled = phaseEnabled;
                 // enable/disable Frequency text field...
-                item.IsFrequencyEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Frequency)));
-                
+                item.IsFrequencyEnabled = frequencyEnabled; 
+
                 // process radio button parameter
                 switch (SelectedRampingSignal)
                 {

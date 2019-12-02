@@ -44,7 +44,7 @@
             </Grid>
         </Border>
 
-        <!-- Register, Dwell Time, Start Delay Time, Measurement Interval and Start Measurement Delay-->
+        <!-- Ramping, Register, Dwell Time, Start Delay Time, Measurement Interval and Start Measurement Delay-->
         <Border
             Grid.Column="0" 
             BorderBrush="Black" 
@@ -102,7 +102,7 @@
                             Content="Magnitude"
                             FontSize="18"
                             VerticalContentAlignment="Center"
-                            IsChecked="True"
+                            IsChecked="{Binding IsMagnitude}"
                             Command="{Binding SelectRampingSignalCommand}" 
                             CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
 
@@ -113,6 +113,7 @@
                             Content="Phase"
                             FontSize="18"
                             VerticalContentAlignment="Center"
+                            IsChecked="{Binding IsPhase}"
                             Command="{Binding SelectRampingSignalCommand}" 
                             CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
 
@@ -123,6 +124,7 @@
                             Content="Frequency"
                             FontSize="18"
                             VerticalContentAlignment="Center"
+                            IsChecked="{Binding IsFrequency}"
                             Command="{Binding SelectRampingSignalCommand}" 
                             CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
 
