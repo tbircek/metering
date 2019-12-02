@@ -99,6 +99,10 @@ namespace metering.core
         /// </summary>
         public ICommand DeleteSelectedTestCommand { get; set; }
 
+        /// <summary>
+        /// The command to handle Omicron Hardware Configuration settings view
+        /// </summary>
+        public ICommand OmicronHardwareConfigurationCommand { get; set; }
         #endregion
 
         #region Constructor
@@ -127,6 +131,9 @@ namespace metering.core
 
             // load the test step(s) from the user specified location.
             LoadTestsCommand = new RelayCommand(async () => await IoC.Commander.ShowFileDialogAsync(FileDialogOption.Open));
+
+            // show the Omicron Hardware Configuration Settings page.
+            OmicronHardwareConfigurationCommand = new RelayCommand(async () => await IoC.SettingsViewModel.HardwareConfiguration());
 
             //// remove the test step(s) from the test strip.
             //DeleteSelectedTestCommand = new RelayCommand(async () => await DeleteSelectedTestAsync());
