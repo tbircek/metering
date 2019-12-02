@@ -46,7 +46,7 @@ namespace metering.core
             IoC.CMCControl.CMEngine.LogNew(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\cmc.log");
 
             // set log level for Omicron Test Set Logging
-            IoC.CMCControl.CMEngine.LogSetLevel((short)CMCControl.OmicronLoggingLevels.Level3);
+            IoC.CMCControl.CMEngine.LogSetLevel((short)CMCControl.OmicronLoggingLevels.Level1);
 
             // inform the developer about search results.
             IoC.Logger.Log($"Found device: {deviceList}",LogLevel.Informative);
