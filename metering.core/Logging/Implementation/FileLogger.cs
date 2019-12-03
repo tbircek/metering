@@ -54,7 +54,7 @@ namespace metering.core
             var timeLogString = LogTime ? $"{currentTime}": string.Empty;
 
             // write the message to the log file
-            IoC.File.WriteTextToFileAsync($"[{timeLogString}] {message}" + Environment.NewLine, FilePath, append: true, useParentFolder: true, newFolderName: "log");
+            IoC.File.WriteTextToFileAsync($"[{timeLogString}] {message}" + Environment.NewLine, FilePath, append: true, useParentFolder: true, newFolderName: "logs");
         }
 
         #endregion

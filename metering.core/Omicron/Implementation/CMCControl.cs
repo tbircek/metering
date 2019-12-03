@@ -78,6 +78,11 @@ namespace metering.core
         public int DeviceID { get; set; }
 
         /// <summary>
+        /// Associated Omicron Test Set Information. Assigned by Omicron.
+        /// </summary>
+        public string DeviceInfo { get; set; }
+
+        /// <summary>
         /// Omicron Test Set debugging log levels.
         /// </summary>
         public enum OmicronLoggingLevels : short { None, Level1, Level2, Level3, };
@@ -92,6 +97,11 @@ namespace metering.core
         /// </summary>
         public string ResultsFolder => Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "metering\\results"));
 
+        /// <summary>
+        /// Holds the logs folder location.
+        /// Omicron logs and app logs.
+        /// </summary>
+        public string LogsFolder => Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "metering\\logs"));
         #endregion
 
         #region Public Methods
