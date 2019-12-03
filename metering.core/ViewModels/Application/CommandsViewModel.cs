@@ -133,7 +133,7 @@ namespace metering.core
             LoadTestsCommand = new RelayCommand(async () => await IoC.Commander.ShowFileDialogAsync(FileDialogOption.Open));
 
             // show the Omicron Hardware Configuration Settings page.
-            OmicronHardwareConfigurationCommand = new RelayCommand(async () => await IoC.SettingsViewModel.HardwareConfiguration());
+            OmicronHardwareConfigurationCommand = new RelayCommand(async () => await IoC.Settings.HardwareConfiguration());
 
             //// remove the test step(s) from the test strip.
             //DeleteSelectedTestCommand = new RelayCommand(async () => await DeleteSelectedTestAsync());

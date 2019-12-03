@@ -81,9 +81,9 @@ namespace metering.core
         public static GenerateOmicronStringCommands SetOmicron => Get<GenerateOmicronStringCommands>();
 
         /// <summary>
-        /// A shortcut to access to <see cref="SettingsViewModel"/>
+        /// A shortcut to access to <see cref="Settings"/>
         /// </summary>
-        public static SettingsViewModel SettingsViewModel => Get<SettingsViewModel>();
+        public static SettingsViewModel Settings => Get<SettingsViewModel>();
 
         /// <summary>
         /// A shortcut to access to <see cref="ILogFactory"/>

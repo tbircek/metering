@@ -14,5 +14,10 @@
         /// Test Details page
         /// </summary>
         TestDetails = 1,
+
+        /// <summary>
+        /// Settings page
+        /// </summary>
+        Settings = 2,
     }
 }
