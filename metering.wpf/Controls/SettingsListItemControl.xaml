@@ -1,0 +1,46 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
+    xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:core="clr-namespace:metering.core;assembly=metering.core"
+    xmlns:local="clr-namespace:metering"
+    x:Class="metering.SettingsListItemControl"
+    mc:Ignorable="d"
+    FontSize="20">
+
+    <Grid d:DataContext="{x:Static core:SettingsListItemDesignModel.Instance}" 
+          Background="Transparent"
+          ClipToBounds="True">
+
+        <Grid.ColumnDefinitions>
+            <!-- UI String -->
+            <ColumnDefinition Width="350"/>
+           <!-- Connection Image -->
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- UI String -->
+        <TextBox Grid.Column="0"                      
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
+                 Padding="2 0 2 0"     
+                 Margin="5 10 5 10" 
+                 HorizontalContentAlignment="Center" 
+                 Text="{Binding UIString}"
+                 ToolTip="Omicron analog signal output details"/>
+        
+        <!-- Connection Image -->
+        <TextBox Grid.Column="1"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 TabIndex="0" 
+                 Padding="2 0 2 0"     
+                 Margin="5 10 5 10"             
+                 HorizontalContentAlignment="Center" 
+                 Text="{Binding Mode}"
+                 ToolTip="The omicron analog signal connection diagram. There will be an image here.">
+
+        </TextBox>
+
+    </Grid>
+</UserControl>

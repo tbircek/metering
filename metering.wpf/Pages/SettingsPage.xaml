@@ -10,5 +10,22 @@
     x:Class="metering.SettingsViewPage"
     mc:Ignorable="d">
 
-    
+    <!-- Omicron Analog Outputs signal values -->
+    <Border
+            Grid.Column="1" 
+            BorderBrush="Black" 
+            BorderThickness="1" 
+            ClipToBounds="True">
+
+        <Grid Margin="5">
+
+            <!-- Output signals details list -->
+            <local:SettingsListControl
+                    ClipToBounds="True"
+                    d:DataContext="{x:Static core:SettingsDesignModel.Instance}"
+                    Padding="3">
+            </local:SettingsListControl>
+        </Grid>
+    </Border>
+
 </local:BasePage>
