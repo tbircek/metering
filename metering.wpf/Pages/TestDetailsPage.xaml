@@ -9,7 +9,8 @@
     xmlns:local="clr-namespace:metering"
     xmlns:core="clr-namespace:metering.core;assembly=metering.core"
     mc:Ignorable="d" 
-    Background="Transparent">
+    Background="Transparent"
+    Foreground="{StaticResource SecondaryAccentForegroundBrush}">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -44,7 +45,7 @@
             </Grid>
         </Border>
 
-        <!-- Register, Dwell Time, Start Delay Time, Measurement Interval and Start Measurement Delay-->
+        <!-- Ramping, Register, Dwell Time, Start Delay Time, Measurement Interval and Start Measurement Delay-->
         <Border
             Grid.Column="0" 
             BorderBrush="Black" 
@@ -98,31 +99,30 @@
                         <!-- Magnitude Ramping Selection -->
                         <RadioButton
                             Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
                             Content="Magnitude"
                             FontSize="18"
                             VerticalContentAlignment="Center"
-                            IsChecked="True"
+                            IsChecked="{Binding IsMagnitude}"
                             Command="{Binding SelectRampingSignalCommand}" 
                             CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
 
                         <!-- Phase Ramping Selection -->
                         <RadioButton
                             Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
                             Content="Phase"
                             FontSize="18"
                             VerticalContentAlignment="Center"
+                            IsChecked="{Binding IsPhase}"
                             Command="{Binding SelectRampingSignalCommand}" 
                             CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
 
                         <!-- Frequency Ramping Selection -->
                         <RadioButton
                             Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
                             Content="Frequency"
                             FontSize="18"
                             VerticalContentAlignment="Center"
+                            IsChecked="{Binding IsFrequency}"
                             Command="{Binding SelectRampingSignalCommand}" 
                             CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
 

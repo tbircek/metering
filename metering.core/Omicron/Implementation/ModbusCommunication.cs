@@ -19,25 +19,43 @@ namespace metering.core
         /// Function to return a Tuple that holds <see cref="MinTestValue"/> and <see cref="MaxTestValue"/>
         /// </summary>
         /// <returns>Returns a Tuple with ramping signal properties</returns>       
-        private (int MaxResponse, int MinResponse) GetServerResponseAsync(int serverResponse, int Index)
+        private (int MaxResponse, int MinResponse, double CurrentAverage, int Counter) GetServerResponseAsync(int serverResponse, int Index)
         {
             try
             {
                 // load Tuple variables with default or previously stored values
                 int MinResponse = (int)IoC.CMCControl.MinValues.GetValue(Index);
                 int MaxResponse = (int)IoC.CMCControl.MaxValues.GetValue(Index);
+                double CurrentAverage = (double)IoC.CMCControl.Averages.GetValue(Index);
+                int Counter = (int)IoC.CMCControl.SuccessCounters.GetValue(Index);
 
-                // update minimum value with new min value or not
-                MinResponse = Math.Min(MinResponse, serverResponse);
+                // server response must be between 0 and 65535
+                if (ushort.MinValue <= Math.Abs(serverResponse) && ushort.MaxValue >= Math.Abs(serverResponse))
+                {
+                    // increment the counter
+                    Interlocked.Increment(ref Counter);
 
-                // update maximum value with new max value or not
-                MaxResponse = Math.Max(MaxResponse, serverResponse);
+                    // retrieve totals for the register
+                    int totals = (int)IoC.CMCControl.Totals.GetValue(Index);
+
+                    // update minimum value with new min value or not
+                    MinResponse = Math.Min(MinResponse, serverResponse);
+
+                    // update maximum value with new max value or not
+                    MaxResponse = Math.Max(MaxResponse, serverResponse);
+
+                    // Calculate server response average
+                    CurrentAverage = (serverResponse + (double)totals) / Counter;
+
+                    // update totals
+                    IoC.CMCControl.Totals.SetValue(totals + serverResponse, Index);
+                }
 
                 //// inform the developer.
-                //IoC.Logger.Log($"{nameof(GetServerResponseAsync)} -- MinResponse: {MinResponse} -- MaxResponse: {MaxResponse}");
+                //IoC.Logger.Log($"{nameof(GetServerResponseAsync)} Reads: {serverResponse} -- MinResponse: {MinResponse} -- MaxResponse: {MaxResponse} --- AveResponse: {AveResponse} --- SuccessfulResponse: {SuccessfulResponse}");
 
                 // return server response
-                return (MaxResponse, MinResponse);
+                return (MaxResponse, MinResponse, CurrentAverage, Counter);
             }
             catch (Exception ex)
             {
@@ -48,7 +66,7 @@ namespace metering.core
                 IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.";
 
                 // return no server response
-                return (default(int), default(int));
+                return (default, default, default, default);
             }
         }
         #endregion
@@ -116,7 +134,7 @@ namespace metering.core
                                             {
 
                                                 // save server response information as a Tuple
-                                                (int MaxRegisterValue, int MinRegisterValue) = GetServerResponseAsync(serverResponse[0], i);
+                                                (int MaxRegisterValue, int MinRegisterValue, double AverageRegisterValue, int SuccessCounter) = GetServerResponseAsync(serverResponse[0], i);
 
                                                 // assign MaxTestValue
                                                 IoC.CMCControl.MaxValues.SetValue(MaxRegisterValue, i);
@@ -124,8 +142,14 @@ namespace metering.core
                                                 // assign MinTestValue
                                                 IoC.CMCControl.MinValues.SetValue(MinRegisterValue, i);
 
-                                                //// inform the developer about register reading
-                                                //IoC.Logger.Log($"{DateTime.Now.ToLocalTime():MM/dd/Ty HH:mm:ss.fff}: register: {register} -- maxResponse : {MaxRegisterValue} -- minResponse : {MinRegisterValue}");
+                                                // assign AverageRegisterValue
+                                                IoC.CMCControl.Averages.SetValue(AverageRegisterValue, i);
+
+                                                // update counter.
+                                                IoC.CMCControl.SuccessCounters.SetValue(SuccessCounter, i);
+
+                                                // inform the developer about register reading
+                                                IoC.Logger.Log($"register: {register} \tminResponse : {MinRegisterValue} \tmaxResponse : {MaxRegisterValue} \taverage: {AverageRegisterValue} \tsuccess: {SuccessCounter}");
                                             }
                                             else
                                             {
@@ -154,7 +178,7 @@ namespace metering.core
                 catch (OperationCanceledException ex)
                 {
                     // inform the developer about error
-                    IoC.Logger.Log($"Exception is : {ex.Message}");
+                    IoC.Logger.Log($"OperationCanceledException is : {ex.Message}");
 
                     // update the user about the error.
                     IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Operation canceled: {ex.Message}.";
@@ -165,7 +189,7 @@ namespace metering.core
                 catch (System.IO.IOException ex)
                 {
                     // inform the developer about error
-                    IoC.Logger.Log($"Exception is : {ex.Message}");
+                    IoC.Logger.Log($"IOException is : {ex.Message}");
 
                     // update the user about the error.
                     IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.";

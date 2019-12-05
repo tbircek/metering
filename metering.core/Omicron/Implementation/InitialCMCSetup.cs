@@ -63,12 +63,7 @@ namespace metering.core
         {
           return IoC.StringCommands.SendStringCommandWithResponseAsync(omicronCommand: CommandToSend).Result;
         }
-
-        private void IdentifyTheCMC()
-        {
-
-        }
-
+        
         #endregion
 
         #region Public Methods

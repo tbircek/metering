@@ -11,9 +11,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>
-      Increased log values precision to "6" decimal points.
-      Updated language version to c# v7.2.
-      Decreased CancellationToken timeout value to "Measurement Interval" to prevent previous measurement's influence over the current measurements.
+      Improves design time view to reflect the new settings page.
+      Adds first wiring diagram to the page.
+      Adds "average" and "successful reading" values to the test report.
+      Adds new Omicron Hardware Outputs view, models, controls and page.
+      Changes log folder name to logs.
+      Fixes Loaded file always shows "Ramping" property as "Magnitude" only issue.
     </releaseNotes>
     <copyright>Copyright 2019 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric turgay bircek</tags>
