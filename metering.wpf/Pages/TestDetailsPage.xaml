@@ -9,7 +9,8 @@
     xmlns:local="clr-namespace:metering"
     xmlns:core="clr-namespace:metering.core;assembly=metering.core"
     mc:Ignorable="d" 
-    Background="Transparent">
+    Background="Transparent"
+    Foreground="{StaticResource SecondaryAccentForegroundBrush}">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -98,7 +99,6 @@
                         <!-- Magnitude Ramping Selection -->
                         <RadioButton
                             Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
                             Content="Magnitude"
                             FontSize="18"
                             VerticalContentAlignment="Center"
@@ -109,7 +109,6 @@
                         <!-- Phase Ramping Selection -->
                         <RadioButton
                             Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
                             Content="Phase"
                             FontSize="18"
                             VerticalContentAlignment="Center"
@@ -120,7 +119,6 @@
                         <!-- Frequency Ramping Selection -->
                         <RadioButton
                             Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                            Foreground="{StaticResource SecondaryAccentForegroundBrush}"
                             Content="Frequency"
                             FontSize="18"
                             VerticalContentAlignment="Center"

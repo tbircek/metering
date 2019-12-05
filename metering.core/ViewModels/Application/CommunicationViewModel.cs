@@ -12,7 +12,7 @@ namespace metering.core
     /// </summary>
     public class CommunicationViewModel : BaseViewModel
     {
-        // TODO: use dependency injection for EasyModbus library
+        // TODO: use a wrapper class for EasyModbus library
 
         #region Private Variables
 

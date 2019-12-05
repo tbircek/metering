@@ -241,11 +241,20 @@
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="AttachedProperties\TextAttachedProperties.cs" />
     <Compile Include="AttachedProperties\NoFrameHistoryProperty.cs" />
+    <Compile Include="Controls\SettingsListItemControl.xaml.cs">
+      <DependentUpon>SettingsListItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SettingsListControl.xaml.cs">
+      <DependentUpon>SettingsListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AnalogSignalListControl.xaml.cs">
       <DependentUpon>AnalogSignalListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TestHost.xaml.cs">
       <DependentUpon>TestHost.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ValueConverters\BooleanInvertConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
@@ -273,6 +282,14 @@
     <Compile Include="IoC\SaveNew.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
+    <Page Include="Controls\SettingsListItemControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\SettingsListControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\AnalogSignalListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -293,6 +310,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\CommandsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -354,6 +375,9 @@
   <ItemGroup>
     <Resource Include="Images\Icons\metering.ico" />
     <Resource Include="Images\Icons\metering.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\6X12.5, 70VA.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

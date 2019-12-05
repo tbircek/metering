@@ -11,9 +11,44 @@
     mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical">
+        <!-- Settings commands -->
+        <Border BorderBrush="Black"
+                BorderThickness="1 1 1 2">
+            <Border.Background>
+                <ImageBrush/>
+            </Border.Background>
+
+            <!-- Omicron Hardware Configuration Button-->
+            <!-- visible in every page -->
+            <Button Margin="10 20 10 5" 
+                Padding="0"
+                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                Cursor="Hand"
+                TabIndex="9"
+                Background="Transparent"
+                Command="{Binding OmicronHardwareConfigurationCommand}"
+                ToolTip="Omicron Hardware Configuration">
+
+                <!-- icon on the button-->
+                <mD:PackIcon Padding="5"
+                             Height="Auto" 
+                             Width="Auto"
+                             Foreground="{StaticResource SecondaryAccentForegroundBrush}">
+
+                    <mD:PackIcon.Style>
+                        <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
+                            <Setter Property="Kind" Value="Settings"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <!--<Setter Property="Foreground" Value="Green"/>-->
+                        </Style>
+                    </mD:PackIcon.Style>
+                </mD:PackIcon>
+            </Button>
+        </Border>
+
         <!-- Test operation commands -->
         <Border BorderBrush="Black"
-                BorderThickness="1">
+                BorderThickness="1 1 1 2">
             <!-- Test operation commands holder -->
             <StackPanel Orientation="Vertical">
                 <!-- Start Test Button -->
@@ -129,11 +164,11 @@
                 </Button>
             </StackPanel>
         </Border>
-        
+
         <!-- File operation commands -->
         <Border BorderBrush="Black"
                 BorderThickness="1 1 1 0">
-            
+
             <!-- File operation commands holder -->
             <StackPanel Orientation="Vertical">
                 <!-- Save Test Command Button -->

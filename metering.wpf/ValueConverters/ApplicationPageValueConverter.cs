@@ -15,14 +15,17 @@ namespace metering
             // Find the appropriate page
             switch ((ApplicationPage)value)
             {
-                //case ApplicationPage.MainPage:
-                //    return new 
-
+                // nominal values page
                 case ApplicationPage.NominalValues:
                     return new NominalValuesPage();
 
+                // test details page
                 case ApplicationPage.TestDetails:
-                    return new TestDetailsPage(); // parameter as TestDetailsViewModel);
+                    return new TestDetailsPage();
+
+                // settings page
+                case ApplicationPage.Settings:
+                    return new SettingsViewPage(); 
 
                 default:
                     Debugger.Break();
