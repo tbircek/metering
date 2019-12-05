@@ -10,22 +10,53 @@
     x:Class="metering.SettingsViewPage"
     mc:Ignorable="d">
 
-    <!-- Omicron Analog Outputs signal values -->
-    <Border
-            Grid.Column="1" 
-            BorderBrush="Black" 
-            BorderThickness="1" 
-            ClipToBounds="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <!-- Outputs -->
+            <ColumnDefinition Width="Auto"/>
+            <!-- Diagrams -->
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <Grid Margin="5">
+        <Grid.RowDefinitions>
+             <!--Voltage Outputs--> 
+            <RowDefinition Height="*"/>
+             <!--Current Outputs--> 
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+         <!--Omicron Analog Outputs signal values--> 
+        <Border Grid.Column="0"
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                ClipToBounds="True">
 
-            <!-- Output signals details list -->
-            <local:SettingsListControl
+            <mD:Card Background="Transparent"
+                     Foreground="{StaticResource SecondaryAccentForegroundBrush}">
+                <!--Output signals details list-->
+                <local:SettingsListControl
                     ClipToBounds="True"
                     d:DataContext="{x:Static core:SettingsDesignModel.Instance}"
                     Padding="3">
-            </local:SettingsListControl>
-        </Grid>
-    </Border>
+                </local:SettingsListControl>
+            </mD:Card>
+            
+        </Border>
+        
+        <!-- Connection Diagrams -->
+        <Border Grid.Column="1"
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                ClipToBounds="True">
+
+            <mD:Card Width="300"
+                     ClipToBounds="True"
+                     Background="Transparent">                
+                <Image Source="../Images/Omicron/6X12.5, 70VA.PNG"
+                       Stretch="UniformToFill" />
+            </mD:Card>
+        </Border>
+    </Grid>
+
 
 </local:BasePage>
