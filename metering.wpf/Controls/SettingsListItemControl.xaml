@@ -8,7 +8,8 @@
     xmlns:local="clr-namespace:metering"
     x:Class="metering.SettingsListItemControl"
     mc:Ignorable="d"
-    FontSize="20">
+    FontSize="20"
+    Foreground="{StaticResource SecondaryAccentForegroundBrush}">
 
     <Grid d:DataContext="{x:Static core:SettingsListItemDesignModel.Instance}" 
           Background="Transparent"
@@ -22,13 +23,14 @@
         </Grid.ColumnDefinitions>
 
         <!-- UI String -->
-        <TextBox Grid.Column="0"                      
-                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"  
-                 Padding="2 0 2 0"     
-                 Margin="5 10 5 10" 
-                 HorizontalContentAlignment="Center" 
-                 Text="{Binding UIString}"
-                 ToolTip="Omicron analog signal output details"/>
+        <RadioButton Grid.Column="0" 
+                     Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
+                     GroupName="voltage"
+                     Padding="2 0 2 0"     
+                     Margin="5 10 5 10" 
+                     HorizontalContentAlignment="Center" 
+                     Content="{Binding UIString}"
+                     ToolTip="Omicron analog signal output details"/>
         
         <!-- Connection Image -->
         <TextBox Grid.Column="1"

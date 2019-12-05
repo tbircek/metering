@@ -34,6 +34,16 @@ namespace metering.core
         /// Omicron Analog Output Signals.
         /// </summary>
         public ObservableCollection<SettingsListItemViewModel> OmicronOutputSignals { get; set; }
+        
+        /// <summary>
+        /// Omicron Voltage Output Signals.
+        /// </summary>
+        public ObservableCollection<SettingsListItemViewModel> OmicronVoltageOutputs { get; set; }
+
+        /// <summary>
+        /// Omicron Current Output Signals.
+        /// </summary>
+        public ObservableCollection<SettingsListItemViewModel> OmicronCurrentOutputs { get; set; }
 
         #endregion
 
