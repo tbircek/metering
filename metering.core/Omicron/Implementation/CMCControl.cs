@@ -68,6 +68,21 @@ namespace metering.core
         public int[] MaxValues { get; set; }
 
         /// <summary>
+        /// Holds total value for test register.
+        /// </summary>
+        public int[] Totals { get; set; }
+
+        /// <summary>
+        /// Holds average value for test register.
+        /// </summary>
+        public double[] Averages { get; set; }
+
+        /// <summary>
+        /// Holds successful reading number of the test register.
+        /// </summary>
+        public int[] SuccessCounters { get; set; }
+
+        /// <summary>
         /// Hold progress information per test register.
         /// </summary>
         public double Progress { get; set; }
@@ -174,7 +189,7 @@ namespace metering.core
                 foreach (int i in registerValues)
                 {
                     // append new variable header information to previous string generated.
-                    @string.Append($" ,Register {i + 1}, Minimum Value {i + 1}, Maximum Value {i + 1}");
+                    @string.Append($" ,Register {i + 1}, Minimum Value {i + 1}, Maximum Value {i + 1}, Average Value {i + 1}, Good Reading Value {i + 1}");
                 }
 
                 // add new line to generated string for the test values.
@@ -211,6 +226,15 @@ namespace metering.core
 
                             // initialize Maximum Value List with the lowest int32 to capture every maximum value
                             MaxValues = Enumerable.Repeat(int.MinValue, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
+
+                            // initialize totals with 0.
+                            Totals = Enumerable.Repeat(0, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
+
+                            // initialize average with 0.
+                            Averages = Enumerable.Repeat(0.0, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
+
+                            // initial successful reading with 0.
+                            SuccessCounters = Enumerable.Repeat(0, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
 
                             // send string commands to Omicron
                             await IoC.Task.Run(() => IoC.SetOmicron.SendOmicronCommands(SignalName, testStartValue));
@@ -258,7 +282,7 @@ namespace metering.core
                             foreach (int i in registerValues)
                             {
                                 // append new variable header information to previous string generated.
-                                await Task.Run(() => @string.Append(value: $" ,{IoC.TestDetails.Register.ToString().Split(',').GetValue(i)} ,{MinValues[i]} , {MaxValues[i]}"));
+                                await Task.Run(() => @string.Append(value: $" ,{IoC.TestDetails.Register.ToString().Split(',').GetValue(i)} ,{MinValues[i]:F6} , {MaxValues[i]:F6}, {Averages[i]:F6}, {SuccessCounters[i]}"));
                             }
 
                             // wait task to be over with
@@ -298,7 +322,7 @@ namespace metering.core
                         // reset message for the next test step
                         @string.Clear();
 
-                        // delay little bit for communication clearing up
+                        // delay little bit for communication to clear up
                         await Task.Delay(Convert.ToInt32(IoC.TestDetails.MeasurementInterval) * 2);
 
                     }
