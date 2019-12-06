@@ -10,6 +10,10 @@ namespace metering.core
     {
         #region Private Properties
 
+        /// <summary>
+        /// holder for the mode
+        /// </summary>
+        private string mode;
         #endregion
 
         #region Public Properties
@@ -28,7 +32,7 @@ namespace metering.core
         /// a detailed text reference to Omicron Hardware Configuration available to the specific
         /// Omicron Test Set. ex: "3x300V, 85VA @ 85V, 1Arms"
         /// </summary>
-        public string UIString { get; set; } = string.Empty;
+        public string WiringDiagramString { get; set; } = string.Empty;
 
         /// <summary>
         /// It encodes the way the different outputs of the physical
@@ -36,8 +40,28 @@ namespace metering.core
         /// configuration’s characteristics. This value would decide which diagram to show to the user.
         /// Value of type string. 
         /// </summary>
-        public string Mode { get; set; } = string.Empty;
+        public string Mode
+        {
+            get
+            {
+                // return wiring diagram location and file name.
+                return $"../Images/Omicron/{mode}.png";
+            }
+            set
+            {
+                // if new selection is different than previous
+                if (!Equals(value, mode))
+                {
+                    // update the old value.
+                    mode = value;
+                }
+            }
+        }
 
+        /// <summary>
+        /// Holds radio button group names
+        /// </summary>
+        public string GroupName { get; set; }
         #endregion
 
         #region Public Commands

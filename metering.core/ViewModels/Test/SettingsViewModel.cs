@@ -30,10 +30,10 @@ namespace metering.core
         /// </summary>
         public bool Selected { get; set; }
 
-        /// <summary>
-        /// Omicron Analog Output Signals.
-        /// </summary>
-        public ObservableCollection<SettingsListItemViewModel> OmicronOutputSignals { get; set; }
+        ///// <summary>
+        ///// Omicron Analog Output Signals.
+        ///// </summary>
+        //public ObservableCollection<SettingsListItemViewModel> OmicronOutputSignals { get; set; }
         
         /// <summary>
         /// Omicron Voltage Output Signals.
@@ -83,16 +83,20 @@ namespace metering.core
                 // find cmc
                 if (await IoC.Task.Run(() => IoC.FindCMC.Find()))
                 {
-
+                    // let log start
                     await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(HardwareConfiguration)} started."));
-
+                    // update device info
                     await IoC.Task.Run(() => IoC.Logger.Log($"Following device associated: {IoC.CMCControl.DeviceInfo}."));
 
+                    // save current page so we can return to it.
                     OldApplicationPage = IoC.Application.CurrentPage;
-
+                    // save current view model so we can return to it.
                     OldViewModel = IoC.Application.CurrentPageViewModel;
 
-                    IoC.Settings.OmicronOutputSignals = await GetOmicronHardwareConfigurations();
+                    // retrieve voltage capabilities.
+                    IoC.Settings.OmicronVoltageOutputs = await GetOmicronHardwareConfigurations("voltage");
+                    // retrieve current capabilities.
+                    IoC.Settings.OmicronCurrentOutputs = await GetOmicronHardwareConfigurations("current");
 
                     // Show TestDetails page
                     IoC.Application.GoToPage(ApplicationPage.Settings, IoC.Settings);
@@ -103,7 +107,7 @@ namespace metering.core
 
         #region Private Methods
 
-        private async Task<ObservableCollection<SettingsListItemViewModel>> GetOmicronHardwareConfigurations()
+        private async Task<ObservableCollection<SettingsListItemViewModel>> GetOmicronHardwareConfigurations(string amplifierType)
         {
             // initialize extract parameters function
             ExtractParameters extract = new ExtractParameters();
@@ -125,44 +129,64 @@ namespace metering.core
             {
                 // Voltage response
                 // 1,11,3,3.000000e+02,5.000000e+01,7.500000e+01,6.600000e-01,zero,13,amp_no,1,amp_no,5;
+                // Current response
+                // 1,16,3,1.250000e+01,7.000000e+01,7.500000e+00,1.000000e+01,zero,40,amp_no,2,amp_no,6;
 
                 // storage for available Omicron Hardware Configuration
                 SettingsListItemViewModel outputConfiguration = new SettingsListItemViewModel();
 
                 // two options available. either voltage or current.
-                string amplifierType = string.Empty;
+                string amplifierInitial = string.Empty;
 
                 // split up the omicron response.
                 string[] responses = (await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandWithResponseAsync(omicronCommand: string.Format(OmicronStringCmd.amp_cfg_0, i)).Result)).Split(separator: delimiterStrings, options: StringSplitOptions.RemoveEmptyEntries);
 
-                // decide the amplifier type.
-                if (Equals("1", responses.GetValue(responses.Length - 1)) || Equals("5", responses.GetValue(responses.Length - 1)))
+                switch (amplifierType)
                 {
-                    // amplifier type is voltage
-                    amplifierType = "V";
-                }
-                else
-                {
-                    // amplifier type is current
-                    amplifierType = "A";
-                }
-                // Current response
-                // 1,16,3,1.250000e+01,7.000000e+01,7.500000e+00,1.000000e+01,zero,40,amp_no,2,amp_no,6;
+                    case "voltage":
+                        // pick correct the amplifier type.
+                        if (!Equals("1", responses.GetValue(responses.Length - 1)) && !Equals("5", responses.GetValue(responses.Length - 1)))
+                        {
+                            continue;
+                        }
 
+                        // amplifier type is voltage
+                        amplifierInitial = "V";
+
+                        break;
+                    case "current":
+                        // pick correct the amplifier type.
+                        if (!Equals("2", responses.GetValue(responses.Length - 1)) && !Equals("6", responses.GetValue(responses.Length - 1)))
+                        {
+                            continue;
+                        }
+
+                        // amplifier type is voltage
+                        amplifierInitial = "A";
+                        break;
+                    default:
+                        IoC.Logger.Log($"Omicron amplifier {responses.GetValue(responses.Length - 1)}is not supported");
+                        continue;
+                }
+                
+                // add configuration id
                 outputConfiguration.ConfigID = Convert.ToInt16(responses[1]);
+                // add file name
                 outputConfiguration.Mode = $"{responses[7]}{responses[8]}";
 
                 // outputConfiguration.
 
                 // 3x300V, 
-                string magnitudeString = $"{responses[2]}x{Convert.ToDouble(responses[3], CultureInfo.CurrentCulture)}{amplifierType}, ";
+                string magnitudeString = $"{responses[2]}x{Convert.ToDouble(responses[3], CultureInfo.CurrentCulture)}{amplifierInitial}, ";
                 // 85VA @ 85V,
-                string vaString = $"{Convert.ToDouble(responses[4], CultureInfo.CurrentCulture)}VA @ {Convert.ToDouble(responses[5], CultureInfo.CurrentCulture)}{amplifierType}, ";
+                string vaString = $"{Convert.ToDouble(responses[4], CultureInfo.CurrentCulture)}VA @ {Convert.ToDouble(responses[5], CultureInfo.CurrentCulture)}{amplifierInitial}, ";
                 // 3x300V, 85VA @ 85V, 1Arms
-                outputConfiguration.UIString = $"{magnitudeString}{vaString}{Convert.ToDouble(responses[6], CultureInfo.CurrentCulture)}{amplifierType}rms";
+                outputConfiguration.WiringDiagramString = $"{magnitudeString}{vaString}{Convert.ToDouble(responses[6], CultureInfo.CurrentCulture)}{amplifierInitial}rms";
+                // add group name for the radio buttons
+                outputConfiguration.GroupName = amplifierInitial;
 
                 // construct the string.
-                await IoC.Task.Run(() => IoC.Logger.Log(outputConfiguration.UIString));
+                await IoC.Task.Run(() => IoC.Logger.Log(outputConfiguration.WiringDiagramString));
 
                 // construct the view model.
                 outputConfigurations.Add(outputConfiguration);

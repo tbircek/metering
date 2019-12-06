@@ -16,33 +16,19 @@
           ClipToBounds="True">
 
         <Grid.ColumnDefinitions>
-            <!-- UI String -->
-            <ColumnDefinition Width="350"/>
-           <!-- Connection Image -->
-            <ColumnDefinition Width="Auto"/>
+            <!-- Wiring Diagram  String -->
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- UI String -->
+        <!-- Wiring Diagram String -->
         <RadioButton Grid.Column="0" 
                      Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
-                     GroupName="voltage"
                      Padding="2 0 2 0"     
                      Margin="5 10 5 10" 
                      HorizontalContentAlignment="Center" 
-                     Content="{Binding UIString}"
-                     ToolTip="Omicron analog signal output details"/>
-        
-        <!-- Connection Image -->
-        <TextBox Grid.Column="1"
-                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                 TabIndex="0" 
-                 Padding="2 0 2 0"     
-                 Margin="5 10 5 10"             
-                 HorizontalContentAlignment="Center" 
-                 Text="{Binding Mode}"
-                 ToolTip="The omicron analog signal connection diagram. There will be an image here.">
-
-        </TextBox>
-
+                     VerticalContentAlignment="Center"
+                     Content="{Binding WiringDiagramString}"
+                     ToolTip="{Binding Mode}"
+                     GroupName="{Binding GroupName}"/>
     </Grid>
 </UserControl>

@@ -10,21 +10,27 @@
 
     <UserControl.Template>
         <ControlTemplate TargetType="UserControl">
-            <Grid 
-                d:DataContext="{x:Static core:SettingsDesignModel.Instance}" 
-                Background="Transparent">
-
-                <Border
-                    BorderBrush="Black"
-                    BorderThickness="2"
-                    Margin="10"
-                    Padding="10">
+            <Grid Background="Transparent">
+                <Grid.RowDefinitions>
+                    <!-- Voltage Output -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Current Output -->
+                    <RowDefinition Height="Auto"/>                    
+                </Grid.RowDefinitions>
+                
+                <!-- Voltage Output Configurations -->
+                <Border Grid.Row="0"
+                        BorderBrush="Black"
+                        BorderThickness="2"
+                        Margin="10"
+                        Padding="10">
                     
                     <ScrollViewer VerticalScrollBarVisibility="Auto" 
                                   HorizontalScrollBarVisibility="Auto">
-                        
-                        <ItemsControl ItemsSource="{Binding OmicronOutputSignals}" 
-                                      Margin="2">
+
+                        <ItemsControl ItemsSource="{Binding OmicronVoltageOutputs}" 
+                                      Margin="2"
+                                      d:DataContext="{x:Static core:SettingsDesignModelVoltage.Instance}">
                            
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -34,17 +40,21 @@
                         </ItemsControl>
                     </ScrollViewer>
                 </Border>
-                <Border
-                    BorderBrush="Black"
-                    BorderThickness="2"
-                    Margin="10"
-                    Padding="10">
+
+                <!-- Current Output Configurations -->
+                <Border Grid.Row="1"
+                        BorderBrush="Black"
+                        BorderThickness="2"
+                        Margin="10"
+                        Padding="10"
+                        d:DataContext="{x:Static core:SettingsDesignModelCurrent.Instance}">
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto" 
                                   HorizontalScrollBarVisibility="Auto">
 
-                        <ItemsControl ItemsSource="{Binding OmicronOutputSignals}" 
-                                      Margin="2">
+                        <ItemsControl ItemsSource="{Binding OmicronCurrentOutputs}" 
+                                      Margin="2" 
+                                      d:DataContext="{x:Static core:SettingsDesignModelCurrent.Instance}">
 
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
