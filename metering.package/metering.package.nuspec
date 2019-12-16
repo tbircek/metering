@@ -10,13 +10,10 @@
     <iconUrl>file:///C:/Users/TBircek/source/repos/metering/metering.core/Resources/metering.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>
-      Improves design time view to reflect the new settings page.
-      Adds first wiring diagram to the page.
-      Adds "average" and "successful reading" values to the test report.
-      Adds new Omicron Hardware Outputs view, models, controls and page.
-      Changes log folder name to logs.
-      Fixes Loaded file always shows "Ramping" property as "Magnitude" only issue.
+    <releaseNotes>      
+      Fixes "Save file failed" errors.
+      Adds "Delta" verification to ramp signals.
+      Adds "Frequency linking" to ramp signals frequency.
     </releaseNotes>
     <copyright>Copyright 2019 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric turgay bircek</tags>
