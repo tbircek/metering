@@ -22,14 +22,14 @@ namespace metering
         private FileDialog Dlg { get; set; }
 
         #endregion
-        
+
         #region Public Method
 
         /// <summary>
         /// Shows a <see cref="SaveFileDialog"/> or <see cref="OpenFileDialog"/> per the user selection.
         /// </summary>
         /// <param name="option"></param>
-        public async Task ShowFileDialogAsync (FileDialogOption option)
+        public async Task ShowFileDialogAsync(FileDialogOption option)
         {
             // check if the Results directory exists... 
             if (!Directory.Exists(IoC.CMCControl.ResultsFolder))
@@ -49,7 +49,7 @@ namespace metering
                 };
             }
             // if the user wants to open test file(s)...
-            else if(Equals(option, FileDialogOption.Open))
+            else if (Equals(option, FileDialogOption.Open))
             {
                 // Configure open file dialog box
                 Dlg = new OpenFileDialog
@@ -120,14 +120,30 @@ namespace metering
             if (Equals(dlg.Tag, FileDialogOption.Save))
             {
                 // generate a new Test Steps Logger
-                IoC.Task.Run(() => new TestStepsLogger(
-                    // file location and name as specified by the user
-                    filePath: dlg.FileName,
-                    // don't need to save time
-                    logTime: false,
-                    // test details need to be saved
-                    test: IoC.TestDetails
-                    ));
+                var fileOkTask =
+                    IoC.Task.Run(() => new TestStepsLogger(
+                        // file location and name as specified by the user
+                        filePath: dlg.FileName,
+                        // don't need to save time
+                        logTime: false,
+                        // test details need to be saved
+                        test: IoC.TestDetails
+                        ));
+
+                if (TaskStatus.RanToCompletion == fileOkTask.Status)
+                {
+
+                    // dispose dialog box
+                    dlg = null;
+                }
+                else if (TaskStatus.Faulted == fileOkTask.Status)
+                {
+                    // inform the developer about error
+                    IoC.Logger.Log(fileOkTask.Exception.GetBaseException().Message);
+
+                    // update the user about the error.
+                    IoC.Communication.Log = fileOkTask.Exception.GetBaseException().Message;
+                }
             }
             // handles "OpenFileDialog"
             // TODO: this code should handle multiple selection as well.
@@ -186,11 +202,12 @@ namespace metering
 
                     // dispose test
                     test = null;
+
+                    // dispose dialog box
+                    dlg = null;
                 }
             }
 
-            // dispose dialog box
-            dlg = null;
         }
 
         #endregion
