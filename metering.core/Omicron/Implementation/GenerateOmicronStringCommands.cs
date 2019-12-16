@@ -45,7 +45,8 @@ namespace metering.core
                     // Signal Phase
                     phase: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)) ? (string.Equals(analogSignal.SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignal.From) : Convert.ToDouble(analogSignal.Phase),
                     // Signal Frequency
-                    frequency: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)) ? (string.Equals(analogSignal.SignalName, testSignalName) ? testStartValue : Convert.ToDouble(analogSignal.From)) : Convert.ToDouble(analogSignal.Frequency)
+                    // if IoC.TestDetails.IsLinked == true, use ramping signals frequency
+                    frequency: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)) ? (string.Equals(analogSignal.SignalName, testSignalName) || IoC.TestDetails.IsLinked ? testStartValue : Convert.ToDouble(analogSignal.From)) : Convert.ToDouble(analogSignal.Frequency)
                     );
             }
         }

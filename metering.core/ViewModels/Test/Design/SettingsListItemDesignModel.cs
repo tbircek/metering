@@ -24,8 +24,9 @@
             // Omicron returns: 0,9,3,3.000000e+02,8.500000e+01,8.500000e+01,1.000000e+00,std,0,amp_no,1;
             // Omicron UI shows: 3x300V, 85VA @ 85V, 1Arms
             ConfigID = 9; // 9,
-            UIString = "3x300V, 85VA @ 85V, 1Arms";
+            WiringDiagramString = "3x300V, 85VA @ 85V, 1Arms";
             Mode = "std"; // std,
+            GroupName = "V";
         }
 
         #endregion

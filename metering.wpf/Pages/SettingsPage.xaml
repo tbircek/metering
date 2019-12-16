@@ -19,14 +19,16 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-             <!--Voltage Outputs--> 
+            <!--Voltage Outputs-->
             <RowDefinition Height="*"/>
-             <!--Current Outputs--> 
+            <!--Current Outputs-->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-         <!--Omicron Analog Outputs signal values--> 
+
+        <!--Omicron Voltage Outputs signal capabilities-->
         <Border Grid.Column="0"
+                Grid.Row="0"
+                Grid.RowSpan="2"
                 BorderBrush="Black" 
                 BorderThickness="1" 
                 ClipToBounds="True">
@@ -36,22 +38,57 @@
                 <!--Output signals details list-->
                 <local:SettingsListControl
                     ClipToBounds="True"
-                    d:DataContext="{x:Static core:SettingsDesignModel.Instance}"
+                    d:DataContext="{x:Static core:SettingsDesignModelVoltage.Instance}"
                     Padding="3">
                 </local:SettingsListControl>
             </mD:Card>
-            
+
         </Border>
-        
-        <!-- Connection Diagrams -->
+
+        <!--Omicron Current Outputs signal capabilities
+        <Border Grid.Column="0"
+                Grid.Row="1"
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                ClipToBounds="True">
+
+            <mD:Card Background="Transparent"
+                     Foreground="{StaticResource SecondaryAccentForegroundBrush}">
+                Output signals details list
+                <local:SettingsListControl
+                    ClipToBounds="True"
+                    d:DataContext="{x:Static core:SettingsDesignModelCurrent.Instance}"
+                    Padding="3">
+                </local:SettingsListControl>
+            </mD:Card>
+
+        </Border>-->
+
+        <!-- Voltage Connection Diagrams -->
         <Border Grid.Column="1"
+                Grid.Row="0"
                 BorderBrush="Black" 
                 BorderThickness="1" 
                 ClipToBounds="True">
 
             <mD:Card Width="300"
                      ClipToBounds="True"
-                     Background="Transparent">                
+                     Background="Transparent">
+                <Image Source="../Images/Omicron/6X12.5, 70VA.PNG"
+                       Stretch="UniformToFill" />
+            </mD:Card>
+        </Border>
+
+        <!-- Connection Diagrams -->
+        <Border Grid.Column="1"
+                Grid.Row="1"
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                ClipToBounds="True">
+
+            <mD:Card Width="300"
+                     ClipToBounds="True"
+                     Background="Transparent">
                 <Image Source="../Images/Omicron/6X12.5, 70VA.PNG"
                        Stretch="UniformToFill" />
             </mD:Card>
