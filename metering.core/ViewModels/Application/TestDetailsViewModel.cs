@@ -36,7 +36,7 @@ namespace metering.core
         }
 
         #endregion
-        
+
         #region Public Properties
 
         /// <summary>
@@ -127,7 +127,12 @@ namespace metering.core
         /// Holds information about the signal parameter to ramp
         /// </summary>
         public string SelectedRampingSignal { get; set; } = "Magnitude";
-        
+
+        /// <summary>
+        /// Indicates if Ramping Signal should ramp every signal's frequency.
+        /// </summary>
+        public bool IsLinked { get; set; }
+
         #endregion
 
         #region Public Commands
@@ -148,6 +153,11 @@ namespace metering.core
         /// </summary>
         public ICommand SelectRampingSignalCommand { get; set; }
 
+        /// <summary>
+        /// The command handles linking every signal attribute to the ramping signal attribute
+        /// </summary>
+        public ICommand LinkRampingSignalsCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -166,7 +176,7 @@ namespace metering.core
             ConnectCommand = new RelayCommand(async () => await IoC.Communication.StartCommunicationAsync());
             SelectAllTextCommand = new RelayCommand(SelectAll);
             SelectRampingSignalCommand = new RelayParameterizedCommand((parameter) => RampingSelectionAsync((string)parameter));
-
+            LinkRampingSignalsCommand = new RelayCommand(() => LinkRampingSignalsFreqency());
         }
 
         #endregion
@@ -193,6 +203,13 @@ namespace metering.core
         #region Private Helpers
 
         /// <summary>
+        /// Links Ramping Signals Frequency to rest of the signals so every signals Frequency can ramp together.
+        /// </summary>
+        private void LinkRampingSignalsFreqency()
+        {
+        }
+
+        /// <summary>
         /// Modifies textbox hint text per selected ramping signal option.
         /// </summary>
         /// <returns></returns>
@@ -210,6 +227,9 @@ namespace metering.core
             // Signal property is Frequency.
             bool frequencyEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Frequency)));
 
+            // reset IsLinked value.
+            IoC.TestDetails.IsLinked = false;
+
             foreach (var item in AnalogSignals)
             {
                 // True = selected signal is NOT ramping so text entry is enabled to the user inputs.
@@ -219,13 +239,13 @@ namespace metering.core
                 // enable/disable Phase text field...
                 item.IsPhaseEnabled = phaseEnabled;
                 // enable/disable Frequency text field...
-                item.IsFrequencyEnabled = frequencyEnabled; 
+                item.IsFrequencyEnabled = frequencyEnabled;
 
                 // process radio button parameter
                 switch (SelectedRampingSignal)
                 {
                     // Phase option selected:
-                    case nameof(RampingSignals.Phase): 
+                    case nameof(RampingSignals.Phase):
                         // Update From value with Phase value
                         item.From = item.Phase;
                         // Update To value with Phase value
