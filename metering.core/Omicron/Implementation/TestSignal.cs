@@ -31,10 +31,15 @@ namespace metering.core
                 if (!Convert.ToDouble(signal.From).Equals(Convert.ToDouble(signal.To)))
                 {
                     // property values of the signal
+                    Delta = Convert.ToDouble(signal.Delta);
+                    // if Delta is zero move next item
+                    if (Equals(Delta, 0.000000d))
+                    {
+                        continue;
+                    }
                     SignalName = signal.SignalName;
                     From = Convert.ToDouble(signal.From);
-                    To = Convert.ToDouble(signal.To);
-                    Delta = Convert.ToDouble(signal.Delta);
+                    To = Convert.ToDouble(signal.To);                    
                     Phase = Convert.ToDouble(signal.Phase);
                     Frequency = Convert.ToDouble(signal.Frequency);
 

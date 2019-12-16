@@ -126,6 +126,20 @@
                             Command="{Binding SelectRampingSignalCommand}" 
                             CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
 
+                        <!-- Link Ramping Signals Selection -->
+                        <CheckBox
+                            Style="{StaticResource MaterialDesignUserForegroundCheckBox}"
+                            Padding="5 0 5 0"
+                            Content="Link Ramping Signals"
+                            FontSize="18"
+                            VerticalContentAlignment="Center"
+                            Visibility="{Binding IsFrequency, 
+                                        Converter={local:BooleanToVisibilityConverter},
+                                        ConverterParameter=False}"
+                            IsChecked="{Binding IsLinked}"
+                            Command="{Binding LinkRampingSignalsCommand}"
+                            ToolTip="Check if all signals ramping is desired."
+                            />
                     </StackPanel>
                 </Border>
 
