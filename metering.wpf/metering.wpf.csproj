@@ -365,7 +365,9 @@
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Omicron\std0.PNG" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Backgrounds\1.png" />
     <Resource Include="Images\Backgrounds\11.png" />
@@ -375,9 +377,6 @@
   <ItemGroup>
     <Resource Include="Images\Icons\metering.ico" />
     <Resource Include="Images\Icons\metering.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Omicron\6X12.5, 70VA.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
