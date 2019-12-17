@@ -42,7 +42,7 @@ namespace metering.core
                     return $"(??????) {Strings.omicron_config_voltage_header}";
                 }
                 return $"{IoC.CMCControl.DeviceInfo} {Strings.omicron_config_voltage_header}";
-            }            
+            }
         }
 
         /// <summary>
@@ -70,11 +70,6 @@ namespace metering.core
         /// </summary>
         public bool Selected { get; set; }
 
-        ///// <summary>
-        ///// Omicron Analog Output Signals.
-        ///// </summary>
-        //public ObservableCollection<SettingsListItemViewModel> OmicronOutputSignals { get; set; }
-        
         /// <summary>
         /// Omicron Voltage Output Signals.
         /// </summary>
@@ -109,6 +104,36 @@ namespace metering.core
         #endregion
 
         #region Public Method
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task GetWiringDiagram(object parameter)
+        {
+            // let log start
+            await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(GetWiringDiagram)} started."));
+
+            // let log start
+            await IoC.Task.Run(() => IoC.Logger.Log($"Group name: {((SettingsListItemViewModel)parameter).GroupName} selected."));
+            await IoC.Task.Run(() => IoC.Logger.Log($"Config id: {((SettingsListItemViewModel)parameter).ConfigID} selected."));
+            await IoC.Task.Run(() => IoC.Logger.Log($"is checked? {((SettingsListItemViewModel)parameter).CurrentWiringDiagram} selected."));
+            await IoC.Task.Run(() => IoC.Logger.Log($"mode: {((SettingsListItemViewModel)parameter).Mode} selected."));
+
+            switch (((SettingsListItemViewModel)parameter).GroupName.ToUpper())
+            {
+                case "V":
+                    // set wiring diagram image file location
+                    VoltageDiagramLocation = ((SettingsListItemViewModel)parameter).Mode;
+                    break;
+                case "A":
+                    // set wiring diagram image file location
+                    CurrentDiagramLocation = ((SettingsListItemViewModel)parameter).Mode;
+                    break;
+                default:
+                    break;
+            }
+        }
 
         /// <summary>
         /// Handles Omicron Hardware Configuration Settings
@@ -177,6 +202,8 @@ namespace metering.core
 
                 // two options available. either voltage or current.
                 string amplifierInitial = string.Empty;
+                // if amplifierInitial == "V" than "A", if amplifierInitial == "A" than "V"
+                string outputType = string.Empty;
 
                 // split up the omicron response.
                 string[] responses = (await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandWithResponseAsync(omicronCommand: string.Format(OmicronStringCmd.amp_cfg_0, i)).Result)).Split(separator: delimiterStrings, options: StringSplitOptions.RemoveEmptyEntries);
@@ -192,7 +219,8 @@ namespace metering.core
 
                         // amplifier type is voltage
                         amplifierInitial = "V";
-
+                        // output type is A
+                        outputType = "A";
                         break;
                     case "current":
                         // pick correct the amplifier type.
@@ -203,12 +231,14 @@ namespace metering.core
 
                         // amplifier type is voltage
                         amplifierInitial = "A";
+                        // output type is V
+                        outputType = "V";
                         break;
                     default:
                         IoC.Logger.Log($"Omicron amplifier {responses.GetValue(responses.Length - 1)}is not supported");
                         continue;
                 }
-                
+
                 // add configuration id
                 outputConfiguration.ConfigID = Convert.ToInt16(responses[1]);
                 // add file name
@@ -221,7 +251,7 @@ namespace metering.core
                 // 85VA @ 85V,
                 string vaString = $"{Convert.ToDouble(responses[4], CultureInfo.CurrentCulture)}VA @ {Convert.ToDouble(responses[5], CultureInfo.CurrentCulture)}{amplifierInitial}, ";
                 // 3x300V, 85VA @ 85V, 1Arms
-                outputConfiguration.WiringDiagramString = $"{magnitudeString}{vaString}{Convert.ToDouble(responses[6], CultureInfo.CurrentCulture)}{amplifierInitial}rms";
+                outputConfiguration.WiringDiagramString = $"{magnitudeString}{vaString}{Convert.ToDouble(responses[6], CultureInfo.CurrentCulture)}{outputType}rms";
                 // add group name for the radio buttons
                 outputConfiguration.GroupName = amplifierInitial;
 

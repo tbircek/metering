@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Threading;
+using System.Windows.Input;
 
 namespace metering.core
 {
@@ -62,9 +63,20 @@ namespace metering.core
         /// Holds radio button group names
         /// </summary>
         public string GroupName { get; set; }
+
+        /// <summary>
+        /// Holds whether check box selected or not
+        /// </summary>
+        public bool CurrentWiringDiagram { get; set; }
+
         #endregion
 
         #region Public Commands
+
+        /// <summary>
+        /// Gets the user selected wiring diagram image file location
+        /// </summary>
+        public ICommand GetWiringDiagramCommand { get; set; }
 
         #endregion
 
@@ -80,6 +92,8 @@ namespace metering.core
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
 
+            // retrieve wiring diagram image file location and show it to the user.
+            GetWiringDiagramCommand = new RelayParameterizedCommand(async (parameter) => await IoC.Settings.GetWiringDiagram(parameter));
         }
 
         #endregion
