@@ -342,4 +342,10 @@
   <data name="header_delta_voltage" xml:space="preserve">
     <value>Delta (V)</value>
   </data>
+  <data name="omicron_config_current_header" xml:space="preserve">
+    <value>Current Outputs</value>
+  </data>
+  <data name="omicron_config_voltage_header" xml:space="preserve">
+    <value>Voltage Outputs</value>
+  </data>
 </root>

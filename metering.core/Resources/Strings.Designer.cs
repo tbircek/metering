@@ -565,6 +565,24 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current Outputs.
+        /// </summary>
+        public static string omicron_config_current_header {
+            get {
+                return ResourceManager.GetString("omicron_config_current_header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voltage Outputs.
+        /// </summary>
+        public static string omicron_config_voltage_header {
+            get {
+                return ResourceManager.GetString("omicron_config_voltage_header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection problems.
         /// </summary>
         public static string program_message_error_connection {

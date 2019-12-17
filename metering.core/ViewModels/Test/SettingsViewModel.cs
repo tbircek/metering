@@ -12,6 +12,7 @@ namespace metering.core
     /// </summary>
     public class SettingsViewModel : BaseViewModel
     {
+
         #region Public Properties
 
         /// <summary>
@@ -24,6 +25,45 @@ namespace metering.core
         /// </summary>
         public ApplicationPage OldApplicationPage { get; private set; }
 
+        /// <summary>
+        /// Holds wiring diagram for the voltage amplifiers.
+        /// </summary>
+        public string VoltageDiagramLocation { get; private set; } = "../Images/Omicron/6X12.5, 70VA.PNG";
+
+        /// <summary>
+        /// Holds voltage wiring diagram header information
+        /// </summary>
+        public string VoltageHeader
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(IoC.CMCControl.DeviceInfo))
+                {
+                    return $"(??????) {Strings.omicron_config_voltage_header}";
+                }
+                return $"{IoC.CMCControl.DeviceInfo} {Strings.omicron_config_voltage_header}";
+            }            
+        }
+
+        /// <summary>
+        /// Holds wiring diagram for the current amplifiers.
+        /// </summary>
+        public string CurrentDiagramLocation { get; private set; } = "../Images/Omicron/6X12.5, 70VA.PNG";
+
+        /// <summary>
+        /// Holds voltage wiring diagram header information
+        /// </summary>
+        public string CurrentHeader
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(IoC.CMCControl.DeviceInfo))
+                {
+                    return $"(??????) {Strings.omicron_config_current_header}";
+                }
+                return $"{IoC.CMCControl.DeviceInfo} {Strings.omicron_config_current_header}";
+            }
+        }
 
         /// <summary>
         /// indicates if the current text double left clicked to highlight the text
