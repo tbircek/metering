@@ -24,7 +24,16 @@ namespace metering.core
         public SettingsDesignModelCurrent()
         {            
             OmicronCurrentOutputs = new ObservableCollection<SettingsListItemViewModel>
-            {                
+            {
+                new SettingsListItemViewModel
+                {
+                    // 0,16,3,1.250000e+01,7.000000e+01,7.500000e+00,1.000000e+01,zero,40,amp_no,2,amp_no,6;
+                    // Omicron UI shows: 6x12.5A, 70VA @ 7.5A, 10Vrms
+                    ConfigID = 16, // 16,
+                    WiringDiagramString = "6x12.5A, 70VA @ 7.5A, 10Vrms",
+                    Mode = "zero40", // zero,40,
+                },
+
                 new SettingsListItemViewModel
                 {
                     // 0,14,3,1.250000e+01,7.000000e+01,7.500000e+00,1.000000e+01,std,18,amp_no,2;
@@ -45,11 +54,11 @@ namespace metering.core
 
                 new SettingsListItemViewModel
                 {
-                    // 0,16,3,1.250000e+01,7.000000e+01,7.500000e+00,1.000000e+01,zero,40,amp_no,2,amp_no,6;
-                    // Omicron UI shows: 6x12.5A, 70VA @ 7.5A, 10Vrms
-                    ConfigID = 16, // 16,
-                    WiringDiagramString = "6x12.5A, 70VA @ 7.5A, 10Vrms",
-                    Mode = "zero40", // zero,40,
+                    // Not in the responses: 0,15,3,1.250000e+01,7.000000e+01,7.500000e+00,1.000000e+01,std,19,amp_no,6;
+                    // Omicron UI shows: 3x12.5A, 70VA @ 7.5A, 10Vrms, IE automatically calculated
+                    ConfigID = 15, // 15,
+                    WiringDiagramString = "3x12.5A, 70VA @ 7.5A, 10Vrms, IE automatically calculated",
+                    Mode = "std19", // std,19,
                 },
 
                 new SettingsListItemViewModel

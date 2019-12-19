@@ -25,6 +25,15 @@ namespace metering.core
         {
             OmicronVoltageOutputs = new ObservableCollection<SettingsListItemViewModel>
             {
+                 new SettingsListItemViewModel
+                {
+                    // This is not in Omicron returns: 0,9,3,3.000000e+02,8.500000e+01,8.500000e+01,1.000000e+00,std,0,amp_no,1;
+                    // Omicron UI shows: 4x300V, 85VA @ 85V, 1Arms
+                    ConfigID = 9, // 9,
+                    WiringDiagramString = "4x300V, 85VA @ 85V, 1Arms",
+                    Mode = "std0", // std,0,
+                },
+
                 new SettingsListItemViewModel
                 {
                     // Omicron returns: 0,9,3,3.000000e+02,8.500000e+01,8.500000e+01,1.000000e+00,std,0,amp_no,1;
@@ -48,7 +57,7 @@ namespace metering.core
                     // 0,11,3,3.000000e+02,5.000000e+01,7.500000e+01,6.600000e-01,zero,13,amp_no,1,amp_no,5;
                     // Omicron UI shows: 3x300V, 50VA @ 75V, 660mArms
                     ConfigID = 11, // 11,
-                    WiringDiagramString = "3x300V, 50VA @ 75V, 660mArms",
+                    WiringDiagramString = "3x300V, 50VA @ 75V, 660mArms, VE automatically calculated",
                     Mode = "zero13", // zero, 
                 },
 

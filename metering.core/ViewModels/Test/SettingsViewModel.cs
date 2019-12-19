@@ -28,7 +28,7 @@ namespace metering.core
         /// <summary>
         /// Holds wiring diagram for the voltage amplifiers.
         /// </summary>
-        public string VoltageDiagramLocation { get; private set; } = "../Images/Omicron/6X12.5, 70VA.PNG";
+        public string VoltageDiagramLocation { get; private set; } = "../Images/Omicron/not used voltage.png";
 
         /// <summary>
         /// Holds voltage wiring diagram header information
@@ -48,7 +48,7 @@ namespace metering.core
         /// <summary>
         /// Holds wiring diagram for the current amplifiers.
         /// </summary>
-        public string CurrentDiagramLocation { get; private set; } = "../Images/Omicron/6X12.5, 70VA.PNG";
+        public string CurrentDiagramLocation { get; private set; } = "../Images/Omicron/not used current.png";
 
         /// <summary>
         /// Holds voltage wiring diagram header information
@@ -165,6 +165,9 @@ namespace metering.core
 
                     // Show TestDetails page
                     IoC.Application.GoToPage(ApplicationPage.Settings, IoC.Settings);
+
+                    // disconnect from attached Omicron Test Set
+                    await IoC.Task.Run(() => IoC.ReleaseOmicron.Release());
                 }
             });
         }
@@ -172,6 +175,11 @@ namespace metering.core
 
         #region Private Methods
 
+        /// <summary>
+        /// Gets every available hardware configuration from attached Omicron test set.
+        /// </summary>
+        /// <param name="amplifierType">2 types available. "voltage" or "current"</param>
+        /// <returns>Returns a <see cref="SettingsListItemViewModel"/></returns>
         private async Task<ObservableCollection<SettingsListItemViewModel>> GetOmicronHardwareConfigurations(string amplifierType)
         {
             // initialize extract parameters function
@@ -244,6 +252,13 @@ namespace metering.core
                 // add file name
                 outputConfiguration.Mode = $"{responses[7]}{responses[8]}";
 
+                // is output configuration has an automatically calculated resultant -- String == "zero"?
+                string autamaticallyCalculated = string.Empty;
+                if (Equals(responses[7], "zero"))
+                {
+                    // two options Voltage is "V" and Current is "I"
+                    autamaticallyCalculated = $", {(amplifierInitial == "A" ? "I": amplifierInitial)}E automatically calculated";
+                }
                 // outputConfiguration.
 
                 // 3x300V, 
@@ -251,7 +266,7 @@ namespace metering.core
                 // 85VA @ 85V,
                 string vaString = $"{Convert.ToDouble(responses[4], CultureInfo.CurrentCulture)}VA @ {Convert.ToDouble(responses[5], CultureInfo.CurrentCulture)}{amplifierInitial}, ";
                 // 3x300V, 85VA @ 85V, 1Arms
-                outputConfiguration.WiringDiagramString = $"{magnitudeString}{vaString}{Convert.ToDouble(responses[6], CultureInfo.CurrentCulture)}{outputType}rms";
+                outputConfiguration.WiringDiagramString = $"{magnitudeString}{vaString}{Convert.ToDouble(responses[6], CultureInfo.CurrentCulture)}{outputType}rms{autamaticallyCalculated}";
                 // add group name for the radio buttons
                 outputConfiguration.GroupName = amplifierInitial;
 
