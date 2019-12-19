@@ -16,7 +16,7 @@
 
         <Grid.ColumnDefinitions>
             <!-- Wiring Diagram  String -->
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <!-- Wiring Diagram String -->

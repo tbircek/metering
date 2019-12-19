@@ -14,9 +14,9 @@
             <Grid Background="Transparent">
                 <Grid.RowDefinitions>
                     <!-- Voltage Output -->
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
                     <!-- Current Output -->
-                    <RowDefinition Height="Auto"/>                    
+                    <RowDefinition />                    
                 </Grid.RowDefinitions>
                 
                 <!-- Voltage Output Configurations -->
@@ -27,14 +27,15 @@
                         Padding="10">
 
                     <GroupBox Header="{Binding VoltageHeader}"
-                              FontSize="18"
-                              FontWeight="Bold">
+                              FontSize="14"
+                              FontWeight="Bold"
+                              MaxHeight="350">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                                  HorizontalScrollBarVisibility="Auto">
+                                      HorizontalScrollBarVisibility="Auto">
 
                             <ItemsControl ItemsSource="{Binding OmicronVoltageOutputs}" 
-                                      Margin="2"
-                                      d:DataContext="{x:Static core:SettingsDesignModelVoltage.Instance}">
+                                          Margin="2"
+                                          d:DataContext="{x:Static core:SettingsDesignModelVoltage.Instance}">
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -55,8 +56,9 @@
                         d:DataContext="{x:Static core:SettingsDesignModelCurrent.Instance}">
 
                     <GroupBox Header="{Binding CurrentHeader}"
-                              FontSize="18"
-                              FontWeight="Bold">
+                              FontSize="14"
+                              FontWeight="Bold"
+                              MaxHeight="350">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" 
                                   HorizontalScrollBarVisibility="Auto">
 

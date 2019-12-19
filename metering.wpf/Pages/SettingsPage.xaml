@@ -15,16 +15,16 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <!-- Outputs -->
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition />
             <!-- Diagrams -->
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <!--Voltage Outputs-->
-            <RowDefinition Height="*"/>
+            <RowDefinition />
             <!--Current Outputs-->
-            <RowDefinition Height="*"/>
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <!--Omicron Voltage Outputs signal capabilities-->
@@ -55,6 +55,7 @@
                 ClipToBounds="True">
 
             <mD:Card Width="300"
+                     MaxHeight="350"
                      ClipToBounds="True"
                      Background="Transparent">
                 <Image Source="{Binding VoltageDiagramLocation}"
@@ -70,6 +71,7 @@
                 ClipToBounds="True">
 
             <mD:Card Width="300"
+                     MaxHeight="350"
                      ClipToBounds="True"
                      Background="Transparent">
                 <Image Source="{Binding CurrentDiagramLocation}"
