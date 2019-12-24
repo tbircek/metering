@@ -416,6 +416,12 @@
     <Resource Include="Images\Omicron\ser337.png" />
     <Resource Include="Images\Omicron\zero40.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\ser1247ser1248.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\par120par121.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <!--<VisualStudio>-->

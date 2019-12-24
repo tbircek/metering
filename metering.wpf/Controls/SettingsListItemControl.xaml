@@ -30,7 +30,7 @@
                      HorizontalContentAlignment="Left" 
                      VerticalContentAlignment="Center"
                      Content="{Binding WiringDiagramString}"
-                     ToolTip="{Binding Mode}"
+                     ToolTip="{Binding WiringDiagramFileLocation}"
                      GroupName="{Binding GroupName}"/>
     </Grid>
 </UserControl>

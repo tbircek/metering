@@ -60,7 +60,7 @@
                               FontWeight="Bold"
                               MaxHeight="350">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                                  HorizontalScrollBarVisibility="Auto">
+                                      HorizontalScrollBarVisibility="Auto">
 
                             <ItemsControl ItemsSource="{Binding OmicronCurrentOutputs}" 
                                       Margin="2" 

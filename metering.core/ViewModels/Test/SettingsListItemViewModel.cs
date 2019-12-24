@@ -11,10 +11,16 @@ namespace metering.core
     {
         #region Private Properties
 
+        ///// <summary>
+        ///// holder for the mode
+        ///// </summary>
+        //private string mode;
+
         /// <summary>
-        /// holder for the mode
+        /// holder for the WiringDiagramFileLocation
         /// </summary>
-        private string mode;
+        private string wiringDiagramFileLocation;
+
         #endregion
 
         #region Public Properties
@@ -26,8 +32,18 @@ namespace metering.core
         /// ID of the configuration to be used in the amp:route, if you
         /// want to route a triple to this configuration.
         /// This is a number of type integer. 
+        /// However to combined amplifiers this app will hold it as string.
         /// </summary>
-        public int ConfigID { get; set; } = 0;
+        public string ConfigID { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Number of phases of the virtual amplifier. It is the number of phases that can be
+        /// independently addressed and set with the out:ana commands.The number of
+        /// phases that are actually output may be different (for instance, when Vo is
+        /// automatically calculated from the three phase voltages in the CMC 256 or newer
+        /// test set). This is a number of type integer.
+        /// </summary>
+        public int PhaseCount { get; set; } = 0;
 
         /// <summary>
         /// a detailed text reference to Omicron Hardware Configuration available to the specific
@@ -36,28 +52,49 @@ namespace metering.core
         public string WiringDiagramString { get; set; } = string.Empty;
 
         /// <summary>
+        /// path to the wiring diagram associated with this hardware configuration
+        /// </summary>
+        public string WiringDiagramFileLocation
+        {
+            get
+            {
+                // return wiring diagram location and file name.
+                return $"../Images/Omicron/{wiringDiagramFileLocation}.png";
+            }
+            set
+            {
+                // if new selection is different than previous
+                if (!Equals(value, wiringDiagramFileLocation))
+                {
+                    // update the old value.
+                    wiringDiagramFileLocation = value;
+                }
+            }
+        }
+
+        /// <summary>
         /// It encodes the way the different outputs of the physical
         /// amplifiers involved in the configuration are to be tied together to achieve the
         /// configuration’s characteristics. This value would decide which diagram to show to the user.
         /// Value of type string. 
         /// </summary>
-        public string Mode
-        {
-            get
-            {
-                // return wiring diagram location and file name.
-                return $"../Images/Omicron/{mode}.png";
-            }
-            set
-            {
-                // if new selection is different than previous
-                if (!Equals(value, mode))
-                {
-                    // update the old value.
-                    mode = value;
-                }
-            }
-        }
+        public string Mode { get; set; } = string.Empty;
+        //{
+        //    get
+        //    {
+        //        // return wiring diagram location and file name.
+        //        return $"../Images/Omicron/{mode}.png";
+        //    }
+        //    set
+        //    {
+        //        // if new selection is different than previous
+        //        if (!Equals(value, mode))
+        //        {
+        //            // update the old value.
+        //            mode = value;
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Holds radio button group names
@@ -68,6 +105,12 @@ namespace metering.core
         /// Holds whether check box selected or not
         /// </summary>
         public bool CurrentWiringDiagram { get; set; }
+
+        /// <summary>
+        /// Internal OMICRON identifier. It refers to a connection diagram depicting the
+        /// connections encoded in <mode>. This field is of integer type.
+        /// </summary>
+        public int WiringID { get; set; } = -1;
 
         #endregion
 
