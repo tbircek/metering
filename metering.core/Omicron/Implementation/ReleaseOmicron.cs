@@ -61,7 +61,7 @@ namespace metering.core
             // if the user want s to stop the test
             if (userRequest)
                 // try to cancel thread running Omicron Test Set
-                IoC.Commands.TokenSource.Cancel();
+                IoC.Commands.TokenSource.Cancel(true);
             
             // update developer
             IoC.Logger.Log($"Test {(userRequest ? "interrupted" : "completed")}", LogLevel.Informative);
