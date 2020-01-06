@@ -40,6 +40,18 @@ namespace metering.core
         #region Public Properties
 
         /// <summary>
+        /// Omicron Hardware Configurations. 
+        /// The user selected Voltage configuration.
+        /// </summary>
+        public SettingsListItemViewModel SelectedVoltageConfiguration { get; set; } = new SettingsListItemViewModel() { };
+
+        /// <summary>
+        /// Omicron Hardware Configurations. 
+        /// The user selected Current configuration.
+        /// </summary>
+        public SettingsListItemViewModel SelectedCurrentConfiguration { get; set; } = new SettingsListItemViewModel() { };
+
+        /// <summary>
         /// Omicron Analog Output Signals.
         /// Depending on <see cref="AnalogSignalListItemViewModel.SignalName"/> 
         /// <see cref="NominalValuesViewModel.NominalVoltage"/> and <see cref="NominalValuesViewModel.NominalCurrent"/>
@@ -153,10 +165,10 @@ namespace metering.core
         /// </summary>
         public ICommand SelectRampingSignalCommand { get; set; }
 
-        /// <summary>
-        /// The command handles linking every signal attribute to the ramping signal attribute
-        /// </summary>
-        public ICommand LinkRampingSignalsCommand { get; set; }
+        ///// <summary>
+        ///// The command handles linking every signal attribute to the ramping signal attribute
+        ///// </summary>
+        //public ICommand LinkRampingSignalsCommand { get; set; }
 
         #endregion
 
@@ -176,7 +188,7 @@ namespace metering.core
             ConnectCommand = new RelayCommand(async () => await IoC.Communication.StartCommunicationAsync());
             SelectAllTextCommand = new RelayCommand(SelectAll);
             SelectRampingSignalCommand = new RelayParameterizedCommand((parameter) => RampingSelectionAsync((string)parameter));
-            LinkRampingSignalsCommand = new RelayCommand(() => LinkRampingSignalsFreqency());
+            // LinkRampingSignalsCommand = new RelayCommand(() => LinkRampingSignalsFreqency());
         }
 
         #endregion
@@ -202,12 +214,12 @@ namespace metering.core
 
         #region Private Helpers
 
-        /// <summary>
-        /// Links Ramping Signals Frequency to rest of the signals so every signals Frequency can ramp together.
-        /// </summary>
-        private void LinkRampingSignalsFreqency()
-        {
-        }
+        ///// <summary>
+        ///// Links Ramping Signals Frequency to rest of the signals so every signals Frequency can ramp together.
+        ///// </summary>
+        //private void LinkRampingSignalsFreqency()
+        //{
+        //}
 
         /// <summary>
         /// Modifies textbox hint text per selected ramping signal option.
