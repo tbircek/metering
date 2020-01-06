@@ -31,7 +31,7 @@ namespace metering.core
         /// <param name="amplitude">Magnitude of analog signal.</param>
         /// <param name="phase">Phase of analog signal.</param>
         /// <param name="frequency">Frequency of analog signal.</param>
-        /// /// <example>Output string ex: out:ana:v(1:1):a(120);p(0);f(60);wav(sin)</example>
+        /// <example>Output string ex: out:ana:v(1:1):a(120);p(0);f(60);wav(sin)</example>
         public async void SendOutAnaAsync(char generatorType, string tripletNumber, double amplitude, double phase, double frequency)
         {
             try
@@ -94,6 +94,11 @@ namespace metering.core
                         {
                             try
                             {
+
+                                // record configuration string command
+                                IoC.Logger.Log($"Command: {omicronCommand}");
+
+                                // send string command
                                 IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand);
                             }
                             catch (COMException ex)
