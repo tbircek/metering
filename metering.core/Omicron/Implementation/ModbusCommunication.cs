@@ -148,8 +148,8 @@ namespace metering.core
                                                 // update counter.
                                                 IoC.CMCControl.SuccessCounters.SetValue(SuccessCounter, i);
 
-                                                // inform the developer about register reading
-                                                IoC.Logger.Log($"register: {register} \tminResponse : {MinRegisterValue} \tmaxResponse : {MaxRegisterValue} \taverage: {AverageRegisterValue} \tsuccess: {SuccessCounter}");
+                                                //// inform the developer about register reading
+                                                //IoC.Logger.Log($"register: {register} \tminResponse : {MinRegisterValue} \tmaxResponse : {MaxRegisterValue} \taverage: {AverageRegisterValue} \tsuccess: {SuccessCounter}");
                                             }
                                             else
                                             {
