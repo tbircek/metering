@@ -67,11 +67,6 @@ namespace metering.core
         }
 
         /// <summary>
-        /// indicates if the current text double left clicked to highlight the text
-        /// </summary>
-        public bool Selected { get; set; }
-
-        /// <summary>
         /// Omicron Voltage Output Signals.
         /// </summary>
         public ObservableCollection<SettingsListItemViewModel> OmicronVoltageOutputs { get; set; }
@@ -107,34 +102,49 @@ namespace metering.core
         #region Public Method
 
         /// <summary>
-        /// 
+        /// Gets Wiring diagram file location for both voltage and current amplifier
         /// </summary>
         /// <returns></returns>
         public async Task GetWiringDiagram(object parameter)
         {
             // let log start
             await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(GetWiringDiagram)} started."));
-
-            // let log start
             await IoC.Task.Run(() => IoC.Logger.Log($"Group name: {((SettingsListItemViewModel)parameter).GroupName} selected."));
-            await IoC.Task.Run(() => IoC.Logger.Log($"Configuration id: {((SettingsListItemViewModel)parameter).ConfigID} selected."));
-            await IoC.Task.Run(() => IoC.Logger.Log($"is checked? {((SettingsListItemViewModel)parameter).CurrentWiringDiagram} selected."));
+            foreach (var item in ((SettingsListItemViewModel)parameter).ConfigIDs)
+            {
+                await IoC.Task.Run(() => IoC.Logger.Log($"Configuration id: {item} selected."));
+            }
+            // await IoC.Task.Run(() => IoC.Logger.Log($"is checked? {((SettingsListItemViewModel)parameter).CurrentWiringDiagram} selected."));
             await IoC.Task.Run(() => IoC.Logger.Log($"file location: {((SettingsListItemViewModel)parameter).WiringDiagramFileLocation} selected."));
             await IoC.Task.Run(() => IoC.Logger.Log($"mode: {((SettingsListItemViewModel)parameter).Mode} selected."));
+            foreach (var item in ((SettingsListItemViewModel)parameter).PhaseCounts)
+            {
+                await IoC.Task.Run(() => IoC.Logger.Log($"phase count: {item} selected."));
+            }
+            await IoC.Task.Run(() => IoC.Logger.Log($"raw response: {((SettingsListItemViewModel)parameter).RawOmicronResponse} selected."));
+            foreach (var item in ((SettingsListItemViewModel)parameter).AmplifierNumber)
+            {
+                await IoC.Task.Run(() => IoC.Logger.Log($"amplifier descriptor: {item} selected."));
+            }
 
             switch (((SettingsListItemViewModel)parameter).GroupName.ToUpper())
             {
                 case "V":
                     // set wiring diagram image file location
                     VoltageDiagramLocation = ((SettingsListItemViewModel)parameter).WiringDiagramFileLocation;
+                    // assign Selected Voltage Amplifier Hardware Configuration.
+                    IoC.TestDetails.SelectedVoltageConfiguration = (SettingsListItemViewModel)parameter;
                     break;
                 case "A":
                     // set wiring diagram image file location
                     CurrentDiagramLocation = ((SettingsListItemViewModel)parameter).WiringDiagramFileLocation;
+                    // assign Selected Current Amplifier Hardware Configuration.
+                    IoC.TestDetails.SelectedCurrentConfiguration = (SettingsListItemViewModel)parameter;
                     break;
                 default:
                     break;
             }
+            await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(GetWiringDiagram)} ended."));
         }
 
         /// <summary>
@@ -160,6 +170,9 @@ namespace metering.core
                     // save current view model so we can return to it.
                     OldViewModel = IoC.Application.CurrentPageViewModel;
 
+                    // update log file about the connected Omicron capabilities.
+                    await IoC.Task.Run(() => IoC.Logger.Log($"Following hardware configurations available:"));
+
                     // retrieve voltage capabilities.
                     IoC.Settings.OmicronVoltageOutputs = await GetOmicronHardwareConfigurations("voltage");
                     // retrieve current capabilities.
@@ -176,7 +189,7 @@ namespace metering.core
         #endregion
 
         #region Private Methods
-               
+
         /// <summary>
         /// Gets every available hardware configuration from attached Omicron test set.
         /// </summary>
@@ -202,7 +215,7 @@ namespace metering.core
             // delimiters to split Omicron responses
             string[] delimiterStrings = { ";", "," };
             // delimiter to count amplifiers
-            string[] ampDelimiter = { "amp_no" };
+            string[] ampDelimiter = { ",amp_no,", ",amp_id," };
 
             // retrieve all available configurations in reverse order to generate combination configurations.
             for (int i = totalConfiguration; i >= 1; i--)
@@ -219,6 +232,8 @@ namespace metering.core
                 string amplifierInitial = string.Empty;
                 // if amplifierInitial == "V" than "A", if amplifierInitial == "A" than "V"
                 string outputType = string.Empty;
+                // record amplifiers' output signal
+                string amplifierDescriptor = string.Empty;
 
                 // retrieve Omicron Hardware Configuration Details
                 string configurationDetails = (await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandWithResponseAsync(omicronCommand: string.Format(OmicronStringCmd.amp_cfg_0, i)).Result));
@@ -226,11 +241,17 @@ namespace metering.core
                 // count amplifiers in configuration details to generate combined hardware configurations
                 // starts with 2
                 int amplifierNumber = configurationDetails.Split(separator: ampDelimiter, options: StringSplitOptions.RemoveEmptyEntries).Length - 1;
-                IoC.Logger.Log($"Total Omicron amplifier: {amplifierNumber}");
+
+                ObservableCollection<int> amplifierNumbers = new ObservableCollection<int>();
+                for (int ind = 1; ind <= amplifierNumber; ind++)
+                {
+                    amplifierNumbers.Add(Convert.ToInt32(configurationDetails.Remove(configurationDetails.LastIndexOf(';'), 1).Split(separator: ampDelimiter, options: StringSplitOptions.RemoveEmptyEntries)[ind]));
+                }
 
                 // split up the omicron response.
                 string[] responses = configurationDetails.Split(separator: delimiterStrings, options: StringSplitOptions.RemoveEmptyEntries);
 
+                
                 switch (amplifierType)
                 {
                     case "voltage":
@@ -244,6 +265,9 @@ namespace metering.core
                         amplifierInitial = "V";
                         // output type is A
                         outputType = "A";
+                        // record amplifiers' output signal
+                        // amp_no,1 == "VA", amp_no,5 == "VB"
+                        //amplifierDescriptor = Equals("5", responses.GetValue(responses.Length - 1)) && 1 == amplifierNumber ? "VB" : "VA";
                         break;
                     case "current":
                         // pick correct the amplifier type.
@@ -256,6 +280,9 @@ namespace metering.core
                         amplifierInitial = "A";
                         // output type is V
                         outputType = "V";
+                        // record amplifiers' output signal
+                        // amp_no,2 == "IA", amp_no,6 == "IB"
+                        //amplifierDescriptor = Equals("6", responses.GetValue(responses.Length - 1)) && 1 == amplifierNumber ? "IB" : "IA";
                         break;
                     default:
                         IoC.Logger.Log($"Omicron amplifier {responses.GetValue(responses.Length - 1)}is not supported");
@@ -263,15 +290,21 @@ namespace metering.core
                 }
 
                 // add configuration id
-                outputConfiguration.ConfigID = responses[1];
+                outputConfiguration.ConfigIDs.Add(Convert.ToInt32(responses[1]));
                 // add phase count
-                outputConfiguration.PhaseCount = Convert.ToInt16(responses[2]);
+                outputConfiguration.PhaseCounts.Add(Convert.ToInt32(responses[2]));
+                // add amplifiers' maximum output
+                outputConfiguration.MaxOutput.Add(Convert.ToDouble(responses[3]));
                 // retrieve mode
                 outputConfiguration.Mode = $"{responses[7]}";
                 // retrieve wiring id.
-                outputConfiguration.WiringID = Convert.ToInt16(responses[8]);
+                outputConfiguration.WiringID = Convert.ToInt32(responses[8]);
                 // add file name
                 outputConfiguration.WiringDiagramFileLocation = $"{outputConfiguration.Mode}{outputConfiguration.WiringID}";
+                // add amplifiers' output signal
+                outputConfiguration.AmplifierNumber = amplifierNumbers;
+                // save raw response
+                outputConfiguration.RawOmicronResponse = configurationDetails;
 
                 // is output configuration has an automatically calculated resultant -- String == "zero"?
                 string autamaticallyCalculated = string.Empty;
@@ -313,19 +346,65 @@ namespace metering.core
                         {
                             // add single amplifier to next single amplifier
                             outputConfigurationsToCombine.Add(outputConfiguration);
+
+                            // combine two amplifiers if there are two of them
                             if (2 == outputConfigurationsToCombine.Count)
                             {
-                                // the new phase count supported by the combined amplifiers.
-                                int phaseCount = outputConfigurationsToCombine[0].PhaseCount + outputConfigurationsToCombine[1].PhaseCount;
+                                //// the new phase count supported by the combined amplifiers.
+                                //int phaseCount = outputConfigurationsToCombine[0].PhaseCount + outputConfigurationsToCombine[1].PhaseCount;
+                                int phaseCount = default; 
+
+                                // generate new combination phase count
+                                ObservableCollection<int> phaseCounts = new ObservableCollection<int>();
+                                for (int b = outputConfigurationsToCombine.Count - 1; b >= 0; b--)
+                                {
+                                    foreach (var item in outputConfigurationsToCombine[b].PhaseCounts)
+                                    {
+                                        phaseCounts.Add(item);
+                                        phaseCount += item;
+                                    }
+                                }
+
+                                // generate new combination max output
+                                ObservableCollection<double> maxOutput = new ObservableCollection<double>();
+                                for (int b = outputConfigurationsToCombine.Count - 1; b >= 0; b--)
+                                {
+                                    foreach (var item in outputConfigurationsToCombine[b].MaxOutput)
+                                    {
+                                        maxOutput.Add(item);
+                                    }
+                                }
+
+                                // generate new combination configuration ids
+                                ObservableCollection<int> configIds = new ObservableCollection<int>();
+                                for (int b = outputConfigurationsToCombine.Count - 1; b >= 0; b--)
+                                {
+                                    foreach (var item in outputConfigurationsToCombine[b].ConfigIDs)
+                                    {
+                                        configIds.Add(item);
+                                    }
+                                }
+
+                                // generate new combination amplifiers
+                                ObservableCollection<int> amplifiers = new ObservableCollection<int>();
+                                for (int b = outputConfigurationsToCombine.Count - 1; b >= 0; b--)
+                                {
+                                    foreach (var item in outputConfigurationsToCombine[b].AmplifierNumber)
+                                    {
+                                        amplifiers.Add(item);
+                                    }
+                                }
+                               
 
                                 // add new combination configuration to the list.
                                 outputConfigurations.Add(new SettingsListItemViewModel()
-                                { 
-                                    // the new configuration id for the combined amplifiers
-                                    // most likely this number is not supported natively by omicron
-                                    ConfigID = $"{outputConfigurationsToCombine[1].ConfigID},{outputConfigurationsToCombine[0].ConfigID}",
-                                    // phase count of the combination of the amplifiers
-                                    PhaseCount = phaseCount,
+                                {
+                                    // configuration ids for the combined amplifiers
+                                    ConfigIDs = configIds, 
+                                    // max output of the combination of the amplifiers
+                                    MaxOutput = maxOutput,
+                                    // phase counts for the combined amplifiers
+                                    PhaseCounts = phaseCounts,
                                     // wire diagram file location to show to the user
                                     WiringDiagramFileLocation = $"{outputConfigurationsToCombine[1].Mode}{outputConfigurationsToCombine[1].WiringID}{outputConfigurationsToCombine[0].Mode}{outputConfigurationsToCombine[0].WiringID}",
                                     // construct string to show to the user.
@@ -334,7 +413,14 @@ namespace metering.core
                                     GroupName = amplifierInitial,
                                     // add the mode since both amplifiers has same mode just use the last ones
                                     Mode = outputConfigurationsToCombine[1].Mode,
+                                    // save raw response
+                                    RawOmicronResponse = $"{outputConfigurationsToCombine[1].RawOmicronResponse}, {outputConfigurationsToCombine[0].RawOmicronResponse}",
+                                   // new Amplifier Descriptors
+                                    AmplifierNumber = amplifiers,
                                 });
+
+                                // update the log.
+                                await IoC.Task.Run(() => IoC.Logger.Log(outputConfigurations.Last().WiringDiagramString));
                             }
                         }
                         break;
