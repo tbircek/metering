@@ -20,7 +20,8 @@
 
             <!-- Omicron Hardware Configuration Button-->
             <!-- visible in every page -->
-            <Button Margin="10 20 10 5" 
+            <Button 
+                Margin="10 20 10 5" 
                 Padding="0"
                 Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                 Cursor="Hand"
@@ -53,21 +54,22 @@
             <StackPanel Orientation="Vertical">
                 <!-- Start Test Button -->
                 <!-- Only visible after the user hits "AddNewTest" button -->
-                <Button Margin="10 20 10 5" 
-                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
-                Command="{Binding StartTestCommand}"
-                mD:ButtonProgressAssist.IsIndicatorVisible="{Binding IsConnecting}"
-                mD:ButtonProgressAssist.IndicatorBackground="Red"
-                mD:ButtonProgressAssist.IndicatorForeground="{StaticResource SecondaryAccentForegroundBrush}"
-                mD:ButtonProgressAssist.Minimum="0.0"
-                mD:ButtonProgressAssist.Maximum="{Binding MaximumTestCount}"
-                mD:ButtonProgressAssist.Value="{Binding TestProgress}"
-                mD:ButtonProgressAssist.IsIndeterminate="True"
-                Background="Transparent"
-                ToolTip="Start all test steps"
-                Visibility="{Binding NewTestAvailable,
-                                    Converter={local:BooleanToVisibilityConverter},
-                                    ConverterParameter=False}">
+                <Button 
+                    Margin="10 20 10 5" 
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                    Command="{Binding StartTestCommand}"
+                    mD:ButtonProgressAssist.IsIndicatorVisible="{Binding IsConnecting}"
+                    mD:ButtonProgressAssist.IndicatorBackground="Red"
+                    mD:ButtonProgressAssist.IndicatorForeground="{StaticResource SecondaryAccentForegroundBrush}"
+                    mD:ButtonProgressAssist.Minimum="0.0"
+                    mD:ButtonProgressAssist.Maximum="{Binding MaximumTestCount}"
+                    mD:ButtonProgressAssist.Value="{Binding TestProgress}"
+                    mD:ButtonProgressAssist.IsIndeterminate="True"
+                    Background="Transparent"
+                    ToolTip="Start all test steps"
+                    Visibility="{Binding NewTestAvailable,
+                                        Converter={local:BooleanToVisibilityConverter},
+                                        ConverterParameter=False}">
 
                     <!-- icon on the button-->
                     <mD:PackIcon Padding="5" 
@@ -88,10 +90,10 @@
                                             <BeginStoryboard>
                                                 <Storyboard>
                                                     <DoubleAnimation 
-                                                Storyboard.TargetProperty="Opacity"
-                                                From="0"
-                                                To="1"
-                                                Duration="0:0:0.8"/>
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        From="0"
+                                                        To="1"
+                                                        Duration="0:0:0.8"/>
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </DataTrigger.EnterActions>
@@ -104,16 +106,17 @@
 
                 <!-- Add New Test Button-->
                 <!-- visible by default, invisible after the user hits "StartTest" button -->
-                <Button Margin="10 20 10 5" 
-                Padding="0"
-                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
-                Cursor="Hand"
-                TabIndex="9"
-                Background="Transparent"
-                Command="{Binding AddNewTestCommand}"
-                ToolTip="Add new test steps"
-                Visibility="{Binding NewTestAvailable,
-                                        Converter={local:BooleanToVisibilityConverter}}">
+                <Button 
+                    Margin="10 20 10 5" 
+                    Padding="0"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                    Cursor="Hand"
+                    TabIndex="9"
+                    Background="Transparent"
+                    Command="{Binding AddNewTestCommand}"
+                    ToolTip="Add new test steps"
+                    Visibility="{Binding NewTestAvailable,
+                                            Converter={local:BooleanToVisibilityConverter}}">
 
                     <!-- icon on the button-->
                     <mD:PackIcon Padding="5"
@@ -135,13 +138,13 @@
 
                 <!-- Cancel Button -->
                 <Button Margin="10 20 10 10" 
-                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
-                Cursor="Hand"
-                TabIndex="8"
-                Background="Transparent"
-                Command="{Binding Path=CancelNewTestCommand}"
-                ToolTip="Cancel all test steps"
-                Visibility="{Binding NewTestAvailable,
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                        Cursor="Hand"
+                        TabIndex="8"
+                        Background="Transparent"
+                        Command="{Binding Path=CancelNewTestCommand}"
+                        ToolTip="Cancel all test steps"
+                        Visibility="{Binding NewTestAvailable,
                                     Converter={local:BooleanToVisibilityConverter},
                                     ConverterParameter=False}">
 
@@ -207,9 +210,10 @@
                         Background="Transparent"
                         Command="{Binding Path=LoadTestsCommand}"
                         ToolTip="Load test step(s)"
-                        Visibility="{Binding NewTestAvailable,
+                        Visibility="Visible">
+                    <!--"{Binding NewTestAvailable,
                                             Converter={local:BooleanToVisibilityConverter},
-                                            ConverterParameter=False}">
+                                            ConverterParameter=False}">-->
                     <!-- icon on the button -->
                     <mD:PackIcon Padding="5"
                                  Height="Auto" 
