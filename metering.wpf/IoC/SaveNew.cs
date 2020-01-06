@@ -119,6 +119,9 @@ namespace metering
             // handles "SaveFileDialog"
             if (Equals(dlg.Tag, FileDialogOption.Save))
             {
+                // update TestFileName
+                IoC.TestDetails.TestFileName = dlg.SafeFileName;
+
                 // generate a new Test Steps Logger
                 var fileOkTask =
                     IoC.Task.Run(() => new TestStepsLogger(
@@ -130,12 +133,14 @@ namespace metering
                         test: IoC.TestDetails
                         ));
 
+                // saving completed successfully.
                 if (TaskStatus.RanToCompletion == fileOkTask.Status)
                 {
 
                     // dispose dialog box
                     dlg = null;
                 }
+                // saving the file failed.
                 else if (TaskStatus.Faulted == fileOkTask.Status)
                 {
                     // inform the developer about error
@@ -193,6 +198,28 @@ namespace metering
 
                     // update SelectedRampingSignal
                     IoC.TestDetails.SelectedRampingSignal = test.SelectedRampingSignal;
+
+                    // update Link Ramping Signals status
+                    // If SelectedRampingSignal == "Frequency"
+                    if (Equals(nameof(TestDetailsViewModel.RampingSignals.Frequency), test.SelectedRampingSignal))
+                    {
+                        // frequencies are linked.
+                        IoC.TestDetails.IsLinked = test.IsLinked;
+                    }
+                    else
+                    {
+                        // frequencies are not linked
+                        IoC.TestDetails.IsLinked = false;
+                    }
+
+                    // update Hardware Configuration = Voltage
+                    IoC.TestDetails.SelectedVoltageConfiguration = test.SelectedVoltageConfiguration;
+
+                    // update Hardware Configuration = Current
+                    IoC.TestDetails.SelectedCurrentConfiguration = test.SelectedCurrentConfiguration;
+
+                    // update TestFileName.
+                    IoC.TestDetails.TestFileName = test.TestFileName;
 
                     // Show TestDetails page
                     IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);

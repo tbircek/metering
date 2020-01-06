@@ -291,11 +291,26 @@ namespace metering.core
                         // update test result report
                         await IoC.Task.Run(() =>
                         {
+                            // initialize test details string.
+                            string testDetailsFileName = string.Empty;
+
+                            if (string.IsNullOrWhiteSpace(IoC.TestDetails.TestFileName))
+                            {
+                                // test result file name contains Register, From, To, and test start time values
+                                testDetailsFileName = $"{IoC.TestDetails.Register}_{From:F6}-{To:F6}_{fileId}";
+                            }
+                            else
+                            {
+                                // test result file name contains "Test File Name" per the user input.
+                                // file name might contain multiple "."
+                                testDetailsFileName = $"{IoC.TestDetails.TestFileName.Substring(0,IoC.TestDetails.TestFileName.LastIndexOf('.'))}_{fileId}";
+                            }
+
                             // create a TestResultLogger to generate a test report in .csv format.
                             new TestResultLogger
                                  (
                                      // set file path and name
-                                     filePath: Path.Combine(ResultsFolder, $"{IoC.TestDetails.Register}_{From:F6}-{To:F6}_{fileId}.csv"),
+                                     filePath: Path.Combine(ResultsFolder, $"{testDetailsFileName}.csv"),
                                      // no need to save time
                                      logTime: false
                                  ).Log(@string.ToString(), LogLevel.Informative);

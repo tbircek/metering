@@ -145,6 +145,11 @@ namespace metering.core
         /// </summary>
         public bool IsLinked { get; set; }
 
+        /// <summary>
+        /// Holds the user entered test file name.
+        /// So this file name can be used as a prefix while saving test results.
+        /// </summary>
+        public string TestFileName { get; set; } = string.Empty;
         #endregion
 
         #region Public Commands
