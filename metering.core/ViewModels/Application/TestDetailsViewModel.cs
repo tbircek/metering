@@ -58,7 +58,7 @@ namespace metering.core
         /// would apply to <see cref="AnalogSignalListItemViewModel.From"/> and <see cref="AnalogSignalListItemViewModel.To"/> values.
         /// So initial view the both values would be same
         /// </summary>
-        public ObservableCollection<AnalogSignalListItemViewModel> AnalogSignals { get; set; }
+        public ObservableCollection<AnalogSignalListItemViewModel> AnalogSignals { get; set; } = new ObservableCollection<AnalogSignalListItemViewModel>() { };
 
         /// <summary>
         /// Provides a hint text for the <see cref="Register"/> textbox
