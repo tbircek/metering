@@ -39,12 +39,6 @@ namespace metering.core
         /// </summary>
         const double phase = 0.0f;
 
-        /// <summary>
-        /// Default value of Frequency amplifiers while testing non-frequency values and
-        /// must be a non-zero value.
-        /// </summary>
-        const double nominalFrequency = 60.0f;
-
         #endregion
 
         #region Private Methods
@@ -58,12 +52,7 @@ namespace metering.core
             // send commands to Omicron Test Set
             IoC.StringCommands.SendStringCommandAsync(omicronCommand: CommandToSend);
         }
-
-        private string SendOmicronCommandWithResponse(string CommandToSend)
-        {
-            return IoC.StringCommands.SendStringCommandWithResponseAsync(omicronCommand: CommandToSend).Result;
-        }
-
+        
         #endregion
 
         #region Public Methods
@@ -102,9 +91,6 @@ namespace metering.core
                     // amp_no == 1 is 1st,  amp_no == 5 is 2nd voltage amplifier per Omicron Documentation
                     SendOmicronCommand(string.Format(OmicronStringCmd.amp_route_v_0_1, 5 == amp_no ? 2 : amp_no, config));
 
-                    // record configuration string command
-                    IoC.Logger.Log($"Configuring amp_no {amp_no}: {string.Format(OmicronStringCmd.amp_route_v_0_1, 5 == amp_no ? 2 : amp_no, Convert.ToInt32(config))}");
-                    
                     // reset Max output value
                     MaxVoltageMagnitude = IoC.TestDetails.SelectedVoltageConfiguration.MaxOutput[hardwareConfigurationPosition];
 
@@ -147,6 +133,7 @@ namespace metering.core
             }
             catch (Exception ex)
             {
+                // update the log
                 IoC.Logger.Log($"InnerException: {ex.Message}");
                 IoC.Communication.Log = $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}.";
 
