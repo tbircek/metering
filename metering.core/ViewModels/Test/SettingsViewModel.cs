@@ -196,6 +196,9 @@ namespace metering.core
                     // set visibility of "Cancel tests" button
                     IoC.Commands.Cancellation = true;
 
+                    // set visibility of "Hardware Configuration" button
+                    IoC.Commands.ConfigurationAvailable = false;
+
                     // Show TestDetails page
                     IoC.Application.GoToPage(ApplicationPage.Settings, IoC.Settings);
 

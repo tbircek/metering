@@ -37,6 +37,11 @@ namespace metering.core
         public bool Cancellation { get; set; } = false;
 
         /// <summary>
+        /// Holds visibility information of "Hardware Configuration" button
+        /// </summary>
+        public bool ConfigurationAvailable { get; set; } = true;
+
+        /// <summary>
         /// Holds Foreground color information for the Start Test Command button
         /// </summary>
         public string StartTestForegroundColor { get; set; }
@@ -185,6 +190,9 @@ namespace metering.core
 
             // set visibility of "Cancel tests" button
             IoC.Commands.Cancellation = false;
+
+            // set visibility of "Hardware Configuration" button
+            IoC.Commands.ConfigurationAvailable = true;
 
             // Show NominalValues page
             IoC.Application.GoToPage(ApplicationPage.NominalValues);

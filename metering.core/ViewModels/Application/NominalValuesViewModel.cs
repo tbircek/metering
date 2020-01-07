@@ -170,6 +170,9 @@ namespace metering.core
         {
             try
             {
+                // set visibility of "Hardware Configuration" button
+                IoC.Commands.ConfigurationAvailable = true;
+
                 // did the use selected a hardware configuration?
                 if (IoC.TestDetails.SelectedCurrentConfiguration.CurrentWiringDiagram || IoC.TestDetails.SelectedVoltageConfiguration.CurrentWiringDiagram)
                 {

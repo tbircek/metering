@@ -230,6 +230,9 @@ namespace metering
                     // set visibility of Cancel button
                     IoC.Commands.Cancellation = true;
 
+                    // set visibility of "Hardware Configuration" button
+                    IoC.Commands.ConfigurationAvailable = true;
+
                     // Show TestDetails page
                     IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
 

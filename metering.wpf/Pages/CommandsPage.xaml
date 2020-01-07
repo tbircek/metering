@@ -25,7 +25,10 @@
                 TabIndex="9"
                 Background="Transparent"
                 Command="{Binding OmicronHardwareConfigurationCommand}"
-                ToolTip="Omicron Hardware Configuration">
+                ToolTip="Omicron Hardware Configuration"
+                Visibility="{Binding ConfigurationAvailable,
+                             Converter={local:BooleanToVisibilityConverter},
+                             ConverterParameter=False}">
 
                 <!-- icon on the button-->
                 <mD:PackIcon Padding="5"
@@ -127,7 +130,7 @@
                                 <Setter Property="Background" 
                                 Value="{Binding CancelForegroundColor, 
                                         Converter={local:StringToBrushConverter}}"/>
-                                <!--<Setter Property="Foreground" Value="Green"/>-->
+                                
                             </Style>
                         </mD:PackIcon.Style>
                     </mD:PackIcon>
@@ -156,8 +159,7 @@
                             <Style TargetType="mD:PackIcon" BasedOn="{StaticResource {x:Type mD:PackIcon}}">
                                 <Setter Property="Kind" Value="CloseOctagonOutline"/>
                                 <Setter Property="Background" Value="Red"/>
-                                <!--<Setter Property="Background" Value="{Binding CancelForegroundColor, 
-                                                                        Converter={local:StringToBrushConverter}}"/>-->
+                                
                             </Style>
                         </mD:PackIcon.Style>
                     </mD:PackIcon>
