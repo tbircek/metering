@@ -16,7 +16,7 @@ namespace metering.core
         /// Default value of Frequency amplifiers while testing non-frequency values and
         /// must be a non-zero value.
         /// </summary>
-        const double nominalFrequency = 60.0f;
+        private const double NominalFrequency = 60.0d;
 
         #endregion
 
@@ -48,8 +48,8 @@ namespace metering.core
                     // check if the user canceling test
                     if (!IoC.Commands.Token.IsCancellationRequested)
                     {
-                        // is frequency zero? yes == use nominalFrequency no == frequency
-                        double frequencyToApply = frequency.Equals(0) ? nominalFrequency : frequency;
+                        // is frequency zero? yes == use NominalFrequency no == frequency
+                        double frequencyToApply = frequency.Equals(0) ? NominalFrequency : frequency;
 
                         // build a string to send to Omicron Test set
                         StringBuilder stringBuilder = new StringBuilder($"out:ana:{generatorType}({tripletNumber}):{nameof(SignalType.a)}({amplitude});{nameof(SignalType.p)}({phase});{nameof(SignalType.f)}({frequencyToApply});wav(sin)");
