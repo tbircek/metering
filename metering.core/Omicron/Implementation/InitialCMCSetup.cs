@@ -10,34 +10,9 @@ namespace metering.core
     {
         #region Private Properties
 
-        /// <summary>
-        /// Omicron Test Set maximum voltage output limit.
-        /// </summary>
-        private double MaxVoltageMagnitude { get; set; } = 300.0f;
-
-        /// <summary>
-        /// Omicron Test Set maximum voltage output limit.
-        /// </summary>
-        private double MaxCurrentMagnitude { get; set; } = 12.50f;
-
         #endregion
 
         #region Private Variables
-
-        /// <summary>
-        /// Default value of Voltage amplifiers while testing non-voltage values.
-        /// </summary>
-        const double nominalVoltage = 120.0f;
-
-        /// <summary>
-        /// Default value of Current amplifiers while testing non-current values.
-        /// </summary>
-        const double nominalCurrent = 0.02f;
-
-        /// <summary>
-        /// Default value of amplifiers phase while testing non-phase values.
-        /// </summary>
-        const double phase = 0.0f;
 
         #endregion
 
