@@ -32,6 +32,11 @@ namespace metering.core
         public bool NewTestAvailable { get; set; } = false;
 
         /// <summary>
+        /// Holds visibility information of "Cancel tests" button
+        /// </summary>
+        public bool Cancellation { get; set; } = false;
+
+        /// <summary>
         /// Holds Foreground color information for the Start Test Command button
         /// </summary>
         public string StartTestForegroundColor { get; set; }
@@ -177,6 +182,9 @@ namespace metering.core
             // Update NominalValues RadioButtons to run a PropertyUpdate event
             IoC.NominalValues.SelectedVoltagePhase = "AllZero";
             IoC.NominalValues.SelectedCurrentPhase = "AllZero";
+
+            // set visibility of "Cancel tests" button
+            IoC.Commands.Cancellation = false;
 
             // Show NominalValues page
             IoC.Application.GoToPage(ApplicationPage.NominalValues);

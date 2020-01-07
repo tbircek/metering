@@ -14,10 +14,7 @@
         <!-- Settings commands -->
         <Border BorderBrush="Black"
                 BorderThickness="1 1 1 2">
-            <Border.Background>
-                <ImageBrush/>
-            </Border.Background>
-
+            
             <!-- Omicron Hardware Configuration Button-->
             <!-- visible in every page -->
             <Button 
@@ -144,7 +141,7 @@
                         Background="Transparent"
                         Command="{Binding Path=CancelNewTestCommand}"
                         ToolTip="Cancel all test steps"
-                        Visibility="{Binding NewTestAvailable,
+                        Visibility="{Binding Cancellation,
                                     Converter={local:BooleanToVisibilityConverter},
                                     ConverterParameter=False}">
 

@@ -227,6 +227,9 @@ namespace metering
                     // set visibility of Command buttons
                     IoC.Commands.NewTestAvailable = true;
 
+                    // set visibility of Cancel button
+                    IoC.Commands.Cancellation = true;
+
                     // Show TestDetails page
                     IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
 
