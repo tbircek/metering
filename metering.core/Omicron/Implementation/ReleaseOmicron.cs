@@ -79,10 +79,14 @@ namespace metering.core
             IoC.Communication.EAModbusClient.Disconnect();
 
             // Progress bar is invisible
-            IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
+            IoC.CMCControl.IsTestRunning = IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
 
             // change color of Cancel Command button to Red
             IoC.Commands.CancelForegroundColor = "ff0000";
+
+            // release omicron test set
+            Release();
+
         }
     }
 
