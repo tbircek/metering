@@ -10,6 +10,38 @@ namespace metering.core
     public class TestSignal
     {
         /// <summary>
+        /// Holds whether a ramping is possible with given <see cref="IoC.TestDetails.AnalogSignals"/>
+        /// </summary>
+        public bool IsRamping
+        {
+            get
+            {
+                bool ramping = default;
+
+                foreach (AnalogSignalListItemViewModel signal in IoC.TestDetails.AnalogSignals)
+                {
+                    // scan TestDetailsViewModel and return all signal properties where From and To values are not same
+                    if (!Convert.ToDouble(signal.From).Equals(Convert.ToDouble(signal.To)))
+                    {
+                        // property values of the signal
+                        // Delta = Convert.ToDouble(signal.Delta);
+                        // if Delta is zero move next item
+                        if (Equals(Convert.ToDouble(signal.Delta), 0.000000d))
+                        {
+                            ramping = false;
+                            continue;
+                        }
+                        else
+                        {
+                            ramping = true;
+                        }
+                    }
+                }
+                return ramping;
+            }
+        }
+
+        /// <summary>
         /// Holds properties of the Ramping Signal that decided by the first 
         /// different From and To values in <see cref="AnalogSignalViewModel.AnalogSignals"/>
         /// </summary>
