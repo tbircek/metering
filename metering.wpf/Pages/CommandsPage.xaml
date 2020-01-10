@@ -16,7 +16,6 @@
                 BorderThickness="1 1 1 2">
 
             <!-- Omicron Hardware Configuration Button-->
-            <!-- visible in every page -->
             <Button 
                 Margin="10 20 10 5" 
                 Padding="0"
@@ -27,6 +26,7 @@
                 Command="{Binding OmicronHardwareConfigurationCommand}"
                 mD:ButtonProgressAssist.IsIndicatorVisible="{Binding IsConfigurationAvailable}"
                 mD:ButtonProgressAssist.IndicatorForeground="{StaticResource SecondaryAccentForegroundBrush}"
+                mD:ButtonProgressAssist.IndicatorBackground="Red"
                 mD:ButtonProgressAssist.IsIndeterminate="True"
                 ToolTip="Omicron Hardware Configuration"
                 Visibility="{Binding ConfigurationAvailable,
@@ -68,7 +68,7 @@
                     mD:ButtonProgressAssist.IsIndeterminate="True"
                     Background="Transparent"
                     ToolTip="Start all test steps"
-                    Visibility="{Binding NewTestAvailable,
+                    Visibility="{Binding StartTestAvailable,
                                         Converter={local:BooleanToVisibilityConverter},
                                         ConverterParameter=False}">
 
@@ -117,7 +117,8 @@
                     Command="{Binding AddNewTestCommand}"
                     ToolTip="Add new test steps"
                     Visibility="{Binding NewTestAvailable,
-                                            Converter={local:BooleanToVisibilityConverter}}">
+                                         Converter={local:BooleanToVisibilityConverter},
+                                         ConverterParameter=False}">
 
                     <!-- icon on the button-->
                     <mD:PackIcon Padding="5"
@@ -182,7 +183,7 @@
                         Background="Transparent"
                         Command="{Binding Path=SaveNewTestCommand}"
                         ToolTip="Save this test step"
-                        Visibility="{Binding NewTestAvailable,
+                        Visibility="{Binding StartTestAvailable,
                                             Converter={local:BooleanToVisibilityConverter},
                                             ConverterParameter=False}">
                     <!-- icon on the button -->
@@ -210,10 +211,9 @@
                         Background="Transparent"
                         Command="{Binding Path=LoadTestsCommand}"
                         ToolTip="Load test step(s)"
-                        Visibility="Visible">
-                    <!--"{Binding NewTestAvailable,
-                                            Converter={local:BooleanToVisibilityConverter},
-                                            ConverterParameter=False}">-->
+                        Visibility="{Binding LoadTestAvailable,
+                                             Converter={local:BooleanToVisibilityConverter},
+                                             ConverterParameter=True}">
                     <!-- icon on the button -->
                     <mD:PackIcon Padding="5"
                                  Height="Auto" 
@@ -230,6 +230,7 @@
                 </Button>
 
                 <!-- Delete Test Command Button -->
+                <!-- multi-test only button-->
                 <Button Margin="10 20 10 5" 
                         Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                         Cursor="Hand"
@@ -237,9 +238,11 @@
                         Background="Transparent"
                         Command="{Binding Path=DeleteSelectedTestCommand}"
                         ToolTip="Delete selected test step from the current test strip"
-                        Visibility="{Binding NewTestAvailable,
+                        Visibility="Collapsed">
+                    <!--"{Binding NewTestAvailable,
                                             Converter={local:BooleanToVisibilityConverter},
-                                            ConverterParameter=False}">
+                                            ConverterParameter=False}">-->
+
                     <!-- icon on the button -->
                     <mD:PackIcon Padding="5"
                                  Height="Auto" 
