@@ -122,7 +122,7 @@ namespace metering.core
                         break;
                     default:
                         // update the log
-                        IoC.Logger.Log($"Omicron amplifier {responses.GetValue(responses.Length - 1)}is not supported");
+                        IoC.Logger.Log($"Omicron amplifier {responses.GetValue(responses.Length - 1)} is not supported");
                         continue;
                 }
 
@@ -150,7 +150,7 @@ namespace metering.core
                 if (Equals(responses[7], "zero"))
                 {
                     // two options Voltage is "V" and Current is "I"
-                    autamaticallyCalculated = $", {(amplifierInitial == "A" ? "I" : amplifierInitial)}E automatically calculated";
+                    autamaticallyCalculated = $"{(amplifierInitial == "A" ? "I" : amplifierInitial)}E automatically calculated";
                 }
 
                 // outputConfiguration.
@@ -159,12 +159,19 @@ namespace metering.core
                 // 85VA @ 85V,
                 string vaString = $"{Convert.ToDouble(responses[4], CultureInfo.CurrentCulture)}VA @ {Convert.ToDouble(responses[5], CultureInfo.CurrentCulture)}{amplifierInitial}, ";
                 // 3x300V, 85VA @ 85V, 1Arms
-                outputConfiguration.WiringDiagramString = $"{magnitudeString}{vaString}{Convert.ToDouble(responses[6], CultureInfo.CurrentCulture)}{outputType}rms{autamaticallyCalculated}";
+                outputConfiguration.WiringDiagramString = $"{magnitudeString}{vaString}{Convert.ToDouble(responses[6], CultureInfo.CurrentCulture)}{outputType}rms, {autamaticallyCalculated}";
                 // add group name for the radio buttons
                 outputConfiguration.GroupName = amplifierInitial;
 
                 // construct the string.
                 await IoC.Task.Run(() => IoC.Logger.Log(outputConfiguration.WiringDiagramString));
+
+                // is this amplifier Selected Voltage or Selected Current?
+                if (string.Equals(outputConfiguration.WiringDiagramFileName, IoC.Settings.SelectedVoltage) || string.Equals(outputConfiguration.WiringDiagramFileName, IoC.Settings.SelectedCurrent))
+                {
+                    // update check box
+                    outputConfiguration.CurrentWiringDiagram = true;
+                }
 
                 // construct the view model.
                 outputConfigurations.Add(outputConfiguration);
@@ -243,9 +250,9 @@ namespace metering.core
                                         amplifiers.Add(item);
                                     }
                                 }
-
+                                
                                 // add new combination configuration to the list.
-                                outputConfigurations.Add(new SettingsListItemViewModel()
+                                SettingsListItemViewModel settings = new SettingsListItemViewModel()
                                 {
                                     // configuration ids for the combined amplifiers
                                     ConfigIDs = configIds,
@@ -265,7 +272,15 @@ namespace metering.core
                                     RawOmicronResponse = $"{outputConfigurationsToCombine[1].RawOmicronResponse}, {outputConfigurationsToCombine[0].RawOmicronResponse}",
                                     // new Amplifier Descriptors
                                     AmplifierNumber = amplifiers,
-                                });
+                                };
+
+                                // generate file name to compare selected configuration file name.
+                                string wiringDiagramFileName = $"{outputConfigurationsToCombine[1].Mode}{outputConfigurationsToCombine[1].WiringID}{outputConfigurationsToCombine[0].Mode}{outputConfigurationsToCombine[0].WiringID}";
+                                // update check box status
+                                settings.CurrentWiringDiagram = string.Equals(wiringDiagramFileName, IoC.Settings.SelectedVoltage) || string.Equals(wiringDiagramFileName, IoC.Settings.SelectedCurrent);
+
+                                // add combined hardware configuration to the list
+                                outputConfigurations.Add(settings);
 
                                 // update the log.
                                 await IoC.Task.Run(() => IoC.Logger.Log(outputConfigurations.Last().WiringDiagramString));
