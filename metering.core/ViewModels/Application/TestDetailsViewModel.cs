@@ -118,7 +118,7 @@ namespace metering.core
         /// <summary>
         /// indicates if the current text double left clicked to highlight the text
         /// </summary>
-        public bool Selected { get; set; }
+        public bool Selected { get; set; } = false;
 
         /// <summary>
         /// Indicates Ramping Signal property is Magnitude.
@@ -128,12 +128,12 @@ namespace metering.core
         /// <summary>
         /// Indicates Ramping Signal property is Phase.
         /// </summary>
-        public bool IsPhase { get; set; }
+        public bool IsPhase { get; set; } = false;
 
         /// <summary>
         /// Indicates Ramping Signal property is Frequency.
         /// </summary>
-        public bool IsFrequency { get; set; }
+        public bool IsFrequency { get; set; } = false;
 
         /// <summary>
         /// Holds information about the signal parameter to ramp
@@ -143,7 +143,7 @@ namespace metering.core
         /// <summary>
         /// Indicates if Ramping Signal should ramp every signal's frequency.
         /// </summary>
-        public bool IsLinked { get; set; }
+        public bool IsLinked { get; set; } = false;
 
         /// <summary>
         /// Holds the user entered test file name.
