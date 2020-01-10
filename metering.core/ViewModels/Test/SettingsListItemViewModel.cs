@@ -15,7 +15,7 @@ namespace metering.core
         /// <summary>
         /// holder for the WiringDiagramFileLocation
         /// </summary>
-        private string wiringDiagramFileLocation;
+        private string wiringDiagramFileLocation = "not used";
 
         #endregion
 
@@ -54,6 +54,37 @@ namespace metering.core
         public string WiringDiagramString { get; set; } = string.Empty;
 
         /// <summary>
+        /// Returns file name of the hardware configuration
+        /// </summary>
+        public string WiringDiagramFileName
+        {
+            get
+            {
+                // return wiring diagram file name.
+                return wiringDiagramFileLocation; // .Substring(wiringDiagramFileLocation.LastIndexOf('/'), wiringDiagramFileLocation.LastIndexOf('/') - wiringDiagramFileLocation.LastIndexOf('.'));
+            }
+            set
+            {
+                // if new selection is different than previous
+                if (!Equals(value, wiringDiagramFileLocation))
+                {
+                    // update the old value.
+                    // check if the file loading
+                    if (value.Contains("/"))
+                    {
+                        // value loaded from the saved file
+                        wiringDiagramFileLocation = value.Substring(value.LastIndexOf('/') + 1, value.LastIndexOf('.') - value.LastIndexOf('/') - 1);
+                    }
+                    else
+                    {
+                        // value selected from the user interface
+                        wiringDiagramFileLocation = value;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// path to the wiring diagram associated with this hardware configuration
         /// </summary>
         public string WiringDiagramFileLocation
@@ -69,7 +100,17 @@ namespace metering.core
                 if (!Equals(value, wiringDiagramFileLocation))
                 {
                     // update the old value.
-                    wiringDiagramFileLocation = value;
+                    // check if the file loading
+                    if (value.Contains("/"))
+                    {
+                        // value loaded from the saved file
+                        wiringDiagramFileLocation = value.Substring(value.LastIndexOf('/') + 1, value.LastIndexOf('.') - value.LastIndexOf('/') - 1);
+                    }
+                    else
+                    {
+                        // value selected from the user interface
+                        wiringDiagramFileLocation = value;
+                    }
                 }
             }
         }
@@ -116,6 +157,7 @@ namespace metering.core
         /// Holds raw Omicron Hardware configuration response for troubleshooting
         /// </summary>
         public string RawOmicronResponse { get; set; } = string.Empty;
+
         #endregion
 
         #region Public Commands
