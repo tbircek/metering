@@ -55,7 +55,7 @@ namespace metering.core
                         StringBuilder stringBuilder = new StringBuilder($"out:ana:{generatorType}({tripletNumber}):{nameof(SignalType.a)}({amplitude});{nameof(SignalType.p)}({phase});{nameof(SignalType.f)}({frequencyToApply});wav(sin)");
 
                         // update the log
-                        IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID}\tcommand: {stringBuilder}", LogLevel.Informative);
+                        IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID} -- command: {stringBuilder}", LogLevel.Informative);
 
                         // send newly generated string command to Omicron Test Set
                         await IoC.Task.Run(() =>
@@ -98,23 +98,26 @@ namespace metering.core
                     // check if the user canceling test
                     if (!IoC.Commands.Token.IsCancellationRequested)
                     {
-                        // pass received string command to Omicron Test set
-                        await IoC.Task.Run(() =>
+                        if (IoC.TestDetails.SelectedCurrentConfiguration.CurrentWiringDiagram || IoC.TestDetails.SelectedVoltageConfiguration.CurrentWiringDiagram)
                         {
-                            try
+                            // pass received string command to Omicron Test set
+                            await IoC.Task.Run(() =>
                             {
-                                // update the log
-                                IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID}\tcommand: {omicronCommand}", LogLevel.Informative);
+                                try
+                                {
+                                    // update the log
+                                    IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID} -- command: {omicronCommand}", LogLevel.Informative);
 
-                                // send string command
-                                IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand);
-                            }
-                            catch (COMException ex)
-                            {
-                                // inform the developer about error.
-                                IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
-                            }
-                        });
+                                    // send string command
+                                    IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand);
+                                }
+                                catch (COMException ex)
+                                {
+                                    // inform the developer about error.
+                                    IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -140,23 +143,23 @@ namespace metering.core
                     // set default response
                     string response = string.Empty;
 
-                    // check if the user canceling test
-                    if (!IoC.Commands.Token.IsCancellationRequested)
+                    //// check if the user canceling test
+                    //if (!IoC.Commands.Token.IsCancellationRequested)
+                    //{
+                    try
                     {
-                        try
-                        {
-                            //// update the log
-                            //IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID}\tcommand: {omicronCommand}", LogLevel.Informative);
+                        //// update the log
+                        //IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID}\tcommand: {omicronCommand}", LogLevel.Informative);
 
-                            // pass received string command to Omicron Test set
-                            response = await IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand));
-                        }
-                        catch (COMException ex)
-                        {
-                            // inform the developer about error.
-                            IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
-                        }
+                        // pass received string command to Omicron Test set
+                        response = await IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand));
                     }
+                    catch (COMException ex)
+                    {
+                        // inform the developer about error.
+                        IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
+                    }
+                    //}
 
                     // return Omicron Test Set response
                     return response;
