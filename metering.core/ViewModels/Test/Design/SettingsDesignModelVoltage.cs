@@ -32,6 +32,7 @@ namespace metering.core
                     ConfigIDs = new ObservableCollection<int>{ 9 }, // 9,
                     WiringDiagramString = "4x300V, 85VA @ 85V, 1Arms",
                     Mode = "std", // std,0,
+                    CurrentWiringDiagram = true,
                 },
 
                 new SettingsListItemViewModel
@@ -41,6 +42,7 @@ namespace metering.core
                     ConfigIDs = new ObservableCollection<int>{ 9 }, // 9,
                     WiringDiagramString = "3x300V, 85VA @ 85V, 1Arms",
                     Mode = "std", // std,0,
+                    CurrentWiringDiagram = false,
                 },
 
                 new SettingsListItemViewModel
@@ -49,7 +51,8 @@ namespace metering.core
                     // Omicron UI shows: 1x300V, 150VA @ 75V, 2Arms
                     ConfigIDs = new ObservableCollection<int>{ 10 }, // 10,
                     WiringDiagramString = "1x300V, 150VA @ 75V, 2Arms",
-                    Mode = "std", // std,14,    
+                    Mode = "std", // std,14,  
+                    CurrentWiringDiagram = false,
                 },
 
                 new SettingsListItemViewModel
@@ -59,6 +62,7 @@ namespace metering.core
                     ConfigIDs = new ObservableCollection<int>{ 11 }, // 11,
                     WiringDiagramString = "3x300V, 50VA @ 75V, 660mArms, VE automatically calculated",
                     Mode = "zero", // zero, 
+                    CurrentWiringDiagram = false,
                 },
 
                 new SettingsListItemViewModel
@@ -68,6 +72,7 @@ namespace metering.core
                     ConfigIDs = new ObservableCollection<int>{ 12 }, // 12,                    
                     WiringDiagramString = "1x600V, 250VA @ 200V, 1.25Arms",
                     Mode = "ser13", // ser13,4, 
+                    CurrentWiringDiagram = false,
                 },
 
                 new SettingsListItemViewModel
@@ -77,6 +82,7 @@ namespace metering.core
                     ConfigIDs = new ObservableCollection<int>{ 13 }, // 13,
                     WiringDiagramString = "2x600V, 125VA @ 150V, 1Arms",
                     Mode = "ser2", // ser2,17,  
+                    CurrentWiringDiagram = false,
                 },
             };
         }

@@ -30,6 +30,7 @@ namespace metering.core
             WiringDiagramString = "4x300V, 85VA @ 85V, 1Arms";
             Mode = "std"; // std + 0,
             GroupName = "V";
+            CurrentWiringDiagram = true;
         }
 
         #endregion

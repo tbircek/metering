@@ -34,6 +34,7 @@ namespace metering.core
                     WiringDiagramString = "6x12.5A, 70VA @ 7.5A, 10Vrms",
                     Mode = "zero40", // zero,40,
                     WiringDiagramFileLocation = "zero40",
+                    CurrentWiringDiagram = false,
                 },
 
                 new SettingsListItemViewModel
@@ -45,6 +46,7 @@ namespace metering.core
                     WiringDiagramString = "3x12.5A, 70VA @ 7.5A, 10Vrms",
                     Mode = "std18", // std,18,
                     WiringDiagramFileLocation = "std18", // std,18,
+                    CurrentWiringDiagram = false,
                 },
 
                 new SettingsListItemViewModel
@@ -56,6 +58,7 @@ namespace metering.core
                     WiringDiagramString = "3x12.5A, 70VA @ 7.5A, 10Vrms",
                     Mode = "std19", // std,19,
                     WiringDiagramFileLocation = "std19", // std,19,
+                    CurrentWiringDiagram = true,
                 },
 
                 new SettingsListItemViewModel
@@ -67,6 +70,7 @@ namespace metering.core
                     WiringDiagramString = "3x12.5A, 70VA @ 7.5A, 10Vrms, IE automatically calculated",
                     Mode = "std19", // std,19,
                     WiringDiagramFileLocation = "std19", // std,19,
+                    CurrentWiringDiagram = false,
                 },
 
                 new SettingsListItemViewModel
@@ -78,6 +82,7 @@ namespace metering.core
                     WiringDiagramString = "3x25A, 140VA @ 15A, 10Vrms",
                     Mode = "par35", // par3,5, 
                     WiringDiagramFileLocation = "par35", // par3,5, 
+                    CurrentWiringDiagram = false,
                 },
 
                 new SettingsListItemViewModel
@@ -88,7 +93,8 @@ namespace metering.core
                     PhaseCounts = new ObservableCollection<int>{ 1 }, // 1,
                     WiringDiagramString = "1x37.5A, 210VA @ 22.5A, 10Vrms",
                     Mode = "par120", // par1,20,         
-                    WiringDiagramFileLocation = "par120", // par1,20,         
+                    WiringDiagramFileLocation = "par120", // par1,20,  
+                    CurrentWiringDiagram = false,
                 },
 
                 new SettingsListItemViewModel
@@ -100,6 +106,7 @@ namespace metering.core
                     WiringDiagramString = "1x37.5A, 210VA @ 22.5A, 10Vrms",
                     Mode = "par121", // par1,21,
                     WiringDiagramFileLocation = "par121", // par1,21,
+                    CurrentWiringDiagram = false,
                 },
 
             };
