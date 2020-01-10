@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using metering.core.Resources;
@@ -32,6 +30,11 @@ namespace metering.core
         public string VoltageDiagramLocation { get; set; } = "../Images/Omicron/not used voltage.png";
 
         /// <summary>
+        /// Holds information <see cref="WiringDiagramString"/> of the voltage configuration is selected.
+        /// </summary>
+        public string SelectedVoltage { get; set; } = "not used voltage";
+
+        /// <summary>
         /// Holds voltage wiring diagram header information
         /// </summary>
         public string VoltageHeader
@@ -50,6 +53,11 @@ namespace metering.core
         /// Holds wiring diagram for the current amplifiers.
         /// </summary>
         public string CurrentDiagramLocation { get; set; } = "../Images/Omicron/not used current.png";
+
+        /// <summary>
+        /// Holds information <see cref="WiringDiagramString"/> of the current configuration is selected.
+        /// </summary>
+        public string SelectedCurrent { get; set; } = "not used current";
 
         /// <summary>
         /// Holds voltage wiring diagram header information
@@ -109,32 +117,11 @@ namespace metering.core
         {
             // update the log
             await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(GetWiringDiagram)} started."));
-            await IoC.Task.Run(() => IoC.Logger.Log($"Group name: {((SettingsListItemViewModel)parameter).GroupName} selected."));
-            // retrieve configuration identification(s)
-            foreach (var item in ((SettingsListItemViewModel)parameter).ConfigIDs)
-            {
-                // update the log
-                await IoC.Task.Run(() => IoC.Logger.Log($"Configuration id: {item} selected."));
-            }
-            // update the log
-            await IoC.Task.Run(() => IoC.Logger.Log($"file location: {((SettingsListItemViewModel)parameter).WiringDiagramFileLocation} selected."));
-            // update the log
-            await IoC.Task.Run(() => IoC.Logger.Log($"mode: {((SettingsListItemViewModel)parameter).Mode} selected."));
-            // retrieve phase count(s)
-            foreach (var item in ((SettingsListItemViewModel)parameter).PhaseCounts)
-            {
-                // update the log
-                await IoC.Task.Run(() => IoC.Logger.Log($"phase count: {item} selected."));
-            }
-            // update the log
-            await IoC.Task.Run(() => IoC.Logger.Log($"raw response: {((SettingsListItemViewModel)parameter).RawOmicronResponse} selected."));
-            // retrieve amplifier number(s) 
-            foreach (var item in ((SettingsListItemViewModel)parameter).AmplifierNumber)
-            {
-                // update the log
-                await IoC.Task.Run(() => IoC.Logger.Log($"amplifier descriptor: {item} selected."));
-            }
+            //await IoC.Task.Run(() => IoC.Logger.Log($"Group name: {((SettingsListItemViewModel)parameter).GroupName} selected."));
 
+            // set visibility of "Add test" button
+            IoC.Commands.NewTestAvailable = true;
+            
             // set wiring diagrams per group names.
             switch (((SettingsListItemViewModel)parameter).GroupName.ToUpper())
             {
@@ -142,16 +129,33 @@ namespace metering.core
                 case "V":
                     // set wiring diagram image file location
                     VoltageDiagramLocation = ((SettingsListItemViewModel)parameter).WiringDiagramFileLocation;
+
                     // assign Selected Voltage Amplifier Hardware Configuration.
                     IoC.TestDetails.SelectedVoltageConfiguration = (SettingsListItemViewModel)parameter;
+
+                    // update selected voltage information
+                    SelectedVoltage = ((SettingsListItemViewModel)parameter).WiringDiagramFileName; //.WiringDiagramString;
+
+
+                    // update the log
+                    await IoC.Task.Run(() => IoC.Logger.Log($"Voltage configuration: {((SettingsListItemViewModel)parameter).WiringDiagramString} selected."));
                     break;
+
                 // signal == "Current"
                 case "A":
                     // set wiring diagram image file location
                     CurrentDiagramLocation = ((SettingsListItemViewModel)parameter).WiringDiagramFileLocation;
+
                     // assign Selected Current Amplifier Hardware Configuration.
                     IoC.TestDetails.SelectedCurrentConfiguration = (SettingsListItemViewModel)parameter;
+
+                    // update selected voltage information
+                    SelectedCurrent = ((SettingsListItemViewModel)parameter).WiringDiagramFileName; //.WiringDiagramString;
+
+                    // update the log
+                    await IoC.Task.Run(() => IoC.Logger.Log($"Current configuration: {((SettingsListItemViewModel)parameter).WiringDiagramString} selected."));
                     break;
+
                 // should never come here.
                 default:
                     // update the log
@@ -172,11 +176,15 @@ namespace metering.core
             // lock the task
             await AsyncAwaiter.AwaitAsync(nameof(HardwareConfiguration), async () =>
             {
+                // set visibility of "Hardware Configuration" animation
+                IoC.Commands.IsConfigurationAvailable = true;
+
                 // find cmc
                 if (await IoC.Task.Run(() => IoC.FindCMC.Find()))
                 {
                     // let log start
                     await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(HardwareConfiguration)} started."));
+
                     // update device info
                     await IoC.Task.Run(() => IoC.Logger.Log($"Following device associated: {IoC.CMCControl.DeviceInfo}."));
 
@@ -188,18 +196,23 @@ namespace metering.core
                     // update log file about the connected Omicron capabilities.
                     await IoC.Task.Run(() => IoC.Logger.Log($"Following hardware configurations available:"));
 
-                    // retrieve voltage capabilities.
+                    // retrieve voltage capabilities if the list is empty.
                     IoC.Settings.OmicronVoltageOutputs = await IoC.Configurations.Get("voltage");
                     // retrieve current capabilities.
                     IoC.Settings.OmicronCurrentOutputs = await IoC.Configurations.Get("current");
-
-                    // set visibility of "Cancel tests" button
+                    
+                    // set visibility of command buttons
                     IoC.Commands.Cancellation = true;
-
-                    // set visibility of "Hardware Configuration" button
+                    IoC.Commands.LoadTestAvailable = false;
+                    IoC.Commands.StartTestAvailable = false;
+                    IoC.Commands.NewTestAvailable = IoC.TestDetails.SelectedCurrentConfiguration.CurrentWiringDiagram || IoC.TestDetails.SelectedVoltageConfiguration.CurrentWiringDiagram; 
                     IoC.Commands.ConfigurationAvailable = false;
 
-                    // Show TestDetails page
+                    // change color of the Add New Test button to green.
+                    IoC.Commands.CancelForegroundColor = "00ff00";
+
+
+                    // Show Settings page
                     IoC.Application.GoToPage(ApplicationPage.Settings, IoC.Settings);
 
                     // disconnect from attached Omicron Test Set
