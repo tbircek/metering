@@ -221,17 +221,21 @@ namespace metering
                     // update TestFileName.
                     IoC.TestDetails.TestFileName = test.TestFileName;
 
+                    // update Settings view model
+                    IoC.Settings.CurrentDiagramLocation = test.SelectedCurrentConfiguration.WiringDiagramFileLocation;
+                    IoC.Settings.VoltageDiagramLocation = test.SelectedVoltageConfiguration.WiringDiagramFileLocation;
+                    IoC.Settings.SelectedCurrent = test.SelectedCurrentConfiguration.WiringDiagramString;
+                    IoC.Settings.SelectedVoltage = test.SelectedVoltageConfiguration.WiringDiagramString;
+
                     // change CancelForegroundColor to Red
                     IoC.Commands.CancelForegroundColor = "ff0000";
 
-                    // set visibility of Command buttons
-                    IoC.Commands.NewTestAvailable = true;
-
-                    // set visibility of Cancel button
+                    // set Command buttons
+                    IoC.Commands.StartTestAvailable = true;
+                    IoC.Commands.NewTestAvailable = false;
                     IoC.Commands.Cancellation = true;
-
-                    // set visibility of "Hardware Configuration" button
                     IoC.Commands.ConfigurationAvailable = true;
+                    IoC.Commands.IsConfigurationAvailable = false;
 
                     // Show TestDetails page
                     IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
