@@ -170,18 +170,13 @@ namespace metering.core
         {
             try
             {
-                // set visibility of "Hardware Configuration" button
+                // set visibility of "Hardware Configuration" button and animation
                 IoC.Commands.ConfigurationAvailable = true;
+                IoC.Commands.IsConfigurationAvailable = false;
 
                 // did the use selected a hardware configuration?
                 if (IoC.TestDetails.SelectedCurrentConfiguration.CurrentWiringDiagram || IoC.TestDetails.SelectedVoltageConfiguration.CurrentWiringDiagram)
                 {
-
-                    // change CancelForegroundColor to Red
-                    IoC.Commands.CancelForegroundColor = "ff0000";
-
-                    // set visibility of Command buttons
-                    IoC.Commands.NewTestAvailable = true;
 
                     // generate AnalogSignals from nominal values.
                     ObservableCollection<AnalogSignalListItemViewModel> analogSignals = new ObservableCollection<AnalogSignalListItemViewModel>();
@@ -237,7 +232,13 @@ namespace metering.core
                 // default ramping signal is "Magnitude"
                 IoC.TestDetails.SelectedRampingSignal = nameof(TestDetailsViewModel.RampingSignals.Magnitude);
 
-                // set visibility of "Cancel tests" button
+                // change CancelForegroundColor to Red
+                IoC.Commands.CancelForegroundColor = "ff0000";
+
+                // set visibility of buttons
+                IoC.Commands.NewTestAvailable = false;
+                IoC.Commands.StartTestAvailable = true;
+                IoC.Commands.LoadTestAvailable = true;
                 IoC.Commands.Cancellation = true;
 
                 // Show TestDetails page
