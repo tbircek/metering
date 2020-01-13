@@ -24,7 +24,7 @@ namespace metering.core
         }
 
         #endregion
-
+        
         #region Public Method
 
         /// <summary>
@@ -166,8 +166,14 @@ namespace metering.core
                 // construct the string.
                 await IoC.Task.Run(() => IoC.Logger.Log(outputConfiguration.WiringDiagramString));
 
+
+                // retrieve file name of selected voltage
+                string voltageFileName = IoC.Settings.VoltageDiagramLocation.Substring(IoC.Settings.VoltageDiagramLocation.LastIndexOf('/') + 1, IoC.Settings.VoltageDiagramLocation.LastIndexOf('.') - IoC.Settings.VoltageDiagramLocation.LastIndexOf('/') - 1);
+                // retrieve file name of selected current
+                string currentFileName = IoC.Settings.CurrentDiagramLocation.Substring(IoC.Settings.CurrentDiagramLocation.LastIndexOf('/') + 1, IoC.Settings.CurrentDiagramLocation.LastIndexOf('.') - IoC.Settings.CurrentDiagramLocation.LastIndexOf('/') - 1);
+
                 // is this amplifier Selected Voltage or Selected Current?
-                if (string.Equals(outputConfiguration.WiringDiagramFileName, IoC.Settings.SelectedVoltage) || string.Equals(outputConfiguration.WiringDiagramFileName, IoC.Settings.SelectedCurrent))
+                if (string.Equals(outputConfiguration.WiringDiagramFileName, voltageFileName) || string.Equals(outputConfiguration.WiringDiagramFileName, currentFileName))
                 {
                     // update check box
                     outputConfiguration.CurrentWiringDiagram = true;
@@ -276,8 +282,31 @@ namespace metering.core
 
                                 // generate file name to compare selected configuration file name.
                                 string wiringDiagramFileName = $"{outputConfigurationsToCombine[1].Mode}{outputConfigurationsToCombine[1].WiringID}{outputConfigurationsToCombine[0].Mode}{outputConfigurationsToCombine[0].WiringID}";
+                                
+                                // retrieve file name of selected voltage
+                                voltageFileName = IoC.Settings.VoltageDiagramLocation.Substring(IoC.Settings.VoltageDiagramLocation.LastIndexOf('/') + 1, IoC.Settings.VoltageDiagramLocation.LastIndexOf('.') - IoC.Settings.VoltageDiagramLocation.LastIndexOf('/') - 1);
+                                // retrieve file name of selected current
+                                currentFileName = IoC.Settings.CurrentDiagramLocation.Substring(IoC.Settings.CurrentDiagramLocation.LastIndexOf('/') + 1, IoC.Settings.CurrentDiagramLocation.LastIndexOf('.') - IoC.Settings.CurrentDiagramLocation.LastIndexOf('/') - 1);
+
                                 // update check box status
-                                settings.CurrentWiringDiagram = string.Equals(wiringDiagramFileName, IoC.Settings.SelectedVoltage) || string.Equals(wiringDiagramFileName, IoC.Settings.SelectedCurrent);
+                                switch (settings.GroupName)
+                                {
+                                    // signal is a voltage
+                                    case "V":
+                                        // is it same voltage signal?
+                                        settings.CurrentWiringDiagram = string.Equals(wiringDiagramFileName, voltageFileName);
+                                        break;
+                                    // signal is a current
+                                    case "A":
+                                        // is it same current signal?
+                                        settings.CurrentWiringDiagram = string.Equals(wiringDiagramFileName, currentFileName);
+                                        break;
+                                    // did we miss something
+                                    default:
+                                        // assign a value
+                                        settings.CurrentWiringDiagram = string.Equals(wiringDiagramFileName, voltageFileName) || string.Equals(wiringDiagramFileName, currentFileName);
+                                        break;
+                                }
 
                                 // add combined hardware configuration to the list
                                 outputConfigurations.Add(settings);
