@@ -272,14 +272,16 @@ namespace metering.core
             // after the user clicked "Go" button
             TestSignal testSignal = new TestSignal();
 
-            // is any signal ramping
+            // is any signal ramping?
             if (testSignal.IsRamping)
             {
-
-                // there is a test set attached so run specified tests.
-                // lock the task
-                await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnitAsync), async () =>
+                // is the user selected a hardware configuration?
+                if (testSignal.IsRunningPermitted)
                 {
+                    // there is a test set attached so run specified tests.
+                    // lock the task
+                    await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnitAsync), async () =>
+                    {
 
                     // define the cancellation token source.
                     TokenSource = new CancellationTokenSource();
@@ -290,12 +292,18 @@ namespace metering.core
 
                     // Run test command
                     await IoC.Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails), Token);
-                });
+                    }); 
+                }
+                else
+                {
+                    // inform the user there is no hardware configuration available
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Running test is not permitted due to hardware configuration. Please check your configuration.";
+                }
             }
             else
             {
                 // inform the user there is no test case
-                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: There is no ramping signal.Please check your entries.";
+                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: There is no ramping signal. Please check your entries.";
             }
         }
 

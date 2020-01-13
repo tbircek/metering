@@ -42,6 +42,20 @@ namespace metering.core
         }
 
         /// <summary>
+        /// Holds if the test is permitted to run
+        /// </summary>
+        public bool IsRunningPermitted
+        {
+            get
+            {
+                // if ramping is possible and current or voltage configuration is selected
+                // Returns true, otherwise false.
+                return IsRamping &&
+                       (IoC.TestDetails.SelectedCurrentConfiguration.CurrentWiringDiagram || IoC.TestDetails.SelectedVoltageConfiguration.CurrentWiringDiagram);             
+            }
+        }
+
+        /// <summary>
         /// Holds properties of the Ramping Signal that decided by the first 
         /// different From and To values in <see cref="AnalogSignalViewModel.AnalogSignals"/>
         /// </summary>
