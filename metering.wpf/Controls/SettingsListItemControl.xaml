@@ -2,13 +2,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
-    xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:core="clr-namespace:metering.core;assembly=metering.core"
-    xmlns:local="clr-namespace:metering"
     x:Class="metering.SettingsListItemControl"
     mc:Ignorable="d"
-    FontSize="20"
+    FontSize="12" 
+    Background="Transparent"
     Foreground="{StaticResource SecondaryAccentForegroundBrush}">
 
     <Grid d:DataContext="{x:Static core:SettingsListItemDesignModel.Instance}" 
@@ -17,7 +16,7 @@
 
         <Grid.ColumnDefinitions>
             <!-- Wiring Diagram  String -->
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <!-- Wiring Diagram String -->
@@ -25,10 +24,13 @@
                      Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
                      Padding="2 0 2 0"     
                      Margin="5 10 5 10" 
-                     HorizontalContentAlignment="Center" 
+                     Command="{Binding GetWiringDiagramCommand}"
+                     CommandParameter="{Binding Mode=OneWay}"
+                     IsChecked="{Binding CurrentWiringDiagram}"
+                     HorizontalContentAlignment="Left" 
                      VerticalContentAlignment="Center"
                      Content="{Binding WiringDiagramString}"
-                     ToolTip="{Binding Mode}"
+                     ToolTip="{Binding WiringDiagramFileLocation}"
                      GroupName="{Binding GroupName}"/>
     </Grid>
 </UserControl>

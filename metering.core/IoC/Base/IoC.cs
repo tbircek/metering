@@ -86,6 +86,11 @@ namespace metering.core
         public static SettingsViewModel Settings => Get<SettingsViewModel>();
 
         /// <summary>
+        /// A shortcut to access to <see cref="Configurations"/>
+        /// </summary>
+        public static HardwareConfigurations Configurations => Get<HardwareConfigurations>();
+
+        /// <summary>
         /// A shortcut to access to <see cref="ILogFactory"/>
         /// </summary>
         public static ILogFactory Logger => Get<ILogFactory>();
@@ -164,6 +169,9 @@ namespace metering.core
 
             // Bind a single instance of CMCControl class
             Kernel.Bind<CMCControl>().ToConstant(new CMCControl());
+
+            // Bind a single instance of HardwareConfigurations class
+            Kernel.Bind<HardwareConfigurations>().ToConstant(new HardwareConfigurations());
 
         }
 

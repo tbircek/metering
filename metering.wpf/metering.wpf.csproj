@@ -365,7 +365,6 @@
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\Backgrounds\1.png" />
     <Resource Include="Images\Backgrounds\11.png" />
@@ -377,7 +376,51 @@
     <Resource Include="Images\Icons\metering.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Omicron\6X12.5, 70VA.PNG" />
+    <Resource Include="Images\Omicron\ser134.png" />
+    <Resource Include="Images\Omicron\std14.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\not used current.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\ser217.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\zero13.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\std0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\std18.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\std19.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\not used voltage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\par120.png" />
+    <Resource Include="Images\Omicron\par121.png" />
+    <Resource Include="Images\Omicron\par17.png" />
+    <Resource Include="Images\Omicron\parser11.png" />
+    <Resource Include="Images\Omicron\ser1247.png" />
+    <Resource Include="Images\Omicron\ser1248.png" />
+    <Resource Include="Images\Omicron\ser410.png" />
+    <Resource Include="Images\Omicron\std0std14.png" />
+    <Resource Include="Images\Omicron\std18std19.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\par35.png" />
+    <Resource Include="Images\Omicron\ser337.png" />
+    <Resource Include="Images\Omicron\zero40.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\ser1247ser1248.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Omicron\par120par121.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

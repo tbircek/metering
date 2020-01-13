@@ -137,9 +137,9 @@
                                         Converter={local:BooleanToVisibilityConverter},
                                         ConverterParameter=False}"
                             IsChecked="{Binding IsLinked}"
-                            Command="{Binding LinkRampingSignalsCommand}"
                             ToolTip="Check if all signals ramping is desired."
                             />
+                        <!--Command="{Binding LinkRampingSignalsCommand}"-->
                     </StackPanel>
                 </Border>
 

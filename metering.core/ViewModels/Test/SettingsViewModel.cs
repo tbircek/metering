@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,6 +11,7 @@ namespace metering.core
     /// </summary>
     public class SettingsViewModel : BaseViewModel
     {
+
         #region Public Properties
 
         /// <summary>
@@ -24,17 +24,56 @@ namespace metering.core
         /// </summary>
         public ApplicationPage OldApplicationPage { get; private set; }
 
+        /// <summary>
+        /// Holds wiring diagram for the voltage amplifiers.
+        /// </summary>
+        public string VoltageDiagramLocation { get; set; } = "../Images/Omicron/not used voltage.png";
 
         /// <summary>
-        /// indicates if the current text double left clicked to highlight the text
+        /// Holds information <see cref="WiringDiagramString"/> of the voltage configuration is selected.
         /// </summary>
-        public bool Selected { get; set; }
+        public string SelectedVoltage { get; set; } = "not used voltage";
 
-        ///// <summary>
-        ///// Omicron Analog Output Signals.
-        ///// </summary>
-        //public ObservableCollection<SettingsListItemViewModel> OmicronOutputSignals { get; set; }
-        
+        /// <summary>
+        /// Holds voltage wiring diagram header information
+        /// </summary>
+        public string VoltageHeader
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(IoC.CMCControl.DeviceInfo))
+                {
+                    return $"(??????) {Strings.omicron_config_voltage_header}";
+                }
+                return $"{IoC.CMCControl.DeviceInfo} {Strings.omicron_config_voltage_header}";
+            }
+        }
+
+        /// <summary>
+        /// Holds wiring diagram for the current amplifiers.
+        /// </summary>
+        public string CurrentDiagramLocation { get; set; } = "../Images/Omicron/not used current.png";
+
+        /// <summary>
+        /// Holds information <see cref="WiringDiagramString"/> of the current configuration is selected.
+        /// </summary>
+        public string SelectedCurrent { get; set; } = "not used current";
+
+        /// <summary>
+        /// Holds voltage wiring diagram header information
+        /// </summary>
+        public string CurrentHeader
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(IoC.CMCControl.DeviceInfo))
+                {
+                    return $"(??????) {Strings.omicron_config_current_header}";
+                }
+                return $"{IoC.CMCControl.DeviceInfo} {Strings.omicron_config_current_header}";
+            }
+        }
+
         /// <summary>
         /// Omicron Voltage Output Signals.
         /// </summary>
@@ -71,6 +110,63 @@ namespace metering.core
         #region Public Method
 
         /// <summary>
+        /// Gets Wiring diagram file location for both voltage and current amplifier
+        /// </summary>
+        /// <returns></returns>
+        public async Task GetWiringDiagram(object parameter)
+        {
+            // update the log
+            await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(GetWiringDiagram)} started."));
+            //await IoC.Task.Run(() => IoC.Logger.Log($"Group name: {((SettingsListItemViewModel)parameter).GroupName} selected."));
+
+            // set visibility of "Add test" button
+            IoC.Commands.NewTestAvailable = true;
+            
+            // set wiring diagrams per group names.
+            switch (((SettingsListItemViewModel)parameter).GroupName.ToUpper())
+            {
+                // signal == "Voltage"
+                case "V":
+                    // set wiring diagram image file location
+                    VoltageDiagramLocation = ((SettingsListItemViewModel)parameter).WiringDiagramFileLocation;
+
+                    // assign Selected Voltage Amplifier Hardware Configuration.
+                    IoC.TestDetails.SelectedVoltageConfiguration = (SettingsListItemViewModel)parameter;
+
+                    // update selected voltage information
+                    SelectedVoltage = ((SettingsListItemViewModel)parameter).WiringDiagramFileName; //.WiringDiagramString;
+
+
+                    // update the log
+                    await IoC.Task.Run(() => IoC.Logger.Log($"Voltage configuration: {((SettingsListItemViewModel)parameter).WiringDiagramString} selected."));
+                    break;
+
+                // signal == "Current"
+                case "A":
+                    // set wiring diagram image file location
+                    CurrentDiagramLocation = ((SettingsListItemViewModel)parameter).WiringDiagramFileLocation;
+
+                    // assign Selected Current Amplifier Hardware Configuration.
+                    IoC.TestDetails.SelectedCurrentConfiguration = (SettingsListItemViewModel)parameter;
+
+                    // update selected voltage information
+                    SelectedCurrent = ((SettingsListItemViewModel)parameter).WiringDiagramFileName; //.WiringDiagramString;
+
+                    // update the log
+                    await IoC.Task.Run(() => IoC.Logger.Log($"Current configuration: {((SettingsListItemViewModel)parameter).WiringDiagramString} selected."));
+                    break;
+
+                // should never come here.
+                default:
+                    // update the log
+                    IoC.Logger.Log($"Omicron amplifier {((SettingsListItemViewModel)parameter).WiringDiagramFileLocation}is not supported");
+                    break;
+            }
+            // update the log
+            await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(GetWiringDiagram)} ended."));
+        }
+
+        /// <summary>
         /// Handles Omicron Hardware Configuration Settings
         /// </summary>
         /// <returns>Returns new Hardware Configuration</returns>
@@ -80,11 +176,15 @@ namespace metering.core
             // lock the task
             await AsyncAwaiter.AwaitAsync(nameof(HardwareConfiguration), async () =>
             {
+                // set visibility of "Hardware Configuration" animation
+                IoC.Commands.IsConfigurationAvailable = true;
+
                 // find cmc
                 if (await IoC.Task.Run(() => IoC.FindCMC.Find()))
                 {
                     // let log start
                     await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(HardwareConfiguration)} started."));
+
                     // update device info
                     await IoC.Task.Run(() => IoC.Logger.Log($"Following device associated: {IoC.CMCControl.DeviceInfo}."));
 
@@ -93,107 +193,36 @@ namespace metering.core
                     // save current view model so we can return to it.
                     OldViewModel = IoC.Application.CurrentPageViewModel;
 
-                    // retrieve voltage capabilities.
-                    IoC.Settings.OmicronVoltageOutputs = await GetOmicronHardwareConfigurations("voltage");
-                    // retrieve current capabilities.
-                    IoC.Settings.OmicronCurrentOutputs = await GetOmicronHardwareConfigurations("current");
+                    // update log file about the connected Omicron capabilities.
+                    await IoC.Task.Run(() => IoC.Logger.Log($"Following hardware configurations available:"));
 
-                    // Show TestDetails page
+                    // retrieve voltage capabilities if the list is empty.
+                    IoC.Settings.OmicronVoltageOutputs = await IoC.Configurations.Get("voltage");
+                    // retrieve current capabilities.
+                    IoC.Settings.OmicronCurrentOutputs = await IoC.Configurations.Get("current");
+                    
+                    // set visibility of command buttons
+                    IoC.Commands.Cancellation = true;
+                    IoC.Commands.LoadTestAvailable = false;
+                    IoC.Commands.StartTestAvailable = false;
+                    IoC.Commands.NewTestAvailable = IoC.TestDetails.SelectedCurrentConfiguration.CurrentWiringDiagram || IoC.TestDetails.SelectedVoltageConfiguration.CurrentWiringDiagram; 
+                    IoC.Commands.ConfigurationAvailable = false;
+
+                    // change color of the Add New Test button to green.
+                    IoC.Commands.CancelForegroundColor = "00ff00";
+
+
+                    // Show Settings page
                     IoC.Application.GoToPage(ApplicationPage.Settings, IoC.Settings);
+
+                    // disconnect from attached Omicron Test Set
+                    await IoC.Task.Run(() => IoC.ReleaseOmicron.Release());
                 }
             });
         }
         #endregion
 
         #region Private Methods
-
-        private async Task<ObservableCollection<SettingsListItemViewModel>> GetOmicronHardwareConfigurations(string amplifierType)
-        {
-            // initialize extract parameters function
-            ExtractParameters extract = new ExtractParameters();
-
-            // storage for available Omicron Hardware Configurations
-            ObservableCollection<SettingsListItemViewModel> outputConfigurations = new ObservableCollection<SettingsListItemViewModel>();
-
-            // returns a string that contains the CMC's test set number and the number of available configurations of type<integer>.
-            string configurationInformation = await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandWithResponseAsync(omicronCommand: string.Format(OmicronStringCmd.amp_cfg)).Result);
-
-            // retrieve the number of available configurations.
-            int totalConfiguration = Convert.ToInt16(extract.Parameters(2, configurationInformation).Replace(oldChar: ';', newChar: ' '));
-
-            // delimiters to split Omicron responses
-            string[] delimiterStrings = { ";", "," };
-
-            // retrieve all available configurations.
-            for (int i = 1; i <= totalConfiguration; i++)
-            {
-                // Voltage response
-                // 1,11,3,3.000000e+02,5.000000e+01,7.500000e+01,6.600000e-01,zero,13,amp_no,1,amp_no,5;
-                // Current response
-                // 1,16,3,1.250000e+01,7.000000e+01,7.500000e+00,1.000000e+01,zero,40,amp_no,2,amp_no,6;
-
-                // storage for available Omicron Hardware Configuration
-                SettingsListItemViewModel outputConfiguration = new SettingsListItemViewModel();
-
-                // two options available. either voltage or current.
-                string amplifierInitial = string.Empty;
-
-                // split up the omicron response.
-                string[] responses = (await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandWithResponseAsync(omicronCommand: string.Format(OmicronStringCmd.amp_cfg_0, i)).Result)).Split(separator: delimiterStrings, options: StringSplitOptions.RemoveEmptyEntries);
-
-                switch (amplifierType)
-                {
-                    case "voltage":
-                        // pick correct the amplifier type.
-                        if (!Equals("1", responses.GetValue(responses.Length - 1)) && !Equals("5", responses.GetValue(responses.Length - 1)))
-                        {
-                            continue;
-                        }
-
-                        // amplifier type is voltage
-                        amplifierInitial = "V";
-
-                        break;
-                    case "current":
-                        // pick correct the amplifier type.
-                        if (!Equals("2", responses.GetValue(responses.Length - 1)) && !Equals("6", responses.GetValue(responses.Length - 1)))
-                        {
-                            continue;
-                        }
-
-                        // amplifier type is voltage
-                        amplifierInitial = "A";
-                        break;
-                    default:
-                        IoC.Logger.Log($"Omicron amplifier {responses.GetValue(responses.Length - 1)}is not supported");
-                        continue;
-                }
-                
-                // add configuration id
-                outputConfiguration.ConfigID = Convert.ToInt16(responses[1]);
-                // add file name
-                outputConfiguration.Mode = $"{responses[7]}{responses[8]}";
-
-                // outputConfiguration.
-
-                // 3x300V, 
-                string magnitudeString = $"{responses[2]}x{Convert.ToDouble(responses[3], CultureInfo.CurrentCulture)}{amplifierInitial}, ";
-                // 85VA @ 85V,
-                string vaString = $"{Convert.ToDouble(responses[4], CultureInfo.CurrentCulture)}VA @ {Convert.ToDouble(responses[5], CultureInfo.CurrentCulture)}{amplifierInitial}, ";
-                // 3x300V, 85VA @ 85V, 1Arms
-                outputConfiguration.WiringDiagramString = $"{magnitudeString}{vaString}{Convert.ToDouble(responses[6], CultureInfo.CurrentCulture)}{amplifierInitial}rms";
-                // add group name for the radio buttons
-                outputConfiguration.GroupName = amplifierInitial;
-
-                // construct the string.
-                await IoC.Task.Run(() => IoC.Logger.Log(outputConfiguration.WiringDiagramString));
-
-                // construct the view model.
-                outputConfigurations.Add(outputConfiguration);
-            }
-            // return the view model.
-            return outputConfigurations;
-        }
 
         private async Task<bool> SetOmicronHardwareConfiguration(SettingsViewModel setting)
         {

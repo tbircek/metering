@@ -170,61 +170,83 @@ namespace metering.core
         {
             try
             {
+                // set visibility of "Hardware Configuration" button and animation
+                IoC.Commands.ConfigurationAvailable = true;
+                IoC.Commands.IsConfigurationAvailable = false;
+
+                // did the use selected a hardware configuration?
+                if (IoC.TestDetails.SelectedCurrentConfiguration.CurrentWiringDiagram || IoC.TestDetails.SelectedVoltageConfiguration.CurrentWiringDiagram)
+                {
+                    if (IoC.Settings.OldViewModel == null)
+                    {
+
+                        // generate AnalogSignals from nominal values.
+                        ObservableCollection<AnalogSignalListItemViewModel> analogSignals = new ObservableCollection<AnalogSignalListItemViewModel>();
+
+                        // Voltage Amplifier number
+                        int omicronVoltageSignalNumber = default;
+                        foreach (var item in IoC.TestDetails.SelectedVoltageConfiguration.PhaseCounts)
+                        {
+                            omicronVoltageSignalNumber += item;
+                        };  // 4;
+
+                        // Current Amplifier number
+                        int omicronCurrentSignalNumber = default;
+                        foreach (var item in IoC.TestDetails.SelectedCurrentConfiguration.PhaseCounts)
+                        {
+                            omicronCurrentSignalNumber += item;
+                        };  // 6;
+
+                        // total of current and voltage Analog Signals of associated Omicron Test set
+                        int omicronAnalogSignalNumber = omicronVoltageSignalNumber + omicronCurrentSignalNumber;
+
+                        // generate AnalogSignalListItems
+                        for (int i = 1; i <= omicronAnalogSignalNumber; i++)
+                        {
+                            // Generate AnalogSignals values.
+                            analogSignals.Add(new AnalogSignalListItemViewModel
+                            {
+                                // is this condition true ? yes : no
+
+                                // current signals names restart at 1 => (i - omicronVoltageSignalNumber)
+
+                                // Omicron Analog Signal Name
+                                SignalName = i <= omicronVoltageSignalNumber ? "v" + i : "i" + (i - omicronVoltageSignalNumber),
+                                // Omicron Analog Signal Magnitude
+                                Magnitude = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
+                                // Omicron Analog Signal Magnitude From value
+                                From = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
+                                // Omicron Analog Signal Magnitude To value
+                                To = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
+                                // Omicron Analog Signal Magnitude Delta value
+                                Delta = $"{Convert.ToDouble(NominalDelta):F3}",
+                                // Omicron Analog Signal Phase
+                                Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
+                                // Omicron Analog Signal Frequency
+                                Frequency = $"{Convert.ToDouble(NominalFrequency):F3}"
+                            });
+                        }
+
+                        // Update only AnalogSignal values in the single instance of TestDetailsViewModel
+                        IoC.TestDetails.AnalogSignals = analogSignals; 
+                    }
+                    else
+                    {
+                        // something here maybe?
+                    }
+                }
+
+                // default ramping signal is "Magnitude"
+                // IoC.TestDetails.SelectedRampingSignal = nameof(TestDetailsViewModel.RampingSignals.Magnitude);
+
                 // change CancelForegroundColor to Red
                 IoC.Commands.CancelForegroundColor = "ff0000";
 
-                // set visibility of Command buttons
-                IoC.Commands.NewTestAvailable = true;
-
-                // generate AnalogSignals from nominal values.
-                ObservableCollection<AnalogSignalListItemViewModel> analogSignals = new ObservableCollection<AnalogSignalListItemViewModel>();
-
-
-                // TODO: these values should receive from associated Omicron test set
-                // Voltage Amplifier number
-                int omicronVoltageSignalNumber = 4;
-
-                // Current Amplifier number
-                int omicronCurrentSignalNumber = 6;
-
-                // total of current and voltage Analog Signals of associated Omicron Test set
-                int omicronAnalogSignalNumber = omicronVoltageSignalNumber + omicronCurrentSignalNumber;
-
-                // generate AnalogSignalListItems
-                for (int i = 1; i <= omicronAnalogSignalNumber; i++)
-                {
-
-                    // exclude "V4", "I4", "I5", and "I6" signals until further notice
-                    if (i == 4 || i > 7)
-                        // continue next iteration
-                        continue;
-
-                    // Generate AnalogSignals values.
-                    analogSignals.Add(new AnalogSignalListItemViewModel
-                    {
-                        // is this condition true ? yes : no
-
-                        // current signals names restart at 1 => (i - omicronVoltageSignalNumber)
-
-                        // Omicron Analog Signal Name
-                        SignalName = i <= omicronVoltageSignalNumber ? "v" + i : "i" + (i - omicronVoltageSignalNumber),
-                        // Omicron Analog Signal Magnitude
-                        Magnitude = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
-                        // Omicron Analog Signal Magnitude From value
-                        From = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
-                        // Omicron Analog Signal Magnitude To value
-                        To = i <= omicronVoltageSignalNumber ? $"{Convert.ToDouble(NominalVoltage):F3}" : $"{Convert.ToDouble(NominalCurrent):F3}",
-                        // Omicron Analog Signal Magnitude Delta value
-                        Delta = $"{Convert.ToDouble(NominalDelta):F3}",
-                        // Omicron Analog Signal Phase
-                        Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
-                        // Omicron Analog Signal Frequency
-                        Frequency = $"{Convert.ToDouble(NominalFrequency):F3}"
-                    });
-                }
-
-                // Update only AnalogSignal values in the single instance of TestDetailsViewModel
-                IoC.TestDetails.AnalogSignals = analogSignals;
+                // set visibility of buttons
+                IoC.Commands.NewTestAvailable = false;
+                IoC.Commands.StartTestAvailable = true;
+                IoC.Commands.LoadTestAvailable = true;
+                IoC.Commands.Cancellation = true;
 
                 // Show TestDetails page
                 IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
