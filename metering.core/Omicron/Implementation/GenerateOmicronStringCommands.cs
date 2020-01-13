@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.Linq;
+using System.Threading;
 
 namespace metering.core
 {
@@ -29,26 +31,78 @@ namespace metering.core
         public void SendOmicronCommands(string testSignalName, double testStartValue)
         {
             // inform developer
-            IoC.Logger.Log($"{nameof(this.SendOmicronCommands)} started :  ramping signal: {testSignalName} -- test value: {testStartValue:F6}", LogLevel.Informative);
+            IoC.Logger.Log($"{nameof(this.SendOmicronCommands)} started: ramping signal: {testSignalName} -- test value: {testStartValue:F6}", LogLevel.Informative);
 
-            foreach (AnalogSignalListItemViewModel analogSignal in IoC.TestDetails.AnalogSignals)
+            // Route Omicron amplifiers.
+            // retrieve voltage amplifiers
+            var analogSignals = (from signal in IoC.TestDetails.AnalogSignals where signal.SignalName.StartsWith("v") select signal).ToArray();
+            // keeper of analog signal positions
+            int analogSignalPosition = default;
+
+            // process voltage amplifiers
+            for (int amplifier = 0; amplifier < IoC.TestDetails.SelectedVoltageConfiguration.ConfigIDs.Count; amplifier++)
             {
-                // set voltage amplifiers values.
+                // retrieve triplet group number this value could be either 1 or 2 for either voltage or current amplifiers.
+                int tripletGroupNumber = Convert.ToInt32(IoC.TestDetails.SelectedVoltageConfiguration.AmplifierNumber[amplifier]) == 5 ? 2 : 1;
 
-                IoC.StringCommands.SendOutAnaAsync(
-                    // Omicron Test Set internal generator type
-                    generatorType: analogSignal.SignalName.ToCharArray()[0],
-                    // tripletNumber --- as long as we use (v|i)1 to 3 this value is 1
-                    tripletNumber: $"1:{analogSignal.SignalName.ToCharArray()[1]}",
-                    // Signal Amplitude
-                    amplitude: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)) ? (string.Equals(analogSignal.SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignal.From) : Convert.ToDouble(analogSignal.Magnitude),
-                    // Signal Phase
-                    phase: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)) ? (string.Equals(analogSignal.SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignal.From) : Convert.ToDouble(analogSignal.Phase),
-                    // Signal Frequency
-                    // if IoC.TestDetails.IsLinked == true, use ramping signals frequency
-                    frequency: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)) ? (string.Equals(analogSignal.SignalName, testSignalName) || IoC.TestDetails.IsLinked ? testStartValue : Convert.ToDouble(analogSignal.From)) : Convert.ToDouble(analogSignal.Frequency)
-                    );
+                // set values per triplets
+                for (int triplet = 1; triplet <= IoC.TestDetails.SelectedVoltageConfiguration.PhaseCounts[amplifier]; triplet++)
+                {
+                    // set the voltage amplifiers values.
+                    IoC.StringCommands.SendOutAnaAsync(
+                        // Omicron Test Set internal generator type
+                        generatorType: analogSignals[analogSignalPosition].SignalName.ToCharArray()[0],
+                        // triplet number of the voltage amplifier
+                        tripletNumber: $"{tripletGroupNumber}:{triplet}",
+                        // Signal Amplitude
+                        amplitude: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From) : Convert.ToDouble(analogSignals[analogSignalPosition].Magnitude),
+                        // Signal Phase
+                        phase: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From) : Convert.ToDouble(analogSignals[analogSignalPosition].Phase),
+                        // Signal Frequency
+                        // if IoC.TestDetails.IsLinked == true, use ramping signals frequency
+                        frequency: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName) || IoC.TestDetails.IsLinked ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From)) : Convert.ToDouble(analogSignals[analogSignalPosition].Frequency)
+                        );
+
+                    // increment analog signal position
+                    Interlocked.Increment(ref analogSignalPosition);
+                }
             }
+
+            // retrieve current amplifiers
+            analogSignals = (from signal in IoC.TestDetails.AnalogSignals where signal.SignalName.StartsWith("i") select signal).ToArray();
+
+            // reset analog signal position for new analog signal group
+            Interlocked.Exchange(ref analogSignalPosition, 0); // analogSignalPosition = 0;
+
+            // process current amplifiers
+            for (int amplifier = 0; amplifier < IoC.TestDetails.SelectedCurrentConfiguration.ConfigIDs.Count; amplifier++)
+            {
+                // retrieve triplet group number this value could be either 1 or 2 for either voltage or current amplifiers.
+                int tripletGroupNumber = Convert.ToInt32(IoC.TestDetails.SelectedCurrentConfiguration.AmplifierNumber[amplifier]) == 6 ? 2 : 1;
+
+                // set values per triplets
+                for (int triplet = 1; triplet <= IoC.TestDetails.SelectedCurrentConfiguration.PhaseCounts[amplifier]; triplet++)
+                {
+                    // set the current amplifiers values.
+                    IoC.StringCommands.SendOutAnaAsync(
+                        // Omicron Test Set internal generator type
+                        generatorType: analogSignals[analogSignalPosition].SignalName.ToCharArray()[0],
+                        // triplet number of the current amplifier
+                        tripletNumber: $"{tripletGroupNumber}:{triplet}",
+                        // Signal Amplitude
+                        amplitude: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From) : Convert.ToDouble(analogSignals[analogSignalPosition].Magnitude),
+                        // Signal Phase
+                        phase: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From) : Convert.ToDouble(analogSignals[analogSignalPosition].Phase),
+                        // Signal Frequency
+                        // if IoC.TestDetails.IsLinked == true, use ramping signals frequency
+                        frequency: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName) || IoC.TestDetails.IsLinked ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From)) : Convert.ToDouble(analogSignals[analogSignalPosition].Frequency)
+                        );
+
+                    // increment analog signal position
+                    Interlocked.Increment(ref analogSignalPosition); // analogSignalPosition++;
+                }
+            }
+
         }
     }
 }

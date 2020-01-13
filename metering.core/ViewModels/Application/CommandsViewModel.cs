@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -32,6 +34,31 @@ namespace metering.core
         public bool NewTestAvailable { get; set; } = false;
 
         /// <summary>
+        /// Holds visibility information of "Start test" and "Save test" button
+        /// </summary>
+        public bool StartTestAvailable { get; set; } = false;
+
+        /// <summary>
+        /// Holds visibility information of "Cancel tests" button
+        /// </summary>
+        public bool Cancellation { get; set; } = false;
+
+        /// <summary>
+        /// Holds visibility information of "Hardware Configuration" button
+        /// </summary>
+        public bool ConfigurationAvailable { get; set; } = true;
+
+        /// <summary>
+        /// Allows animation of "Hardware Configuration" button
+        /// </summary>
+        public bool IsConfigurationAvailable { get; set; } = false;
+
+        /// <summary>
+        /// Hold visibility information of "LoadTest" button
+        /// </summary>
+        public bool LoadTestAvailable { get; set; } = true;
+
+        /// <summary>
         /// Holds Foreground color information for the Start Test Command button
         /// </summary>
         public string StartTestForegroundColor { get; set; }
@@ -50,6 +77,7 @@ namespace metering.core
         /// To change icon on the floating StartTestCommand button
         /// </summary>
         public bool IsConnectionCompleted { get; set; }
+
         /// <summary>
         /// Progress percentage of the test completion
         /// </summary>
@@ -127,7 +155,7 @@ namespace metering.core
             CancelNewTestCommand = new RelayCommand(() => CancelTestDetailsPageShowing());
 
             // save the test step to the user specified location.
-            SaveNewTestCommand = new RelayCommand(async() => await IoC.Commander.ShowFileDialogAsync(FileDialogOption.Save));
+            SaveNewTestCommand = new RelayCommand(async () => await IoC.Commander.ShowFileDialogAsync(FileDialogOption.Save));
 
             // load the test step(s) from the user specified location.
             LoadTestsCommand = new RelayCommand(async () => await IoC.Commander.ShowFileDialogAsync(FileDialogOption.Open));
@@ -156,45 +184,82 @@ namespace metering.core
         private void CancelTestDetailsPageShowing()
         {
 
-            // reset maximum value for progress bar for the next run
-            MaximumTestCount = 0d;
+            // set visibility of "Cancel tests" button
+            Cancellation = false;
 
-            // change CancelForegroundColor to Red
-            CancelForegroundColor = "00ff00";
-
-            // set visibility of the Command Buttons
-            NewTestAvailable = false;
-
-            // clear Test details view model
-            IoC.Application.CurrentPageViewModel = null;
-
-            // reset test progress to show test canceled.
-            TestProgress = 0d;
-
-            // reset StartTestCommand button icon
-            IsConnectionCompleted = false;
-
-            // Update NominalValues RadioButtons to run a PropertyUpdate event
-            IoC.NominalValues.SelectedVoltagePhase = "AllZero";
-            IoC.NominalValues.SelectedCurrentPhase = "AllZero";
-
-            // Show NominalValues page
-            IoC.Application.GoToPage(ApplicationPage.NominalValues);
+            // set visibility of "Hardware Configuration" button and animation
+            ConfigurationAvailable = true;
+            IsConfigurationAvailable = false;
 
             // if the test completed normally no need to cancel token as it is canceled already
             if (IoC.CMCControl.IsTestRunning)
             {
+                // set visibility of the Command Buttons
+                StartTestAvailable = true;
+                NewTestAvailable = false;
+                Cancellation = true;
+
+                // reset maximum value for progress bar for the next run
+                MaximumTestCount = 0d;
+
+                // change CancelForegroundColor to Red
+                CancelForegroundColor = "00ff00";
+
+                // reset test progress to show test canceled.
+                TestProgress = 0d;
+
                 // check if Omicron Test Set is running
                 // if the user never started test and press "Back" button 
                 // DeviceID would be a zero
                 if (IoC.CMCControl.DeviceID > 0)
                 {
-                    // try to cancel thread running Omicron Test Set
-                    TokenSource.Cancel();
-
                     // try to stop Omicron Test Set gracefully
                     IoC.ReleaseOmicron.ProcessErrors(true);
                 }
+            }
+            else
+            {
+
+                // Update NominalValues RadioButtons to run a PropertyUpdate event
+                IoC.NominalValues.SelectedVoltagePhase = "AllZero";
+                IoC.NominalValues.SelectedCurrentPhase = "AllZero";
+
+                // set visibility of the Command Buttons
+                StartTestAvailable = false;
+                LoadTestAvailable = true;
+                Cancellation = false;
+                NewTestAvailable = false;
+
+                // Show NominalValues page
+                IoC.Application.GoToPage(ApplicationPage.NominalValues, new NominalValuesViewModel());
+
+                // reset items in TestDetails page.
+                IoC.TestDetails.SelectedVoltageConfiguration = new SettingsListItemViewModel();
+                IoC.TestDetails.SelectedCurrentConfiguration = new SettingsListItemViewModel();
+                IoC.TestDetails.AnalogSignals = new ObservableCollection<AnalogSignalListItemViewModel>();
+                IoC.TestDetails.Register = "2279";
+                IoC.TestDetails.Progress = "0.0";
+                IoC.TestDetails.DwellTime = "20";
+                IoC.TestDetails.StartDelayTime = "0.1";
+                IoC.TestDetails.MeasurementInterval = "250";
+                IoC.TestDetails.StartMeasurementDelay = "5";
+                IoC.TestDetails.Selected = false;
+                IoC.TestDetails.IsMagnitude = true;
+                IoC.TestDetails.IsPhase = false;
+                IoC.TestDetails.IsFrequency = false;
+                IoC.TestDetails.SelectedRampingSignal = "Magnitude";
+                IoC.TestDetails.IsLinked = false;
+                IoC.TestDetails.TestFileName = string.Empty;
+
+                // reset selected voltage hardware configuration
+                IoC.Settings.OmicronVoltageOutputs = new ObservableCollection<SettingsListItemViewModel>();
+                IoC.Settings.VoltageDiagramLocation = "../Images/Omicron/not used voltage.png";
+                IoC.Settings.SelectedVoltage = "not used voltage";
+
+                // reset selected current hardware configuration
+                IoC.Settings.OmicronCurrentOutputs = new ObservableCollection<SettingsListItemViewModel>();
+                IoC.Settings.CurrentDiagramLocation = "../Images/Omicron/not used current.png";
+                IoC.Settings.SelectedCurrent = "not used current";
             }
         }
 
@@ -203,21 +268,43 @@ namespace metering.core
         /// </summary>    
         private async Task ConnectOmicronAndUnitAsync()
         {
-            // there is a test set attached so run specified tests.
-            // lock the task
-            await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnitAsync), async () =>
+            // decides which signal is our ramping signal by comparing the mismatch of any "From" and "To" values.
+            // after the user clicked "Go" button
+            TestSignal testSignal = new TestSignal();
+
+            // is any signal ramping?
+            if (testSignal.IsRamping)
             {
+                // is the user selected a hardware configuration?
+                if (testSignal.IsRunningPermitted)
+                {
+                    // there is a test set attached so run specified tests.
+                    // lock the task
+                    await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnitAsync), async () =>
+                    {
 
-            // define the cancellation token source.
-            TokenSource = new CancellationTokenSource();
+                    // define the cancellation token source.
+                    TokenSource = new CancellationTokenSource();
 
-            // define the cancellation token to use 
-            // terminate tests prematurely.
-            Token = TokenSource.Token;
+                    // define the cancellation token to use 
+                    // terminate tests prematurely.
+                    Token = TokenSource.Token;
 
-            // Run test command
-            await IoC.Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails), Token);
-            });
+                    // Run test command
+                    await IoC.Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails), Token);
+                    }); 
+                }
+                else
+                {
+                    // inform the user there is no hardware configuration available
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Running test is not permitted due to hardware configuration. Please check your configuration.";
+                }
+            }
+            else
+            {
+                // inform the user there is no test case
+                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: There is no ramping signal. Please check your entries.";
+            }
         }
 
         #endregion

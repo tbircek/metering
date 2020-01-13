@@ -61,7 +61,7 @@ namespace metering.core
             // if the user want s to stop the test
             if (userRequest)
                 // try to cancel thread running Omicron Test Set
-                IoC.Commands.TokenSource.Cancel();
+                IoC.Commands.TokenSource.Cancel(true);
             
             // update developer
             IoC.Logger.Log($"Test {(userRequest ? "interrupted" : "completed")}", LogLevel.Informative);
@@ -72,17 +72,24 @@ namespace metering.core
             // check if timer is initialized then dispose it.
             IoC.CMCControl.MdbusTimer?.Dispose();
 
-            // Turn off outputs of Omicron Test Set and release it.
-            IoC.PowerOptions.TurnOffCMC();
+            // Turn off outputs of Omicron Test Set and wait 200msec.
+            var turnOffTask = IoC.Task.Run(() => IoC.PowerOptions.TurnOffCMC());
+            turnOffTask.Wait(200);
 
-            // Disconnect Modbus Communication
-            IoC.Communication.EAModbusClient.Disconnect();
+            // Disconnect Modbus Communication and wait 200msec
+            var disconnectTask = IoC.Task.Run(() => IoC.Communication.EAModbusClient.Disconnect());
+            disconnectTask.Wait(200);
 
             // Progress bar is invisible
-            IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
+            IoC.CMCControl.IsTestRunning = IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
 
             // change color of Cancel Command button to Red
             IoC.Commands.CancelForegroundColor = "ff0000";
+
+            // release omicron test set and wait 200msec
+            var releaseTask = IoC.Task.Run(() => Release());
+            disconnectTask.Wait(200);
+
         }
     }
 

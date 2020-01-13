@@ -21,13 +21,14 @@ namespace metering.core
                 {
 
                     // update the developer
-                    IoC.Logger.Log($"turnOffCMC setup: runs", LogLevel.Informative);
+                    IoC.Logger.Log($"{nameof(TurnOffCMC)} started.", LogLevel.Informative);
 
                     // send Turn off command to Omicron Test Set
                     await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandAsync(OmicronStringCmd.out_ana_off));
+                    
+                    // update the developer
+                    IoC.Logger.Log($"{nameof(TurnOffCMC)} completed.", LogLevel.Informative);
 
-                    // release Omicron Test Set.
-                    await IoC.Task.Run(() => IoC.ReleaseOmicron.Release());
                 });
             }
 
@@ -60,10 +61,13 @@ namespace metering.core
                 await AsyncAwaiter.AwaitAsync(nameof(TurnOnCMC), async () =>
                 {
                     // update the developer
-                    IoC.Logger.Log($"turnOnCMC setup runs", LogLevel.Informative);
+                    IoC.Logger.Log($"{nameof(TurnOnCMC)} started.", LogLevel.Informative);
 
                     // Send command to Turn On Analog Outputs
                     await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandAsync(OmicronStringCmd.out_ana_on));
+
+                    // update the developer
+                    IoC.Logger.Log($"{nameof(TurnOnCMC)} completed.", LogLevel.Informative);
 
                 });
             }

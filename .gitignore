@@ -44,3 +44,5 @@ _ReSharper*/
 #!**/packages/repositories.config
 *.psess
 *.vsp
+/metering.wpf/Images/Omicron/currents
+/metering.wpf/Images/Omicron/voltages
