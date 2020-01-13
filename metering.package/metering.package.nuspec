@@ -11,9 +11,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>      
-      Fixes "Save file failed" errors.
-      Adds "Delta" verification to ramp signals.
-      Adds "Frequency linking" to ramp signals frequency.
+      Detects attached Omicron capabilities.
+      Changes Omicron analog amplifier configurations.
+      Controls V4 voltage signal.
+      Controls I4, I5 and I6 current signals.
+      Loads old test files without hardware configuration.
     </releaseNotes>
     <copyright>Copyright 2019 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric turgay bircek</tags>
