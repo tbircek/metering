@@ -174,8 +174,9 @@ namespace metering
                     IoC.TestDetails.AnalogSignals = test.AnalogSignals;
 
                     // Select Ramping Signal property
-                    // Ramping Signal property is Magnitude.
-                    IoC.TestDetails.IsMagnitude = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude));
+                    // Ramping Signal property is Magnitude. 
+                    // This is also default setting for this property.
+                    IoC.TestDetails.IsMagnitude = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)) || string.IsNullOrWhiteSpace(test.SelectedRampingSignal);
                     // Ramping Signal property is Phase.
                     IoC.TestDetails.IsPhase = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase));
                     // Ramping Signal property is Frequency.
@@ -214,19 +215,37 @@ namespace metering
 
                     // update Hardware Configuration = Voltage
                     IoC.TestDetails.SelectedVoltageConfiguration = test.SelectedVoltageConfiguration;
-
+                    
                     // update Hardware Configuration = Current
                     IoC.TestDetails.SelectedCurrentConfiguration = test.SelectedCurrentConfiguration;
 
-                    // update TestFileName.
+                    // update TestFileName
                     IoC.TestDetails.TestFileName = test.TestFileName;
+
+                    // update Settings view model
+                    IoC.Settings.SelectedCurrent = test.SelectedCurrentConfiguration.WiringDiagramString;
+                    IoC.Settings.SelectedVoltage = test.SelectedVoltageConfiguration.WiringDiagramString;
+
+                    // if the test file is old,
+                    // add a new fileName attribute,
+                    // add some missing attributes to "SelectedVoltageConfiguration",
+                    // add some missing attributes to "SelectedCurrentConfiguration".
+                    if (string.IsNullOrWhiteSpace(IoC.TestDetails.TestFileName))
+                    {
+                        // add saved file name
+                        IoC.TestDetails.TestFileName = dlg.SafeFileName;
+
+                        // add new "WiringDiagramFileLocation"
+                        test.SelectedVoltageConfiguration.WiringDiagramFileLocation = "../Images/Omicron/not used voltage.png";
+                        test.SelectedCurrentConfiguration.WiringDiagramFileLocation = "../Images/Omicron/not used current.png";
+
+                        // add new SelectedCurrent and SelectedVoltage
+                    }
 
                     // update Settings view model
                     IoC.Settings.CurrentDiagramLocation = test.SelectedCurrentConfiguration.WiringDiagramFileLocation;
                     IoC.Settings.VoltageDiagramLocation = test.SelectedVoltageConfiguration.WiringDiagramFileLocation;
-                    IoC.Settings.SelectedCurrent = test.SelectedCurrentConfiguration.WiringDiagramString;
-                    IoC.Settings.SelectedVoltage = test.SelectedVoltageConfiguration.WiringDiagramString;
-
+                    
                     // change CancelForegroundColor to Red
                     IoC.Commands.CancelForegroundColor = "ff0000";
 
