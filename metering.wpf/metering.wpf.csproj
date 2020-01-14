@@ -241,6 +241,9 @@
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="AttachedProperties\TextAttachedProperties.cs" />
     <Compile Include="AttachedProperties\NoFrameHistoryProperty.cs" />
+    <Compile Include="Controls\TestFileListItemControl.xaml.cs">
+      <DependentUpon>TestFileListItemControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SettingsListItemControl.xaml.cs">
       <DependentUpon>SettingsListItemControl.xaml</DependentUpon>
     </Compile>
@@ -282,6 +285,10 @@
     <Compile Include="IoC\SaveNew.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WindowViewModel.cs" />
+    <Page Include="Controls\TestFileListItemControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\SettingsListItemControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
