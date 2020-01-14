@@ -15,7 +15,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <!-- Test Settings -->
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="220"/>
 
             <!-- Test Values -->
             <ColumnDefinition Width="*"/>
@@ -69,7 +69,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <!-- Ramping Signal Selection -->                
+                <!-- Ramping Signal Selection -->
                 <Border
                     BorderBrush="Black" 
                     BorderThickness="1" 
@@ -80,7 +80,7 @@
                         Orientation="Vertical"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
-                        
+
                         <!-- Ramping selection label -->
                         <TextBox
                             mD:HintAssist.Hint="Ramping"
@@ -152,6 +152,9 @@
                     Padding="0 0 5 0"                 
                     HorizontalContentAlignment="Center" 
                     Text="{Binding Register, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F0\}, ConverterCulture=en-US}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Auto"
                     FontSize="18"
                     ToolTip="The communication point to poll during the test steps"
                     local:FocusAndSelectProperty.Value="{Binding Selected}">
