@@ -265,7 +265,7 @@ namespace metering.core
                         IoC.Task.Run(async () =>
                         {
                             // lock the task
-                            await AsyncAwaiter.AwaitAsync(nameof(TestAsync), async () =>
+                            await AsyncAwaiter.AwaitAsync(nameof(TestAsync) + testStartValue, async () =>
                             {
 
                                 // wait until the user specified "Dwell Time" expires.

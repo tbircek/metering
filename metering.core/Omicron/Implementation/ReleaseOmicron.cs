@@ -58,7 +58,7 @@ namespace metering.core
         /// true if test completed itself</param>
         public void ProcessErrors(bool userRequest = true)
         {
-            // if the user want s to stop the test
+            // if the user wants to stop the test
             if (userRequest)
                 // try to cancel thread running Omicron Test Set
                 IoC.Commands.TokenSource.Cancel(true);
@@ -69,26 +69,29 @@ namespace metering.core
             // update the user
             IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test { (userRequest ? "interrupted by the user." : "completed.")}";
 
+            // Disconnect Modbus Communication and wait 200msec
+            IoC.Task.Run(() => IoC.Communication.EAModbusClient.Disconnect());
+            //var disconnectTask = IoC.Task.Run(() => IoC.Communication.EAModbusClient.Disconnect());
+            //disconnectTask.Wait(200);
+
             // check if timer is initialized then dispose it.
             IoC.CMCControl.MdbusTimer?.Dispose();
 
             // Turn off outputs of Omicron Test Set and wait 200msec.
-            var turnOffTask = IoC.Task.Run(() => IoC.PowerOptions.TurnOffCMC());
-            turnOffTask.Wait(200);
+            IoC.Task.Run(() => IoC.PowerOptions.TurnOffCMC());
+            //var turnOffTask = IoC.Task.Run(() => IoC.PowerOptions.TurnOffCMC());
+            //turnOffTask.Wait(200);
 
-            // Disconnect Modbus Communication and wait 200msec
-            var disconnectTask = IoC.Task.Run(() => IoC.Communication.EAModbusClient.Disconnect());
-            disconnectTask.Wait(200);
+            // release omicron test set and wait 200msec
+            IoC.Task.Run(() => Release());
+            //var releaseTask = IoC.Task.Run(() => Release());
+            //releaseTask.Wait(200);
 
             // Progress bar is invisible
             IoC.CMCControl.IsTestRunning = IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
 
             // change color of Cancel Command button to Red
             IoC.Commands.CancelForegroundColor = "ff0000";
-
-            // release omicron test set and wait 200msec
-            var releaseTask = IoC.Task.Run(() => Release());
-            disconnectTask.Wait(200);
 
         }
     }
