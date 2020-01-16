@@ -34,9 +34,10 @@
             FromHint = Resources.Strings.header_from;
             To = "134.600";
             ToHint = Resources.Strings.header_to;
-            IsFrequencyEnabled = false;
             IsMagnitudeEnabled = false;
-            IsPhaseEnabled = true;
+            IsPhaseEnabled = false;
+            IsFrequencyEnabled = true;
+            IsHarmonicsEnabled = false;
         }
 
         #endregion

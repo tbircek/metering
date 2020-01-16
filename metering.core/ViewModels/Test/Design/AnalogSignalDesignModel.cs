@@ -42,7 +42,8 @@ namespace metering.core
                     ToHint = Resources.Strings.header_to,
                     IsFrequencyEnabled = false,
                     IsMagnitudeEnabled = false,
-                    IsPhaseEnabled = true,
+                    IsPhaseEnabled = false,
+                    IsHarmonicsEnabled = true,
                 },
                 new AnalogSignalListItemViewModel
                 {
