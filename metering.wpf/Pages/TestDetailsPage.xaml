@@ -15,7 +15,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <!-- Test Settings -->
-            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="260"/>
 
             <!-- Test Values -->
             <ColumnDefinition Width="*"/>
@@ -78,7 +78,6 @@
                     <!-- Ramping selection zone -->
                     <StackPanel 
                         Orientation="Vertical"
-                        HorizontalAlignment="Center"
                         VerticalAlignment="Center">
 
                         <!-- Ramping selection label -->
@@ -90,7 +89,7 @@
                             Padding="0 0 5 0"                 
                             HorizontalContentAlignment="Center" 
                             FontSize="18"
-                            ToolTip="Select your Ramping Signal"
+                            ToolTip="{Binding RampingTooltip}"
                             IsEnabled="False"/>
 
                         <!-- Separate controls -->
@@ -129,16 +128,48 @@
                         <!-- Link Ramping Signals Selection -->
                         <CheckBox
                             Style="{StaticResource MaterialDesignUserForegroundCheckBox}"
+                            Margin="30 0 0 0"
                             Padding="5 0 5 0"
                             Content="Link Ramping Signals"
                             FontSize="18"
-                            VerticalContentAlignment="Center"
                             Visibility="{Binding IsFrequency, 
                                         Converter={local:BooleanToVisibilityConverter},
                                         ConverterParameter=False}"
                             IsChecked="{Binding IsLinked}"
-                            ToolTip="Check if all signals ramping is desired."
-                            />
+                            ToolTip="{Binding LinkFrequencyTooltip}"/>
+
+                        <!-- Harmonics Ramping Selection -->
+                        <RadioButton
+                            Style="{StaticResource MaterialDesignUserForegroundRadioButton}"
+                            Content="Harmonics"
+                            FontSize="18"
+                            VerticalContentAlignment="Center"
+                            IsChecked="{Binding IsHarmonics}"
+                            Command="{Binding SelectRampingSignalCommand}" 
+                            CommandParameter="{Binding Content, RelativeSource={RelativeSource Self}}"/>
+
+                        <!-- Harmonics Setting -->
+                        <TextBox
+                            mD:HintAssist.Hint="{Binding HarmonicsHint}"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                            TabIndex="0"
+                            Padding="0 0 5 0"                 
+                            HorizontalContentAlignment="Center" 
+                            Text="{Binding HarmonicsOrder, UpdateSourceTrigger=PropertyChanged, StringFormat=\{0:F0\}, ConverterCulture=en-US}"
+                            TextWrapping="Wrap"
+                            FontSize="18"
+                            ToolTip="{Binding HarmonicsSettingTooltip}"
+                            local:FocusAndSelectProperty.Value="{Binding Selected}"
+                            Visibility="{Binding IsHarmonics, 
+                                        Converter={local:BooleanToVisibilityConverter},
+                                        ConverterParameter=False}">
+
+                            <!-- left click to select all text -->
+                            <TextBox.InputBindings>
+                                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding SelectAllTextCommand}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+
                         <!--Command="{Binding LinkRampingSignalsCommand}"-->
                     </StackPanel>
                 </Border>
