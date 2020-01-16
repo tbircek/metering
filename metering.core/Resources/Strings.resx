@@ -348,4 +348,25 @@
   <data name="omicron_config_voltage_header" xml:space="preserve">
     <value>Voltage Outputs</value>
   </data>
+  <data name="header_harmonics" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="header_from_harmonics" xml:space="preserve">
+    <value>From (% Fund.)</value>
+  </data>
+  <data name="header_to_harmonics" xml:space="preserve">
+    <value>To (% Fund.)</value>
+  </data>
+  <data name="header_delta_harmonics" xml:space="preserve">
+    <value>Delta (% Fund.)</value>
+  </data>
+  <data name="tooltips_harmonics_settings" xml:space="preserve">
+    <value>Please enter Harmonics Order here. e.g. 2-5, 8, 11-15</value>
+  </data>
+  <data name="tooltips_link_frequency" xml:space="preserve">
+    <value>Check for all signals frequency ramping.</value>
+  </data>
+  <data name="tooltips_ramping" xml:space="preserve">
+    <value>Select your Ramping Signal</value>
+  </data>
 </root>
