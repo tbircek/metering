@@ -53,14 +53,20 @@
                 BorderBrush="Black" 
                 BorderThickness="1" 
                 ClipToBounds="True">
-
-            <mD:Card Width="300"
+            
+            <ScrollViewer 
+                VerticalScrollBarVisibility="Auto" 
+                HorizontalScrollBarVisibility="Auto">
+                
+                <!-- Voltage amplifier connection images -->
+                <mD:Card Width="300"
                      MaxHeight="350"
                      ClipToBounds="True"
                      Background="Transparent">
-                <Image Source="{Binding VoltageDiagramLocation}"
+                    <Image Source="{Binding VoltageDiagramLocation}"
                        Stretch="UniformToFill" />
-            </mD:Card>
+                </mD:Card>
+            </ScrollViewer>
         </Border>
 
         <!-- Connection Diagrams -->
@@ -70,13 +76,19 @@
                 BorderThickness="1" 
                 ClipToBounds="True">
 
-            <mD:Card Width="300"
+            <ScrollViewer 
+                VerticalScrollBarVisibility="Auto" 
+                HorizontalScrollBarVisibility="Auto">
+
+                <!-- Current amplifier connection images -->
+                <mD:Card Width="300"
                      MaxHeight="350"
                      ClipToBounds="True"
                      Background="Transparent">
-                <Image Source="{Binding CurrentDiagramLocation}"
+                    <Image Source="{Binding CurrentDiagramLocation}"
                        Stretch="UniformToFill" />
-            </mD:Card>
+                </mD:Card>
+            </ScrollViewer>
         </Border>
     </Grid>
 

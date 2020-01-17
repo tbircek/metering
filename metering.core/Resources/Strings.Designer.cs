@@ -214,6 +214,15 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delta (% Fund.).
+        /// </summary>
+        public static string header_delta_harmonics {
+            get {
+                return ResourceManager.GetString("header_delta_harmonics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delta (°).
         /// </summary>
         public static string header_delta_phase {
@@ -277,6 +286,15 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to From (% Fund.).
+        /// </summary>
+        public static string header_from_harmonics {
+            get {
+                return ResourceManager.GetString("header_from_harmonics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to From (°).
         /// </summary>
         public static string header_from_phase {
@@ -291,6 +309,15 @@ namespace metering.core.Resources {
         public static string header_from_voltage {
             get {
                 return ResourceManager.GetString("header_from_voltage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order.
+        /// </summary>
+        public static string header_harmonics {
+            get {
+                return ResourceManager.GetString("header_harmonics", resourceCulture);
             }
         }
         
@@ -435,6 +462,15 @@ namespace metering.core.Resources {
         public static string header_to_frequency {
             get {
                 return ResourceManager.GetString("header_to_frequency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To (% Fund.).
+        /// </summary>
+        public static string header_to_harmonics {
+            get {
+                return ResourceManager.GetString("header_to_harmonics", resourceCulture);
             }
         }
         
@@ -750,6 +786,33 @@ namespace metering.core.Resources {
         public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter Harmonics Order here. e.g. 2-5, 8, 11-15.
+        /// </summary>
+        public static string tooltips_harmonics_settings {
+            get {
+                return ResourceManager.GetString("tooltips_harmonics_settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for all signals frequency ramping..
+        /// </summary>
+        public static string tooltips_link_frequency {
+            get {
+                return ResourceManager.GetString("tooltips_link_frequency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select your Ramping Signal.
+        /// </summary>
+        public static string tooltips_ramping {
+            get {
+                return ResourceManager.GetString("tooltips_ramping", resourceCulture);
             }
         }
     }

@@ -223,7 +223,9 @@ namespace metering.core
                                 // Omicron Analog Signal Phase
                                 Phase = i <= omicronVoltageSignalNumber ? SelectedPhaseToString(SelectedVoltagePhase, (i - 1)) : SelectedPhaseToString(SelectedCurrentPhase, (i - 2)),
                                 // Omicron Analog Signal Frequency
-                                Frequency = $"{Convert.ToDouble(NominalFrequency):F3}"
+                                Frequency = $"{Convert.ToDouble(NominalFrequency):F3}",
+                                // Omicron Analog Signal Harmonics ... set to 0 for time being.
+                                Harmonics = $"{0:F3}"
                             });
                         }
 

@@ -60,7 +60,16 @@ namespace metering.core
                         phase: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From) : Convert.ToDouble(analogSignals[analogSignalPosition].Phase),
                         // Signal Frequency
                         // if IoC.TestDetails.IsLinked == true, use ramping signals frequency
-                        frequency: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName) || IoC.TestDetails.IsLinked ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From)) : Convert.ToDouble(analogSignals[analogSignalPosition].Frequency)
+                        frequency: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName) || IoC.TestDetails.IsLinked ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From)) : Convert.ToDouble(analogSignals[analogSignalPosition].Frequency),
+                        // Harmonics only. Amplitude of the fundamental relative to the setting of the a() command
+                        // Always 1 until further notice.
+                        amplitude_factor: 1,
+                        // the order of a harmonic
+                        harmonicX: IoC.Communication.TestingHarmonicOrder,
+                        // Signal Harmonic % of fundamental
+                        amplitudeFactorX: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Harmonics)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From) : Convert.ToDouble(analogSignals[analogSignalPosition].Magnitude),
+                        // the phase of the harmonic
+                        phaseX: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From) : Convert.ToDouble(analogSignals[analogSignalPosition].Phase)
                         );
 
                     // increment analog signal position
@@ -95,7 +104,16 @@ namespace metering.core
                         phase: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From) : Convert.ToDouble(analogSignals[analogSignalPosition].Phase),
                         // Signal Frequency
                         // if IoC.TestDetails.IsLinked == true, use ramping signals frequency
-                        frequency: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName) || IoC.TestDetails.IsLinked ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From)) : Convert.ToDouble(analogSignals[analogSignalPosition].Frequency)
+                        frequency: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName) || IoC.TestDetails.IsLinked ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From)) : Convert.ToDouble(analogSignals[analogSignalPosition].Frequency),
+                        // Harmonics only. Amplitude of the fundamental relative to the setting of the a() command
+                        // Always 1 until further notice.
+                        amplitude_factor: 1,
+                        // the order of a harmonic
+                        harmonicX: IoC.Communication.TestingHarmonicOrder,
+                        // Signal Harmonic % of fundamental
+                        amplitudeFactorX: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Harmonics)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From) : Convert.ToDouble(analogSignals[analogSignalPosition].Magnitude),
+                        // the phase of the harmonic
+                        phaseX: string.Equals(IoC.TestDetails.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase)) ? (string.Equals(analogSignals[analogSignalPosition].SignalName, testSignalName)) ? testStartValue : Convert.ToDouble(analogSignals[analogSignalPosition].From) : Convert.ToDouble(analogSignals[analogSignalPosition].Phase)
                         );
 
                     // increment analog signal position

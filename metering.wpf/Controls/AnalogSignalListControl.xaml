@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:metering"
              xmlns:core="clr-namespace:metering.core;assembly=metering.core"
-             mc:Ignorable="d">
+             mc:Ignorable="d" 
+             Background="Transparent"
+             Foreground="{StaticResource SecondaryAccentForegroundBrush}">
 
     <UserControl.Template>
         <ControlTemplate TargetType="UserControl">

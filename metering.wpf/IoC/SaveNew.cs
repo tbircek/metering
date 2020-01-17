@@ -181,6 +181,11 @@ namespace metering
                     IoC.TestDetails.IsPhase = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase));
                     // Ramping Signal property is Frequency.
                     IoC.TestDetails.IsFrequency = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency));
+                    // Ramping Signal property is Harmonics.
+                    IoC.TestDetails.IsHarmonics = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Harmonics));
+
+                    // update Harmonics Order
+                    IoC.TestDetails.HarmonicsOrder = test.HarmonicsOrder;
 
                     // update Register
                     IoC.TestDetails.Register = test.Register;
@@ -201,8 +206,8 @@ namespace metering
                     IoC.TestDetails.SelectedRampingSignal = test.SelectedRampingSignal;
 
                     // update Link Ramping Signals status
-                    // If SelectedRampingSignal == "Frequency"
-                    if (Equals(nameof(TestDetailsViewModel.RampingSignals.Frequency), test.SelectedRampingSignal))
+                    // If SelectedRampingSignal == "Frequency" or If SelectedRampingSignal == "Harmonics"
+                    if (Equals(nameof(TestDetailsViewModel.RampingSignals.Frequency), test.SelectedRampingSignal)|| Equals(nameof(TestDetailsViewModel.RampingSignals.Harmonics), test.SelectedRampingSignal))
                     {
                         // frequencies are linked.
                         IoC.TestDetails.IsLinked = test.IsLinked;

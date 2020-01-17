@@ -268,43 +268,45 @@ namespace metering.core
         /// </summary>    
         private async Task ConnectOmicronAndUnitAsync()
         {
-            // decides which signal is our ramping signal by comparing the mismatch of any "From" and "To" values.
-            // after the user clicked "Go" button
-            TestSignal testSignal = new TestSignal();
-
-            // is any signal ramping?
-            if (testSignal.IsRamping)
+            // there is a test set attached so run specified tests.
+            // lock the task
+            await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnitAsync), async () =>
             {
-                // is the user selected a hardware configuration?
-                if (testSignal.IsRunningPermitted)
+
+                // decides which signal is our ramping signal by comparing the mismatch of any "From" and "To" values.
+                // after the user clicked "Go" button
+                TestSignal testSignal = new TestSignal();
+
+                // is any signal ramping?
+                if (testSignal.IsRamping)
                 {
-                    // there is a test set attached so run specified tests.
-                    // lock the task
-                    await AsyncAwaiter.AwaitAsync(nameof(ConnectOmicronAndUnitAsync), async () =>
+                    // is the user selected a hardware configuration?
+                    if (testSignal.IsRunningPermitted)
                     {
 
-                    // define the cancellation token source.
-                    TokenSource = new CancellationTokenSource();
+                        // define the cancellation token source.
+                        TokenSource = new CancellationTokenSource();
 
-                    // define the cancellation token to use 
-                    // terminate tests prematurely.
-                    Token = TokenSource.Token;
+                        // define the cancellation token to use 
+                        // terminate tests prematurely.
+                        Token = TokenSource.Token;
 
-                    // Run test command
-                    await IoC.Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails), Token);
-                    }); 
+                        // Run test command
+                        await IoC.Task.Run(() => IoC.TestDetails.ConnectCommand.Execute(IoC.TestDetails), Token);
+
+                    }
+                    else
+                    {
+                        // inform the user there is no hardware configuration available
+                        IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Running test is not permitted due to hardware configuration. Please check your configuration.";
+                    }
                 }
                 else
                 {
-                    // inform the user there is no hardware configuration available
-                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Running test is not permitted due to hardware configuration. Please check your configuration.";
+                    // inform the user there is no test case
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: There is no ramping signal. Please check your entries.";
                 }
-            }
-            else
-            {
-                // inform the user there is no test case
-                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: There is no ramping signal. Please check your entries.";
-            }
+            });
         }
 
         #endregion

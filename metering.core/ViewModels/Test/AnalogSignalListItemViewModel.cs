@@ -196,6 +196,21 @@ namespace metering.core
         public bool IsFrequencyEnabled { get; set; } = true;
 
         /// <summary>
+        /// Omicron Analog Output harmonics
+        /// </summary>
+        public string Harmonics { get; set; }
+
+        /// <summary>
+        /// Hint label for Harmonics entry.
+        /// </summary>
+        public string HarmonicsHint { get; set; } = Resources.Strings.header_harmonics;
+
+        /// <summary>
+        /// inversely indicates if the ramping signal is Harmonics (false == yes, true == no)
+        /// </summary>
+        public bool IsHarmonicsEnabled { get; set; } = true;
+
+        /// <summary>
         /// indicates if the current text double left clicked to highlight the text
         /// </summary>
         public bool Selected { get; set; }
