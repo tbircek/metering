@@ -8,7 +8,9 @@
     xmlns:local="clr-namespace:metering"
     x:Class="metering.AnalogSignalListItemControl"
     mc:Ignorable="d"
-    FontSize="20">
+    FontSize="20" 
+    Background="Transparent"
+    Foreground="{StaticResource SecondaryAccentForegroundBrush}">
 
     <Grid d:DataContext="{x:Static core:AnalogSignalListItemDesignModel.Instance}" 
           Background="Transparent"

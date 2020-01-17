@@ -33,6 +33,11 @@ namespace metering.core
             /// Ramping Signal is "Frequency"
             /// </summary>
             Frequency = 2,
+
+            /// <summary>
+            /// Ramping Signal is "Harmonics"
+            /// </summary>
+            Harmonics = 3,
         }
 
         #endregion
@@ -59,6 +64,26 @@ namespace metering.core
         /// So initial view the both values would be same
         /// </summary>
         public ObservableCollection<AnalogSignalListItemViewModel> AnalogSignals { get; set; } = new ObservableCollection<AnalogSignalListItemViewModel>() { };
+
+        /// <summary>
+        /// Holds Ramping Textbox tool tip
+        /// </summary>
+        public string RampingTooltip { get; set; } = Strings.tooltips_ramping;
+
+        /// <summary>
+        /// Provides a hint text for the <see cref="Harmonics"/> textbox
+        /// </summary>
+        public string HarmonicsHint { get; set; } = Strings.header_harmonics;
+
+        /// <summary>
+        /// The harmonics to test
+        /// </summary>
+        public string HarmonicsOrder { get; set; } = "2";
+
+        /// <summary>
+        /// Holds Harmonics Text box tool tip information
+        /// </summary>
+        public string HarmonicsSettingTooltip { get; set; } = Strings.tooltips_harmonics_settings;
 
         /// <summary>
         /// Provides a hint text for the <see cref="Register"/> textbox
@@ -136,6 +161,11 @@ namespace metering.core
         public bool IsFrequency { get; set; } = false;
 
         /// <summary>
+        /// Indicates Ramping Signal property is Harmonics.
+        /// </summary>
+        public bool IsHarmonics { get; set; } = false;
+
+        /// <summary>
         /// Holds information about the signal parameter to ramp
         /// </summary>
         public string SelectedRampingSignal { get; set; } = "Magnitude";
@@ -145,6 +175,10 @@ namespace metering.core
         /// </summary>
         public bool IsLinked { get; set; } = false;
 
+        /// <summary>
+        /// Holds tool tip for Link Frequency check box
+        /// </summary>
+        public string LinkFrequencyTooltip { get; set; } = Strings.tooltips_link_frequency;
         /// <summary>
         /// Holds the user entered test file name.
         /// So this file name can be used as a prefix while saving test results.
@@ -194,6 +228,7 @@ namespace metering.core
             SelectAllTextCommand = new RelayCommand(SelectAll);
             SelectRampingSignalCommand = new RelayParameterizedCommand((parameter) => RampingSelectionAsync((string)parameter));
             // LinkRampingSignalsCommand = new RelayCommand(() => LinkRampingSignalsFreqency());
+
         }
 
         #endregion
@@ -243,6 +278,8 @@ namespace metering.core
             bool phaseEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Phase)));
             // Signal property is Frequency.
             bool frequencyEnabled = !(string.Equals(SelectedRampingSignal, nameof(RampingSignals.Frequency)));
+            // Signal property is Harmonics.
+            bool harmonicsEnabled = (string.Equals(SelectedRampingSignal, nameof(RampingSignals.Harmonics)));
 
             // reset IsLinked value.
             IoC.TestDetails.IsLinked = false;
@@ -257,10 +294,26 @@ namespace metering.core
                 item.IsPhaseEnabled = phaseEnabled;
                 // enable/disable Frequency text field...
                 item.IsFrequencyEnabled = frequencyEnabled;
+                // enable/disable Harmonics text field...
+                item.IsHarmonicsEnabled = harmonicsEnabled;
 
                 // process radio button parameter
                 switch (SelectedRampingSignal)
                 {
+                    // Harmonics option selected:
+                    case nameof(RampingSignals.Harmonics):
+                        // Update From value with Harmonics value if null than "0.000"
+                        item.From = item.Harmonics ?? "0.000";
+                        // Update To value with Harmonics value if null than "0.000"
+                        item.To = item.Harmonics ?? "0.000";
+                        // From text field hint
+                        item.FromHint = Strings.header_from_harmonics;
+                        // To text field hint
+                        item.ToHint = Strings.header_to_harmonics;
+                        // Delta text field hint
+                        item.DeltaHint = Strings.header_delta_harmonics;
+                        break;
+
                     // Phase option selected:
                     case nameof(RampingSignals.Phase):
                         // Update From value with Phase value

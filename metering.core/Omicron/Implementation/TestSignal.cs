@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 
 namespace metering.core
 {
@@ -16,27 +17,34 @@ namespace metering.core
         {
             get
             {
-                bool ramping = default;
+                // assumption == no ramping
+                bool ramping = false;
 
-                foreach (AnalogSignalListItemViewModel signal in IoC.TestDetails.AnalogSignals)
+                // if harmonic is selected magnitude must be a non-zero value
+                // since harmonics == magnitude * from(%)
+                if (IoC.TestDetails.IsHarmonics)
                 {
-                    // scan TestDetailsViewModel and return all signal properties where From and To values are not same
-                    if (!Convert.ToDouble(signal.From).Equals(Convert.ToDouble(signal.To)))
-                    {
-                        // property values of the signal
-                        // Delta = Convert.ToDouble(signal.Delta);
-                        // if Delta is zero move next item
-                        if (Equals(Convert.ToDouble(signal.Delta), 0.000000d))
-                        {
-                            ramping = false;
-                            continue;
-                        }
-                        else
-                        {
-                            ramping = true;
-                        }
-                    }
+                    // scan analog signals for magnitude > 0 && from != to && delta > 0
+                    var rampingSignal = from signal in IoC.TestDetails.AnalogSignals
+                                        where !Convert.ToDouble(signal.Magnitude).Equals(0.000000d)
+                                        where !Convert.ToDouble(signal.From).Equals(Convert.ToDouble(signal.To))
+                                        select !Convert.ToDouble(signal.Delta).Equals(0.000000d);
+
+                    // more than 0 indicate there is a ramping module
+                    ramping = rampingSignal.Count() > 0;
                 }
+                else
+                {
+                    // scan analog signals for from != to && delta > 0
+                    var rampingSignal = from signal in IoC.TestDetails.AnalogSignals
+                                        where !Convert.ToDouble(signal.From).Equals(Convert.ToDouble(signal.To))
+                                        select !Convert.ToDouble(signal.Delta).Equals(0.000000d);
+
+                    // more than 0 indicate there is a ramping module
+                    ramping = rampingSignal.Count() > 0;
+                }
+
+                // return if ramping is possible
                 return ramping;
             }
         }
