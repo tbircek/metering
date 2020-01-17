@@ -11,14 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>      
-      Detects attached Omicron capabilities.
-      Changes Omicron analog amplifier configurations.
-      Controls V4 voltage signal.
-      Controls I4, I5 and I6 current signals.
-      Loads old test files without hardware configuration.
+      Adds Harmonics testing.
     </releaseNotes>
-    <copyright>Copyright 2019 Beckwith Electric Co. Inc.</copyright>
-    <tags>metering modbus omicron beckwith electric turgay bircek</tags>
+    <copyright>Copyright 2019-2020 Beckwith Electric Co. Inc.</copyright>
+    <tags>metering modbus omicron beckwith electric voltage current phase frequency harmonics turgay bircek</tags>
     <dependencies/>
   </metadata>
   <files>
