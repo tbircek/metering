@@ -70,22 +70,22 @@ namespace metering.core
             IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test { (userRequest ? "interrupted by the user." : "completed.")}";
 
             // Disconnect Modbus Communication and wait 200msec
-            IoC.Task.Run(() => IoC.Communication.EAModbusClient.Disconnect());
-            //var disconnectTask = IoC.Task.Run(() => IoC.Communication.EAModbusClient.Disconnect());
-            //disconnectTask.Wait(200);
+            // IoC.Task.Run(() => IoC.Communication.EAModbusClient.Disconnect());
+            var disconnectTask = IoC.Task.Run(() => IoC.Communication.EAModbusClient.Disconnect());
+            disconnectTask.Wait(200);
 
             // check if timer is initialized then dispose it.
             IoC.CMCControl.MdbusTimer?.Dispose();
 
             // Turn off outputs of Omicron Test Set and wait 200msec.
-            IoC.Task.Run(() => IoC.PowerOptions.TurnOffCMC());
-            //var turnOffTask = IoC.Task.Run(() => IoC.PowerOptions.TurnOffCMC());
-            //turnOffTask.Wait(200);
+            // IoC.Task.Run(() => IoC.PowerOptions.TurnOffCMC());
+            var turnOffTask = IoC.Task.Run(() => IoC.PowerOptions.TurnOffCMC());
+            turnOffTask.Wait(500);
 
             // release omicron test set and wait 200msec
-            IoC.Task.Run(() => Release());
-            //var releaseTask = IoC.Task.Run(() => Release());
-            //releaseTask.Wait(200);
+            // IoC.Task.Run(() => Release());
+            var releaseTask = IoC.Task.Run(() => Release());
+            releaseTask.Wait(500);
 
             // Progress bar is invisible
             IoC.CMCControl.IsTestRunning = IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
