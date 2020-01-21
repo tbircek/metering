@@ -196,48 +196,8 @@ namespace metering.core
                                 // indicates the test is running.
                                 IoC.CMCControl.IsTestRunning = true;
 
-                                if (IoC.TestDetails.IsHarmonics)
-                                {
-                                    // Multiple Harmonics Order test
-                                    List<string> harmonicOrders = IoC.TestDetails.HarmonicsOrder.Split(',').ToList();
-
-                                    foreach (var orders in harmonicOrders)
-                                    {
-                                        int orderStart = default;
-                                        int orderEnd = default;
-                                        if (orders.Split('-').Count() == 1)
-                                        {
-                                            orderStart = orderEnd = Convert.ToInt16(orders[0].ToString());
-                                        }
-                                        else if (orders.Split('-').Count() == 2)
-                                        {
-                                            orderStart = Convert.ToInt16(orders.Split('-')[0].ToString());
-                                            orderEnd = Convert.ToInt16(orders.Split('-')[1].ToString());
-                                        }
-                                        else
-                                        {
-                                            // inform the user 
-                                            Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: Harmonics Order is NOT valid. Please fix it.";
-                                            break;
-                                        }
-
-                                        //List<Task> taskBucket = new List<Task>();
-
-                                        for (int i = orderStart; i < orderEnd + 1; i++)
-                                        {
-                                            // update testing harmonic number for file naming
-                                            TestingHarmonicOrder = i;
-                                            // there is a test set attached so run specified tests.
-                                            //taskBucket.Add(IoC.CMCControl.TestAsync());
-                                            await IoC.CMCControl.TestAsync();
-                                        }
-                                    } 
-                                }
-                                else
-                                {
-                                    // there is a test set attached so run specified tests.
-                                    await IoC.CMCControl.TestAsync();
-                                }
+                                // there is a test set attached so run specified tests.
+                                await IoC.CMCControl.TestAsync();
 
                             }
                             else
