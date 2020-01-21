@@ -71,14 +71,14 @@ namespace metering.core
         public string RampingTooltip { get; set; } = Strings.tooltips_ramping;
 
         /// <summary>
-        /// Provides a hint text for the <see cref="Harmonics"/> textbox
+        /// Provides a hint text for the <see cref="TestHarmonics"/> textbox
         /// </summary>
         public string HarmonicsHint { get; set; } = Strings.header_harmonics;
 
         /// <summary>
         /// The harmonics to test
         /// </summary>
-        public string HarmonicsOrder { get; set; } = "2";
+        public string HarmonicsOrder { get; set; } = "0";
 
         /// <summary>
         /// Holds Harmonics Text box tool tip information

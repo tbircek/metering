@@ -224,10 +224,10 @@ namespace metering.core
 
         #region Private Methods
 
-        private async Task<bool> SetOmicronHardwareConfiguration(SettingsViewModel setting)
-        {
-            return true;
-        }
+        //private async Task<bool> SetOmicronHardwareConfiguration(SettingsViewModel setting)
+        //{
+        //    return true;
+        //}
         #endregion
     }
 }
