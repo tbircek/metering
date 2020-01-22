@@ -7,31 +7,23 @@
     xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
     x:Class="metering.TestFileListItemControl"
     mc:Ignorable="d"
+    d:DataContext="{x:Static core:TestFileItemDesignModel.Instance}" 
     Background="Transparent"
     Foreground="{StaticResource SecondaryAccentForegroundBrush}">
 
-    <Grid d:DataContext="{x:Static core:TestFileItemDesignModel.Instance}" 
-          Background="Transparent"
-          ClipToBounds="True">
-
-        <Grid.RowDefinitions>
-            <!-- Multi-test step -->
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
-        <!-- Multi-test step-->
-        <mD:Chip
-            Margin="5"
-            IsDeletable="{Binding IsDeletable}"
-            ToolTip="{Binding TestToolTip}"
-            DeleteToolTip="{Binding TestDeleteToolTip}"
-            Command="{Binding LoadTestStepCommand}"
-            DeleteCommand="{Binding DeleteTestStepCommand}"
-            FontSize="12" 
-            Width="120" 
-            Background="{Binding TestStepBackgroundColor}">
-            <!-- Chip Text Content -->
-            <TextBlock Text="{Binding ShortTestFileName}" TextTrimming="WordEllipsis" />
-        </mD:Chip>
-    </Grid>
+    <!-- Multi-test step-->
+    <mD:Chip
+        Margin="3"
+        Padding="5"
+        IsDeletable="{Binding IsDeletable}"
+        ToolTip="{Binding TestToolTip}"
+        DeleteToolTip="{Binding TestDeleteToolTip}"
+        Command="{Binding LoadTestStepCommand}"
+        DeleteCommand="{Binding DeleteTestStepCommand}"
+        FontSize="12" 
+        Width="120" 
+        Background="{Binding TestStepBackgroundColor}">
+        <!-- Chip Text Content -->
+        <TextBlock Text="{Binding ShortTestFileName}" TextTrimming="WordEllipsis" />
+    </mD:Chip>
 </UserControl>
