@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +31,11 @@ namespace metering.core
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Holds multi-test files
+        /// </summary>
+        public ObservableCollection<TestFileListItemViewModel> TestFileListItems { get; set; } = new ObservableCollection<TestFileListItemViewModel>() { };
 
         /// <summary>
         /// ModbusClient for modbus protocol communication.
