@@ -69,8 +69,13 @@
                     Height="Auto"
                     HorizontalAlignment="Right" >
                 
+                <local:TestFileListControl
+                    ClipToBounds="True"
+                    d:DataContext="{x:Static core:TestFileDesignModel.Instance}"
+                    Padding="3">
+                </local:TestFileListControl>
                 <!-- and here's another -->
-                <ItemsControl ItemsSource="{Binding }"
+                <!--<ItemsControl ItemsSource="{Binding }"
                               Grid.IsSharedSizeScope="True">
                     
                     <ItemsControl.ItemTemplate>
@@ -106,7 +111,7 @@
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                </ItemsControl>-->
 
             </Border>
             
