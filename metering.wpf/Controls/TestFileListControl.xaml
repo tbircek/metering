@@ -7,35 +7,28 @@
              xmlns:core="clr-namespace:metering.core;assembly=metering.core"
              mc:Ignorable="d" 
              Background="Transparent"
-             Foreground="{StaticResource SecondaryAccentForegroundBrush}">
+             Foreground="{StaticResource SecondaryAccentForegroundBrush}" >
 
     <UserControl.Template>
         <ControlTemplate TargetType="UserControl">
-            <Grid 
-                d:DataContext="{x:Static core:TestFileDesignModel.Instance}" 
-                Background="Transparent">
-
-                <Border
-                    BorderBrush="Black"
-                    BorderThickness="2"
-                    Margin="10"
-                    Padding="10">
-
-                    <ScrollViewer  VerticalScrollBarVisibility="Auto" 
-                                   HorizontalScrollBarVisibility="Auto">
-
-                        <ItemsControl ItemsSource="{Binding TestFileListItems}" 
-                                      Margin="2">
-                            
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <local:TestFileListItemControl/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Border>
-            </Grid>
+            <ScrollViewer  VerticalScrollBarVisibility="Auto" 
+                           HorizontalScrollBarVisibility="Auto"                                           
+                           d:DataContext="{x:Static core:TestFileDesignModel.Instance}">
+                
+                <ItemsControl ItemsSource="{Binding TestFileListItems}" 
+                              Margin="2">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Width="520" Background="Transparent"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:TestFileListItemControl/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </ControlTemplate>
     </UserControl.Template>
 </UserControl>
