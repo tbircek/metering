@@ -166,6 +166,24 @@ namespace metering
                     // convert the JsonSerializer to TestDetailsViewModel
                     test = (TestDetailsViewModel)serializer.Deserialize(file, typeof(TestDetailsViewModel));
 
+                    // generate multi-test list
+                    foreach (var testFileName in dlg.SafeFileNames)
+                    {
+                        // initialize a new test file
+                        TestFileListItemViewModel testFile = new TestFileListItemViewModel
+                        {
+                            IsDeletable = true,
+                            ShortTestFileName = testFileName,
+                            TestStepBackgroundColor = "DarkSlateBlue", // "DarkBlue", // "Transparent",  // 
+                            TestToolTip = $"{testFileName}. Test status: Not started."
+                        };
+                        // add the new test file to the multi-test list.
+                        IoC.Communication.TestFileListItems.Add(testFile);
+                    }
+
+                    // is multiple test available?
+                    IoC.Communication.IsMultipleTest = (IoC.Communication.TestFileListItems.Count > 1) ? true : false;
+
                     // clear previous test values.
                     IoC.TestDetails.AnalogSignals.Clear();
 
