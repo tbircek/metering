@@ -44,7 +44,7 @@ namespace metering.core
         /// <summary>
         /// Holds tool tip information of the "X" delete button of the control.
         /// </summary>
-        public string DeleteTestToolTip { get; set; } = "Remove from multi-test step";
+        public string TestDeleteToolTip { get; set; } = "Remove from multi-test step";
         #endregion
 
         #region Public Commands

@@ -25,7 +25,7 @@ namespace metering.core
         {
             IsDeletable = true;
             TestToolTip = "Design time TestToolTip. This should show long version of file name and test status.";
-            DeleteTestToolTip = "Design time TestDeleteToolTip.";
+            TestDeleteToolTip = "Design time TestDeleteToolTip.";
             TestStepBackgroundColor = "Transparent";
             ShortTestFileName = "ShortDesign-time filename";
         }

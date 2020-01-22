@@ -29,7 +29,7 @@ namespace metering.core
                 {
                   IsDeletable = false,
                   TestToolTip = "Design time TestToolTip. This should show long version of file name and test status.",
-                  DeleteTestToolTip = "Design time TestDeleteToolTip.",
+                  TestDeleteToolTip = "Design time TestDeleteToolTip.",
                   TestStepBackgroundColor = "DarkBlue",
                   ShortTestFileName = "PhaseTest",
                 },
@@ -37,7 +37,7 @@ namespace metering.core
                 {
                   IsDeletable = false,
                   TestToolTip = "Design time TestToolTip. This should show long version of file name and test status.",
-                  DeleteTestToolTip = "Design time TestDeleteToolTip.",
+                  TestDeleteToolTip = "Design time TestDeleteToolTip.",
                   TestStepBackgroundColor = "DarkBlue",
                   ShortTestFileName = "FrequencyTest",
                 },
@@ -45,7 +45,7 @@ namespace metering.core
                 {
                   IsDeletable = false,
                   TestToolTip = "Design time TestToolTip. This should show long version of file name and test status.",
-                  DeleteTestToolTip = "Design time TestDeleteToolTip.",
+                  TestDeleteToolTip = "Design time TestDeleteToolTip.",
                   TestStepBackgroundColor = "DarkSlateBlue",
                   ShortTestFileName = "VoltageTest",
                 },
@@ -53,7 +53,7 @@ namespace metering.core
                 {
                   IsDeletable = true,
                   TestToolTip = "Design time TestToolTip. This should show long version of file name and test status.",
-                  DeleteTestToolTip = "Design time TestDeleteToolTip.",
+                  TestDeleteToolTip = "Design time TestDeleteToolTip.",
                   TestStepBackgroundColor = "Transparent",
                   ShortTestFileName = "CurrentTest",
                 },
@@ -62,7 +62,7 @@ namespace metering.core
                 {
                   IsDeletable = true,
                   TestToolTip = "Design time TestToolTip. This should show long version of file name and test status.",
-                  DeleteTestToolTip = "Design time TestDeleteToolTip.",
+                  TestDeleteToolTip = "Design time TestDeleteToolTip.",
                   TestStepBackgroundColor = "Transparent",
                   ShortTestFileName = "2ndHarmonicsTest",
                 },
@@ -71,7 +71,7 @@ namespace metering.core
                 {
                   IsDeletable = true,
                   TestToolTip = "Design time TestToolTip. This should show long version of file name and test status.",
-                  DeleteTestToolTip = "Design time TestDeleteToolTip.",
+                  TestDeleteToolTip = "Design time TestDeleteToolTip.",
                   TestStepBackgroundColor = "Transparent",
                   ShortTestFileName = "3rdHarmonicsTest",
                 },
