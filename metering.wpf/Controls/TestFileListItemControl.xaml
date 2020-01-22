@@ -10,7 +10,7 @@
     Background="Transparent"
     Foreground="{StaticResource SecondaryAccentForegroundBrush}">
 
-    <Grid d:DataContext="{x:Static core:SettingsListItemDesignModel.Instance}" 
+    <Grid d:DataContext="{x:Static core:TestFileItemDesignModel.Instance}" 
           Background="Transparent"
           ClipToBounds="True">
 
@@ -21,22 +21,17 @@
 
         <!-- Multi-test step-->
         <mD:Chip
-            IsDeletable="True"
-            ToolTip="File name and location, Test is enqueue/completed/running"
-            DeleteToolTip="Remove from multi-test step"
+            Margin="5"
+            IsDeletable="{Binding IsDeletable}"
+            ToolTip="{Binding TestToolTip}"
+            DeleteToolTip="{Binding TestDeleteToolTip}"
             Command="{Binding LoadTestStepCommand}"
             DeleteCommand="{Binding DeleteTestStepCommand}"
             FontSize="12" 
-            Width="150" 
+            Width="120" 
             Background="{Binding TestStepBackgroundColor}">
-            <!-- Background colors -->
-            <!-- Test is completed: DarkBlue-->
-            <!-- Test is running: DarkSlateBlue-->
-            <!-- Test is enqueue: Transparent-->
-            
             <!-- Chip Text Content -->
-            <TextBlock Text="Short File Name Test Length" TextTrimming="WordEllipsis" />
-            
+            <TextBlock Text="{Binding ShortTestFileName}" TextTrimming="WordEllipsis" />
         </mD:Chip>
     </Grid>
 </UserControl>
