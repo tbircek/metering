@@ -369,4 +369,25 @@
   <data name="tooltips_ramping" xml:space="preserve">
     <value>Select your Ramping Signal</value>
   </data>
+  <data name="test_status_completed" xml:space="preserve">
+    <value>Test status: Completed...</value>
+  </data>
+  <data name="test_status_in_progress" xml:space="preserve">
+    <value>Test status: In Progress...</value>
+  </data>
+  <data name="test_status_loaded" xml:space="preserve">
+    <value>Test status: Enqueue...</value>
+  </data>
+  <data name="color_test_completed" xml:space="preserve">
+    <value>DarkBlue</value>
+  </data>
+  <data name="color_test_in_progress" xml:space="preserve">
+    <value>DarkSlateBlue</value>
+  </data>
+  <data name="color_test_loaded" xml:space="preserve">
+    <value>Transparent</value>
+  </data>
+  <data name="tooltips_remove_file" xml:space="preserve">
+    <value>Remove this file from multiple test scheme...</value>
+  </data>
 </root>
