@@ -28,7 +28,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <!-- Communication Page -->
-            <RowDefinition Height="110"/>
+            <RowDefinition Height="120"/>
             
             <!-- Test Details / Nominal Values Page -->
             <RowDefinition/>
