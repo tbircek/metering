@@ -19,7 +19,7 @@
                               Margin="2">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Width="520" Background="Transparent"/>
+                            <WrapPanel Width="400" Background="Transparent"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
