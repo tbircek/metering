@@ -22,7 +22,7 @@
                 <!-- Test Files List box -->
                 <ColumnDefinition Width="Auto"/>
                 <!-- Log text box-->
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- IPADDRESS text box -->
@@ -80,26 +80,27 @@
             
             <!-- Log text box-->
             <Border Grid.Column="3"
-                        Margin="5 5 20 5"
-                        Width="Auto"
-                        Height="Auto"
-                        HorizontalAlignment="Right" >
+                    Margin="5 5 20 5"
+                    Width="Auto"
+                    Height="Auto"
+                    HorizontalAlignment="Right" >
 
                 <ScrollViewer 
-                            ClipToBounds="True"
-                            VerticalScrollBarVisibility="Auto"
-                            HorizontalScrollBarVisibility="Auto"
-                            local:AutoScrollToBottomProperty.Value="True">
+                    ClipToBounds="True"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Auto"
+                    local:AutoScrollToBottomProperty.Value="True">
 
                     <!-- Log text box -->
                     <TextBox
-                            Padding="5"
-                            TextWrapping="Wrap"               
-                            Text="{Binding Log, UpdateSourceTrigger=PropertyChanged}"
-                            TextAlignment="Left"
-                            IsReadOnly="True" 
-                            ToolTip="The information about test process and more"
-                            local:FocusAndSelectProperty.Value="{Binding Selected}">
+                        Padding="5"
+                        TextWrapping="Wrap"               
+                        Text="{Binding Log, UpdateSourceTrigger=PropertyChanged}"
+                        TextAlignment="Left"
+                        MaxWidth="400"
+                        IsReadOnly="True" 
+                        ToolTip="The information about test process and more"
+                        local:FocusAndSelectProperty.Value="{Binding Selected}">
 
                         <!-- left click to select all text -->
                         <TextBox.InputBindings>
