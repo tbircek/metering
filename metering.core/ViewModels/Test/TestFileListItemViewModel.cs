@@ -16,6 +16,11 @@ namespace metering.core
         #region Public Properties
 
         /// <summary>
+        /// Holds full path of the test file. 
+        /// </summary>
+        public string FullFileName { get; set; } = string.Empty;
+
+        /// <summary>
         /// Holds visibility information of "X" delete button of the control.
         /// </summary>
         public bool IsDeletable { get; set; } = true;
