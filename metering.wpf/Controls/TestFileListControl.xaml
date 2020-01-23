@@ -11,24 +11,29 @@
 
     <UserControl.Template>
         <ControlTemplate TargetType="UserControl">
-            <ScrollViewer  VerticalScrollBarVisibility="Auto" 
+            <Border Margin="5"
+                    BorderBrush="Black" 
+                    BorderThickness="1">
+
+                <ScrollViewer  VerticalScrollBarVisibility="Auto" 
                            HorizontalScrollBarVisibility="Auto"                                           
                            d:DataContext="{x:Static core:TestFileDesignModel.Instance}">
-                
-                <ItemsControl ItemsSource="{Binding TestFileListItems}" 
+
+                    <ItemsControl ItemsSource="{Binding TestFileListItems}" 
                               Margin="2">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Width="400" Background="Transparent"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <local:TestFileListItemControl/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Width="400" Background="Transparent"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:TestFileListItemControl/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
         </ControlTemplate>
     </UserControl.Template>
 </UserControl>
