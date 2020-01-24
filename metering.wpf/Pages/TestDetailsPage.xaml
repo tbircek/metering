@@ -67,13 +67,16 @@
                     <RowDefinition />
                     <!-- Start Measurement Delay -->
                     <RowDefinition />
+                    <!-- Blank row -->
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
 
                 <!-- Ramping Signal Selection -->
                 <Border
                     BorderBrush="Black" 
                     BorderThickness="1" 
-                    ClipToBounds="True">
+                    ClipToBounds="True" 
+                    Padding="5">
 
                     <!-- Ramping selection zone -->
                     <StackPanel 

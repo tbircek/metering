@@ -13,6 +13,13 @@ namespace metering.core
         /// <param name="option"><see cref="FileDialogOption"/> to allow the user select save or open test file(s)</param>
         /// <returns></returns>
         Task ShowFileDialogAsync(FileDialogOption option);
+
+        /// <summary>
+        /// Loads multiple tests in order
+        /// </summary>
+        /// <param name="testFileNumber">Test file number in multiple test file location</param>
+        /// <returns></returns>
+        void LoadTestFile(int testFileNumber);
     }
 
     /// <summary>

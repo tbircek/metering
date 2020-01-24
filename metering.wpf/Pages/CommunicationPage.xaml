@@ -8,14 +8,15 @@
     xmlns:local="clr-namespace:metering" 
     xmlns:core="clr-namespace:metering.core;assembly=metering.core" 
     x:Class="metering.CommunicationPage"    
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Foreground="{StaticResource SecondaryAccentForegroundBrush}" >
 
     <Border Margin="10">
 
         <Grid>
             <Grid.ColumnDefinitions>
                 <!-- IpAddress Text box-->
-                <ColumnDefinition Width="180"/>
+                <ColumnDefinition Width="150"/>
                 <!-- Port Number text box-->
                 <ColumnDefinition Width="100"/>
                 <!-- Test Files List box -->
@@ -25,17 +26,18 @@
             </Grid.ColumnDefinitions>
 
             <!-- IPADDRESS text box -->
-            <TextBox Grid.Column="0"
-                     mD:HintAssist.Hint="{Binding IpAddressHint}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="0" 
-                     Padding="5 5 5 5"
-                     Margin="15 5 5 5"
-                     FontSize="16"
-                     MaxLength="15"
-                     ToolTip="Enter IpAddress of the unit under the test"
-                     Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"
-                     local:FocusAndSelectProperty.Value="{Binding Selected}">
+            <TextBox 
+                Grid.Column="0"
+                mD:HintAssist.Hint="{Binding IpAddressHint}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="0" 
+                Padding="5 5 5 5"
+                Margin="15 5 5 5"
+                FontSize="16"
+                MaxLength="15"
+                ToolTip="Enter IpAddress of the unit under the test"
+                Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"
+                local:FocusAndSelectProperty.Value="{Binding Selected}">
 
                 <!-- left click to select all text -->
                 <TextBox.InputBindings>
@@ -44,17 +46,18 @@
             </TextBox>
 
             <!-- PORT text box -->
-            <TextBox Grid.Column="1"
-                     mD:HintAssist.Hint="{Binding PortHint}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                     TabIndex="1"  
-                     Padding="5 5 5 5"
-                     Margin="15 5 15 5"
-                     FontSize="16"
-                     MaxLength="5"
-                     ToolTip="Enter Port number of the unit under the test"
-                     Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"
-                     local:FocusAndSelectProperty.Value="{Binding Selected}">
+            <TextBox
+                Grid.Column="1"
+                mD:HintAssist.Hint="{Binding PortHint}"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                TabIndex="1"  
+                Padding="5 5 5 5"
+                Margin="15 5 15 5"
+                FontSize="16"
+                MaxLength="5"
+                ToolTip="Enter Port number of the unit under the test"
+                Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"
+                local:FocusAndSelectProperty.Value="{Binding Selected}">
 
                 <!-- left click to select all text -->
                 <TextBox.InputBindings>
@@ -62,77 +65,38 @@
                 </TextBox.InputBindings>
             </TextBox>
 
-            <!-- Test Files List box -->
-            <Border Grid.Column="2"
-                    Margin="5 5 20 5"
-                    Width="Auto"
-                    Height="Auto"
-                    HorizontalAlignment="Right" >
-                
-                <!-- and here's another -->
-                <ItemsControl ItemsSource="{Binding }"
-                              Grid.IsSharedSizeScope="True">
-                    
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type core:TestDetailsViewModel}">
-                            <Border x:Name="Border"
-                                    Padding="8"
-                                    BorderThickness="0 0 0 1"
-                                    BorderBrush="{DynamicResource MaterialDesignDivider}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition SharedSizeGroup="Checkerz" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <ToggleButton VerticalAlignment="Center"
-                                                  IsChecked="{Binding IsSelected}"
-                                                  Style="{StaticResource MaterialDesignActionLightToggleButton}"
-                                                  Content="T" />
-                                    <StackPanel Margin="8 0 0 0"
-                                                Grid.Column="1">
-                                        <TextBlock FontWeight="Bold"
-                                                   Text="{Binding DwellTimeHint}" />
-                                        <TextBlock Text="{Binding DwellTime}" />
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                            <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding IsSelected}"
-                                             Value="True">
-                                    <Setter TargetName="Border"
-                                            Property="Background"
-                                            Value="{DynamicResource MaterialDesignSelection}" />
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+            <!-- Multiple Test Files -->
+            <local:TestFileListControl
+                Grid.Column="2"
+                ClipToBounds="True"
+                d:DataContext="{x:Static core:TestFileDesignModel.Instance}"
+                Padding="3"
+                Visibility="{Binding IsMultipleTest,
+                                Converter={local:BooleanToVisibilityConverter},
+                                ConverterParameter=False}">
+            </local:TestFileListControl>
 
-            </Border>
-            
             <!-- Log text box-->
             <Border Grid.Column="3"
-                        Margin="5 5 20 5"
-                        Width="Auto"
-                        Height="Auto"
-                        HorizontalAlignment="Right" >
+                    Margin="5 5 20 5"
+                    HorizontalAlignment="Right" >
 
                 <ScrollViewer 
-                            ClipToBounds="True"
-                            VerticalScrollBarVisibility="Auto"
-                            HorizontalScrollBarVisibility="Auto"
-                            local:AutoScrollToBottomProperty.Value="True">
+                    ClipToBounds="True"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Auto"
+                    local:AutoScrollToBottomProperty.Value="True">
 
                     <!-- Log text box -->
                     <TextBox
-                            Padding="5"
-                            TextWrapping="Wrap"               
-                            Text="{Binding Log, UpdateSourceTrigger=PropertyChanged}"
-                            TextAlignment="Left"
-                            IsReadOnly="True" 
-                            MaxWidth="400"
-                            ToolTip="The information about test process and more"
-                            local:FocusAndSelectProperty.Value="{Binding Selected}">
+                        Padding="5"
+                        TextWrapping="Wrap"               
+                        Text="{Binding Log, UpdateSourceTrigger=PropertyChanged}"
+                        TextAlignment="Left"
+                        MaxWidth="400"
+                        IsReadOnly="True" 
+                        ToolTip="The information about test process and more"
+                        local:FocusAndSelectProperty.Value="{Binding Selected}">
 
                         <!-- left click to select all text -->
                         <TextBox.InputBindings>

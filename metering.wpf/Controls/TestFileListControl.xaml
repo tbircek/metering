@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="metering.TestFileListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:metering"
+             xmlns:core="clr-namespace:metering.core;assembly=metering.core"
+             mc:Ignorable="d" 
+             Background="Transparent"
+             Foreground="{StaticResource SecondaryAccentForegroundBrush}" >
+
+    <UserControl.Template>
+        <ControlTemplate TargetType="UserControl">
+            <Border Margin="5"
+                    BorderBrush="Black" 
+                    BorderThickness="1">
+
+                <ScrollViewer  VerticalScrollBarVisibility="Auto" 
+                           HorizontalScrollBarVisibility="Auto"                                           
+                           d:DataContext="{x:Static core:TestFileDesignModel.Instance}">
+
+                    <ItemsControl ItemsSource="{Binding TestFileListItems}" 
+                              Margin="2">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Width="400" Background="Transparent"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:TestFileListItemControl/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </ControlTemplate>
+    </UserControl.Template>
+</UserControl>
