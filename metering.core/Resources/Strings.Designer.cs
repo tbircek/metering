@@ -79,6 +79,33 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DarkBlue.
+        /// </summary>
+        public static string color_test_completed {
+            get {
+                return ResourceManager.GetString("color_test_completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DarkSlateBlue.
+        /// </summary>
+        public static string color_test_in_progress {
+            get {
+                return ResourceManager.GetString("color_test_in_progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transparent.
+        /// </summary>
+        public static string color_test_loaded {
+            get {
+                return ResourceManager.GetString("color_test_loaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nominal Analog Values:.
         /// </summary>
         public static string global_nominal_analog_header {
@@ -781,6 +808,33 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Test status: Completed....
+        /// </summary>
+        public static string test_status_completed {
+            get {
+                return ResourceManager.GetString("test_status_completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test status: In Progress....
+        /// </summary>
+        public static string test_status_in_progress {
+            get {
+                return ResourceManager.GetString("test_status_in_progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test status: Enqueue....
+        /// </summary>
+        public static string test_status_loaded {
+            get {
+                return ResourceManager.GetString("test_status_loaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Metering.
         /// </summary>
         public static string Title {
@@ -813,6 +867,15 @@ namespace metering.core.Resources {
         public static string tooltips_ramping {
             get {
                 return ResourceManager.GetString("tooltips_ramping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove this file from multiple test scheme....
+        /// </summary>
+        public static string tooltips_remove_file {
+            get {
+                return ResourceManager.GetString("tooltips_remove_file", resourceCulture);
             }
         }
     }

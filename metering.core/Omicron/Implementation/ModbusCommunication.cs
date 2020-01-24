@@ -96,130 +96,145 @@ namespace metering.core
             // Partition the entire source array.
             var rangePartitioner = Partitioner.Create(0, registerStrings.Count);
 
-            // inquire each register that specified by the user.
-            Parallel.ForEach(rangePartitioner, parallelingOptions, async (registerString) =>
+            try
             {
 
-                try
+                // inquire each register that specified by the user.
+                Parallel.ForEach(rangePartitioner, parallelingOptions, async (registerString) =>
                 {
 
-                    // Was cancellation already requested?
-                    if (IoC.Commands.Token.IsCancellationRequested)
+                    try
+                    {
+
+                        // Was cancellation already requested?
+                        if (IoC.Commands.Token.IsCancellationRequested)
+                            // throw if the cancellation requested.
+                            IoC.Commands.Token.ThrowIfCancellationRequested();
+
+                        // Loop over each range element without a delegate invocation.
+                        for (int i = registerString.Item1; i < registerString.Item2; i++)
+                        {
+                            // establish a new cancellation source with a timeout to automatically terminate communication threads
+                            // CancellationTokenSource cancellation = new CancellationTokenSource(Convert.ToInt32(IoC.TestDetails.MeasurementInterval) * 2);
+                            CancellationTokenSource cancellation = new CancellationTokenSource(new TimeSpan(0, 0, 0, Convert.ToInt32(IoC.TestDetails.MeasurementInterval)));
+
+                            // start a task to read register address specified by the user.
+                            await IoC.Task.Run(async () =>
+                                    {
+
+                                    // is the register is between modbus holding register range?
+                                    if (ushort.TryParse(registerStrings[i].Trim(), out ushort register))
+                                        {
+
+                                        // lock the task
+                                        await AsyncAwaiter.AwaitAsync(nameof(MeasurementIntervalCallback), async () =>
+                                                {
+                                                // start a task to read holding register (Function 0x03)
+                                                int[] serverResponse = await IoC.Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1), cancellation.Token);
+
+                                                // decide if serverResponse is acceptable only criteria is the length of the response.
+                                                if (serverResponse.Length > 0)
+                                                    {
+
+                                                    // save server response information as a Tuple
+                                                    (int MaxRegisterValue, int MinRegisterValue, double AverageRegisterValue, int SuccessCounter) = GetServerResponseAsync(serverResponse[0], i);
+
+                                                    // assign MaxTestValue
+                                                    IoC.CMCControl.MaxValues.SetValue(MaxRegisterValue, i);
+
+                                                    // assign MinTestValue
+                                                    IoC.CMCControl.MinValues.SetValue(MinRegisterValue, i);
+
+                                                    // assign AverageRegisterValue
+                                                    IoC.CMCControl.Averages.SetValue(AverageRegisterValue, i);
+
+                                                    // update counter.
+                                                    IoC.CMCControl.SuccessCounters.SetValue(SuccessCounter, i);
+
+                                                    //// inform the developer about register reading
+                                                    //IoC.Logger.Log($"register: {register} \tminResponse : {MinRegisterValue} \tmaxResponse : {MaxRegisterValue} \taverage: {AverageRegisterValue} \tsuccess: {SuccessCounter}");
+                                                }
+                                                    else
+                                                    {
+                                                    // server failed to respond. Ignoring it until find a better option.
+                                                    // inform the developer about error
+                                                    IoC.Logger.Log($"register: {register} -- serverResponse : No server response");
+
+                                                    }
+                                                });
+                                        }
+                                        else
+                                        {
+                                        // illegal register address
+                                        throw new ArgumentOutOfRangeException($"Register: {registerStrings[i].Trim()} is out of range");
+
+                                        }
+                                    // }, cancellation.Token);
+                                });
+
+                            cancellation.Dispose();
+                        }
+
                         // throw if the cancellation requested.
                         IoC.Commands.Token.ThrowIfCancellationRequested();
-
-                    // Loop over each range element without a delegate invocation.
-                    for (int i = registerString.Item1; i < registerString.Item2; i++)
-                    {
-                        // establish a new cancellation source with a timeout to automatically terminate communication threads
-                        // CancellationTokenSource cancellation = new CancellationTokenSource(Convert.ToInt32(IoC.TestDetails.MeasurementInterval) * 2);
-                        CancellationTokenSource cancellation = new CancellationTokenSource(new TimeSpan(0, 0, 0, Convert.ToInt32(IoC.TestDetails.MeasurementInterval)));
-
-                        // start a task to read register address specified by the user.
-                        await IoC.Task.Run(async () =>
-                            {
-
-                                // is the register is between modbus holding register range?
-                                if (ushort.TryParse(registerStrings[i].Trim(), out ushort register))
-                                {
-
-                                    // lock the task
-                                    await AsyncAwaiter.AwaitAsync(nameof(MeasurementIntervalCallback), async () =>
-                                        {
-                                            // start a task to read holding register (Function 0x03)
-                                            int[] serverResponse = await IoC.Task.Run(() => IoC.Communication.EAModbusClient.ReadHoldingRegisters(register - 1, 1), cancellation.Token);
-
-                                            // decide if serverResponse is acceptable only criteria is the length of the response.
-                                            if (serverResponse.Length > 0)
-                                            {
-
-                                                // save server response information as a Tuple
-                                                (int MaxRegisterValue, int MinRegisterValue, double AverageRegisterValue, int SuccessCounter) = GetServerResponseAsync(serverResponse[0], i);
-
-                                                // assign MaxTestValue
-                                                IoC.CMCControl.MaxValues.SetValue(MaxRegisterValue, i);
-
-                                                // assign MinTestValue
-                                                IoC.CMCControl.MinValues.SetValue(MinRegisterValue, i);
-
-                                                // assign AverageRegisterValue
-                                                IoC.CMCControl.Averages.SetValue(AverageRegisterValue, i);
-
-                                                // update counter.
-                                                IoC.CMCControl.SuccessCounters.SetValue(SuccessCounter, i);
-
-                                                //// inform the developer about register reading
-                                                //IoC.Logger.Log($"register: {register} \tminResponse : {MinRegisterValue} \tmaxResponse : {MaxRegisterValue} \taverage: {AverageRegisterValue} \tsuccess: {SuccessCounter}");
-                                            }
-                                            else
-                                            {
-                                                // server failed to respond. Ignoring it until find a better option.
-                                                // inform the developer about error
-                                                IoC.Logger.Log($"register: {register} -- serverResponse : No server response");
-
-                                            }
-                                        });
-                                }
-                                else
-                                {
-                                    // illegal register address
-                                    throw new ArgumentOutOfRangeException($"Register: {registerStrings[i].Trim()} is out of range");
-
-                                }
-                                // }, cancellation.Token);
-                            });
-
-                        cancellation.Dispose();
                     }
-
-                    // throw if the cancellation requested.
-                    IoC.Commands.Token.ThrowIfCancellationRequested();
-                }
-                catch (OperationCanceledException ex)
-                {
-                    // inform the developer about error
-                    IoC.Logger.Log($"OperationCanceledException is : {ex.Message}");
-
-                    // update the user about the error.
-                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Operation canceled: {ex.Message}.";
-
-                    // Trying to stop the app gracefully.
-                    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
-                }
-                catch (System.IO.IOException ex)
-                {
-                    // inform the developer about error
-                    IoC.Logger.Log($"IOException is : {ex.Message}");
-
-                    // update the user about the error.
-                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.";
-
-                    // Trying to stop the app gracefully.
-                    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
-                }
-                catch (Exception ex)
-                {
-                    // inform the developer about error
-                    IoC.Logger.Log($"Exception is : {ex.Message}");
-
-                    // update the user about the error.
-                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.";
-
-                    // catch inner exceptions if exists
-                    if (ex.InnerException != null)
+                    catch (OperationCanceledException ex)
                     {
                         // inform the developer about error
-                        IoC.Logger.Log($"InnerException is : {ex.Message}");
+                        IoC.Logger.Log($"OperationCanceledException is : {ex.Message}");
 
-                        // update the user.
-                        IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
+                        // update the user about the error.
+                        IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Operation canceled: {ex.Message}.";
+
+                        // Trying to stop the app gracefully.
+                        await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                    }
+                    catch (System.IO.IOException ex)
+                    {
+                        // inform the developer about error
+                        IoC.Logger.Log($"IOException is : {ex.Message}");
+
+                        // update the user about the error.
+                        IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.";
+
+                        // Trying to stop the app gracefully.
+                        await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                    }
+                    catch (Exception ex)
+                    {
+                        // inform the developer about error
+                        IoC.Logger.Log($"Exception is : {ex.Message}");
+
+                        // update the user about the error.
+                        IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.";
+
+                        // catch inner exceptions if exists
+                        if (ex.InnerException != null)
+                        {
+                            // inform the developer about error
+                            IoC.Logger.Log($"InnerException is : {ex.Message}");
+
+                            // update the user.
+                            IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
+                        }
+
+                        // Trying to stop the app gracefully.
+                        await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
                     }
 
-                    // Trying to stop the app gracefully.
-                    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
-                }
+                });
+            }
+            catch (OperationCanceledException ex)
+            {
+                // inform the developer about error
+                IoC.Logger.Log($"OperationCanceledException is : {ex.Message}");
 
-            });
+                // update the user about the error.
+                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Operation canceled: {ex.Message}.";
+
+                // Trying to stop the app gracefully.
+                IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+            }
         }
 
         #endregion
