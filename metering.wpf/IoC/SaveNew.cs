@@ -33,12 +33,12 @@ namespace metering
         public void LoadTestFile(int testFileNumber)
         {
             // initialize multiple test view model.
-            TestFileListItemViewModel firstTestFile = new TestFileListItemViewModel();
+            TestFileListItemViewModel currentTestFile = new TestFileListItemViewModel();
             // retrieve the first test
-            firstTestFile = IoC.Communication.TestFileListItems[0];
+            currentTestFile = IoC.Communication.TestFileListItems[testFileNumber];
 
             // convert a JSON file to a TestDetailsViewModel to show it the user.
-            using (StreamReader file = File.OpenText(firstTestFile.FullFileName))
+            using (StreamReader file = File.OpenText(currentTestFile.FullFileName))
             {
                 // initialize a new TestDetailsViewModel
                 TestDetailsViewModel test = new TestDetailsViewModel();
@@ -50,7 +50,7 @@ namespace metering
                 test = (TestDetailsViewModel)serializer.Deserialize(file, typeof(TestDetailsViewModel));
 
                 // clear previous test values.
-                IoC.TestDetails.AnalogSignals.Clear();
+                //IoC.TestDetails.AnalogSignals.Clear();
 
                 // Update values in the single instance of TestDetailsViewModel
                 // update AnalogSignals
@@ -121,7 +121,7 @@ namespace metering
                 if (string.IsNullOrWhiteSpace(IoC.TestDetails.TestFileName))
                 {
                     // add saved file name
-                    IoC.TestDetails.TestFileName = Path.GetFileName(firstTestFile.FullFileName);
+                    IoC.TestDetails.TestFileName = Path.GetFileName(currentTestFile.FullFileName);
 
                     // add new "WiringDiagramFileLocation"
                     test.SelectedVoltageConfiguration.WiringDiagramFileLocation = "../Images/Omicron/not used voltage.png";
