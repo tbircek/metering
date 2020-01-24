@@ -49,9 +49,6 @@ namespace metering
                 // convert the JsonSerializer to TestDetailsViewModel
                 test = (TestDetailsViewModel)serializer.Deserialize(file, typeof(TestDetailsViewModel));
 
-                // clear previous test values.
-                //IoC.TestDetails.AnalogSignals.Clear();
-
                 // Update values in the single instance of TestDetailsViewModel
                 // update AnalogSignals
                 IoC.TestDetails.AnalogSignals = test.AnalogSignals;
@@ -299,6 +296,9 @@ namespace metering
 
                 // always show multiple test user interface.
                 IoC.Communication.IsMultipleTest = true; // (IoC.Communication.TestFileListItems.Count > 0) ? true : false;
+
+                // clear previous test values.
+                IoC.TestDetails.AnalogSignals.Clear();
 
                 // dispose dialog box
                 dlg = null;
