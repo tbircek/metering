@@ -376,7 +376,7 @@
     <value>Test status: In Progress...</value>
   </data>
   <data name="test_status_loaded" xml:space="preserve">
-    <value>Test status: Enqueue...</value>
+    <value>Test status: Enqueued...</value>
   </data>
   <data name="color_test_completed" xml:space="preserve">
     <value>DarkBlue</value>

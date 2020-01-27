@@ -826,7 +826,7 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test status: Enqueue....
+        ///   Looks up a localized string similar to Test status: Enqueued....
         /// </summary>
         public static string test_status_loaded {
             get {
