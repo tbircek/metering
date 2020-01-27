@@ -97,6 +97,15 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DimGray.
+        /// </summary>
+        public static string color_test_interrupted {
+            get {
+                return ResourceManager.GetString("color_test_interrupted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Transparent.
         /// </summary>
         public static string color_test_loaded {
@@ -822,6 +831,15 @@ namespace metering.core.Resources {
         public static string test_status_in_progress {
             get {
                 return ResourceManager.GetString("test_status_in_progress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test status: Interrupted....
+        /// </summary>
+        public static string test_status_interrupted {
+            get {
+                return ResourceManager.GetString("test_status_interrupted", resourceCulture);
             }
         }
         

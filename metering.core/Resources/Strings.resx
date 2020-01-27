@@ -390,4 +390,10 @@
   <data name="tooltips_remove_file" xml:space="preserve">
     <value>Remove this file from multiple test scheme...</value>
   </data>
+  <data name="color_test_interrupted" xml:space="preserve">
+    <value>DimGray</value>
+  </data>
+  <data name="test_status_interrupted" xml:space="preserve">
+    <value>Test status: Interrupted...</value>
+  </data>
 </root>
