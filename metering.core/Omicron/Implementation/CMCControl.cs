@@ -143,9 +143,6 @@ namespace metering.core
                     // retrieve file name with extension without file location
                     IoC.Communication.TestFileListItems[testFileNumber].TestFileNameWithExtension = Path.GetFileName(IoC.Communication.TestFileListItems[testFileNumber].FullFileName);
 
-                    //// inform the developer of test SignalName
-                    //await Task.Run(() => IoC.Logger.Log($"{IoC.Communication.TestFileListItems[testFileNumber].TestFileNameWithExtension} Test started...", LogLevel.Informative));
-
                     // load the test file into memory
                     IoC.Commander.LoadTestFile(testFileNumber);
 
@@ -158,23 +155,16 @@ namespace metering.core
                     // update test progress
                     int progressStep = default;
 
-                    // report file id to distinguish between test results 
-                    string fileId = $"{DateTime.Now.ToLocalTime():yyyy_MM_dd_HH_mm}";
-
                     // check if the test is harmonic
                     // yes => include harmonics portion of the test
                     // no => move to core metering testing
-                    // TestHarmonics testHarmonics = new TestHarmonics();
-
                     // loads TestSignal information as a Tuple
-                    var (HarmonicStart, HarmonicEnd, HarmonicOrders, TotalHarmonicTestCount) = new TestHarmonics().GetHarmonicOrder(); // testHarmonics.GetHarmonicOrder();
+                    var (HarmonicStart, HarmonicEnd, HarmonicOrders, TotalHarmonicTestCount) = new TestHarmonics().GetHarmonicOrder();
 
                     // decides which signal is our ramping signal by comparing the mismatch of any "From" and "To" values.
                     // after the user clicked "Go" button
-                    // TestSignal testSignal = new TestSignal();
-
                     // loads TestSignal information as a Tuple
-                    var (SignalName, From, To, Delta, Phase, Frequency, Precision) = new TestSignal().GetRampingSignal(); // testSignal.GetRampingSignal();
+                    var (SignalName, From, To, Delta, Phase, Frequency, Precision) = new TestSignal().GetRampingSignal();
 
                     // initialize new testStartValue
                     double testStartValue = default;
@@ -196,7 +186,10 @@ namespace metering.core
                     await Task.Run(() => IoC.Logger.Log($"Test signal name: {SignalName}", LogLevel.Informative));
 
                     // set maximum value for the progress bar
-                    await Task.Run(() => IoC.Commands.MaximumTestCount = TotalHarmonicTestCount * (Math.Ceiling((Math.Abs(To - From) / Delta)) + 1));
+                    // IoC.Commands.MaximumTestCountPerFile = Math.Ceiling((Math.Abs(To - From) / Delta)) + 1;
+                    IoC.Commands.MaximumTestCount = TotalHarmonicTestCount * (Math.Ceiling((Math.Abs(To - From) / Delta)) + 1);
+                    //await Task.Run(() => IoC.Commands.MaximumTestCountPerFile = Math.Ceiling((Math.Abs(To - From) / Delta)) + 1);
+                    //await Task.Run(() => IoC.Commands.MaximumTestCount = TotalHarmonicTestCount * IoC.Commands.MaximumTestCountPerFile);
 
                     // overall every harmonic test
                     foreach (var harmonicTest in HarmonicOrders)
@@ -206,6 +199,9 @@ namespace metering.core
                         // if there is harmonics test should run From "HarmonicStart" To "HarmonicEnd"
                         for (int orderNumber = HarmonicStart[HarmonicOrders.IndexOf(harmonicTest)]; orderNumber < HarmonicEnd[HarmonicOrders.IndexOf(harmonicTest)] + 1; orderNumber++)
                         {
+
+                            // report file id to distinguish between test results 
+                            string fileId = $"{DateTime.Now.ToLocalTime():yyyy_MM_dd_HH_mm}";
 
                             // inform the developer MaximumTestCount
                             await Task.Run(() => IoC.Logger.Log($"Maximum test count: {IoC.Commands.MaximumTestCount}", LogLevel.Informative));
@@ -226,8 +222,11 @@ namespace metering.core
                             // change color of Cancel Command button to Green
                             IoC.Commands.CancelForegroundColor = "00ff00";
 
-                            // new test starts 
-                            progressStep = 0;
+                            // new test starts if it is not harmonic
+                            if (2 >= TotalHarmonicTestCount)
+                            {
+                                progressStep = 0;
+                            }
 
                             // update testing harmonic number for file naming
                             IoC.Communication.TestingHarmonicOrder = orderNumber;
@@ -250,7 +249,7 @@ namespace metering.core
 
                             // Process test steps
                             // due to nature of double calculations use this formula "testStartValue <= (To + Delta * 1 / 1000)" to make sure the last test step always runs
-                            for (testStartValue = From; testStartValue <= (To + Delta * 1 / 1000); testStartValue += Delta)
+                            for (testStartValue = From; testStartValue <= (To + Delta * Math.Pow(10, -Precision)); testStartValue += Delta)
                             {
                                 // check if the user canceled the tests.
                                 if (!IoC.Commands.Token.IsCancellationRequested)
@@ -320,7 +319,7 @@ namespace metering.core
                                         // initialize test details string.
                                         string testDetailsFileName = string.Empty;
 
-                                        if (string.IsNullOrWhiteSpace(IoC.TestDetails.TestFileName))
+                                        if (string.IsNullOrWhiteSpace(IoC.Communication.CurrentTestFileListItem.TestFileNameWithExtension))
                                         {
                                             // test result file name contains Register, From, To, and test start time values
                                             testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.TestDetails.Register}_{From:F6}-{To:F6}_{fileId}";
@@ -329,7 +328,7 @@ namespace metering.core
                                         {
                                             // test result file name contains "Test File Name" per the user input.
                                             // file name might contain multiple "."
-                                            testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.TestDetails.TestFileName.Substring(0, IoC.TestDetails.TestFileName.LastIndexOf('.'))}_{fileId}";
+                                            testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.Communication.CurrentTestFileListItem.ShortTestFileName}_{fileId}";
                                         }
 
                                         // create a TestResultLogger to generate a test report in .csv format.
