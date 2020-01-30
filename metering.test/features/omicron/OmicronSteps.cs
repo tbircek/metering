@@ -53,7 +53,7 @@ namespace meteringspecs.features.omicron
         public void ThenTheResultShouldBeAOkOnTheScreen()
         {
             // initial setup run?
-            IoC.InitialCMCSetup.InitialSetup();
+            IoC.Task.Run(async()=> await IoC.InitialCMCSetup.InitialSetupAsync());
             Assert.AreEqual(1, engine.DeviceID);
         }
 
