@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using metering.core.Resources;
 
 namespace metering.core
 {
@@ -130,24 +129,31 @@ namespace metering.core
         {
             try
             {
+
+                // check if the user trying to run a non-saved test?
+                if (1 > IoC.Communication.TestFileListItems.Count)
+                {
+                    // generate a dummy test file, save and load it 
+                    await IoC.Commander.SaveDummyTestFileAsync();
+                }
+
                 // scan multiple tests input for the test
                 for (int testFileNumber = 0; testFileNumber < IoC.Communication.TestFileListItems.Count(); testFileNumber++)
                 {
-                    string fullFileName = Path.GetFileName(IoC.Communication.TestFileListItems[testFileNumber].FullFileName);
+                    // retrieve file name with extension without file location
+                    IoC.Communication.TestFileListItems[testFileNumber].TestFileNameWithExtension = Path.GetFileName(IoC.Communication.TestFileListItems[testFileNumber].FullFileName);
 
-                    // inform the developer of test SignalName
-                    await Task.Run(() => IoC.Logger.Log($"{fullFileName} Test started...", LogLevel.Informative));
+                    //// inform the developer of test SignalName
+                    //await Task.Run(() => IoC.Logger.Log($"{IoC.Communication.TestFileListItems[testFileNumber].TestFileNameWithExtension} Test started...", LogLevel.Informative));
 
                     // load the test file into memory
                     IoC.Commander.LoadTestFile(testFileNumber);
 
-                    // modify physical appearance of the Test File list and tool tip
-                    IoC.Communication.TestFileListItems[testFileNumber].IsDeletable = false;
-                    IoC.Communication.TestFileListItems[testFileNumber].TestStepBackgroundColor = Strings.color_test_in_progress;
-                    IoC.Communication.TestFileListItems[testFileNumber].TestToolTip = $"{fullFileName}.{Environment.NewLine}{Strings.test_status_in_progress}";
+                    // update In Progress test file
+                    IoC.Communication.CurrentTestFileListItem = IoC.Communication.TestFileListItems[testFileNumber];
 
-                    // inform the user about test register and start value.
-                    IoC.Communication.Log = await Task.Run(() => $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {fullFileName} Test started...");
+                    // modify physical appearance of the Test File list and tool tip
+                    IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.InProgress);
 
                     // update test progress
                     int progressStep = default;
@@ -158,17 +164,17 @@ namespace metering.core
                     // check if the test is harmonic
                     // yes => include harmonics portion of the test
                     // no => move to core metering testing
-                    TestHarmonics testHarmonics = new TestHarmonics();
+                    // TestHarmonics testHarmonics = new TestHarmonics();
 
                     // loads TestSignal information as a Tuple
-                    var (HarmonicStart, HarmonicEnd, HarmonicOrders, TotalHarmonicTestCount) = testHarmonics.GetHarmonicOrder();
+                    var (HarmonicStart, HarmonicEnd, HarmonicOrders, TotalHarmonicTestCount) = new TestHarmonics().GetHarmonicOrder(); // testHarmonics.GetHarmonicOrder();
 
                     // decides which signal is our ramping signal by comparing the mismatch of any "From" and "To" values.
                     // after the user clicked "Go" button
-                    TestSignal testSignal = new TestSignal();
+                    // TestSignal testSignal = new TestSignal();
 
                     // loads TestSignal information as a Tuple
-                    var (SignalName, From, To, Delta, Phase, Frequency, Precision) = testSignal.GetRampingSignal();
+                    var (SignalName, From, To, Delta, Phase, Frequency, Precision) = new TestSignal().GetRampingSignal(); // testSignal.GetRampingSignal();
 
                     // initialize new testStartValue
                     double testStartValue = default;
@@ -192,30 +198,6 @@ namespace metering.core
                     // set maximum value for the progress bar
                     await Task.Run(() => IoC.Commands.MaximumTestCount = TotalHarmonicTestCount * (Math.Ceiling((Math.Abs(To - From) / Delta)) + 1));
 
-                    // inform the developer MaximumTestCount
-                    await Task.Run(() => IoC.Logger.Log($"Maximum test count: {IoC.Commands.MaximumTestCount}", LogLevel.Informative));
-
-                    // Wait StartDelayTime to start Modbus communication
-                    IoC.Task.Run(async () =>
-                    {
-                    // lock the task
-                    await AsyncAwaiter.AwaitAsync(nameof(TestAsync), async () =>
-                        {
-                        // wait for the user specified "Start Delay Time"
-                        await Task.Delay(TimeSpan.FromMinutes(Convert.ToDouble(IoC.TestDetails.StartDelayTime)), IoC.Commands.Token);
-                        });
-
-                    // Progress bar is visible
-                    IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
-
-                    // change color of Cancel Command button to Green
-                    IoC.Commands.CancelForegroundColor = "00ff00";
-
-                    // test starts 
-                    progressStep = 0;
-
-                    }, IoC.Commands.Token).Wait();
-
                     // overall every harmonic test
                     foreach (var harmonicTest in HarmonicOrders)
                     {
@@ -224,6 +206,29 @@ namespace metering.core
                         // if there is harmonics test should run From "HarmonicStart" To "HarmonicEnd"
                         for (int orderNumber = HarmonicStart[HarmonicOrders.IndexOf(harmonicTest)]; orderNumber < HarmonicEnd[HarmonicOrders.IndexOf(harmonicTest)] + 1; orderNumber++)
                         {
+
+                            // inform the developer MaximumTestCount
+                            await Task.Run(() => IoC.Logger.Log($"Maximum test count: {IoC.Commands.MaximumTestCount}", LogLevel.Informative));
+
+                            // Wait StartDelayTime to start Modbus communication
+                            await IoC.Task.Run(async () =>
+                            {
+                                // obtain time delay from UI.
+                                TimeSpan delayTime = TimeSpan.FromMinutes(Convert.ToDouble(IoC.TestDetails.StartDelayTime));
+
+                                // wait with cancellation token
+                                await Task.Delay(delay: delayTime, cancellationToken: IoC.Commands.Token);
+                            });
+
+                            // set Progress bar is visible
+                            IoC.Commands.IsConnectionCompleted = IoC.Commands.IsConnecting = IoC.Communication.EAModbusClient.Connected;
+
+                            // change color of Cancel Command button to Green
+                            IoC.Commands.CancelForegroundColor = "00ff00";
+
+                            // new test starts 
+                            progressStep = 0;
+
                             // update testing harmonic number for file naming
                             IoC.Communication.TestingHarmonicOrder = orderNumber;
 
@@ -233,6 +238,7 @@ namespace metering.core
                             // generate variable portion of header information based on Register entry.
                             IEnumerable<int> registerValues = Enumerable.Range(0, IoC.TestDetails.Register.ToString().Split(',').Length).Select(i => i);
 
+                            // generate headers for the reporting.
                             foreach (int registerValue in registerValues)
                             {
                                 // append new variable header information to previous string generated.
@@ -250,15 +256,12 @@ namespace metering.core
                                 if (!IoC.Commands.Token.IsCancellationRequested)
                                 {
 
-                                    // inform the developer about test register and start value.
+                                    // inform the developer about test register and start values.
                                     await Task.Run(() => IoC.Logger.Log($"Register: {IoC.TestDetails.Register}\tTest value: {testStartValue:F6} started", LogLevel.Informative));
 
-                                    // inform the user about test register and start value.
+                                    // inform the user about test register and start values.
                                     IoC.Communication.Log = await Task.Run(() => $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Register: {IoC.TestDetails.Register} --- Test value: {testStartValue:F6} started");
 
-                                    // send Omicron commands
-                                    await IoC.Task.Run(async () =>
-                                    {
                                     // initialize Minimum Value List with the highest int32 to capture every minimum value
                                     MinValues = Enumerable.Repeat(int.MaxValue, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
 
@@ -284,31 +287,19 @@ namespace metering.core
                                     await IoC.Task.Run(() => IoC.PowerOptions.TurnOnCMC());
 
                                     // set timer to read modbus register per the user specified time.
-                                    MdbusTimer =
-                                                    await Task.Run(() =>
-                                                        new Timer(
-                                                            // reads the user specified modbus register(s).
-                                                            callback: IoC.Modbus.MeasurementIntervalCallback,
-                                                            // pass the use specified modbus register(s) to callback.
-                                                            state: IoC.TestDetails.Register,
-                                                            // the time delay before modbus register(s) read start. 
-                                                            dueTime: TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)),
-                                                            // the interval between reading of the modbus register(s).
-                                                            period: TimeSpan.FromMilliseconds(Convert.ToDouble(IoC.TestDetails.MeasurementInterval))));
+                                    MdbusTimer = await Task.Run(() =>
+                                                    new Timer(
+                                                        // reads the user specified modbus register(s).
+                                                        callback: IoC.Modbus.MeasurementIntervalCallback,
+                                                        // pass the use specified modbus register(s) to callback.
+                                                        state: IoC.TestDetails.Register,
+                                                        // the time delay before modbus register(s) read start. 
+                                                        dueTime: TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)),
+                                                        // the interval between reading of the modbus register(s).
+                                                        period: TimeSpan.FromMilliseconds(Convert.ToDouble(IoC.TestDetails.MeasurementInterval))), IoC.Commands.Token);
 
-                                    // cancel this task if cancellation requested
-                                }, IoC.Commands.Token);
-
-                                    // Start reading the user specified Register
-                                    IoC.Task.Run(async () =>
-                                    {
-                                    // lock the task
-                                    await AsyncAwaiter.AwaitAsync(nameof(TestAsync) + testStartValue, async () =>
-                                                {
-
-                                                // wait until the user specified "Dwell Time" expires.
-                                                await Task.Delay(TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.DwellTime) + Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)));
-                                                });
+                                    // wait until the user specified "Dwell Time" expires.
+                                    await Task.Delay(TimeSpan.FromSeconds(Convert.ToDouble(IoC.TestDetails.DwellTime) + Convert.ToDouble(IoC.TestDetails.StartMeasurementDelay)));
 
                                     // terminate reading modbus register because "Dwell Time" is over.
                                     MdbusTimer?.Dispose();
@@ -318,40 +309,37 @@ namespace metering.core
 
                                     // generate variable portion of header information based on Register entry.
                                     foreach (int i in registerValues)
-                                        {
+                                    {
                                         // append new variable header information to previous string generated.
                                         await Task.Run(() => @string.Append(value: $" ,{IoC.TestDetails.Register.ToString().Split(',').GetValue(i)} ,{MinValues[i]:F6} , {MaxValues[i]:F6}, {Averages[i]:F6}, {SuccessCounters[i]}"));
-                                        }
-
-                                    // wait task to be over with
-                                }, IoC.Commands.Token).Wait();
+                                    }
 
                                     // update test result report
                                     await IoC.Task.Run(() =>
                                     {
-                                    // initialize test details string.
-                                    string testDetailsFileName = string.Empty;
+                                        // initialize test details string.
+                                        string testDetailsFileName = string.Empty;
 
                                         if (string.IsNullOrWhiteSpace(IoC.TestDetails.TestFileName))
                                         {
-                                        // test result file name contains Register, From, To, and test start time values
-                                        testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.TestDetails.Register}_{From:F6}-{To:F6}_{fileId}";
+                                            // test result file name contains Register, From, To, and test start time values
+                                            testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.TestDetails.Register}_{From:F6}-{To:F6}_{fileId}";
                                         }
                                         else
                                         {
-                                        // test result file name contains "Test File Name" per the user input.
-                                        // file name might contain multiple "."
-                                        testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.TestDetails.TestFileName.Substring(0, IoC.TestDetails.TestFileName.LastIndexOf('.'))}_{fileId}";
+                                            // test result file name contains "Test File Name" per the user input.
+                                            // file name might contain multiple "."
+                                            testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.TestDetails.TestFileName.Substring(0, IoC.TestDetails.TestFileName.LastIndexOf('.'))}_{fileId}";
                                         }
 
-                                    // create a TestResultLogger to generate a test report in .csv format.
-                                    new TestResultLogger
-                                                     (
-                                                         // set file path and name
-                                                         filePath: Path.Combine(ResultsFolder, $"{testDetailsFileName}.csv"),
-                                                         // no need to save time
-                                                         logTime: false
-                                                     ).Log(@string.ToString(), LogLevel.Informative);
+                                        // create a TestResultLogger to generate a test report in .csv format.
+                                        new TestResultLogger
+                                                         (
+                                                             // set file path and name
+                                                             filePath: Path.Combine(ResultsFolder, $"{testDetailsFileName}.csv"),
+                                                             // no need to save time
+                                                             logTime: false
+                                                         ).Log(@string.ToString(), LogLevel.Informative);
                                     });
 
                                     // increment progress bar strip on the "Button"
@@ -397,15 +385,17 @@ namespace metering.core
                     await IoC.Task.Run(() => IoC.PowerOptions.TurnOffCMC());
 
                     // modify physical appearance of the Test File list and tool tip
-                    IoC.Communication.TestFileListItems[testFileNumber].IsDeletable = false;
-                    IoC.Communication.TestFileListItems[testFileNumber].TestStepBackgroundColor = Strings.color_test_completed;
-                    IoC.Communication.TestFileListItems[testFileNumber].TestToolTip = $"{Path.GetFileName(IoC.Communication.TestFileListItems[testFileNumber].FullFileName)}.{Environment.NewLine}{Strings.test_status_completed}";
+                    IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Completed);
 
-                    // inform the developer of test SignalName
-                    await Task.Run(() => IoC.Logger.Log($"{fullFileName} Test completed...", LogLevel.Informative));
+                    //testSignal = null;
+                    //testHarmonics = null;
+                    IoC.Communication.CurrentTestFileListItem = null;
 
-                    // inform the user about test register and start value.
-                    IoC.Communication.Log = await Task.Run(() => $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {fullFileName} Test completed...");
+                    //// inform the developer of test SignalName
+                    //await Task.Run(() => IoC.Logger.Log($"{IoC.Communication.TestFileListItems[testFileNumber].TestFileNameWithExtension} Test completed...", LogLevel.Informative));
+
+                    //// inform the user about test register and start value.
+                    //IoC.Communication.Log = await Task.Run(() => $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {IoC.Communication.TestFileListItems[testFileNumber].TestFileNameWithExtension} Test completed...");
 
                 }
             }
@@ -418,7 +408,8 @@ namespace metering.core
                 IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.";
 
                 // Trying to stop the app gracefully.
-                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                //await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
             }
             catch (Exception ex)
             {
@@ -437,7 +428,8 @@ namespace metering.core
                 }
 
                 // Trying to stop the app gracefully.
-                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                //await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
 
                 // exit from this task
                 return;
@@ -445,7 +437,8 @@ namespace metering.core
             finally
             {
                 // Trying to stop the app gracefully.
-                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors(false));
+                //await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors(false));
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync(false));
             }
         }
 
