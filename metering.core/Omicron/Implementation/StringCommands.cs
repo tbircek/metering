@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,51 +55,32 @@ namespace metering.core
         {
             try
             {
-                // lock the task
-                await AsyncAwaiter.AwaitAsync(nameof(SendOutAnaAsync), async () =>
+                // check if the user canceling test
+                if (!IoC.Commands.Token.IsCancellationRequested)
                 {
-                    // check if the user canceling test
-                    if (!IoC.Commands.Token.IsCancellationRequested)
+                    // default waveform to use is "sin"
+                    string waveForm = "sin";
+                    // only time this changes while the ramping signal is "Harmonics"
+                    if (IoC.TestDetails.IsHarmonics)
                     {
-                        // default waveform to use is "sin"
-                        string waveForm = "sin";
-                        // only time this changes while the ramping signal is "Harmonics"
-                        if (IoC.TestDetails.IsHarmonics)
-                        {
-                            // use waveform == "sum" 
-                            // e.g. sum,1,2,0.10,0
-                            waveForm = $"sum,{amplitude_factor},{harmonicX},{amplitudeFactorX/100.0d:F6},{phaseX:F6}";
+                        // use waveform == "sum" 
+                        // e.g. sum,1,2,0.10,0
+                        waveForm = $"sum,{amplitude_factor},{harmonicX},{amplitudeFactorX / 100.0d:F6},{phaseX:F6}";
 
-                        }
-
-                        // is frequency zero? yes == use NominalFrequency no == frequency
-                        double frequencyToApply = frequency.Equals(0) ? NominalFrequency : frequency;
-
-
-                        // build a string to send to Omicron Test set
-                        StringBuilder stringBuilder = new StringBuilder($"out:ana:{generatorType}({tripletNumber}):{nameof(SignalType.a)}({amplitude});{nameof(SignalType.p)}({phase});{nameof(SignalType.f)}({frequencyToApply});wav({waveForm})");
-
-                        // update the log
-                        IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID} -- command: {stringBuilder}", LogLevel.Informative);
-
-                        // send newly generated string command to Omicron Test Set
-                        await IoC.Task.Run(() =>
-                        {
-                            try
-                            {
-                                // execute the user values.
-                                IoC.CMCControl.CMEngine.Exec(
-                                   DevID: IoC.CMCControl.DeviceID,
-                                   Command: stringBuilder.ToString());
-                            }
-                            catch (COMException ex)
-                            {
-                                // inform the developer about error.
-                                IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
-                            }
-                        });
                     }
-                });
+
+                    // is frequency zero? yes == use NominalFrequency no == frequency
+                    double frequencyToApply = frequency.Equals(0) ? NominalFrequency : frequency;
+
+                    // build a string to send to Omicron Test set
+                    StringBuilder stringBuilder = new StringBuilder($"out:ana:{generatorType}({tripletNumber}):{nameof(SignalType.a)}({amplitude});{nameof(SignalType.p)}({phase});{nameof(SignalType.f)}({frequencyToApply});wav({waveForm})");
+
+                    // update the log
+                    IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID} -- command: {stringBuilder}", LogLevel.Informative);
+
+                    // send newly generated string command to Omicron Test Set
+                    await SendStringCommandsAsync(omicronCommand: stringBuilder.ToString());
+                }
             }
             catch (Exception ex)
             {
@@ -113,88 +93,63 @@ namespace metering.core
         /// Sends string command to Omicron Test Set.
         /// </summary>
         /// <param name="omicronCommand">This is the command to send Omicron Test Set.</param>
-        public async void SendStringCommandAsync(string omicronCommand)
+        /// <returns>a string that contains Omicron test response</returns>
+        public async Task<string> SendStringCommandsAsync(string omicronCommand)
         {
+            // update the log
+            IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID} -- command: {omicronCommand}", LogLevel.Informative);
+
             try
             {
-                // lock the task
-                await AsyncAwaiter.AwaitAsync(nameof(SendStringCommandAsync), async () =>
+
+                // execute the user values.
+                Task<string> result = IoC.Task.Run(() =>
                 {
-
-                    // check if the user canceling test
-                    if (!IoC.Commands.Token.IsCancellationRequested)
-                    {
-                        if (IoC.TestDetails.SelectedCurrentConfiguration.CurrentWiringDiagram || IoC.TestDetails.SelectedVoltageConfiguration.CurrentWiringDiagram)
-                        {
-                            // pass received string command to Omicron Test set
-                            await IoC.Task.Run(() =>
-                            {
-                                try
-                                {
-                                    // update the log
-                                    IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID} -- command: {omicronCommand}", LogLevel.Informative);
-
-                                    // send string command
-                                    IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand);
-                                }
-                                catch (COMException ex)
-                                {
-                                    // inform the developer about error.
-                                    IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-            catch (Exception err)
-            {
-                // inform the developer about error.
-                IoC.Logger.Log($"Exception: {err.Message}");
-            }
-        }
-
-        /// <summary>
-        /// Sends string command to Omicron Test Set.
-        /// </summary>
-        /// <param name="omicronCommand">This is the command to send Omicron Test Set.</param>
-        /// <returns>Returns Omicron Test Set response to the most recent executed command.</returns>
-        public async Task<string> SendStringCommandWithResponseAsync(string omicronCommand)
-        {
-            try
-            {
-                // lock the task
-                return await AsyncAwaiter.AwaitResultAsync(nameof(SendStringCommandWithResponseAsync), async () =>
-                {
-                    // set default response
-                    string response = string.Empty;
-
-                    //// check if the user canceling test
-                    //if (!IoC.Commands.Token.IsCancellationRequested)
-                    //{
                     try
                     {
-                        //// update the log
-                        //IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID}\tcommand: {omicronCommand}", LogLevel.Informative);
+                        // send command string.
+                        return IoC.CMCControl.CMEngine.Exec(DevID: IoC.CMCControl.DeviceID, Command: omicronCommand);
 
-                        // pass received string command to Omicron Test set
-                        response = await IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(IoC.CMCControl.DeviceID, omicronCommand));
                     }
-                    catch (COMException ex)
+                    // Re-throw all exceptions.
+                    catch (Exception)
                     {
-                        // inform the developer about error.
-                        IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
+                        throw;
                     }
-                    //}
+                }, IoC.Commands.Token);
 
-                    // return Omicron Test Set response
-                    return response;
-                });
+                // wait for the result
+                return await result;
+            }
+            catch (COMException ex)
+            {
+                // inform the developer about error.
+                IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
+
+                // update Current Test File
+                IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Interrupted);
+
+                // return an empty string.
+                return string.Empty;
+            }
+            catch (OperationCanceledException ex)
+            {
+                // inform the developer about error.
+                IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
+
+                // update Current Test File
+                IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Interrupted);
+
+                // return an empty string.
+                return string.Empty;
             }
             catch (Exception err)
             {
                 // inform the developer about error.
                 IoC.Logger.Log($"Exception: {err.Message}");
+
+                // update Current Test File
+                IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Interrupted);
 
                 // return an empty string.
                 return string.Empty;

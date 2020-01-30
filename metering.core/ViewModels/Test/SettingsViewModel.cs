@@ -216,7 +216,8 @@ namespace metering.core
                     IoC.Application.GoToPage(ApplicationPage.Settings, IoC.Settings);
 
                     // disconnect from attached Omicron Test Set
-                    await IoC.Task.Run(() => IoC.ReleaseOmicron.Release());
+                    await IoC.ReleaseOmicron.ReleaseAsync();
+                    //await IoC.Task.Run(() => IoC.ReleaseOmicron.Release());
                 }
             });
         }

@@ -44,7 +44,7 @@ namespace metering.core
             ObservableCollection<SettingsListItemViewModel> outputConfigurationsToCombine = new ObservableCollection<SettingsListItemViewModel>();
 
             // returns a string that contains the CMC's test set number and the number of available configurations of type<integer>.
-            string configurationInformation = await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandWithResponseAsync(omicronCommand: string.Format(OmicronStringCmd.amp_cfg)).Result);
+            string configurationInformation = await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandsAsync(omicronCommand: string.Format(OmicronStringCmd.amp_cfg)).Result);
 
             // retrieve the number of available configurations.
             int totalConfiguration = Convert.ToInt16(extract.Parameters(2, configurationInformation).Replace(oldChar: ';', newChar: ' '));
@@ -73,7 +73,7 @@ namespace metering.core
                 string amplifierDescriptor = string.Empty;
 
                 // retrieve Omicron Hardware Configuration Details
-                string configurationDetails = (await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandWithResponseAsync(omicronCommand: string.Format(OmicronStringCmd.amp_cfg_0, i)).Result));
+                string configurationDetails = (await IoC.Task.Run(() => IoC.StringCommands.SendStringCommandsAsync(omicronCommand: string.Format(OmicronStringCmd.amp_cfg_0, i)).Result));
 
                 // count amplifiers in configuration details to generate combined hardware configurations
                 // starts with 2

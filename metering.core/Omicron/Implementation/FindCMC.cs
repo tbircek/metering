@@ -9,7 +9,7 @@ namespace metering.core
     /// </summary>
     public class FindCMC
     {
-        
+
         #region Public Methods
 
         /// <summary>
@@ -30,6 +30,15 @@ namespace metering.core
             ExtractParameters extract = new ExtractParameters();
 
             // get list of Omicron Test Set attached to this computer but it is unlocked.
+            // lsAllAssociated all associated devices
+            // lsUnlockedAssociated only unlocked(but associated) devices
+            // lsLockedAssociatedonly locked(but associated) devices
+            // lsAllUnassociated all unassociated devices
+            // lsUnlockedUnassociated only unlocked(and unassociated) devices
+            // lsLockedUnassociated only locked(and unassociated) devices
+            // lsAllAssociatedAny all devices(with any association state)
+            // lsUnlockedAssociatedAny only unlocked devices(with any association state)
+            // lsLockedAssociatedAny only locked devices(with any association state)
             deviceList = IoC.CMCControl.CMEngine.DevGetList(ListSelectType.lsUnlockedAssociated);
 
             // verify at least one device met search criteria
@@ -53,7 +62,7 @@ namespace metering.core
 
             // extract the device id that matched search criteria 
             IoC.CMCControl.DeviceID = Convert.ToInt32(extract.Parameters(1, deviceList));
-            
+
             // obtain device information
             IoC.CMCControl.DeviceInfo = $"{IoC.CMCControl.CMEngine.DeviceType[IoC.CMCControl.DeviceID]} ({IoC.CMCControl.CMEngine.SerialNumber[IoC.CMCControl.DeviceID]})";
 

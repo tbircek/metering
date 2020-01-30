@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using metering.core.Resources;
 
 namespace metering.core
 {
@@ -30,7 +31,46 @@ namespace metering.core
 
         #endregion
 
+        #region Public Enums
+
+        /// <summary>
+        /// Test status options
+        /// </summary>
+        public enum TestStatus
+        {
+            /// <summary>
+            /// Test is added to the list
+            /// </summary>
+            Enqueued,
+
+            /// <summary>
+            /// Test is running
+            /// </summary>
+            InProgress,
+
+            /// <summary>
+            /// Test is stopped
+            /// </summary>
+            Interrupted,
+
+            /// <summary>
+            /// Test is completed successfully
+            /// </summary>
+            Completed,
+
+            /// <summary>
+            /// Test is unknown
+            /// </summary>
+            Unknown,
+        }
+        #endregion
+
         #region Public Properties
+
+        /// <summary>
+        /// The current "In Progress..." Test File
+        /// </summary>
+        public TestFileListItemViewModel CurrentTestFileListItem { get; set; }
 
         /// <summary>
         /// Holds multi-test files
@@ -196,14 +236,16 @@ namespace metering.core
                         // find any CMCEngine attached to this computer
                         if (IoC.FindCMC.Find())
                         {
-                            // perform initial set up on CMCEngine
-                            IoC.InitialCMCSetup.InitialSetup();
-
+                            
                             // Is there Omicron Test Set attached to this app?
                             if (IoC.CMCControl.DeviceID > 0)
                             {
                                 // indicates the test is running.
                                 IoC.CMCControl.IsTestRunning = true;
+
+                                // perform initial set up on CMCEngine
+                                //await IoC.Task.Run(()=> IoC.InitialCMCSetup.InitialSetup());
+                                await IoC.InitialCMCSetup.InitialSetupAsync();
 
                                 // there is a test set attached so run specified tests.
                                 await IoC.CMCControl.TestAsync();
@@ -217,27 +259,19 @@ namespace metering.core
                         }
                         else
                         {
-                            //// inform the developer
-                            //IoC.Logger.Log("Find no Omicron");
-
                             // inform the user 
                             Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: There is no attached Omicron Test Set. Please attached a Omicron Test Set before test.";
                         }
                     }
                     else
                     {
-                        //// inform the developer
-                        //IoC.Logger.Log($"The server {EAModbusClient.IPAddress} is not available.");
-
                         // inform the user 
                         Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: The server is not available: {EAModbusClient.IPAddress}.";
                     }
                 }
                 catch (Exception ex)
                 {
-                    //// inform the developer about error.
-                    //IoC.Logger.Log(ex.Message);
-
+                    
                     // inform the user about error.
                     Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Start Communication failed: {ex.Message}.";
 
@@ -249,6 +283,62 @@ namespace metering.core
                     }
                 }
             });
+        }
+
+        /// <summary>
+        /// Updates CurrentTestFileListItem throughout
+        /// </summary>
+        /// <param name="testStatus"><see cref="TestStatus"/> status of the test</param>
+        public void UpdateCurrentTestFileListItem(TestStatus testStatus)
+        {
+            CurrentTestFileListItem.IsDeletable = false;
+            CurrentTestFileListItem.TestToolTip = $"{CurrentTestFileListItem.TestFileNameWithExtension}.{Environment.NewLine}";
+
+            switch (testStatus)
+            {
+                case TestStatus.Enqueued:
+                    // modify physical appearance of the Test File list and tool tip
+                    CurrentTestFileListItem.IsDeletable = true;
+                    CurrentTestFileListItem.TestStepBackgroundColor = Strings.color_test_enqueued;
+                    CurrentTestFileListItem.TestToolTip += $"{Strings.test_status_enqueued}";
+                    IoC.Logger.Log($"{CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_enqueued}", LogLevel.Informative);
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_enqueued}";
+                    break;
+
+                case TestStatus.InProgress:
+                    // modify physical appearance of the Test File list and tool tip
+                    CurrentTestFileListItem.TestStepBackgroundColor = Strings.color_test_in_progress;
+                    CurrentTestFileListItem.TestToolTip += $"{Strings.test_status_in_progress}";
+                    IoC.Logger.Log($"{CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_in_progress}", LogLevel.Informative);
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_in_progress}";
+                    break;
+
+                case TestStatus.Interrupted:
+                    // modify physical appearance of the Test File list and tool tip
+                    CurrentTestFileListItem.IsDeletable = true;
+                    CurrentTestFileListItem.TestStepBackgroundColor = Strings.color_test_interrupted;
+                    CurrentTestFileListItem.TestToolTip += $"{Strings.test_status_interrupted}";
+                    IoC.Logger.Log($"{CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_interrupted}", LogLevel.Informative);
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_interrupted}";
+                    break;
+
+                case TestStatus.Completed:
+                    // modify physical appearance of the Test File list and tool tip
+                    CurrentTestFileListItem.TestStepBackgroundColor = Strings.color_test_completed;                    
+                    CurrentTestFileListItem.TestToolTip += $"{Strings.test_status_completed}";
+                    IoC.Logger.Log($"{CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_completed}", LogLevel.Informative);
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_completed}";
+                    break;
+
+                default:
+                    // same as enqueued.
+                    CurrentTestFileListItem.IsDeletable = true;
+                    CurrentTestFileListItem.TestStepBackgroundColor = Strings.color_test_unknown;
+                    CurrentTestFileListItem.TestToolTip += $"{Strings.test_status_unknown}";
+                    IoC.Logger.Log($"{CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_unknown}", LogLevel.Informative);
+                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_unknown}";
+                    break;
+            }
         }
         #endregion
 

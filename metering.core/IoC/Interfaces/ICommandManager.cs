@@ -11,8 +11,14 @@ namespace metering.core
         /// Shows a <see cref="SaveFileDialog"/> or <see cref="OpenFileDialog"/> per the user selection.
         /// </summary>
         /// <param name="option"><see cref="FileDialogOption"/> to allow the user select save or open test file(s)</param>
-        /// <returns></returns>
+        /// <returns>Returns no value.</returns>
         Task ShowFileDialogAsync(FileDialogOption option);
+
+        /// <summary>
+        /// Saves a non-saved test details view model as a test file.
+        /// </summary>
+        /// <returns>Returns no value.</returns>
+        Task SaveDummyTestFileAsync();
 
         /// <summary>
         /// Loads multiple tests in order

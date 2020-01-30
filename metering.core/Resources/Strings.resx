@@ -375,8 +375,8 @@
   <data name="test_status_in_progress" xml:space="preserve">
     <value>Test status: In Progress...</value>
   </data>
-  <data name="test_status_loaded" xml:space="preserve">
-    <value>Test status: Enqueue...</value>
+  <data name="test_status_enqueued" xml:space="preserve">
+    <value>Test status: Enqueued...</value>
   </data>
   <data name="color_test_completed" xml:space="preserve">
     <value>DarkBlue</value>
@@ -384,10 +384,25 @@
   <data name="color_test_in_progress" xml:space="preserve">
     <value>DarkSlateBlue</value>
   </data>
-  <data name="color_test_loaded" xml:space="preserve">
+  <data name="color_test_enqueued" xml:space="preserve">
     <value>Transparent</value>
   </data>
   <data name="tooltips_remove_file" xml:space="preserve">
     <value>Remove this file from multiple test scheme...</value>
+  </data>
+  <data name="color_test_interrupted" xml:space="preserve">
+    <value>DimGray</value>
+  </data>
+  <data name="test_status_interrupted" xml:space="preserve">
+    <value>Test status: Interrupted...</value>
+  </data>
+  <data name="color_test_unknown" xml:space="preserve">
+    <value>DarkSlateGray</value>
+  </data>
+  <data name="test_status_unknown" xml:space="preserve">
+    <value>Test status: Unknown...</value>
+  </data>
+  <data name="temp_test_file_name" xml:space="preserve">
+    <value>DummyMeteringTest.bmtf</value>
   </data>
 </root>
