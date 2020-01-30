@@ -30,7 +30,7 @@ namespace metering.core
                   IsDeletable = false,
                   TestToolTip = "Design time TestToolTip. This should show long version of file name and test status.",
                   TestDeleteToolTip = "Design time TestDeleteToolTip.",
-                  TestStepBackgroundColor = "DarkBlue",
+                  TestStepBackgroundColor = "DimGray",
                   ShortTestFileName = "PhaseTest",
                 },
                 new TestFileListItemViewModel

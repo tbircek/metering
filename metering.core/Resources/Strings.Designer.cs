@@ -88,6 +88,15 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Transparent.
+        /// </summary>
+        public static string color_test_enqueued {
+            get {
+                return ResourceManager.GetString("color_test_enqueued", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DarkSlateBlue.
         /// </summary>
         public static string color_test_in_progress {
@@ -97,11 +106,20 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Transparent.
+        ///   Looks up a localized string similar to DimGray.
         /// </summary>
-        public static string color_test_loaded {
+        public static string color_test_interrupted {
             get {
-                return ResourceManager.GetString("color_test_loaded", resourceCulture);
+                return ResourceManager.GetString("color_test_interrupted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DarkSlateGray.
+        /// </summary>
+        public static string color_test_unknown {
+            get {
+                return ResourceManager.GetString("color_test_unknown", resourceCulture);
             }
         }
         
@@ -808,11 +826,29 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DummyMeteringTest.bmtf.
+        /// </summary>
+        public static string temp_test_file_name {
+            get {
+                return ResourceManager.GetString("temp_test_file_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test status: Completed....
         /// </summary>
         public static string test_status_completed {
             get {
                 return ResourceManager.GetString("test_status_completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test status: Enqueued....
+        /// </summary>
+        public static string test_status_enqueued {
+            get {
+                return ResourceManager.GetString("test_status_enqueued", resourceCulture);
             }
         }
         
@@ -826,11 +862,20 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test status: Enqueue....
+        ///   Looks up a localized string similar to Test status: Interrupted....
         /// </summary>
-        public static string test_status_loaded {
+        public static string test_status_interrupted {
             get {
-                return ResourceManager.GetString("test_status_loaded", resourceCulture);
+                return ResourceManager.GetString("test_status_interrupted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test status: Unknown....
+        /// </summary>
+        public static string test_status_unknown {
+            get {
+                return ResourceManager.GetString("test_status_unknown", resourceCulture);
             }
         }
         

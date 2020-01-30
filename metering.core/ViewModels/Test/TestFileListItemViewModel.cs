@@ -30,9 +30,11 @@ namespace metering.core
         /// </summary>
         /// <value>
         /// Background colors:
-        /// Test is completed: DarkBlue
-        /// Test is running: DarkSlateBlue
-        /// Test is enqueue: Transparent
+        /// Test status is completed: DarkBlue
+        /// Test status is running: DarkSlateBlue
+        /// Test status is enqueue: Transparent
+        /// Test status is interrupted: DimGray
+        /// Test status is unknown: DarkSlateGray
         /// </value>
         public string TestStepBackgroundColor { get; set; } = "Transparent";
         
@@ -42,9 +44,14 @@ namespace metering.core
         public string ShortTestFileName { get; set; } = "DesignTime Short";
 
         /// <summary>
+        /// Holds file name information with file extension of a test.
+        /// </summary>
+        public string TestFileNameWithExtension { get; set; } = "DesignTime FileNameWithExtension";
+
+        /// <summary>
         /// Holds long version file name and test progress status.
         /// </summary>
-        public string TestToolTip { get; set; } = "File name and location, Test is enqueue/completed/running";
+        public string TestToolTip { get; set; } = "File name and location, Test is enqueue/completed/running/interrupted/unknown";
 
         /// <summary>
         /// Holds tool tip information of the "X" delete button of the control.

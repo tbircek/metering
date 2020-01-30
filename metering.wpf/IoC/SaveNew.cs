@@ -25,7 +25,74 @@ namespace metering
 
         #endregion
 
-        #region Public Method
+        #region Private Methods
+
+        /// <summary>
+        /// Loads the user non-saved test file.
+        /// </summary>
+        /// <returns>Returns no value.</returns>
+        private async Task LoadDummyTestFileAsync(string currentFile)
+        {
+
+            await IoC.Task.Run(() => 
+            {
+                // store file names to TestFileListItemViewModel
+                // initialize a new test file list
+                TestFileListItemViewModel testFile = new TestFileListItemViewModel
+                {
+                    // since this is the first loading...
+                    IsDeletable = false, // so the user have chance to fix their mistakes and such...
+                    ShortTestFileName = Path.GetFileNameWithoutExtension(currentFile), // the file name only...
+                    TestDeleteToolTip = $"{Strings.tooltips_remove_file}",
+                    TestStepBackgroundColor = $"{Strings.color_test_enqueued}",
+                    TestToolTip = $"{Path.GetFileName(currentFile)}.{Environment.NewLine}{Strings.test_status_enqueued}",
+                    FullFileName = $"{currentFile}",
+                };
+
+                // add the new test file to the multi-test list.
+                IoC.Communication.TestFileListItems.Add(testFile);
+
+                // always show multiple test user interface.
+                IoC.Communication.IsMultipleTest = true; // (IoC.Communication.TestFileListItems.Count > 0) ? true : false;
+
+                // fill TestDetails view with first file == 0
+                LoadTestFile(0);
+
+            });
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Saves a non-saved test details view model as a test file.
+        /// </summary>
+        /// <returns>Returns no value.</returns>
+        public async Task SaveDummyTestFileAsync()
+        {
+            // make a test file name.
+            string safeFileName = Strings.temp_test_file_name;
+            // update TestFileName
+            IoC.TestDetails.TestFileName = safeFileName;
+
+            // generate a new Test Steps Logger
+            var fileOkTask =
+                IoC.Task.Run(() => new TestStepsLogger(
+                    // file location and name as specified by the user
+                    filePath: Path.Combine(IoC.CMCControl.TestsFolder, safeFileName),
+                    // don't need to save time
+                    logTime: false,
+                    // test details need to be saved
+                    test: IoC.TestDetails
+                    ));
+
+            // save non-user saved file
+            await fileOkTask;
+
+            // load non-user saved file
+            await LoadDummyTestFileAsync(Path.Combine(IoC.CMCControl.TestsFolder, safeFileName));
+        }
 
         /// <summary>
         /// Loads multiple tests in order
@@ -48,9 +115,6 @@ namespace metering
 
                 // convert the JsonSerializer to TestDetailsViewModel
                 test = (TestDetailsViewModel)serializer.Deserialize(file, typeof(TestDetailsViewModel));
-
-                // clear previous test values.
-                //IoC.TestDetails.AnalogSignals.Clear();
 
                 // Update values in the single instance of TestDetailsViewModel
                 // update AnalogSignals
@@ -143,10 +207,17 @@ namespace metering
                 IoC.Commands.Cancellation = true;
                 IoC.Commands.ConfigurationAvailable = true;
                 IoC.Commands.IsConfigurationAvailable = false;
-                
+
                 // Show TestDetails page
                 IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
             }
+
+            // dispose dialog box
+            Dlg = null;
+
+            // dispose temp multiple test view model.
+            currentTestFile = null;
+
         }
 
         /// <summary>
@@ -222,7 +293,6 @@ namespace metering
 
             // Show save file dialog box
             await Dispatcher.CurrentDispatcher.BeginInvoke(() => Dlg.ShowDialog());
-            // Dlg.ShowDialog();
         }
 
         #endregion
@@ -288,8 +358,8 @@ namespace metering
                         IsDeletable = true, // so the user have chance to fix their mistakes and such...
                         ShortTestFileName = Path.GetFileNameWithoutExtension(currentFile), // the file name only...
                         TestDeleteToolTip = $"{Strings.tooltips_remove_file}",
-                        TestStepBackgroundColor = $"{Strings.color_test_loaded}", 
-                        TestToolTip = $"{Path.GetFileName(currentFile)}.{Environment.NewLine}{Strings.test_status_loaded}",
+                        TestStepBackgroundColor = $"{Strings.color_test_enqueued}",
+                        TestToolTip = $"{Path.GetFileName(currentFile)}.{Environment.NewLine}{Strings.test_status_enqueued}",
                         FullFileName = $"{currentFile}",
                     };
 
@@ -300,14 +370,14 @@ namespace metering
                 // always show multiple test user interface.
                 IoC.Communication.IsMultipleTest = true; // (IoC.Communication.TestFileListItems.Count > 0) ? true : false;
 
+                // clear previous test values.
+                IoC.TestDetails.AnalogSignals.Clear();
+
                 // dispose dialog box
                 dlg = null;
 
                 // fill TestDetails view with first file == 0
                 LoadTestFile(0);
-
-                //// Show TestDetails page
-                //IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
             }
         }
 

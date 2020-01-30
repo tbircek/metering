@@ -229,6 +229,10 @@ namespace metering.core
             SelectRampingSignalCommand = new RelayParameterizedCommand((parameter) => RampingSelectionAsync((string)parameter));
             // LinkRampingSignalsCommand = new RelayCommand(() => LinkRampingSignalsFreqency());
 
+            // reset all items?
+            AnalogSignals.Clear();
+
+
         }
 
         #endregion

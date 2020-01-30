@@ -214,7 +214,8 @@ namespace metering.core
                 if (IoC.CMCControl.DeviceID > 0)
                 {
                     // try to stop Omicron Test Set gracefully
-                    IoC.ReleaseOmicron.ProcessErrors(true);
+                    // IoC.ReleaseOmicron.ProcessErrors(true);
+                    IoC.Task.Run(async () => await IoC.ReleaseOmicron.ProcessErrorsAsync(true));
                 }
             }
             else
