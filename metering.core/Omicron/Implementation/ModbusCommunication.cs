@@ -187,7 +187,7 @@ namespace metering.core
                         IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Operation canceled: {ex.Message}.";
 
                         // Trying to stop the app gracefully.
-                        await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                        await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
                     }
                     catch (System.IO.IOException ex)
                     {
@@ -198,7 +198,7 @@ namespace metering.core
                         IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Modbus Communication failed: {ex.Message}.";
 
                         // Trying to stop the app gracefully.
-                        await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                        await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
                     }
                     catch (Exception ex)
                     {
@@ -219,7 +219,7 @@ namespace metering.core
                         }
 
                         // Trying to stop the app gracefully.
-                        await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                        await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
                     }
 
                 });
@@ -233,7 +233,7 @@ namespace metering.core
                 IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Operation canceled: {ex.Message}.";
 
                 // Trying to stop the app gracefully.
-                IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
+                IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
             }
         }
 
