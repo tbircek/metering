@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Threading;
-using System.Windows.Input;
 
 namespace metering.core
 {
@@ -24,16 +23,6 @@ namespace metering.core
 
         #region Public Commands
 
-        /// <summary>
-        /// Gets the user selected test and shows details.
-        /// </summary>
-        public ICommand LoadTestStepCommand { get; set; }
-
-        /// <summary>
-        /// Removes the user selected test from the multi-test scheme.
-        /// </summary>
-        public ICommand DeleteTestStepCommand { get; set; }
-
         #endregion
 
         #region Constructor
@@ -47,13 +36,9 @@ namespace metering.core
             // in case this software turns to something else.
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
-
         }
 
         #endregion
 
-        #region Public Method
-
-        #endregion
     }
 }
