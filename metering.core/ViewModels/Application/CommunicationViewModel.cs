@@ -90,7 +90,7 @@ namespace metering.core
         /// <summary>
         /// Hint value for IpAddress textbox
         /// </summary>
-        public string IpAddressHint { get; set; } = Resources.Strings.tab_home_ipaddress;
+        public string IpAddressHint { get; set; } = Strings.tab_home_ipaddress;
 
         /// <summary>
         /// IpAddress of the test unit.
@@ -100,7 +100,7 @@ namespace metering.core
         /// <summary>
         /// Hint value for Port textbox
         /// </summary>
-        public string PortHint { get; set; } = Resources.Strings.tab_home_port;
+        public string PortHint { get; set; } = Strings.tab_home_port;
 
         /// <summary>
         /// port number of communication port
