@@ -18,8 +18,10 @@
         IsDeletable="{Binding IsDeletable}"
         ToolTip="{Binding TestToolTip}"
         DeleteToolTip="{Binding TestDeleteToolTip}"
-        Command="{Binding LoadTestStepCommand}"
-        DeleteCommand="{Binding DeleteTestStepCommand}"
+        Command="{Binding ShowTestStepCommand}"
+        CommandParameter="{Binding FullFileName}"
+        DeleteCommand="{Binding RemoveTestStepCommand}"
+        DeleteCommandParameter="{Binding FullFileName}"
         FontSize="12" 
         Width="120" 
         Background="{Binding TestStepBackgroundColor}">
