@@ -210,6 +210,9 @@ namespace metering
 
                 // Show TestDetails page
                 IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
+
+                test = null;
+                serializer = null;
             }
 
             // dispose dialog box
