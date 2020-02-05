@@ -11,7 +11,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>      
-      Adds not saved file testing.
+      shows selected test file.
+      removes selected test file.
     </releaseNotes>
     <copyright>Copyright 2019-2020 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric voltage current phase frequency harmonics turgay bircek</tags>
