@@ -78,10 +78,10 @@ namespace meteringspecs.features.omicron
         }
 
         [Then(@"Omicron Test Set should be power down")]
-        public void ThenOmicronTestSetShouldBePowerDown()
+        public async void ThenOmicronTestSetShouldBePowerDown()
         {
             // manual observation?
-            IoC.PowerOptions.TurnOffCMC();
+           await IoC.PowerOptions.TurnOffCMCAsync();
         }
     }
 }

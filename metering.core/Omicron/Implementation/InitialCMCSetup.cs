@@ -26,10 +26,8 @@ namespace metering.core
         private Task SendOmicronCommand(string CommandToSend)
         {
             // send commands to Omicron Test Set
-            return IoC.Task.Run(async() => await IoC.StringCommands.SendStringCommandsAsync(omicronCommand: CommandToSend));
+            return IoC.Task.Run(async () => await IoC.StringCommands.SendStringCommandsAsync(omicronCommand: CommandToSend));
 
-            //// return Task Completed
-            //return Task.CompletedTask;
         }
 
         #endregion
@@ -39,7 +37,7 @@ namespace metering.core
         /// <summary>
         /// Sets Omicron Test Set default values and limits.
         /// </summary>
-        [Obsolete("Please use Async version",true)]
+        [Obsolete("Please use Async version", true)]
         public Task InitialSetup()
         {
             try
@@ -210,30 +208,28 @@ namespace metering.core
                 // change power mode.
                 await IoC.Task.Run(() => SendOmicronCommand(string.Format(OmicronStringCmd.out_ana_pmode_0, "timeabs")));
 
-                // return Task Completed
-                // return;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // update the log
-                IoC.Logger.Log($"InnerException: {ex.Message}");
-                IoC.Communication.Log = $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}.";
+                //// update the log
+                //IoC.Logger.Log($"InnerException: {ex.Message}");
+                //IoC.Communication.Log = $"Time: {DateTime.Now.ToLocalTime():MM/dd/yy hh:mm:ss.fff}\tinitial setup::Exception InnerException is : {ex.Message}.";
 
-                // catch inner exceptions if exists
-                if (ex.InnerException != null)
-                {
-                    // inform the user about more details about error.
-                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
-                }
+                //// catch inner exceptions if exists
+                //if (ex.InnerException != null)
+                //{
+                //    // inform the user about more details about error.
+                //    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
+                //}
 
-                // update Current Test File
-                IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Interrupted);   
-                
-                // return Task Completed
-                // return;
+                //// update Current Test File
+                //IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Interrupted);   
+
+                // Trying to stop the app gracefully.
+                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync(false));
             }
         }
     }
 
-        #endregion
+    #endregion
 }
