@@ -251,9 +251,9 @@ namespace metering.core
                             // due to nature of double calculations use this formula "testStartValue <= (To + Delta * 1 / 1000)" to make sure the last test step always runs
                             for (testStartValue = From; testStartValue <= (To + Delta * Math.Pow(10, -Precision)); testStartValue += Delta)
                             {
-                                // check if the user canceled the tests.
-                                if (!IoC.Commands.Token.IsCancellationRequested)
-                                {
+                                //// check if the user canceled the tests.
+                                //if (!IoC.Commands.Token.IsCancellationRequested)
+                                //{
 
                                     // inform the developer about test register and start values.
                                     await Task.Run(() => IoC.Logger.Log($"Register: {IoC.TestDetails.Register}\tTest value: {testStartValue:F6} started", LogLevel.Informative));
@@ -283,13 +283,13 @@ namespace metering.core
                                     await Task.Delay(1000);
 
                                     // Turn On Omicron Analog Outputs per the user input
-                                    await IoC.Task.Run(() => IoC.PowerOptions.TurnOnCMC());
+                                    await IoC.Task.Run(async() => await IoC.PowerOptions.TurnOnCMCAsync());
 
                                     // set timer to read modbus register per the user specified time.
                                     MdbusTimer = await Task.Run(() =>
                                                     new Timer(
                                                         // reads the user specified modbus register(s).
-                                                        callback: IoC.Modbus.MeasurementIntervalCallback,
+                                                        callback: IoC.Modbus.MeasurementIntervalCallbackAsync,
                                                         // pass the use specified modbus register(s) to callback.
                                                         state: IoC.TestDetails.Register,
                                                         // the time delay before modbus register(s) read start. 
@@ -364,24 +364,27 @@ namespace metering.core
 
                                     // delay little bit for communication to clear up
                                     await Task.Delay(Convert.ToInt32(IoC.TestDetails.MeasurementInterval) * 2);
-                                }
-                                else
-                                {
-                                    // if timer is initialized terminate reading modbus register because the user canceled the test.
-                                    MdbusTimer?.Dispose();
+                                //}
+                                //else
+                                //{
+                                //    //// if timer is initialized terminate reading modbus register because the user canceled the test.
+                                //    //MdbusTimer?.Dispose();
 
-                                    // throw an error if we canceled already.
-                                    IoC.Commands.Token.ThrowIfCancellationRequested();
+                                //    //// throw an error if we canceled already.
+                                //    //IoC.Commands.Token.ThrowIfCancellationRequested();
 
-                                    // exit from this task
-                                    return;
-                                }
+                                //    // Trying to stop the app gracefully.
+                                //    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync(true));
+
+                                //    // exit from this task
+                                //    return;
+                                //}
                             }
                         }
                     }
 
                     // Turn off Omicron Test set temporarily.
-                    await IoC.Task.Run(() => IoC.PowerOptions.TurnOffCMC());
+                    await IoC.Task.Run(async() => await IoC.PowerOptions.TurnOffCMCAsync());
 
                     // modify physical appearance of the Test File list and tool tip
                     IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Completed);
@@ -398,47 +401,51 @@ namespace metering.core
 
                 }
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
-                // inform the developer about error
-                IoC.Logger.Log($"Exception is : {ex.Message}");
+                //if (!IoC.Commands.TokenSource.IsCancellationRequested)
+                //{
+                //    // inform the developer about error
+                //    IoC.Logger.Log($"Exception is : {ex.Message}");
 
-                // update the user about the error.
-                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.";
+                //    // update the user about the error.
+                //    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.";
 
-                // Trying to stop the app gracefully.
-                //await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
-                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
+                //    // Trying to stop the app gracefully.
+                //    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
+                //}
+                throw;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                // inform developer
-                IoC.Logger.Log($"Exception: {ex.Message}");
+                throw;
+                //if (!IoC.Commands.TokenSource.IsCancellationRequested)
+                //{
 
-                // update the user about failed test.
-                IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test failed: {ex.Message}.";
+                //    // inform developer
+                //    IoC.Logger.Log($"Exception: {ex.Message}");
 
-                // catch inner exceptions if exists
-                if (ex.InnerException != null)
-                {
-                    // inform the user about more details about error.
-                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
-                }
+                //    // update the user about failed test.
+                //    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test failed: {ex.Message}.";
 
-                // Trying to stop the app gracefully.
-                //await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors());
-                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
+                //    // catch inner exceptions if exists
+                //    if (ex.InnerException != null)
+                //    {
+                //        // inform the user about more details about error.
+                //        IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
+                //    }
 
-                // exit from this task
-                return;
+                //    // Trying to stop the app gracefully.
+                //    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
+
+                //}
             }
-            finally
-            {
-                // Trying to stop the app gracefully.
-                //await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrors(false));
-                await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync(false));
-            }
+            //finally
+            //{
+            //    // Trying to stop the app gracefully.
+            //    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync(false));
+            //}
         }
 
         #endregion

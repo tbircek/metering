@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Threading;
@@ -36,6 +37,18 @@ namespace metering
 
             await IoC.Task.Run(() => 
             {
+                // generate a TestFileListItems temporarily.
+                ObservableCollection<TestFileListItemViewModel> tempFileList = new ObservableCollection<TestFileListItemViewModel>() { };
+
+                if (IoC.Communication.TestFileListItems.Count > 0)
+                {
+
+                    foreach (var item in IoC.Communication.TestFileListItems)
+                    {
+                        tempFileList.Add(item);
+                    } 
+                }
+
                 // store file names to TestFileListItemViewModel
                 // initialize a new test file list
                 TestFileListItemViewModel testFile = new TestFileListItemViewModel
@@ -49,8 +62,11 @@ namespace metering
                     FullFileName = $"{currentFile}",
                 };
 
-                // add the new test file to the multi-test list.
-                IoC.Communication.TestFileListItems.Add(testFile);
+                // add new generated to tempFileList.
+                tempFileList.Add(testFile);
+
+                // add the new test list to the multi-test list.
+                IoC.Communication.TestFileListItems = tempFileList;
 
                 // always show multiple test user interface.
                 IoC.Communication.IsMultipleTest = true; // (IoC.Communication.TestFileListItems.Count > 0) ? true : false;
@@ -99,128 +115,132 @@ namespace metering
         /// </summary>
         public void LoadTestFile(int testFileNumber)
         {
-            // initialize multiple test view model.
-            TestFileListItemViewModel currentTestFile = new TestFileListItemViewModel();
-            // retrieve the first test
-            currentTestFile = IoC.Communication.TestFileListItems[testFileNumber];
-
-            // convert a JSON file to a TestDetailsViewModel to show it the user.
-            using (StreamReader file = File.OpenText(currentTestFile.FullFileName))
+            if (IoC.Communication.TestFileListItems.Count > 0)
             {
-                // initialize a new TestDetailsViewModel
-                TestDetailsViewModel test = new TestDetailsViewModel();
 
-                // initialize JsonSerializer
-                JsonSerializer serializer = new JsonSerializer();
+                // initialize multiple test view model.
+                TestFileListItemViewModel currentTestFile = new TestFileListItemViewModel();
+                // retrieve the first test
+                currentTestFile = IoC.Communication.TestFileListItems[testFileNumber];
 
-                // convert the JsonSerializer to TestDetailsViewModel
-                test = (TestDetailsViewModel)serializer.Deserialize(file, typeof(TestDetailsViewModel));
-
-                // Update values in the single instance of TestDetailsViewModel
-                // update AnalogSignals
-                IoC.TestDetails.AnalogSignals = test.AnalogSignals;
-
-                // Select Ramping Signal property
-                // Ramping Signal property is Magnitude. 
-                // This is also default setting for this property.
-                IoC.TestDetails.IsMagnitude = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)) || string.IsNullOrWhiteSpace(test.SelectedRampingSignal);
-                // Ramping Signal property is Phase.
-                IoC.TestDetails.IsPhase = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase));
-                // Ramping Signal property is Frequency.
-                IoC.TestDetails.IsFrequency = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency));
-                // Ramping Signal property is Harmonics.
-                IoC.TestDetails.IsHarmonics = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Harmonics));
-
-                // update Harmonics Order
-                IoC.TestDetails.HarmonicsOrder = test.HarmonicsOrder;
-
-                // update Register
-                IoC.TestDetails.Register = test.Register;
-
-                // update DwellTime
-                IoC.TestDetails.DwellTime = test.DwellTime;
-
-                // update StartDelayTime
-                IoC.TestDetails.StartDelayTime = test.StartDelayTime;
-
-                // update MeasurementInterval
-                IoC.TestDetails.MeasurementInterval = test.MeasurementInterval;
-
-                // update StartMeasurementDelay
-                IoC.TestDetails.StartMeasurementDelay = test.StartMeasurementDelay;
-
-                // update SelectedRampingSignal
-                IoC.TestDetails.SelectedRampingSignal = test.SelectedRampingSignal;
-
-                // update Link Ramping Signals status
-                // If SelectedRampingSignal == "Frequency" or If SelectedRampingSignal == "Harmonics"
-                if (Equals(nameof(TestDetailsViewModel.RampingSignals.Frequency), test.SelectedRampingSignal) || Equals(nameof(TestDetailsViewModel.RampingSignals.Harmonics), test.SelectedRampingSignal))
+                // convert a JSON file to a TestDetailsViewModel to show it the user.
+                using (StreamReader file = File.OpenText(currentTestFile.FullFileName))
                 {
-                    // frequencies are linked.
-                    IoC.TestDetails.IsLinked = test.IsLinked;
+                    // initialize a new TestDetailsViewModel
+                    TestDetailsViewModel test = new TestDetailsViewModel();
+
+                    // initialize JsonSerializer
+                    JsonSerializer serializer = new JsonSerializer();
+
+                    // convert the JsonSerializer to TestDetailsViewModel
+                    test = (TestDetailsViewModel)serializer.Deserialize(file, typeof(TestDetailsViewModel));
+
+                    // Update values in the single instance of TestDetailsViewModel
+                    // update AnalogSignals
+                    IoC.TestDetails.AnalogSignals = test.AnalogSignals;
+
+                    // Select Ramping Signal property
+                    // Ramping Signal property is Magnitude. 
+                    // This is also default setting for this property.
+                    IoC.TestDetails.IsMagnitude = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Magnitude)) || string.IsNullOrWhiteSpace(test.SelectedRampingSignal);
+                    // Ramping Signal property is Phase.
+                    IoC.TestDetails.IsPhase = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Phase));
+                    // Ramping Signal property is Frequency.
+                    IoC.TestDetails.IsFrequency = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Frequency));
+                    // Ramping Signal property is Harmonics.
+                    IoC.TestDetails.IsHarmonics = string.Equals(test.SelectedRampingSignal, nameof(TestDetailsViewModel.RampingSignals.Harmonics));
+
+                    // update Harmonics Order
+                    IoC.TestDetails.HarmonicsOrder = test.HarmonicsOrder;
+
+                    // update Register
+                    IoC.TestDetails.Register = test.Register;
+
+                    // update DwellTime
+                    IoC.TestDetails.DwellTime = test.DwellTime;
+
+                    // update StartDelayTime
+                    IoC.TestDetails.StartDelayTime = test.StartDelayTime;
+
+                    // update MeasurementInterval
+                    IoC.TestDetails.MeasurementInterval = test.MeasurementInterval;
+
+                    // update StartMeasurementDelay
+                    IoC.TestDetails.StartMeasurementDelay = test.StartMeasurementDelay;
+
+                    // update SelectedRampingSignal
+                    IoC.TestDetails.SelectedRampingSignal = test.SelectedRampingSignal;
+
+                    // update Link Ramping Signals status
+                    // If SelectedRampingSignal == "Frequency" or If SelectedRampingSignal == "Harmonics"
+                    if (Equals(nameof(TestDetailsViewModel.RampingSignals.Frequency), test.SelectedRampingSignal) || Equals(nameof(TestDetailsViewModel.RampingSignals.Harmonics), test.SelectedRampingSignal))
+                    {
+                        // frequencies are linked.
+                        IoC.TestDetails.IsLinked = test.IsLinked;
+                    }
+                    else
+                    {
+                        // frequencies are not linked
+                        IoC.TestDetails.IsLinked = false;
+                    }
+
+                    // update Hardware Configuration = Voltage
+                    IoC.TestDetails.SelectedVoltageConfiguration = test.SelectedVoltageConfiguration;
+
+                    // update Hardware Configuration = Current
+                    IoC.TestDetails.SelectedCurrentConfiguration = test.SelectedCurrentConfiguration;
+
+                    // update TestFileName
+                    IoC.TestDetails.TestFileName = test.TestFileName;
+
+                    // update Settings view model
+                    IoC.Settings.SelectedCurrent = test.SelectedCurrentConfiguration.WiringDiagramString;
+                    IoC.Settings.SelectedVoltage = test.SelectedVoltageConfiguration.WiringDiagramString;
+
+                    // if the test file is old,
+                    // add a new fileName attribute,
+                    // add some missing attributes to "SelectedVoltageConfiguration",
+                    // add some missing attributes to "SelectedCurrentConfiguration".
+                    if (string.IsNullOrWhiteSpace(IoC.TestDetails.TestFileName))
+                    {
+                        // add saved file name
+                        IoC.TestDetails.TestFileName = Path.GetFileName(currentTestFile.FullFileName);
+
+                        // add new "WiringDiagramFileLocation"
+                        test.SelectedVoltageConfiguration.WiringDiagramFileLocation = "../Images/Omicron/not used voltage.png";
+                        test.SelectedCurrentConfiguration.WiringDiagramFileLocation = "../Images/Omicron/not used current.png";
+
+                        // add new SelectedCurrent and SelectedVoltage
+                    }
+
+                    // update Settings view model
+                    IoC.Settings.CurrentDiagramLocation = test.SelectedCurrentConfiguration.WiringDiagramFileLocation;
+                    IoC.Settings.VoltageDiagramLocation = test.SelectedVoltageConfiguration.WiringDiagramFileLocation;
+
+                    // change CancelForegroundColor to Red
+                    IoC.Commands.CancelForegroundColor = "ff0000";
+
+                    // set Command buttons
+                    IoC.Commands.StartTestAvailable = true;
+                    IoC.Commands.NewTestAvailable = false;
+                    IoC.Commands.Cancellation = true;
+                    IoC.Commands.ConfigurationAvailable = true;
+                    IoC.Commands.IsConfigurationAvailable = false;
+
+                    // Show TestDetails page
+                    IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
+
+                    test = null;
+                    serializer = null;
                 }
-                else
-                {
-                    // frequencies are not linked
-                    IoC.TestDetails.IsLinked = false;
-                }
 
-                // update Hardware Configuration = Voltage
-                IoC.TestDetails.SelectedVoltageConfiguration = test.SelectedVoltageConfiguration;
+                // dispose dialog box
+                Dlg = null;
 
-                // update Hardware Configuration = Current
-                IoC.TestDetails.SelectedCurrentConfiguration = test.SelectedCurrentConfiguration;
+                // dispose temp multiple test view model.
+                currentTestFile = null;
 
-                // update TestFileName
-                IoC.TestDetails.TestFileName = test.TestFileName;
-
-                // update Settings view model
-                IoC.Settings.SelectedCurrent = test.SelectedCurrentConfiguration.WiringDiagramString;
-                IoC.Settings.SelectedVoltage = test.SelectedVoltageConfiguration.WiringDiagramString;
-
-                // if the test file is old,
-                // add a new fileName attribute,
-                // add some missing attributes to "SelectedVoltageConfiguration",
-                // add some missing attributes to "SelectedCurrentConfiguration".
-                if (string.IsNullOrWhiteSpace(IoC.TestDetails.TestFileName))
-                {
-                    // add saved file name
-                    IoC.TestDetails.TestFileName = Path.GetFileName(currentTestFile.FullFileName);
-
-                    // add new "WiringDiagramFileLocation"
-                    test.SelectedVoltageConfiguration.WiringDiagramFileLocation = "../Images/Omicron/not used voltage.png";
-                    test.SelectedCurrentConfiguration.WiringDiagramFileLocation = "../Images/Omicron/not used current.png";
-
-                    // add new SelectedCurrent and SelectedVoltage
-                }
-
-                // update Settings view model
-                IoC.Settings.CurrentDiagramLocation = test.SelectedCurrentConfiguration.WiringDiagramFileLocation;
-                IoC.Settings.VoltageDiagramLocation = test.SelectedVoltageConfiguration.WiringDiagramFileLocation;
-
-                // change CancelForegroundColor to Red
-                IoC.Commands.CancelForegroundColor = "ff0000";
-
-                // set Command buttons
-                IoC.Commands.StartTestAvailable = true;
-                IoC.Commands.NewTestAvailable = false;
-                IoC.Commands.Cancellation = true;
-                IoC.Commands.ConfigurationAvailable = true;
-                IoC.Commands.IsConfigurationAvailable = false;
-
-                // Show TestDetails page
-                IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
-
-                test = null;
-                serializer = null;
             }
-
-            // dispose dialog box
-            Dlg = null;
-
-            // dispose temp multiple test view model.
-            currentTestFile = null;
-
         }
 
         /// <summary>

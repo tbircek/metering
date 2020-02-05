@@ -236,19 +236,63 @@ namespace metering.core
                         // find any CMCEngine attached to this computer
                         if (IoC.FindCMC.Find())
                         {
-                            
+
                             // Is there Omicron Test Set attached to this app?
                             if (IoC.CMCControl.DeviceID > 0)
                             {
                                 // indicates the test is running.
                                 IoC.CMCControl.IsTestRunning = true;
+                                try
+                                {
 
-                                // perform initial set up on CMCEngine
-                                //await IoC.Task.Run(()=> IoC.InitialCMCSetup.InitialSetup());
-                                await IoC.InitialCMCSetup.InitialSetupAsync();
+                                    // perform initial set up on CMCEngine
+                                    await IoC.InitialCMCSetup.InitialSetupAsync();
 
-                                // there is a test set attached so run specified tests.
-                                await IoC.CMCControl.TestAsync();
+                                    // there is a test set attached so run specified tests.
+                                    await IoC.CMCControl.TestAsync();
+                                }
+                                catch (OperationCanceledException ex)
+                                {
+                                    //if (!IoC.Commands.TokenSource.IsCancellationRequested)
+                                    //{
+                                    // inform the developer about error
+                                    IoC.Logger.Log($"Exception is : {ex.Message}");
+
+                                    // update the user about the error.
+                                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.";
+
+                                    // Trying to stop the app gracefully.
+                                    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
+                                    //}
+                                }
+                                catch (Exception ex)
+                                {
+                                    //if (!IoC.Commands.TokenSource.IsCancellationRequested)
+                                    //{
+
+                                    // inform developer
+                                    IoC.Logger.Log($"Exception: {ex.Message}");
+
+                                    // update the user about failed test.
+                                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test failed: {ex.Message}.";
+
+                                    // catch inner exceptions if exists
+                                    if (ex.InnerException != null)
+                                    {
+                                        // inform the user about more details about error.
+                                        IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
+                                    }
+
+                                    // Trying to stop the app gracefully.
+                                    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
+
+                                    //}
+                                }
+                                finally
+                                {
+                                    // Trying to stop the app gracefully.
+                                    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync(false));
+                                }
 
                             }
                             else
@@ -271,7 +315,7 @@ namespace metering.core
                 }
                 catch (Exception ex)
                 {
-                    
+
                     // inform the user about error.
                     Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Start Communication failed: {ex.Message}.";
 
@@ -324,7 +368,8 @@ namespace metering.core
 
                 case TestStatus.Completed:
                     // modify physical appearance of the Test File list and tool tip
-                    CurrentTestFileListItem.TestStepBackgroundColor = Strings.color_test_completed;                    
+                    CurrentTestFileListItem.IsDeletable = true;
+                    CurrentTestFileListItem.TestStepBackgroundColor = Strings.color_test_completed;
                     CurrentTestFileListItem.TestToolTip += $"{Strings.test_status_completed}";
                     IoC.Logger.Log($"{CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_completed}", LogLevel.Informative);
                     IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_completed}";
