@@ -49,7 +49,7 @@ namespace metering.core
                 for (int triplet = 1; triplet <= IoC.TestDetails.SelectedVoltageConfiguration.PhaseCounts[amplifier]; triplet++)
                 {
                     // set the voltage amplifiers values.
-                    IoC.StringCommands.SendOutAnaAsync(
+                    IoC.StringCommands.SendAnalogOutputString(
                         // Omicron Test Set internal generator type
                         generatorType: analogSignals[analogSignalPosition].SignalName.ToCharArray()[0],
                         // triplet number of the voltage amplifier
@@ -93,7 +93,7 @@ namespace metering.core
                 for (int triplet = 1; triplet <= IoC.TestDetails.SelectedCurrentConfiguration.PhaseCounts[amplifier]; triplet++)
                 {
                     // set the current amplifiers values.
-                    IoC.StringCommands.SendOutAnaAsync(
+                    IoC.StringCommands.SendAnalogOutputString(
                         // Omicron Test Set internal generator type
                         generatorType: analogSignals[analogSignalPosition].SignalName.ToCharArray()[0],
                         // triplet number of the current amplifier
