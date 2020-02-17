@@ -33,7 +33,7 @@ namespace metering
         {
             // for future use 
             // change update location to github
-            // using (var updateManager = UpdateManager.GitHubUpdateManager("https://github.com/tbircek/metering"))
+            // using (var updateManager = UpdateManager.GitHubUpdateManager("https://api.github.com/repos/tbircek/metering/releases"))
 
             // specify the location of update
             using (UpdateManager updateManager = new UpdateManager(@"\\volta\Eng_Lab\Software Updates\metering"))

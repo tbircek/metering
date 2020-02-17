@@ -163,9 +163,6 @@ namespace metering.core
             // show the Omicron Hardware Configuration Settings page.
             OmicronHardwareConfigurationCommand = new RelayCommand(async () => await IoC.Settings.HardwareConfiguration());
 
-            //// remove the test step(s) from the test strip.
-            //DeleteSelectedTestCommand = new RelayCommand(async () => await DeleteSelectedTestAsync());
-
             // default StartTestForegroundColor is Green
             StartTestForegroundColor = "00ff00";
 
@@ -214,7 +211,6 @@ namespace metering.core
                 if (IoC.CMCControl.DeviceID > 0)
                 {
                     // try to stop Omicron Test Set gracefully
-                    // IoC.ReleaseOmicron.ProcessErrors(true);
                     IoC.Task.Run(async () => await IoC.ReleaseOmicron.ProcessErrorsAsync(true));
                 }
             }
@@ -244,12 +240,9 @@ namespace metering.core
                 IoC.TestDetails.StartDelayTime = "0.1";
                 IoC.TestDetails.MeasurementInterval = "250";
                 IoC.TestDetails.StartMeasurementDelay = "5";
-                IoC.TestDetails.Selected = false;
+                IoC.TestDetails.Selected = IoC.TestDetails.IsPhase = IoC.TestDetails.IsFrequency = IoC.TestDetails.IsLinked = false;
                 IoC.TestDetails.IsMagnitude = true;
-                IoC.TestDetails.IsPhase = false;
-                IoC.TestDetails.IsFrequency = false;
-                IoC.TestDetails.SelectedRampingSignal = "Magnitude";
-                IoC.TestDetails.IsLinked = false;
+                IoC.TestDetails.SelectedRampingSignal = "Magnitude";                
                 IoC.TestDetails.TestFileName = string.Empty;
 
                 // reset selected voltage hardware configuration
