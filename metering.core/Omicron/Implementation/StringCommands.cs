@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace metering.core
@@ -10,6 +11,7 @@ namespace metering.core
     /// </summary>
     public class StringCommands
     {
+
         #region Private Members
 
         /// <summary>
@@ -18,12 +20,14 @@ namespace metering.core
         /// </summary>
         private const double NominalFrequency = 60.0d;
 
-        #endregion
-
         /// <summary>
         /// Omicron Test Set generator short signal names.
         /// </summary>
-        public enum SignalType : short { a, f, p };
+        private enum SignalType : short { a, f, p };
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Sends "ON" command to Omicron Test Set.
@@ -96,72 +100,83 @@ namespace metering.core
         /// <returns>a string that contains Omicron test response</returns>
         public async Task<string> SendStringCommandsAsync(string omicronCommand)
         {
-            try
+
+            // enable cancellation token
+            using (var cancellation = new CancellationTokenSource())
             {
-
-                // update the log
-                IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID} -- command: {omicronCommand}", LogLevel.Informative);
-
-                // execute the user values.
-                Task<string> result = IoC.Task.Run(() =>
+                // Listening to the cancellation event either the user or test completed.
+                var cancellationTask = Task.Run(() =>
                 {
-                    //try
-                    //{
-                        // send command string.
-                        return IoC.CMCControl.CMEngine.Exec(DevID: IoC.CMCControl.DeviceID, Command: omicronCommand);
+                    if (IoC.Commands.Token.IsCancellationRequested)
+                    {
+                        // Sending the cancellation message
+                        cancellation.Cancel();
+                    }
+                });
 
-                    //}
-                    //// Re-throw all exceptions.
-                    //catch (Exception)
-                    //{
-                    //    throw;
-                    //}
-                }, IoC.Commands.Token);
-
-                // wait for the result
-                return await result;
-            }
-            catch (COMException ex)
-            {
-                // inform the developer about error.
-                IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
-
-                // update Current Test File
-                IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Interrupted);
-
-                // return an empty string.
-                return string.Empty;
-            }
-            catch (OperationCanceledException ex)
-            {
-                if (!IoC.Commands.TokenSource.IsCancellationRequested)
+                try
                 {
-                    // inform the developer about error.
-                    IoC.Logger.Log($"Exception: {ex.Message}\nPlease try to re-start the program.");
 
-                    // update Current Test File
-                    IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Interrupted);
+                    // update the log
+                    IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID} -- command: {omicronCommand}", LogLevel.Informative);
 
+                    // execute string command
+                    var executeTask = CMCExecuteAsync(omicronCommand: omicronCommand, cancellationToken: cancellation.Token);
+
+                    // wait for the result
+                    await executeTask;
+                }
+                catch (COMException)
+                {
+                    // re-throw error
+                    throw;
+                }
+                catch (Exception)
+                {
+                    // re-throw error
+                    throw;
                 }
 
-                // return an empty string.
-                return string.Empty;
-            }
-            catch (Exception err)
-            {
-                if (!IoC.Commands.TokenSource.IsCancellationRequested)
-                {
-                    // inform the developer about error.
-                    IoC.Logger.Log($"Exception: {err.Message}");
+                // monitor if cancellation requested
+                await cancellationTask;
 
-                    // update Current Test File
-                    IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Interrupted);
-
-                }
-
-                // return an empty string.
+                // return empty string
                 return string.Empty;
             }
         }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// executes Omicron Test Set string commands 
+        /// </summary>
+        /// <param name="omicronCommand">command to be execute.</param>
+        /// <param name="cancellationToken">token to cancel this task.</param>
+        /// <returns></returns>
+        private async Task<string> CMCExecuteAsync(string omicronCommand, CancellationToken cancellationToken)
+        {
+            // generate a TaskCompletionSource.
+            var taskCompletionSource = new TaskCompletionSource<string>();
+
+            // Registering a lambda into the cancellationToken
+            cancellationToken.Register(() =>
+            {
+                // received a cancellation message, cancel the TaskCompletionSource.Task
+                taskCompletionSource.TrySetCanceled();
+            });
+
+            // generate CMEngine.Exec Task
+            var task = IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(DevID: IoC.CMCControl.DeviceID, Command: omicronCommand));
+
+            // Wait for the task to finish.
+            var completedTask = await Task.WhenAny(task, taskCompletionSource.Task);
+
+            // return completed task
+            return await completedTask;
+        }
+
+        #endregion
     }
 }
