@@ -11,8 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>      
-      shows selected test file.
-      removes selected test file.
+      adds standard deviation calculation.
     </releaseNotes>
     <copyright>Copyright 2019-2020 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric voltage current phase frequency harmonics turgay bircek</tags>

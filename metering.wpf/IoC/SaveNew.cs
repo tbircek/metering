@@ -249,73 +249,78 @@ namespace metering
         /// <param name="option"></param>
         public async Task ShowFileDialogAsync(FileDialogOption option)
         {
-            // check if the Results directory exists... 
-            if (!Directory.Exists(IoC.CMCControl.ResultsFolder))
-                // if not create the Result directory...
-                Directory.CreateDirectory(IoC.CMCControl.ResultsFolder);
-
-            // if the user wants to save test file...
-            if (Equals(option, FileDialogOption.Save))
+            // is test running?
+            if (!IoC.CMCControl.IsTestRunning)
             {
-                // Configure save file dialog box
-                Dlg = new SaveFileDialog
+
+                // check if the Results directory exists... 
+                if (!Directory.Exists(IoC.CMCControl.ResultsFolder))
+                    // if not create the Result directory...
+                    Directory.CreateDirectory(IoC.CMCControl.ResultsFolder);
+
+                // if the user wants to save test file...
+                if (Equals(option, FileDialogOption.Save))
                 {
-                    // Default file name
-                    FileName = "NewMeteringTest",
-                    // sets the text that appears in the title bar of a file dialog.
-                    Title = "Save your test step...",
-                };
-            }
-            // if the user wants to open test file(s)...
-            else if (Equals(option, FileDialogOption.Open))
-            {
-                // Configure open file dialog box
-                Dlg = new OpenFileDialog
+                    // Configure save file dialog box
+                    Dlg = new SaveFileDialog
+                    {
+                        // Default file name
+                        FileName = "NewMeteringTest",
+                        // sets the text that appears in the title bar of a file dialog.
+                        Title = "Save your test step...",
+                    };
+                }
+                // if the user wants to open test file(s)...
+                else if (Equals(option, FileDialogOption.Open))
                 {
-                    // Default file name
-                    FileName = "",
-                    // sets the text that appears in the title bar of a file dialog.
-                    Title = "Please select test file(s)...",
-                    // allow the users to select multiple files
-                    Multiselect = true,
-                };
+                    // Configure open file dialog box
+                    Dlg = new OpenFileDialog
+                    {
+                        // Default file name
+                        FileName = "",
+                        // sets the text that appears in the title bar of a file dialog.
+                        Title = "Please select test file(s)...",
+                        // allow the users to select multiple files
+                        Multiselect = true,
+                    };
+                }
+
+                // associate with the correct dialog.
+                Dlg.Tag = option;
+
+                // Default file extension
+                Dlg.DefaultExt = ".bmtf";
+
+                // Filter files by extension
+                Dlg.Filter = "Beckwith metering test files (.bmtf)|*.bmtf";
+
+                // automatically add an extension to a file name
+                Dlg.AddExtension = true;
+
+                // sets the initial directory that is displayed by a file dialog.
+                Dlg.InitialDirectory = IoC.CMCControl.TestsFolder;
+
+                // check if the InitialDirectory exists... 
+                if (!Directory.Exists(Dlg.InitialDirectory))
+                    // if not create the InitialDirectory...
+                    Directory.CreateDirectory(Dlg.InitialDirectory);
+
+                // add the list of custom places for file dialog boxes.
+                Dlg.CustomPlaces.Add(
+                    new FileDialogCustomPlace(IoC.CMCControl.ResultsFolder)
+                    );
+
+                // add the list of custom places for file dialog boxes.
+                Dlg.CustomPlaces.Add(
+                    new FileDialogCustomPlace(IoC.CMCControl.TestsFolder)
+                    );
+
+                // hook up to the dialog event
+                Dlg.FileOk += Dlg_FileOk;
+
+                // Show save file dialog box
+                await Dispatcher.CurrentDispatcher.BeginInvoke(() => Dlg.ShowDialog()); 
             }
-
-            // associate with the correct dialog.
-            Dlg.Tag = option;
-
-            // Default file extension
-            Dlg.DefaultExt = ".bmtf";
-
-            // Filter files by extension
-            Dlg.Filter = "Beckwith metering test files (.bmtf)|*.bmtf";
-
-            // automatically add an extension to a file name
-            Dlg.AddExtension = true;
-
-            // sets the initial directory that is displayed by a file dialog.
-            Dlg.InitialDirectory = IoC.CMCControl.TestsFolder;
-
-            // check if the InitialDirectory exists... 
-            if (!Directory.Exists(Dlg.InitialDirectory))
-                // if not create the InitialDirectory...
-                Directory.CreateDirectory(Dlg.InitialDirectory);
-
-            // add the list of custom places for file dialog boxes.
-            Dlg.CustomPlaces.Add(
-                new FileDialogCustomPlace(IoC.CMCControl.ResultsFolder)
-                );
-
-            // add the list of custom places for file dialog boxes.
-            Dlg.CustomPlaces.Add(
-                new FileDialogCustomPlace(IoC.CMCControl.TestsFolder)
-                );
-
-            // hook up to the dialog event
-            Dlg.FileOk += Dlg_FileOk;
-
-            // Show save file dialog box
-            await Dispatcher.CurrentDispatcher.BeginInvoke(() => Dlg.ShowDialog());
         }
 
         #endregion

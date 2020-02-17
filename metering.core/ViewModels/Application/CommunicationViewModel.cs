@@ -213,118 +213,108 @@ namespace metering.core
             // start point of all test steps with the first mouse click and it will ignore subsequent mouse clicks
             await AsyncAwaiter.AwaitAsync(nameof(StartCommunicationAsync), async () =>
             {
-                try
+                using (IoC.Commands.TokenSource)
                 {
-                    // update the user
-                    Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Communication starts.";
-
-                    // get new construct of ModbusClient
-                    EAModbusClient = new EasyModbus.ModbusClient
+                    try
                     {
-                        IPAddress = IpAddress,
-                        Port = Convert.ToInt32(Port),
-                        ConnectionTimeout = 20000,
-                        // LogFileFilename = @"C:\Users\TBircek\Documents\metering\modbus.log"
-                    };
+                        // update the user
+                        Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Communication starts.";
 
-                    // Checks if the Server IPAddress is available
-                    if (EAModbusClient.Available(20000))
-                    {
-                        // connect to the server
-                        EAModbusClient.Connect();
-
-                        // find any CMCEngine attached to this computer
-                        if (IoC.FindCMC.Find())
+                        // get new construct of ModbusClient
+                        EAModbusClient = new EasyModbus.ModbusClient
                         {
+                            IPAddress = IpAddress,
+                            Port = Convert.ToInt32(Port),
+                            ConnectionTimeout = 20000,
+                            // LogFileFilename = @"C:\Users\TBircek\Documents\metering\modbus.log"
+                        };
 
-                            // Is there Omicron Test Set attached to this app?
-                            if (IoC.CMCControl.DeviceID > 0)
+                        // Checks if the Server IPAddress is available
+                        if (EAModbusClient.Available(20000))
+                        {
+                            // connect to the server
+                            EAModbusClient.Connect();
+
+                            // find any CMCEngine attached to this computer
+                            if (IoC.FindCMC.Find())
                             {
-                                // indicates the test is running.
-                                IoC.CMCControl.IsTestRunning = true;
-                                try
+
+                                // Is there Omicron Test Set attached to this app?
+                                if (IoC.CMCControl.DeviceID > 0)
                                 {
 
-                                    // perform initial set up on CMCEngine
-                                    await IoC.InitialCMCSetup.InitialSetupAsync();
+                                    // indicates the test is running.
+                                    IoC.CMCControl.IsTestRunning = true;
 
-                                    // there is a test set attached so run specified tests.
-                                    await IoC.CMCControl.TestAsync();
-                                }
-                                catch (OperationCanceledException ex)
-                                {
-                                    //if (!IoC.Commands.TokenSource.IsCancellationRequested)
-                                    //{
-                                    // inform the developer about error
-                                    IoC.Logger.Log($"Exception is : {ex.Message}");
-
-                                    // update the user about the error.
-                                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.";
-
-                                    // Trying to stop the app gracefully.
-                                    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
-                                    //}
-                                }
-                                catch (Exception ex)
-                                {
-                                    //if (!IoC.Commands.TokenSource.IsCancellationRequested)
-                                    //{
-
-                                    // inform developer
-                                    IoC.Logger.Log($"Exception: {ex.Message}");
-
-                                    // update the user about failed test.
-                                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test failed: {ex.Message}.";
-
-                                    // catch inner exceptions if exists
-                                    if (ex.InnerException != null)
+                                    try
                                     {
-                                        // inform the user about more details about error.
-                                        IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
+
+                                        // perform initial set up on CMCEngine
+                                        await IoC.Task.Run(async () => await IoC.InitialCMCSetup.InitialSetupAsync());
+
+                                        // there is a test set attached so run specified tests.
+                                        await IoC.Task.Run(async () => await IoC.CMCControl.TestAsync(IoC.Commands.Token));
                                     }
+                                    catch (OperationCanceledException ex)
+                                    {
+                                        // inform the developer about error
+                                        IoC.Logger.Log($"Exception is : {ex.Message}");
 
-                                    // Trying to stop the app gracefully.
-                                    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync());
+                                        // update the user about the error.
+                                        IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Exception: {ex.Message}.";
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        // inform developer
+                                        IoC.Logger.Log($"Exception: {ex.Message}");
 
-                                    //}
+                                        // update the user about failed test.
+                                        IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Test failed: {ex.Message}.";
+
+                                        // catch inner exceptions if exists
+                                        if (ex.InnerException != null)
+                                        {
+                                            // inform the user about more details about error.
+                                            IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
+                                        }
+                                    }
+                                    finally
+                                    {
+                                        // Trying to stop the app gracefully.
+                                        await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync(false));
+                                    }
                                 }
-                                finally
+                                else
                                 {
-                                    // Trying to stop the app gracefully.
-                                    await IoC.Task.Run(() => IoC.ReleaseOmicron.ProcessErrorsAsync(false));
+                                    // inform the user 
+                                    Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: Omicron Test Set ID is a zero.";
                                 }
-
                             }
                             else
                             {
                                 // inform the user 
-                                Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: Omicron Test Set ID is a zero.";
+                                Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: There is no attached Omicron Test Set. Please attached a Omicron Test Set before test.";
                             }
                         }
                         else
                         {
                             // inform the user 
-                            Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: There is no attached Omicron Test Set. Please attached a Omicron Test Set before test.";
+                            Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: The server is not available: {EAModbusClient.IPAddress}.";
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        // inform the user 
-                        Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Failed: The server is not available: {EAModbusClient.IPAddress}.";
-                    }
-                }
-                catch (Exception ex)
-                {
 
-                    // inform the user about error.
-                    Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Start Communication failed: {ex.Message}.";
+                        // inform the user about error.
+                        Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Start Communication failed: {ex.Message}.";
 
-                    // catch inner exceptions if exists
-                    if (ex.InnerException != null)
-                    {
-                        // inform the user about more details about error.
-                        Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
-                    }
+                        // catch inner exceptions if exists
+                        if (ex.InnerException != null)
+                        {
+                            // inform the user about more details about error.
+                            Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: Inner exception: {ex.InnerException}.";
+                        }
+                    } 
                 }
             });
         }

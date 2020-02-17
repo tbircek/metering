@@ -121,7 +121,7 @@ namespace metering.core
 
             // set visibility of "Add test" button
             IoC.Commands.NewTestAvailable = true;
-            
+
             // set wiring diagrams per group names.
             switch (((SettingsListItemViewModel)parameter).GroupName.ToUpper())
             {
@@ -172,54 +172,58 @@ namespace metering.core
         /// <returns>Returns new Hardware Configuration</returns>
         public async Task HardwareConfiguration()
         {
-            // there is a test set attached so run specified tests.
-            // lock the task
-            await AsyncAwaiter.AwaitAsync(nameof(HardwareConfiguration), async () =>
+            // is test running?
+            if (!IoC.CMCControl.IsTestRunning)
             {
-                // set visibility of "Hardware Configuration" animation
-                IoC.Commands.IsConfigurationAvailable = true;
 
-                // find cmc
-                if (await IoC.Task.Run(() => IoC.FindCMC.Find()))
+                // there is a test set attached so run specified tests.
+                // lock the task
+                await AsyncAwaiter.AwaitAsync(nameof(HardwareConfiguration), async () =>
                 {
-                    // let log start
-                    await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(HardwareConfiguration)} started."));
+                    // set visibility of "Hardware Configuration" animation
+                    IoC.Commands.IsConfigurationAvailable = true;
 
-                    // update device info
-                    await IoC.Task.Run(() => IoC.Logger.Log($"Following device associated: {IoC.CMCControl.DeviceInfo}."));
+                    // find cmc
+                    if (await IoC.Task.Run(() => IoC.FindCMC.Find()))
+                    {
+                        // let log start
+                        await IoC.Task.Run(() => IoC.Logger.Log($"{nameof(HardwareConfiguration)} started."));
 
-                    // save current page so we can return to it.
-                    OldApplicationPage = IoC.Application.CurrentPage;
-                    // save current view model so we can return to it.
-                    OldViewModel = IoC.Application.CurrentPageViewModel;
+                        // update device info
+                        await IoC.Task.Run(() => IoC.Logger.Log($"Following device associated: {IoC.CMCControl.DeviceInfo}."));
 
-                    // update log file about the connected Omicron capabilities.
-                    await IoC.Task.Run(() => IoC.Logger.Log($"Following hardware configurations available:"));
+                        // save current page so we can return to it.
+                        OldApplicationPage = IoC.Application.CurrentPage;
+                        // save current view model so we can return to it.
+                        OldViewModel = IoC.Application.CurrentPageViewModel;
 
-                    // retrieve voltage capabilities if the list is empty.
-                    IoC.Settings.OmicronVoltageOutputs = await IoC.Configurations.Get("voltage");
-                    // retrieve current capabilities.
-                    IoC.Settings.OmicronCurrentOutputs = await IoC.Configurations.Get("current");
-                    
-                    // set visibility of command buttons
-                    IoC.Commands.Cancellation = true;
-                    IoC.Commands.LoadTestAvailable = false;
-                    IoC.Commands.StartTestAvailable = false;
-                    IoC.Commands.NewTestAvailable = IoC.TestDetails.SelectedCurrentConfiguration.CurrentWiringDiagram || IoC.TestDetails.SelectedVoltageConfiguration.CurrentWiringDiagram; 
-                    IoC.Commands.ConfigurationAvailable = false;
+                        // update log file about the connected Omicron capabilities.
+                        await IoC.Task.Run(() => IoC.Logger.Log($"Following hardware configurations available:"));
 
-                    // change color of the Add New Test button to green.
-                    IoC.Commands.CancelForegroundColor = "00ff00";
+                        // retrieve voltage capabilities if the list is empty.
+                        IoC.Settings.OmicronVoltageOutputs = await IoC.Configurations.Get("voltage");
+                        // retrieve current capabilities.
+                        IoC.Settings.OmicronCurrentOutputs = await IoC.Configurations.Get("current");
+
+                        // set visibility of command buttons
+                        IoC.Commands.Cancellation = true;
+                        IoC.Commands.LoadTestAvailable = false;
+                        IoC.Commands.StartTestAvailable = false;
+                        IoC.Commands.NewTestAvailable = IoC.TestDetails.SelectedCurrentConfiguration.CurrentWiringDiagram || IoC.TestDetails.SelectedVoltageConfiguration.CurrentWiringDiagram;
+                        IoC.Commands.ConfigurationAvailable = false;
+
+                        // change color of the Add New Test button to green.
+                        IoC.Commands.CancelForegroundColor = "00ff00";
 
 
-                    // Show Settings page
-                    IoC.Application.GoToPage(ApplicationPage.Settings, IoC.Settings);
+                        // Show Settings page
+                        IoC.Application.GoToPage(ApplicationPage.Settings, IoC.Settings);
 
-                    // disconnect from attached Omicron Test Set
-                    await IoC.ReleaseOmicron.ReleaseAsync();
-                    //await IoC.Task.Run(() => IoC.ReleaseOmicron.Release());
-                }
-            });
+                        // disconnect from attached Omicron Test Set
+                        await IoC.ReleaseOmicron.ReleaseAsync();
+                    }
+                });
+            }
         }
         #endregion
 

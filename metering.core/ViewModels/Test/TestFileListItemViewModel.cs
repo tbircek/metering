@@ -88,7 +88,7 @@ namespace metering.core
             CultureInfo ci = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentCulture = ci;
 
-            // initialize commands
+            // initialize commands.
             RemoveTestStepCommand = new RelayParameterizedCommand(async (parameter) => await RemoveTestStepAsync(parameter));
             ShowTestStepCommand = new RelayParameterizedCommand(async (parameter) => await ShowTestStepAsync(parameter));
         }
@@ -103,45 +103,17 @@ namespace metering.core
         #region Private Methods
 
         /// <summary>
-        /// Shows the user selected file's <see cref="TestDetailsViewModel"/>
+        /// Shows the user selected file's <see cref="TestDetailsViewModel"/> while test is NOT running.
         /// </summary>
         /// <param name="parameter"><see cref="FullFileName"/> of the currently selected <see cref="TestFileListItemViewModel"/></param>
         /// <returns>Returns no value</returns>
         private async Task ShowTestStepAsync(object parameter)
         {
-            // generate new awaitable task
-            var showTestStepTask = IoC.Task.Run(() =>
+            // is test running?
+            if (!IoC.CMCControl.IsTestRunning)
             {
-                // scan the collection to generate the new collection
-                foreach (TestFileListItemViewModel testFileListItem in IoC.Communication.TestFileListItems)
-                {
-                    // is this item match?
-                    if (Equals(testFileListItem.FullFileName, parameter))
-                    {
-                        // update view to first file
-                        IoC.Task.Run(() => IoC.Commander.LoadTestFile(IoC.Communication.TestFileListItems.IndexOf(testFileListItem)));
-                        // exit this loop
-                        break;
-                    }
-                }
-            });
-
-            // wait for the task to completed.
-            await showTestStepTask;
-        }
-
-        /// <summary>
-        /// Removes the user selected file's <see cref="TestDetailsViewModel"/> from the <see cref="TestFileViewModel"/>
-        /// </summary>
-        /// <param name="parameter"><see cref="FullFileName"/> of the currently selected <see cref="TestFileListItemViewModel"/></param>
-        /// <returns>Returns no value</returns>
-        private async Task RemoveTestStepAsync(object parameter)
-        {
-            // generate a new collection to hold the collection with the user removed collection
-            ObservableCollection<TestFileListItemViewModel> newTestFileListItemViewModels = new ObservableCollection<TestFileListItemViewModel>() { };
-
-            // generate new awaitable task
-            var removeTestStepTask = IoC.Task.Run(() =>
+                // generate new awaitable task
+                var showTestStepTask = IoC.Task.Run(() =>
                 {
                     // scan the collection to generate the new collection
                     foreach (TestFileListItemViewModel testFileListItem in IoC.Communication.TestFileListItems)
@@ -149,30 +121,64 @@ namespace metering.core
                         // is this item match?
                         if (Equals(testFileListItem.FullFileName, parameter))
                         {
-                            // this item removed. do not add to new collection and skip next item in the old collection.
-                            continue;
+                            // update view to first file
+                            IoC.Task.Run(() => IoC.Commander.LoadTestFile(IoC.Communication.TestFileListItems.IndexOf(testFileListItem)));
+                            // exit this loop
+                            break;
                         }
-
-                        // this item is not removed. add it to the new collection.
-                        newTestFileListItemViewModels.Add(testFileListItem);
                     }
-
-                    //// is the first item removed?
-                    //if (!IoC.Communication.TestFileListItems[0].Equals(newTestFileListItemViewModels[0]))
-                    //{
-                    // update the collection with removed test file collection
-                    IoC.Communication.TestFileListItems = newTestFileListItemViewModels;
-                    // always update view to first file
-                    IoC.Task.Run(() => IoC.Commander.LoadTestFile(0));
-                    //}
-
-                    //// the first item is not removed so just update the collection
-                    //// but don't reload first item.
-                    //IoC.Communication.TestFileListItems = newTestFileListItemViewModels;
                 });
 
-            // wait for the task to completed.
-            await removeTestStepTask;
+                // wait for the task to completed.
+                await showTestStepTask;
+            }
+        }
+
+        /// <summary>
+        /// Removes the user selected file's <see cref="TestDetailsViewModel"/> from the <see cref="TestFileViewModel"/> while test is NOT running.
+        /// </summary>
+        /// <param name="parameter"><see cref="FullFileName"/> of the currently selected <see cref="TestFileListItemViewModel"/></param>
+        /// <returns>Returns no value</returns>
+        private async Task RemoveTestStepAsync(object parameter)
+        {
+            // is test running?
+            if (!IoC.CMCControl.IsTestRunning)
+            {
+
+                // generate a new collection to hold the collection with the user removed collection
+                ObservableCollection<TestFileListItemViewModel> newTestFileListItemViewModels = new ObservableCollection<TestFileListItemViewModel>() { };
+
+                // generate new awaitable task
+                var removeTestStepTask = IoC.Task.Run(() =>
+                    {
+                        // scan the collection to generate the new collection
+                        foreach (TestFileListItemViewModel testFileListItem in IoC.Communication.TestFileListItems)
+                        {
+                            // is this item match?
+                            if (Equals(testFileListItem.FullFileName, parameter))
+                            {
+                                // this item removed. do not add to new collection and skip next item in the old collection.
+                                continue;
+                            }
+
+                            // this item is not removed. add it to the new collection.
+                            newTestFileListItemViewModels.Add(testFileListItem);
+                        }
+
+                        // cannot use this commands as ObservableCollection<T> would block this change
+                        // through any other than UI thread.
+                        // IoC.Communication.TestFileListItems.Clear();
+
+                        // update the collection with removed test file collection.
+                        IoC.Communication.TestFileListItems = newTestFileListItemViewModels;
+                        // always update view to first file
+                        IoC.Task.Run(() => IoC.Commander.LoadTestFile(0));
+                        
+                    });
+
+                // wait for the task to completed.
+                await removeTestStepTask;
+            }
         }
 
         #endregion
