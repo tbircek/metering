@@ -109,10 +109,7 @@ namespace metering.core
                                         {
                                             // server response must be between 0 and 65535
                                             if (ushort.MinValue <= Math.Abs(serverResponse[0]) && ushort.MaxValue >= Math.Abs(serverResponse[0]))
-                                            {
-                                                //// new reading
-                                                //IoC.CMCControl.RegisterReadings[i].Add(serverResponse[0]);
-
+                                            {                                                
                                                 // add new reading with the current time.
                                                 IoC.CMCControl.RegisterReadingsWithTime[i].Add(DateTime.Now, serverResponse[0]);
                                             }
