@@ -41,9 +41,9 @@
                       Padding="5"
                       TabIndex="3"
                       VerticalContentAlignment="Center" 
-                      ToolTip="Check this box to save modbus register details to a file."/>
-                      <!--Command="{Binding RadioButtonCommand}" 
-                      CommandParameter="Voltage.Balanced"/>-->
+                      ToolTip="Check this box to save modbus register details to a file."
+                      Command="{Binding SaveHoldingRegisterDetails}" 
+                      CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}"/>
 
             <!-- IPADDRESS text box -->
             <TextBox 
