@@ -85,12 +85,14 @@ namespace metering.core
         ///// <summary>
         ///// Holds every legit read values for the registers
         ///// </summary>
-        //public List<List<int>> RegisterReadings { get; set; }
+        // public List<List<int>> RegisterReadings { get; set; }
+
+        public List<StringBuilder> IndivudalRegisters { get; set; }
 
         /// <summary>
         /// Holds every legit read values for the registers with time stamp.
         /// </summary>
-        public List<Dictionary<DateTime, int>> RegisterReadingsWithTime { get; set; }
+        public List<SortedDictionary<DateTime, int>> RegisterReadingsWithTime { get; set; }
 
         /// <summary>
         /// Holds successful reading number of the test register.
@@ -251,11 +253,16 @@ namespace metering.core
                             // generate variable portion of header information based on Register entry.
                             IEnumerable<int> registerValues = Enumerable.Range(0, IoC.TestDetails.Register.ToString().Split(',').Length).Select(i => i);
 
+                            // every register holder initialization
+                            IndivudalRegisters = new List<StringBuilder>();
                             // generate headers for the reporting.
                             foreach (int registerValue in registerValues)
                             {
                                 // append new variable header information to previous string generated.
                                 @string.Append($" ,Register {registerValue + 1}, Minimum Value {registerValue + 1}, Maximum Value {registerValue + 1}, Average Value {registerValue + 1}, StDev Value {registerValue + 1},Good Reading Value {registerValue + 1}");
+
+                                // add register holders
+                                IndivudalRegisters.Add(new StringBuilder());
                             }
 
                             // add new line to generated string for the test values.
@@ -291,12 +298,12 @@ namespace metering.core
                                 StandardDeviations = Enumerable.Repeat(0.0, IoC.TestDetails.Register.ToString().Split(',').Length).ToArray();
 
                                 // initialize RegisterReadingsWithTime with null values.
-                                RegisterReadingsWithTime = new List<Dictionary<DateTime, int>>();
+                                RegisterReadingsWithTime = new List<SortedDictionary<DateTime, int>>();                                
                                 // add RegisterReadings the user specified register space holders
                                 for (int i = 0; i < IoC.TestDetails.Register.ToString().Split(',').Length; i++)
                                 {
                                     // initialize a blank register space holders.
-                                    Dictionary<DateTime, int> registerReadings = new Dictionary<DateTime, int>();
+                                    SortedDictionary<DateTime, int> registerReadings = new SortedDictionary<DateTime, int>();
 
                                     // add the register holder
                                     RegisterReadingsWithTime.Add(registerReadings);
@@ -333,8 +340,7 @@ namespace metering.core
                                 await Task.Run(() => @string.Append(value: $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{testStartValue:F6}"));
 
                                 // calculate Std. Deviation
-                                CalculateStdDeviationWithTime(RegisterReadingsWithTime);
-                                // CalculateStdDeviation(RegisterReadings);
+                                new CalculateStdDeviation().CalculateStdDeviationWithTime(RegisterReadingsWithTime, testStartValue);
 
                                 // generate variable portion of header information based on Register entry.
                                 foreach (int i in registerValues)
@@ -404,6 +410,43 @@ namespace metering.core
                     // modify physical appearance of the Test File list and tool tip
                     IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Completed);
 
+                    // generate result files per register 
+                    foreach (var item in IndivudalRegisters)
+                    {
+                        // check if the user wants to save modbus reading details.
+                        if (IoC.Communication.IsSaveHoldingRegisterDetailsChecked)
+                        {
+
+                            // report file id to distinguish between test results 
+                            string fileId = $"{DateTime.Now.ToLocalTime():yyyy_MM_dd_HH_mm}";
+
+                            // initialize test details string.
+                            string testDetailsFileName = string.Empty;
+
+                            if (string.IsNullOrWhiteSpace(IoC.Communication.CurrentTestFileListItem.TestFileNameWithExtension))
+                            {
+                                // test result file name contains Register, From, To, and test start time values
+                                testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.TestDetails.Register}_{StandardDeviations:F6}-{StandardDeviations:F6}_{fileId}";
+                            }
+                            else
+                            {
+                                // test result file name contains "Test File Name" per the user input.
+                                // file name might contain multiple "."
+                                testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.Communication.CurrentTestFileListItem.ShortTestFileName}_{IoC.TestDetails.Register.ToString().Split(',').GetValue(IndivudalRegisters.IndexOf(item))}_{fileId}";
+                            }
+
+                            // create a TestResultLogger to generate a test report in .csv format.
+                            new TestResultLogger
+                                         (
+                                             // set file path and name
+                                             filePath: Path.Combine(ResultsFolder, $"{testDetailsFileName}.csv"),
+                                             // no need to save time
+                                             logTime: false
+                                         ).Log(item.ToString(), LogLevel.Informative);
+
+                        } 
+                    }
+
                     // destruct TestFileListItem
                     IoC.Communication.CurrentTestFileListItem = null;
                 }
@@ -424,181 +467,6 @@ namespace metering.core
         #endregion
 
         #region Private Methods
-
-        /// <summary>
-        /// Calculates Standard Deviation.
-        /// See <see cref="https://www.mathsisfun.com/data/standard-deviation-formulas.html"/> for more information.
-        /// </summary>
-        /// <param name="AllValues">All legit modbus register readings available.</param>
-        private void CalculateStdDeviationWithTime(List<Dictionary<DateTime, int>> AllValues)
-        {
-
-            // retrieved general information of the current register.
-            foreach (Dictionary<DateTime, int> registerReading in AllValues)
-            {
-
-                // generate fixed portion of header information for reporting.
-                StringBuilder experimentalString = new StringBuilder("Time, Value Read,").AppendLine();
-
-                // update Minimum value.
-                MinValues.SetValue(registerReading.Values.Min(), AllValues.IndexOf(registerReading));
-                // System.Diagnostics.Debug.WriteLine($"Min value: {MinValues.GetValue(AllValues.IndexOf(registerReading))}");
-                // update Maximum value.
-                MaxValues.SetValue(registerReading.Values.Max(), AllValues.IndexOf(registerReading));
-                // System.Diagnostics.Debug.WriteLine($"Max value: {MaxValues.GetValue(AllValues.IndexOf(registerReading))}");
-                // update Average value.
-                Averages.SetValue(registerReading.Values.Average(), AllValues.IndexOf(registerReading));
-                // System.Diagnostics.Debug.WriteLine($"Mean value: {Averages.GetValue(AllValues.IndexOf(registerReading))}");
-                // update GoodReading value.
-                SuccessCounters.SetValue(registerReading.Count(), AllValues.IndexOf(registerReading));
-                // System.Diagnostics.Debug.WriteLine($"GoodReading value: {SuccessCounters.GetValue(AllValues.IndexOf(registerReading))}");
-                // update Total value.
-                Totals.SetValue(registerReading.Values.Sum(), AllValues.IndexOf(registerReading));
-                // System.Diagnostics.Debug.WriteLine($"Total value: {Totals.GetValue(AllValues.IndexOf(registerReading))}");
-
-                // new list to hold square of the differences
-                List<double> squaredDifferences = new List<double>();
-
-                // Step 2. Then for each number: subtract the Mean and square the result
-                foreach (KeyValuePair<DateTime, int> entry in registerReading)
-                {
-                    // add up all the squared values 
-                    squaredDifferences.Add(Math.Pow(entry.Value - registerReading.Values.Average(), 2));
-
-                    @experimentalString.AppendLine(value: $"{entry.Key:MM/dd/yy HH:mm:ss.fff},{entry.Value:F6}");
-                }
-
-                // Step 3. add up all the values then divide by how many.
-                double sigmaNotation = squaredDifferences.Average();
-
-                // Step 4. Take the square root of that.
-                double standardDeviation = Math.Pow(sigmaNotation, 0.5);
-
-                // update Standard Deviation value.
-                StandardDeviations.SetValue(standardDeviation, AllValues.IndexOf(registerReading));
-
-
-                // check if the user wants to save modbus reading details.
-                if (IoC.Communication.IsSaveHoldingRegisterDetailsChecked)
-                {
-
-                    // report file id to distinguish between test results 
-                    string fileId = $"{DateTime.Now.ToLocalTime():yyyy_MM_dd_HH_mm}";
-
-                    // initialize test details string.
-                    string testDetailsFileName = string.Empty;
-
-                    if (string.IsNullOrWhiteSpace(IoC.Communication.CurrentTestFileListItem.TestFileNameWithExtension))
-                    {
-                        // test result file name contains Register, From, To, and test start time values
-                        testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.TestDetails.Register}_{StandardDeviations:F6}-{StandardDeviations:F6}_{fileId}";
-                    }
-                    else
-                    {
-                        // test result file name contains "Test File Name" per the user input.
-                        // file name might contain multiple "."
-                        testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.Communication.CurrentTestFileListItem.ShortTestFileName}_{IoC.TestDetails.Register.ToString().Split(',').GetValue(AllValues.IndexOf(registerReading))}_{fileId}";
-                    }
-
-                    // create a TestResultLogger to generate a test report in .csv format.
-                    new TestResultLogger
-                                 (
-                                     // set file path and name
-                                     filePath: Path.Combine(ResultsFolder, $"{testDetailsFileName}.csv"),
-                                     // no need to save time
-                                     logTime: false
-                                 ).Log(experimentalString.ToString(), LogLevel.Informative);
-
-                }
-            }
-        }
-
-        ///// <summary>
-        ///// Calculates Standard Deviation.
-        ///// See <see cref="https://www.mathsisfun.com/data/standard-deviation-formulas.html"/> for more information.
-        ///// </summary>
-        ///// <param name="AllValues">All legit modbus register readings available.</param>
-        //private void CalculateStdDeviation(List<List<int>> AllValues)
-        //{
-
-        //    // retrieved general information of the current register.
-        //    foreach (List<int> registerReading in AllValues)
-        //    {
-
-        //        // generate fixed portion of header information for reporting.
-        //        StringBuilder experimentalString = new StringBuilder("Time, Test Value,").AppendLine();
-
-        //        // update Minimum value.
-        //        MinValues.SetValue(registerReading.Min(), AllValues.IndexOf(registerReading));
-        //        // System.Diagnostics.Debug.WriteLine($"Min value: {MinValues.GetValue(AllValues.IndexOf(registerReading))}");
-        //        // update Maximum value.
-        //        MaxValues.SetValue(registerReading.Max(), AllValues.IndexOf(registerReading));
-        //        // System.Diagnostics.Debug.WriteLine($"Max value: {MaxValues.GetValue(AllValues.IndexOf(registerReading))}");
-        //        // update Average value.
-        //        Averages.SetValue(registerReading.Average(), AllValues.IndexOf(registerReading));
-        //        // System.Diagnostics.Debug.WriteLine($"Mean value: {Averages.GetValue(AllValues.IndexOf(registerReading))}");
-        //        // update GoodReading value.
-        //        SuccessCounters.SetValue(registerReading.Count(), AllValues.IndexOf(registerReading));
-        //        // System.Diagnostics.Debug.WriteLine($"GoodReading value: {SuccessCounters.GetValue(AllValues.IndexOf(registerReading))}");
-        //        // update Total value.
-        //        Totals.SetValue(registerReading.Sum(), AllValues.IndexOf(registerReading));
-        //        // System.Diagnostics.Debug.WriteLine($"Total value: {Totals.GetValue(AllValues.IndexOf(registerReading))}");
-
-        //        // new list to hold square of the differences
-        //        List<double> squaredDifferences = new List<double>();
-
-        //        // Step 2. Then for each number: subtract the Mean and square the result
-        //        foreach (int value in registerReading)
-        //        {
-        //            // add up all the squared values 
-        //            squaredDifferences.Add(Math.Pow(value - registerReading.Average(), 2));
-
-        //            @experimentalString.AppendLine(value: $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff},{value:F6}");
-        //        }
-
-        //        // Step 3. add up all the values then divide by how many.
-        //        double sigmaNotation = squaredDifferences.Average();
-
-        //        // Step 4. Take the square root of that.
-        //        double standardDeviation = Math.Pow(sigmaNotation, 0.5);
-
-        //        // update Standard Deviation value.
-        //        StandardDeviations.SetValue(standardDeviation, AllValues.IndexOf(registerReading));
-
-
-        //        // report file id to distinguish between test results 
-        //        string fileId = $"{DateTime.Now.ToLocalTime():yyyy_MM_dd_HH_mm}";
-
-
-        //        // update test result report
-
-        //        // initialize test details string.
-        //        string testDetailsFileName = string.Empty;
-
-        //        if (string.IsNullOrWhiteSpace(IoC.Communication.CurrentTestFileListItem.TestFileNameWithExtension))
-        //        {
-        //            // test result file name contains Register, From, To, and test start time values
-        //            testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.TestDetails.Register}_{StandardDeviations:F6}-{StandardDeviations:F6}_{fileId}";
-        //        }
-        //        else
-        //        {
-        //            // test result file name contains "Test File Name" per the user input.
-        //            // file name might contain multiple "."
-        //            testDetailsFileName = $"{(IoC.TestDetails.IsHarmonics ? $"[{IoC.Communication.TestingHarmonicOrder.ToString()}]" : string.Empty)}{IoC.Communication.CurrentTestFileListItem.ShortTestFileName}_{IoC.TestDetails.Register.ToString().Split(',').GetValue(AllValues.IndexOf(registerReading))}_{fileId}";
-        //        }
-
-        //        // create a TestResultLogger to generate a test report in .csv format.
-        //        new TestResultLogger
-        //                     (
-        //                         // set file path and name
-        //                         filePath: Path.Combine(ResultsFolder, $"{testDetailsFileName}.csv"),
-        //                         // no need to save time
-        //                         logTime: false
-        //                     ).Log(experimentalString.ToString(), LogLevel.Informative);
-
-
-        //    }
-        //}
 
         #endregion
     }
