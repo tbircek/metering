@@ -40,6 +40,7 @@
                       Content="Save holding register details"
                       Padding="5"
                       TabIndex="3"
+                      IsChecked="{Binding IsSaveHoldingRegisterDetailsChecked}"
                       VerticalContentAlignment="Center" 
                       ToolTip="Check this box to save modbus register details to a file."
                       Command="{Binding SaveHoldingRegisterDetails}" 

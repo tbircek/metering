@@ -158,7 +158,7 @@ namespace metering.core
         /// <summary>
         /// indicates if the user wants to dump modbus register values to a file.
         /// </summary>
-        public bool IsSaveHoldingRegisterDetailsChecked {get;set;}
+        public bool IsSaveHoldingRegisterDetailsChecked { get; set; } = false;
 
         /// <summary>
         /// Holds the current Harmonic Order is testing.
