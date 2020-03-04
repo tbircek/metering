@@ -365,8 +365,8 @@ namespace metering.core
                     CurrentTestFileListItem.IsDeletable = true;
                     CurrentTestFileListItem.TestStepBackgroundColor = Strings.color_test_enqueued;
                     CurrentTestFileListItem.TestToolTip += $"{Strings.test_status_enqueued}";
-                    IoC.Logger.Log($"{CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_enqueued}", LogLevel.Informative);
-                    IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_enqueued}";
+                    //IoC.Logger.Log($"{CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_enqueued}", LogLevel.Informative);
+                    //IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_enqueued}";
                     break;
 
                 case TestStatus.InProgress:
@@ -393,6 +393,15 @@ namespace metering.core
                     CurrentTestFileListItem.TestToolTip += $"{Strings.test_status_completed}";
                     IoC.Logger.Log($"{CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_completed}", LogLevel.Informative);
                     IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_completed}";
+                    break;
+
+                case TestStatus.Selected:
+                    // modify physical appearance of the Test File list and tool tip
+                    CurrentTestFileListItem.IsDeletable = true;
+                    CurrentTestFileListItem.TestStepBackgroundColor = Strings.color_test_selected;
+                    CurrentTestFileListItem.TestToolTip += $"{Strings.test_status_selected}";
+                    //IoC.Logger.Log($"{CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_selected}", LogLevel.Informative);
+                    //IoC.Communication.Log = $"{DateTime.Now.ToLocalTime():MM/dd/yy HH:mm:ss.fff}: {CurrentTestFileListItem.TestFileNameWithExtension} {Strings.test_status_selected}";
                     break;
 
                 default:
