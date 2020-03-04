@@ -82,11 +82,9 @@ namespace metering.core
         /// </summary>
         public double[] StandardDeviations { get; set; }
 
-        ///// <summary>
-        ///// Holds every legit read values for the registers
-        ///// </summary>
-        // public List<List<int>> RegisterReadings { get; set; }
-
+        /// <summary>
+        /// Holds every legit read values for the registers
+        /// </summary>
         public List<StringBuilder> IndivudalRegisters { get; set; }
 
         /// <summary>
