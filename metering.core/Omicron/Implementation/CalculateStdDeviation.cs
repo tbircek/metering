@@ -98,19 +98,23 @@ namespace metering.core
 
                     // decide the max message length
                     int length = Math.Max(oldText.Count, newText.Count);
-                    
+
                     // is this the first reading?
                     if (1 < oldText.Count)
                     {
                         // are previous record same length as the current readings?
-                        if (length > oldText.Count)
+                        while (length > oldText.Count)
+                        {
                             // not same size. increase size
                             oldText.Add($"{string.Empty},{string.Empty},{string.Empty},{string.Empty}");
+                        }
 
                         // are new records same length as the previous readings?
-                        if (length > newText.Count)
+                        while (length > newText.Count)
+                        {
                             // not same size. increase size
                             newText.Add($"{string.Empty},{string.Empty},{string.Empty},{string.Empty}");
+                        }
 
                         // step through every records
                         for (int i = 0; i < length; i++)
