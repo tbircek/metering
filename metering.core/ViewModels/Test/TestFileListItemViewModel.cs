@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using metering.core.Resources;
 
 namespace metering.core
 {
@@ -38,6 +39,7 @@ namespace metering.core
         /// Test status is enqueue: Transparent
         /// Test status is interrupted: DimGray
         /// Test status is unknown: DarkSlateGray
+        /// Test status is selected: CadetBlue
         /// </value>
         public string TestStepBackgroundColor { get; set; } = "Transparent";
 
@@ -118,13 +120,27 @@ namespace metering.core
                     // scan the collection to generate the new collection
                     foreach (TestFileListItemViewModel testFileListItem in IoC.Communication.TestFileListItems)
                     {
+
+                        // update In Progress test file
+                        IoC.Communication.CurrentTestFileListItem = testFileListItem;
+
+                        // reset background colors to "Enqueued"
+                        IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Enqueued);
+
                         // is this item match?
                         if (Equals(testFileListItem.FullFileName, parameter))
                         {
                             // update view to first file
                             IoC.Task.Run(() => IoC.Commander.LoadTestFile(IoC.Communication.TestFileListItems.IndexOf(testFileListItem)));
-                            // exit this loop
-                            break;
+
+                            // update In Progress test file
+                            IoC.Communication.CurrentTestFileListItem = testFileListItem;
+
+                            // update the background color
+                            IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.Selected);
+                            
+                            //// exit this loop
+                            //break;
                         }
                     }
                 });
