@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -107,6 +106,7 @@ namespace metering.core
                 // Listening to the cancellation event either the user or test completed.
                 var cancellationTask = Task.Run(() =>
                 {
+                    // is cancellation requested?
                     if (IoC.Commands.Token.IsCancellationRequested)
                     {
                         // Sending the cancellation message
@@ -114,34 +114,14 @@ namespace metering.core
                     }
                 });
 
-                try
-                {
+                // update the log
+                IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID} -- command: {omicronCommand}", LogLevel.Informative);
 
-                    // update the log
-                    IoC.Logger.Log($"device id: {IoC.CMCControl.DeviceID} -- command: {omicronCommand}", LogLevel.Informative);
+                // execute string command
+                var executeTask = CMCExecuteAsync(omicronCommand: omicronCommand, cancellationToken: cancellation.Token);
 
-                    // execute string command
-                    var executeTask = CMCExecuteAsync(omicronCommand: omicronCommand, cancellationToken: cancellation.Token);
-
-                    // wait for the result
-                    await executeTask;
-                }
-                catch (COMException)
-                {
-                    // re-throw error
-                    throw;
-                }
-                catch (Exception)
-                {
-                    // re-throw error
-                    throw;
-                }
-
-                // monitor if cancellation requested
-                await cancellationTask;
-
-                // return empty string
-                return string.Empty;
+                // wait for the result
+                return await executeTask;
             }
         }
 
@@ -169,12 +149,22 @@ namespace metering.core
 
             // generate CMEngine.Exec Task
             var task = IoC.Task.Run(() => IoC.CMCControl.CMEngine.Exec(DevID: IoC.CMCControl.DeviceID, Command: omicronCommand));
-
-            // Wait for the task to finish.
+            
+            // Wait for the first task to finish among the two
             var completedTask = await Task.WhenAny(task, taskCompletionSource.Task);
 
+            // Wait for the task to finish and set its result.
+            if (completedTask == task)
+            {
+                // Extract the result, the task is finished and the await will return immediately
+                var result = await task;
+
+                // Set the taskCompletionSource result
+                taskCompletionSource.TrySetResult(result);
+            }
+
             // return completed task
-            return await completedTask;
+            return await taskCompletionSource.Task;
         }
 
         #endregion

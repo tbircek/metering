@@ -59,6 +59,11 @@ namespace metering.core
             Completed,
 
             /// <summary>
+            /// The user is selected this item
+            /// </summary>
+            Selected,
+
+            /// <summary>
             /// Test is unknown
             /// </summary>
             Unknown,
@@ -151,9 +156,15 @@ namespace metering.core
         public bool Selected { get; set; }
 
         /// <summary>
+        /// indicates if the user wants to dump modbus register values to a file.
+        /// </summary>
+        public bool IsSaveHoldingRegisterDetailsChecked { get; set; } = false;
+
+        /// <summary>
         /// Holds the current Harmonic Order is testing.
         /// </summary>
         public int TestingHarmonicOrder { get; set; } = 2;
+
 
         #endregion
 
@@ -163,6 +174,11 @@ namespace metering.core
         /// Selects all text on left clicked text box.
         /// </summary>
         public ICommand SelectAllTextCommand { get; set; }
+
+        /// <summary>
+        /// The user wants to dump modbus register values to a file.
+        /// </summary>
+        public ICommand SaveHoldingRegisterDetails { get; set; }
 
         #endregion
 
@@ -183,11 +199,25 @@ namespace metering.core
 
             // create command
             SelectAllTextCommand = new RelayCommand(SelectAll);
+            SaveHoldingRegisterDetails = new RelayParameterizedCommand((parameter) => DumpRegisterDetails((bool)parameter));
         }
 
         #endregion
 
-        #region Public Method
+        #region Private Methods
+
+        /// <summary>
+        /// Save every register(s) to a file.
+        /// </summary>
+        /// <param name="isChecked"> Indicates if the user whether the check box selected</param>
+        private void DumpRegisterDetails(bool isChecked)
+        {
+            IsSaveHoldingRegisterDetailsChecked = isChecked;
+        }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Selects all text on the text box

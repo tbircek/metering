@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes>      
-      adds standard deviation calculation.
+      adds option to dump register(s) reading to file(s).
     </releaseNotes>
     <copyright>Copyright 2019-2020 Beckwith Electric Co. Inc.</copyright>
     <tags>metering modbus omicron beckwith electric voltage current phase frequency harmonics turgay bircek</tags>
