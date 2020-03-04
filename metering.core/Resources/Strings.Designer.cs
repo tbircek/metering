@@ -115,6 +115,15 @@ namespace metering.core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CadetBlue.
+        /// </summary>
+        public static string color_test_selected {
+            get {
+                return ResourceManager.GetString("color_test_selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DarkSlateGray.
         /// </summary>
         public static string color_test_unknown {
@@ -867,6 +876,15 @@ namespace metering.core.Resources {
         public static string test_status_interrupted {
             get {
                 return ResourceManager.GetString("test_status_interrupted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test status: Selected....
+        /// </summary>
+        public static string test_status_selected {
+            get {
+                return ResourceManager.GetString("test_status_selected", resourceCulture);
             }
         }
         

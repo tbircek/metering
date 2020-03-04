@@ -405,4 +405,10 @@
   <data name="temp_test_file_name" xml:space="preserve">
     <value>DummyMeteringTest.bmtf</value>
   </data>
+  <data name="color_test_selected" xml:space="preserve">
+    <value>CadetBlue</value>
+  </data>
+  <data name="test_status_selected" xml:space="preserve">
+    <value>Test status: Selected...</value>
+  </data>
 </root>
