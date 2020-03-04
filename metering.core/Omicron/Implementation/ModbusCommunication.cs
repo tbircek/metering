@@ -48,7 +48,7 @@ namespace metering.core
         /// <summary>
         /// Allows to read test register values separated with comma specified by "Measurement Interval".
         /// </summary>
-        public void MeasurementIntervalCallbackAsync(object Register)
+        public void MeasurementIntervalCallback(object Register)
         {
             // generate register(s) list
             List<string> registerStrings = new List<string>();
@@ -99,7 +99,7 @@ namespace metering.core
                                 {
 
                                     // lock the task
-                                    await AsyncAwaiter.AwaitAsync(nameof(MeasurementIntervalCallbackAsync), async () =>
+                                    await AsyncAwaiter.AwaitAsync(nameof(MeasurementIntervalCallback), async () =>
                                     {
                                         // start a task to read holding register (Function 0x03)
                                         int[] serverResponse = await IoC.Task.Run(() => ReadHoldingRegisterWithCancellationAsync(register: register, cancellationToken: cancellation.Token));
@@ -109,9 +109,9 @@ namespace metering.core
                                         {
                                             // server response must be between 0 and 65535
                                             if (ushort.MinValue <= Math.Abs(serverResponse[0]) && ushort.MaxValue >= Math.Abs(serverResponse[0]))
-                                            {
-                                                // new reading
-                                                IoC.CMCControl.RegisterReadings[i].Add(serverResponse[0]);
+                                            {                                                
+                                                // add new reading with the current time.
+                                                IoC.CMCControl.RegisterReadingsWithTime[i].Add(DateTime.Now, serverResponse[0]);
                                             }
                                         }
                                         else
