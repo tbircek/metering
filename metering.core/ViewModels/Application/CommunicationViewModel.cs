@@ -279,8 +279,8 @@ namespace metering.core
                                     try
                                     {
 
-                                        // perform initial set up on CMCEngine
-                                        await IoC.Task.Run(async () => await IoC.InitialCMCSetup.InitialSetupAsync());
+                                        //// perform initial set up on CMCEngine
+                                        //await IoC.Task.Run(async () => await IoC.InitialCMCSetup.InitialSetupAsync());
 
                                         // there is a test set attached so run specified tests.
                                         await IoC.Task.Run(async () => await IoC.CMCControl.TestAsync(IoC.Commands.Token));

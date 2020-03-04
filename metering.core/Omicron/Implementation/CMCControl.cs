@@ -157,6 +157,7 @@ namespace metering.core
                 // scan multiple tests input for the test
                 for (int testFileNumber = 0; testFileNumber < IoC.Communication.TestFileListItems.Count(); testFileNumber++)
                 {
+
                     // retrieve file name with extension without file location
                     IoC.Communication.TestFileListItems[testFileNumber].TestFileNameWithExtension = Path.GetFileName(IoC.Communication.TestFileListItems[testFileNumber].FullFileName);
 
@@ -168,6 +169,9 @@ namespace metering.core
 
                     // modify physical appearance of the Test File list and tool tip
                     IoC.Communication.UpdateCurrentTestFileListItem(CommunicationViewModel.TestStatus.InProgress);
+
+                    // perform initial set up on CMCEngine
+                    await IoC.Task.Run(async () => await IoC.InitialCMCSetup.InitialSetupAsync());
 
                     // update test progress
                     int progressStep = default;
