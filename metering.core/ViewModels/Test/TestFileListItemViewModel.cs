@@ -1,10 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using metering.core.Resources;
 
 namespace metering.core
 {
@@ -56,7 +54,7 @@ namespace metering.core
         /// <summary>
         /// Holds long version file name and test progress status.
         /// </summary>
-        public string TestToolTip { get; set; } = "File name and location, Test is enqueue/completed/running/interrupted/unknown";
+        public string TestToolTip { get; set; } = "File name and location, Test is enqueue/completed/running/interrupted/unknown/selected";
 
         /// <summary>
         /// Holds tool tip information of the "X" delete button of the control.
