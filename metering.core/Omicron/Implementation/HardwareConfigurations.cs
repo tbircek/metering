@@ -190,7 +190,7 @@ namespace metering.core
                     case "ser13":
                     case "gen2":
                     case "par1":
-                    case "par2ser1": // not 100% sure if this mode can be combine.
+                    // case "par2ser1": // not 100% sure if this mode can be combine. this is can not be combine per CMC353
                         // only single amplifiers can be combined
                         if (1 == amplifierNumber)
                         {
