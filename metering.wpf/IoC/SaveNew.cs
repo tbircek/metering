@@ -230,6 +230,13 @@ namespace metering
                     // Show TestDetails page
                     IoC.Application.GoToPage(ApplicationPage.TestDetails, IoC.TestDetails);
 
+                    // update test step background
+                    if (0 == testFileNumber)
+                    {
+                        // background is "Selected"
+                        currentTestFile.TestStepBackgroundColor = $"{Strings.color_test_selected}";
+                    }
+
                     test = null;
                     serializer = null;
                 }
