@@ -24,7 +24,7 @@ namespace metering.core
             foreach (SortedDictionary<DateTime, int> registerReading in AllValues)
             {
                 // generate fixed portion of header information for reporting.
-                StringBuilder experimentalString = new StringBuilder($"Time, Test Value, Value Read, {string.Empty}").AppendLine();
+                StringBuilder standardDeviationString = new StringBuilder($"Time, Test Value, Value Read, {string.Empty}").AppendLine();
 
                 // update Minimum value.
                 IoC.CMCControl.MinValues.SetValue(registerReading.Values.Min(), AllValues.IndexOf(registerReading));
@@ -51,7 +51,7 @@ namespace metering.core
                     // add up all the squared values 
                     squaredDifferences.Add(Math.Pow(entry.Value - registerReading.Values.Average(), 2));
 
-                    @experimentalString.AppendLine(value: $"{entry.Key:MM/dd/yy HH:mm:ss.fff},{TestValue:F6},{entry.Value:F6}, {string.Empty}");
+                    standardDeviationString.AppendLine(value: $"{entry.Key:MM/dd/yy HH:mm:ss.fff},{TestValue:F6},{entry.Value:F6}, {string.Empty}");
                 }
 
                 // Step 3. add up all the values then divide by how many.
@@ -92,7 +92,7 @@ namespace metering.core
                     // retrieve previous reading if there any
                     List<string> oldText = builder.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
                     // retrieve current reading per register
-                    List<string> newText = experimentalString.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    List<string> newText = standardDeviationString.ToString().Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
                     // temporary storage to keep values
                     StringBuilder tempBuilder = new StringBuilder();
 
@@ -103,17 +103,24 @@ namespace metering.core
                     if (1 < oldText.Count)
                     {
                         // are previous record same length as the current readings?
-                        while (length > oldText.Count)
+                        if (length > oldText.Count)
                         {
+                            //// this is a one record.
+                            //IEnumerable<string> oneRecord = Enumerable.Repeat($"{string.Empty},{string.Empty},{string.Empty},{string.Empty}", length - oldText.Count);
+
                             // not same size. increase size
-                            oldText.Add($"{string.Empty},{string.Empty},{string.Empty},{string.Empty}");
+                            oldText.Add(new StringExtensions().RepeatStringBuilderInsert(",,,", length - oldText.Count));
                         }
 
                         // are new records same length as the previous readings?
-                        while (length > newText.Count)
+                        if (length > newText.Count)
                         {
+                            //// this is a one record.
+                            //IEnumerable<string> oneRecord = Enumerable.Repeat($"{string.Empty},{string.Empty},{string.Empty},{string.Empty}", length - newText.Count);
+
+
                             // not same size. increase size
-                            newText.Add($"{string.Empty},{string.Empty},{string.Empty},{string.Empty}");
+                            newText.Add(new StringExtensions().RepeatStringBuilderInsert(",,,", length - newText.Count));
                         }
 
                         // step through every records
@@ -134,10 +141,30 @@ namespace metering.core
                         // remove previous reading
                         IoC.CMCControl.IndivudalRegisters.RemoveAt(AllValues.IndexOf(registerReading));
                         // add new reading
-                        IoC.CMCControl.IndivudalRegisters.Insert(AllValues.IndexOf(registerReading), experimentalString);
+                        IoC.CMCControl.IndivudalRegisters.Insert(AllValues.IndexOf(registerReading), standardDeviationString);
                     }
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// adds extra string methods
+    /// </summary>
+    public class StringExtensions
+    {
+        /// <summary>
+        /// Repeats specified string n times
+        /// </summary>
+        /// <param name="s">string to repeat</param>
+        /// <param name="n">number times to repeat</param>
+        /// <returns>new string builder with n times s.</returns>
+        public string RepeatStringBuilderInsert(string s, int n)
+        {
+            // returns new string builder
+            return new StringBuilder(s.Length * n)
+                        .Insert(0, s, n)
+                        .ToString();
         }
     }
 }
